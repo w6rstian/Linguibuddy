@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Linguibuddy.MainPage">
+             x:Class="Linguibuddy.Views.MainPage">
 
     <ScrollView>
         <VerticalStackLayout
@@ -30,6 +30,19 @@
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnCounterClicked"
                 HorizontalOptions="Fill" />
+
+            <Label Text="Angielsko-Polski słownik" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" />
+            <Entry x:Name="WordEntry" Placeholder="Wpisz angielskie słowo..." />
+            <Button Text="Pobierz tłumaczenia" Clicked="OnSearchClicked" />
+            <CollectionView x:Name="ResultsList">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="4" CornerRadius="12" BackgroundColor="#eef">
+                            <Label Text="{Binding}" FontSize="18" />
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
     </ScrollView>
 
