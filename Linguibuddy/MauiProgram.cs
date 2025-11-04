@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Linguibuddy.Resources.Strings;
+using LocalizationResourceManager.Maui;
+using Microsoft.Extensions.Logging;
 
 namespace Linguibuddy
 {
@@ -9,6 +11,11 @@ namespace Linguibuddy
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseLocalizationResourceManager(settings =>
+                {
+                    settings.RestoreLatestCulture(true);
+                    settings.AddResource(AppResources.ResourceManager);
+                })
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

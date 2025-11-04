@@ -1,15 +1,19 @@
 ﻿using Linguibuddy.Services;
+using LocalizationResourceManager.Maui;
 
 namespace Linguibuddy.Views
 {
     public partial class MainPage : ContentPage
     {
+        private readonly ILocalizationResourceManager _localization; // mozna wykorzystac do zmiany jezyka w aplikacji
+
         private readonly DictionaryApiService _dictionaryService = new();
         int count = 0;
 
-        public MainPage()
+        public MainPage(ILocalizationResourceManager localization)
         {
             InitializeComponent();
+            _localization = localization;
         }
 
         private void OnCounterClicked(object? sender, EventArgs e)
