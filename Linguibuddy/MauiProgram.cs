@@ -6,6 +6,8 @@ using Linguibuddy.Services;
 using LocalizationResourceManager.Maui;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using CommunityToolkit.Maui;
+using Linguibuddy.Views;
 
 namespace Linguibuddy
 {
@@ -16,6 +18,7 @@ namespace Linguibuddy
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .UseLocalizationResourceManager(settings =>
                 {
                     settings.RestoreLatestCulture(true);
@@ -35,7 +38,12 @@ namespace Linguibuddy
                 }
                 );
 
-            builder.Services.AddTransient<MainViewModel>();
+            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<MainViewModel>();
+
+            builder.Services.AddTransient<DictionaryPage>();
+            builder.Services.AddTransient<DictionaryViewModel>();
+
             var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
 
             if (string.IsNullOrEmpty(deepLKey))
