@@ -14,15 +14,41 @@ namespace Linguibuddy.Services
             _client = new DeepLClient(apiKey);
         }
 
-        public async Task<string> TranslateTextAsync(string text, string targetLang = "PL")
+        public async Task<string> TranslateTextAsync(string text, string targetLang = "PL", string? partOfSpeech = null)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return string.Empty;
 
             try
             {
-                var result = await _client.TranslateTextAsync(text, null, targetLang);
-                return result.Text;
+                string contextualText = partOfSpeech?.ToLower() switch
+                {
+                    "verb" => $"to {text}",
+                    "noun" => $"the {text}",
+                    "adjective" => $"something {text}",
+                    _ => text
+                };
+
+                var options = new TextTranslateOptions
+                {
+                    SentenceSplittingMode = SentenceSplittingMode.Off, // nie dzieli na zdania
+                    PreserveFormatting = true,
+                    Formality = Formality.Default,
+                    Context = "Translate this as a dictionary entry for language learners, focusing on the most common Polish meaning."
+                };
+
+                var result = await _client.TranslateTextAsync(contextualText, null, targetLang, options);
+
+                var translated = result.Text
+                    .Replace("to ", "", StringComparison.OrdinalIgnoreCase)
+                    .Replace("the ", "", StringComparison.OrdinalIgnoreCase)
+                    .Replace("something ", "", StringComparison.OrdinalIgnoreCase)
+                    .Trim();
+
+                if (translated.Equals(text, StringComparison.OrdinalIgnoreCase))
+                    return text;
+
+                return translated;
             }
             catch (Exception ex)
             {
