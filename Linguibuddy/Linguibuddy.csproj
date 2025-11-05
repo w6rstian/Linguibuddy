@@ -69,7 +69,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Database\" />
 	  <Folder Include="Helpers\" />
 	  <Folder Include="ViewModels\" />
 	</ItemGroup>
