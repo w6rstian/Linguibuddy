@@ -1,75 +1,55 @@
-﻿namespace Linguibuddy.Models
+﻿using Newtonsoft.Json;
+
+namespace Linguibuddy.Models
 {
-    public class Entry
+    public class Definition
     {
-        public Language Language { get; set; } = new();
-        public string PartOfSpeech { get; set; } = string.Empty;
-        public List<Pronunciation> Pronunciations { get; set; } = [];
-        public List<Form> Forms { get; set; } = [];
-        public List<Sense> Senses { get; set; } = [];
+        [JsonProperty("definition")]
+        public string DefinitionText { get; set; } = string.Empty;
+
+        [JsonProperty("example")]
+        public string Example { get; set; } = string.Empty;
+
+        [JsonProperty("synonyms")]
         public List<string> Synonyms { get; set; } = [];
+
+        [JsonProperty("antonyms")]
         public List<string> Antonyms { get; set; } = [];
     }
 
-    public class Form
+    public class Meaning
     {
-        public string Word { get; set; } = string.Empty;
-        public List<string> Tags { get; set; } = [];
+        [JsonProperty("partOfSpeech")]
+        public string PartOfSpeech { get; set; } = string.Empty;
+
+        [JsonProperty("definitions")]
+        public List<Definition> Definitions { get; set; } = [];
     }
 
-    public class Language
+    public class Phonetic
     {
-        public string Code { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-    }
-
-    public class License
-    {
-        public string Name { get; set; } = string.Empty;
-        public string Url { get; set; } = string.Empty;
-    }
-
-    public class Pronunciation
-    {
-        public string Type { get; set; } = string.Empty;
+        [JsonProperty("text")]
         public string Text { get; set; } = string.Empty;
-        public List<string> Tags { get; set; } = [];
+
+        [JsonProperty("audio")]
+        public string Audio { get; set; } = string.Empty;
     }
 
-    public class Quote
+    public class WordEntry
     {
-        public string Text { get; set; } = string.Empty;
-        public string Reference { get; set; } = string.Empty;
-    }
-
-    public class DictionaryResponse
-    {
+        [JsonProperty("word")]
         public string Word { get; set; } = string.Empty;
-        public List<Entry> Entries { get; set; } = [];
-        public Source Source { get; set; } = new();
-    }
 
-    public class Sense
-    {
-        public string Definition { get; set; } = string.Empty;
-        public List<string> Tags { get; set; } = [];
-        public List<string> Examples { get; set; } = [];
-        public List<Quote> Quotes { get; set; } = [];
-        public List<string> Synonyms { get; set; }  = [];
-        public List<string> Antonyms { get; set; } = [];
-        public List<Translation> Translations { get; set; } = [];
-        public List<Sense> Subsenses { get; set; } = [];
-    }
+        [JsonProperty("phonetic")]
+        public string Phonetic { get; set; } = string.Empty;
 
-    public class Source
-    {
-        public string Url { get; set; } = string.Empty;
-        public License License { get; set; } = new();
-    }
+        [JsonProperty("phonetics")]
+        public List<Phonetic> Phonetics { get; set; } = [];
 
-    public class Translation
-    {
-        public Language Language { get; set; } = new();
-        public string Word { get; set; } = string.Empty;
+        [JsonProperty("origin")]
+        public string Origin { get; set; } = string.Empty;
+
+        [JsonProperty("meanings")]
+        public List<Meaning> Meanings { get; set; } = [];
     }
 }

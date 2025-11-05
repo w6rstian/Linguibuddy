@@ -15,35 +15,28 @@
                 SemanticProperties.Description="dot net bot in a hovercraft number nine" />
 
             <Label
-                Text="Hello, World!"
-                Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1" />
-
-            <Label
                 Text="{loc:Translate Welcome}"
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me" 
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Fill" />
+            <Entry x:Name="WordEntry"
+                   Placeholder="Enter an English word"
+                   ReturnType="Search" />
 
-            <Label Text="Angielsko-Polski słownik" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" />
-            <Entry x:Name="WordEntry" Placeholder="Wpisz angielskie słowo..." />
-            <Button Text="Pobierz tłumaczenia" Clicked="OnSearchClicked" />
-            <CollectionView x:Name="ResultsList">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Padding="10" Margin="4" CornerRadius="12" BackgroundColor="#eef">
-                            <Label Text="{Binding}" FontSize="18" />
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <Button Text="Search"
+                    Clicked="OnSearchClicked" />
+
+            <Button x:Name="AudioButton"
+                    Text="🔊 Play pronunciation"
+                    Clicked="OnPlayAudioClicked"
+                    IsEnabled="False" />
+
+            <ScrollView>
+                <Label x:Name="ResultsLabel"
+                       FontSize="16"
+                       TextColor="White" />
+            </ScrollView>
         </VerticalStackLayout>
     </ScrollView>
 

@@ -6,7 +6,7 @@ namespace Linguibuddy.Services
     public class DictionaryApiService
     {
         private readonly HttpClient _httpClient;
-        private const string BaseUrl = "https://freedictionaryapi.com/api/v1/";
+        private const string BaseUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
         public DictionaryApiService(HttpClient? httpClient = null)
         {
@@ -16,29 +16,17 @@ namespace Linguibuddy.Services
             };
         }
 
-        public async Task<List<string>> GetPolishTranslationsAsync(string englishWord)
+        public async Task<WordEntry?> GetEnglishWordAsync(string englishWord)
         {
             if (string.IsNullOrWhiteSpace(englishWord))
-                return [];
+                return null;
 
             try
             {
-                var url = $"entries/en/{englishWord}?translations=true";
-                var result = await _httpClient.GetFromJsonAsync<DictionaryResponse>(url);
+                var url = $"{BaseUrl}{englishWord}";
+                var response = await _httpClient.GetFromJsonAsync<List<WordEntry>>(url);
 
-                if (result?.Entries == null)
-                    return [];
-
-                var translations = result.Entries
-                    .SelectMany(e => e.Senses ?? [])
-                    .Where(s => s.Translations != null)
-                    .SelectMany(s => s.Translations)
-                    .Where(t => t.Language.Code.Equals("pl", StringComparison.OrdinalIgnoreCase))
-                    .Select(t => t.Word)
-                    .Distinct()
-                    .ToList();
-
-                return translations;
+                return response?.FirstOrDefault();
             }
             catch (HttpRequestException e)
             {
@@ -47,7 +35,7 @@ namespace Linguibuddy.Services
             catch (Exception e)
             {
                 Console.WriteLine($"Api error: {e.Message}");
-                return [];
+                return null;
             }
         }
     }
