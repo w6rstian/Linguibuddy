@@ -1,6 +1,10 @@
-﻿using Linguibuddy.Resources.Strings;
+﻿using Linguibuddy.Data;
+using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
+using Linguibuddy.ViewModels;
 using Linguibuddy.Services;
 using LocalizationResourceManager.Maui;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Linguibuddy
@@ -23,11 +27,20 @@ namespace Linguibuddy
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            builder.Services.AddDbContext<DataContext>(
+                options =>
+                {
+                    var dbPath = Path.Combine(FileSystem.AppDataDirectory, "database.db");
+                    options.UseSqlite($"Data Source={dbPath}");
+                }
+                );
+
+            builder.Services.AddTransient<MainViewModel>();
             var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
 
             if (string.IsNullOrEmpty(deepLKey))
             {
-                System.Diagnostics.Debug.WriteLine("⚠DEEPL_API_KEY is not set in environment variables.");
+                System.Diagnostics.Debug.WriteLine("DEEPL_API_KEY is not set in environment variables.");
             }
 
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
@@ -36,7 +49,24 @@ namespace Linguibuddy
             builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
+            var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+                context.Database.EnsureCreated();
+
+                if (!context.Users.Any())
+                {
+                    context.Users.AddRange(
+                        new User { UserName = "admin" },
+                        new User { UserName = "testuser" }
+                        );
+                    context.SaveChanges();
+                }
+            }
+
+            return app;
         }
     }
 }

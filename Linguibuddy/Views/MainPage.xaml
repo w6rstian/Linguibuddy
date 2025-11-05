@@ -20,6 +20,21 @@
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
+            <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
+                <Label Text="Users" FontSize="32" HorizontalOptions="Center" />
+                <CollectionView ItemsSource="{Binding Users}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10" ColumnDefinitions="*,Auto,Auto">
+                                <Label Grid.Column="0"
+                                       Text="{Binding UserName}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+            
             <Entry x:Name="WordEntry"
                    Placeholder="Enter an English word"
                    ReturnType="Search" />

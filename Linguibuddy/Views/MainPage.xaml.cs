@@ -1,4 +1,6 @@
-﻿using Linguibuddy.Services;
+﻿using Linguibuddy.Data;
+using Linguibuddy.Services;
+using Linguibuddy.ViewModels;
 using LocalizationResourceManager.Maui;
 using Microsoft.Maui.Controls;
 
@@ -10,9 +12,10 @@ namespace Linguibuddy.Views
         private readonly DictionaryApiService _dictionaryService = new();
         private readonly DeepLTranslationService _translationService;
 
-        public MainPage(ILocalizationResourceManager localization, DeepLTranslationService translationService)
+        public MainPage(MainViewModel viewModel, ILocalizationResourceManager localization, DeepLTranslationService translationService)
         {
             InitializeComponent();
+            BindingContext = viewModel;
             _localization = localization;
             _translationService = translationService;
         }
