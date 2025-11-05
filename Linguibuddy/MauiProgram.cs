@@ -2,6 +2,7 @@
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.ViewModels;
+using Linguibuddy.Services;
 using LocalizationResourceManager.Maui;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -35,6 +36,14 @@ namespace Linguibuddy
                 );
 
             builder.Services.AddTransient<MainViewModel>();
+            var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
+
+            if (string.IsNullOrEmpty(deepLKey))
+            {
+                System.Diagnostics.Debug.WriteLine("DEEPL_API_KEY is not set in environment variables.");
+            }
+
+            builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
 
 #if DEBUG
             builder.Logging.AddDebug();
