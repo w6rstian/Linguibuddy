@@ -61,6 +61,60 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter an English word.
+        /// </summary>
+        internal static string DictionarySearchFieldPlaceholder {
+            get {
+                return ResourceManager.GetString("DictionarySearchFieldPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ⚠️ Please enter a word..
+        /// </summary>
+        internal static string EnterWordWarning {
+            get {
+                return ResourceManager.GetString("EnterWordWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ❌ Error.
+        /// </summary>
+        internal static string ErrorText {
+            get {
+                return ResourceManager.GetString("ErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No results found 😞.
+        /// </summary>
+        internal static string NoResultsFoundText {
+            get {
+                return ResourceManager.GetString("NoResultsFoundText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ⏳ Searching....
+        /// </summary>
+        internal static string SearchingText {
+            get {
+                return ResourceManager.GetString("SearchingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🌐 Translation (PL).
+        /// </summary>
+        internal static string TranslationText {
+            get {
+                return ResourceManager.GetString("TranslationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Welcome to Linguibuddy!.
         /// </summary>
         internal static string Welcome {

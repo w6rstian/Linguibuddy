@@ -117,6 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DictionarySearchFieldPlaceholder" xml:space="preserve">
+    <value>Wpisz angielskie słowo</value>
+  </data>
+  <data name="EnterWordWarning" xml:space="preserve">
+    <value>⚠️ Proszę wpisać słowo.</value>
+  </data>
+  <data name="ErrorText" xml:space="preserve">
+    <value>❌ Błąd</value>
+  </data>
+  <data name="NoResultsFoundText" xml:space="preserve">
+    <value>Nie znaleziono wyników 😞</value>
+  </data>
+  <data name="SearchingText" xml:space="preserve">
+    <value>⏳ Wyszukiwanie...</value>
+  </data>
+  <data name="TranslationText" xml:space="preserve">
+    <value>🌐 Tłumaczenie (PL)</value>
+  </data>
   <data name="Welcome" xml:space="preserve">
     <value>Witaj w Linguibuddy!</value>
   </data>
