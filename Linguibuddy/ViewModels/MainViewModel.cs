@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Linguibuddy.Data;
 using Linguibuddy.Models;
+using Linguibuddy.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Linguibuddy.ViewModels
 {
-    public class MainViewModel : ObservableObject
+    public partial class MainViewModel : ObservableObject
     {
         private readonly DataContext _dataContext;
         public ObservableCollection<User> Users { get; set; }
@@ -20,7 +21,7 @@ namespace Linguibuddy.ViewModels
         public MainViewModel(DataContext dataContext)
         {
             _dataContext = dataContext;
-            Users = new ObservableCollection<User>();
+            Users = [];
             LoadUsers();
         }
 
