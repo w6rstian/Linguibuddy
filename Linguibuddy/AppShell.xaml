@@ -4,17 +4,20 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Linguibuddy"
-    xmlns:views="using:Linguibuddy.Views"
+    xmlns:views="clr-namespace:Linguibuddy.Views"
     Title="Linguibuddy">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:MainPage}"
-        Route="MainPage" />
-    
-    <ShellContent
-        Title="Dictionary"
-        ContentTemplate="{DataTemplate views:DictionaryPage}"
-        Route="DictionaryPage" />
+    <FlyoutItem Title="Home">
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate views:MainPage}"
+            Route="MainPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Dictionary">
+        <ShellContent
+            Title="Dictionary"
+            ContentTemplate="{DataTemplate views:DictionaryPage}"
+            Route="DictionaryPage" />
+    </FlyoutItem>
 
 </Shell>

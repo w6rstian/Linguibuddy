@@ -52,6 +52,7 @@ namespace Linguibuddy
             }
 
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
+            builder.Services.AddSingleton<DictionaryApiService>();
 
 #if DEBUG
             builder.Logging.AddDebug();
