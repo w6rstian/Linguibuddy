@@ -1,5 +1,5 @@
 ﻿using Linguibuddy.Models;
-using System.Net.Http.Json;
+using Newtonsoft.Json;
 
 namespace Linguibuddy.Services
 {
@@ -24,8 +24,8 @@ namespace Linguibuddy.Services
             try
             {
                 var url = $"{BaseUrl}{englishWord}";
-                var response = await _httpClient.GetFromJsonAsync<List<WordEntry>>(url);
-
+                var json = await _httpClient.GetStringAsync(url);
+                var response = JsonConvert.DeserializeObject<List<WordEntry>>(json);
                 return response?.FirstOrDefault();
             }
             catch (HttpRequestException e)
