@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:resx="clr-namespace:Linguibuddy.Resources.Strings"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Linguibuddy.Views.DictionaryPage"
+             Title="Dictionary">
+    <ScrollView>
+        <VerticalStackLayout Margin="30,0">
+            <Entry Text="{Binding InputText}"
+                   Placeholder="{x:Static resx:AppResources.DictionarySearchFieldPlaceholder}"
+                   ReturnCommand="{Binding LookupWordCommand}">
+                <!--<Entry.Behaviors>
+                    <toolkit:EventToCommandBehavior 
+                        EventName="Completed"
+                        Command="{Binding LookupWordCommand}" />
+                </Entry.Behaviors>-->
+            </Entry>
+
+            <ScrollView>
+                <Label Text="{Binding ResultsText}"
+                       FontSize="16"
+                       TextColor="Black" />
+            </ScrollView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
