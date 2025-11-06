@@ -25,17 +25,16 @@ namespace Linguibuddy.ViewModels
         public partial string? InputText { get; set; }
         [ObservableProperty]
         public partial string? ResultsText { get; set; }
-        public IRelayCommand LookupWordCommand { get; }
 
         public DictionaryViewModel(DataContext dataContext, DictionaryApiService dictionaryService, DeepLTranslationService translationService)
         {
             _dataContext = dataContext;
             _dictionaryService = dictionaryService;
             _translationService = translationService;
-            LookupWordCommand = new RelayCommand(async () => await LookUpWord());
         }
 
-        public async Task LookUpWord()
+        [RelayCommand]
+        public async Task LookupWord()
         {
             ResultsText = AppResources.SearchingText;
 

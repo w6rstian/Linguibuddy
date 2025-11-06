@@ -7,12 +7,13 @@
              Title="Dictionary">
     <VerticalStackLayout>
         <Entry Text="{Binding InputText}"
-               Placeholder="{x:Static resx:AppResources.DictionarySearchFieldPlaceholder}">
-            <Entry.Behaviors>
+               Placeholder="{x:Static resx:AppResources.DictionarySearchFieldPlaceholder}"
+               ReturnCommand="{Binding LookupWordCommand}">
+            <!--<Entry.Behaviors>
                 <toolkit:EventToCommandBehavior 
                     EventName="Completed"
                     Command="{Binding LookupWordCommand}" />
-            </Entry.Behaviors>
+            </Entry.Behaviors>-->
         </Entry>
 
         <ScrollView>
