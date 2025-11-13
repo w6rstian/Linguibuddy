@@ -35,23 +35,6 @@
                 </CollectionView>
             </VerticalStackLayout>
             
-            <Entry x:Name="WordEntry"
-                   Placeholder="Enter an English word"
-                   ReturnType="Search" />
-
-            <Button Text="Search"
-                    Clicked="OnSearchClicked" />
-
-            <Button x:Name="AudioButton"
-                    Text="🔊 Play pronunciation"
-                    Clicked="OnPlayAudioClicked"
-                    IsEnabled="False" />
-
-            <ScrollView>
-                <Label x:Name="ResultsLabel"
-                       FontSize="16"
-                       TextColor="White" />
-            </ScrollView>
         </VerticalStackLayout>
     </ScrollView>
 
