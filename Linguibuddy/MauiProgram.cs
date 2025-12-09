@@ -44,6 +44,9 @@ namespace Linguibuddy
             builder.Services.AddTransient<DictionaryPage>();
             builder.Services.AddTransient<DictionaryViewModel>();
 
+            builder.Services.AddTransient<FlashcardsPage>();
+            builder.Services.AddTransient<FlashcardsViewModel>();
+
             var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
 
             if (string.IsNullOrEmpty(deepLKey))

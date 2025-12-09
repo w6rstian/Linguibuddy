@@ -15,9 +15,9 @@
     </FlyoutItem>
     <FlyoutItem Title="Dictionary">
         <ShellContent
-            Title="Dictionary"
-            ContentTemplate="{DataTemplate views:DictionaryPage}"
-            Route="DictionaryPage" />
+            Title="Flashcards"
+            ContentTemplate="{DataTemplate views:FlashcardsPage}"
+            Route="FlashcardsPage" />
     </FlyoutItem>
 
 </Shell>

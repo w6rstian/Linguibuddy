@@ -12,5 +12,6 @@ namespace Linguibuddy.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<User> Users { get; set; }
+        public DbSet<Flashcard> Flashcards { get; set; }
     }
 }
