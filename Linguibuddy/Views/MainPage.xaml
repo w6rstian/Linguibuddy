@@ -20,6 +20,25 @@
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
+            <Border StrokeShape="RoundRectangle 10" 
+                    Background="#f0f0f0" 
+                    Padding="10" 
+                    StrokeThickness="0">
+
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="OpenAI Connection Test" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+                    <Button Text="Check API Key" 
+                            Command="{Binding TestOpenAiCommand}"
+                            BackgroundColor="#512BD4"
+                            TextColor="White"/>
+
+                    <Label Text="{Binding ApiResponseStatus}" 
+                           TextColor="Black"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </Border>
             <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
                 <Label Text="Users" FontSize="32" HorizontalOptions="Center" />
                 <CollectionView ItemsSource="{Binding Users}">
@@ -34,7 +53,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </VerticalStackLayout>
-            
+
         </VerticalStackLayout>
     </ScrollView>
 
