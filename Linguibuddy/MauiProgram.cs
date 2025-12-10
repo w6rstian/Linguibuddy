@@ -68,10 +68,10 @@ namespace Linguibuddy
                 UserRepository = new FileUserRepository("Linguibuddy")
             }));
 
-            builder.Services.AddSingleton<SignInPage>();
-            builder.Services.AddSingleton<SignInViewModel>();
-            builder.Services.AddSingleton<SignUpPage>();
-            builder.Services.AddSingleton<SignUpViewModel>();
+            builder.Services.AddTransient<SignInPage>();
+            builder.Services.AddTransient<SignInViewModel>();
+            builder.Services.AddTransient<SignUpPage>();
+            builder.Services.AddTransient<SignUpViewModel>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
