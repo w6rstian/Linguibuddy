@@ -1,13 +1,14 @@
-﻿using Linguibuddy.Data;
+﻿using CommunityToolkit.Maui;
+using Linguibuddy.Data;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.ViewModels;
 using Linguibuddy.Services;
+using Linguibuddy.ViewModels;
+using Linguibuddy.Views;
 using LocalizationResourceManager.Maui;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
-using CommunityToolkit.Maui;
-using Linguibuddy.Views;
 
 namespace Linguibuddy
 {
@@ -45,13 +46,21 @@ namespace Linguibuddy
             builder.Services.AddTransient<DictionaryViewModel>();
 
             var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
+            //var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+            var githubAiKey = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
 
             if (string.IsNullOrEmpty(deepLKey))
             {
                 System.Diagnostics.Debug.WriteLine("DEEPL_API_KEY is not set in environment variables.");
             }
 
+            if (string.IsNullOrEmpty(githubAiKey))
+            {
+                System.Diagnostics.Debug.WriteLine("GITHUB_TOKEN is not set in environment variables.");
+            }
+
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
+            builder.Services.AddSingleton(new OpenAiService(githubAiKey));
             builder.Services.AddSingleton<DictionaryApiService>();
 
 #if DEBUG
