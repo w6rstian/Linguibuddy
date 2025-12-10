@@ -4,8 +4,8 @@
              x:Class="Linguibuddy.Views.SignInPage"
              Title="Sign In">
     <VerticalStackLayout>
-        <Entry Text="{Binding Email}" />
-        <Entry IsPassword="True" Text="{Binding Password}" />
+        <Entry Text="{Binding Email}" Placeholder="Email address" />
+        <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Password" />
         <Button Command="{Binding SignInCommand}" Text="Sign In" />
         <Button Command="{Binding NavigateSignUpCommand}" Text="Need an account? Sign up" />
     </VerticalStackLayout>
