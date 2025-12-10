@@ -66,6 +66,10 @@ namespace Linguibuddy
                 }
             }));
 
+            builder.Services.AddSingleton<SignInPage>();
+            builder.Services.AddSingleton<SignInViewModel>();
+            builder.Services.AddSingleton<SignUpPage>();
+            builder.Services.AddSingleton<SignUpViewModel>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

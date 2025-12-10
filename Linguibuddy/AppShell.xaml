@@ -20,4 +20,13 @@
             Route="DictionaryPage" />
     </FlyoutItem>
 
+    <ShellContent
+        Title="Sign In"
+        ContentTemplate="{DataTemplate views:SignInPage}"
+        Route="SignIn" />
+    <ShellContent
+        Title="Sign Up"
+        ContentTemplate="{DataTemplate views:SignUpPage}"
+        Route="SignUp" />
+
 </Shell>
