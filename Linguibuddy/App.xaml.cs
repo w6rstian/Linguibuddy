@@ -18,7 +18,7 @@ namespace Linguibuddy
             {
                 var signInPage = IPlatformApplication.Current.Services.GetService<SignInPage>();
 
-                return new Window(signInPage);
+                return new Window(new NavigationPage(signInPage));
             }
             else
             {

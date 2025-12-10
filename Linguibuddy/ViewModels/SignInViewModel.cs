@@ -46,7 +46,7 @@ namespace Linguibuddy.ViewModels
         {
             var signUpPage = _services.GetRequiredService<SignUpPage>();
 
-            Application.Current.Windows[0].Page = signUpPage;
+            Application.Current.Windows[0].Page = new NavigationPage(signUpPage);
         }
     }
 }

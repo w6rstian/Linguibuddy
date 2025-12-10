@@ -39,14 +39,14 @@ namespace Linguibuddy.ViewModels
             await _authClient.CreateUserWithEmailAndPasswordAsync(Email, Password, Username);
             var signInPage = _services.GetRequiredService<SignInPage>();
 
-            Application.Current.Windows[0].Page = signInPage;
+            Application.Current.Windows[0].Page = new NavigationPage(signInPage);
         }
         [RelayCommand]
         private async Task NavigateSignIn()
         {
             var signInPage = _services.GetRequiredService<SignInPage>();
 
-            Application.Current.Windows[0].Page = signInPage;
+            Application.Current.Windows[0].Page = new NavigationPage(signInPage);
         }
     }
 }
