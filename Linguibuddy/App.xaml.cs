@@ -1,4 +1,7 @@
-﻿namespace Linguibuddy
+﻿using Firebase.Auth;
+using Linguibuddy.Views;
+
+namespace Linguibuddy
 {
     public partial class App : Application
     {
@@ -9,7 +12,18 @@
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell());
+            var authClient = IPlatformApplication.Current.Services.GetRequiredService<FirebaseAuthClient>();
+            var user = authClient.User;
+            if (user is null)
+            {
+                var signInPage = IPlatformApplication.Current.Services.GetService<SignInPage>();
+
+                return new Window(signInPage);
+            }
+            else
+            {
+                return new Window(new AppShell());
+            }
         }
     }
 }
