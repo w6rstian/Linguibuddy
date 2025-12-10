@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Data;
 using Linguibuddy.Models;
 using Linguibuddy.Services;
@@ -15,14 +16,35 @@ namespace Linguibuddy.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
+        private readonly OpenAiService _openAiService; // test AI
         private readonly DataContext _dataContext;
         public ObservableCollection<User> Users { get; set; }
 
-        public MainViewModel(DataContext dataContext)
+        [ObservableProperty]
+        private string? apiResponseStatus;
+
+        public MainViewModel(DataContext dataContext, OpenAiService openAiService)
         {
             _dataContext = dataContext;
+            _openAiService = openAiService;
             Users = [];
+            ApiResponseStatus = "Kliknij przycisk, aby przetestować API";
             LoadUsers();
+        }
+
+        [RelayCommand]
+        private async Task TestOpenAiAsync()
+        {
+            try
+            {
+                ApiResponseStatus = "Łączenie z OpenAI...";
+                var result = await _openAiService.TestConnectionAsync();
+                ApiResponseStatus = $"Odpowiedź API: {result}";
+            }
+            catch (Exception ex)
+            {
+                ApiResponseStatus = $"Błąd podczas testu OpenAI: {ex.Message}";
+            }
         }
 
         private async void LoadUsers()
