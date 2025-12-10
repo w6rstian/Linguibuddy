@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
 using Linguibuddy.Views;
+using Firebase.Auth;
+using Firebase.Auth.Providers;
 
 namespace Linguibuddy
 {
@@ -54,12 +56,23 @@ namespace Linguibuddy
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
             builder.Services.AddSingleton<DictionaryApiService>();
 
+            builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
+            {
+                ApiKey = "AIzaSyDzvckq_urVWkkgHCTbgeDK3MTHq6GzFmk",
+                AuthDomain = "linguibuddy.web.app",
+                Providers = new FirebaseAuthProvider[]
+                {
+                    new EmailProvider()
+                }
+            }));
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
 
             var app = builder.Build();
 
+            /*
             using (var scope = app.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<DataContext>();
@@ -68,13 +81,13 @@ namespace Linguibuddy
                 if (!context.Users.Any())
                 {
                     context.Users.AddRange(
-                        new User { UserName = "admin" },
-                        new User { UserName = "testuser" }
+                        new Models.User { UserName = "admin" },
+                        new Models.User { UserName = "testuser" }
                         );
                     context.SaveChanges();
                 }
             }
-
+            */
             return app;
         }
     }
