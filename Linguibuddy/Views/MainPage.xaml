@@ -20,6 +20,10 @@
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
+
+            <Button Text="Sign out" 
+                    Command="{Binding SignOutCommand}" />
+
             <Border StrokeShape="RoundRectangle 10" 
                     Background="#f0f0f0" 
                     Padding="10" 

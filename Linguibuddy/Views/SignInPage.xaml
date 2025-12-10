@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Linguibuddy.Views.SignInPage"
+             Title="Sign In">
+    <VerticalStackLayout>
+        <Entry Text="{Binding Email}" Placeholder="Email address" />
+        <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Password" />
+        <Button Command="{Binding SignInCommand}" Text="Sign In" />
+        <Button Command="{Binding NavigateSignUpCommand}" Text="Need an account? Sign up" />
+    </VerticalStackLayout>
+</ContentPage>

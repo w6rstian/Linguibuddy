@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Firebase.Auth;
 using Linguibuddy.Data;
 using Linguibuddy.Models;
 using Linguibuddy.Services;
+using Linguibuddy.Views;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,15 +20,19 @@ namespace Linguibuddy.ViewModels
     {
         private readonly OpenAiService _openAiService; // test AI
         private readonly DataContext _dataContext;
-        public ObservableCollection<User> Users { get; set; }
+        private readonly FirebaseAuthClient _authClient;
+        private readonly IServiceProvider _services;
+        public ObservableCollection<Models.User> Users { get; set; }
 
         [ObservableProperty]
         private string? apiResponseStatus;
 
-        public MainViewModel(DataContext dataContext, OpenAiService openAiService)
+        public MainViewModel(DataContext dataContext, OpenAiService openAiService, FirebaseAuthClient authClient, IServiceProvider services)
         {
             _dataContext = dataContext;
             _openAiService = openAiService;
+            _authClient = authClient;
+            _services = services;
             Users = [];
             ApiResponseStatus = "Kliknij przycisk, aby przetestować API";
             LoadUsers();
@@ -63,6 +69,14 @@ namespace Linguibuddy.ViewModels
             {
                 return;
             }
+        }
+
+        [RelayCommand]
+        private async Task SignOut()
+        {
+            _authClient.SignOut();
+            var signInPage = _services.GetRequiredService<SignInPage>();
+            Application.Current.Windows[0].Page = new NavigationPage(signInPage);
         }
     }
 }

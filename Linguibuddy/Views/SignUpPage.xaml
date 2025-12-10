@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Linguibuddy.Views.SignUpPage"
+             Title="Sign Up">
+    <VerticalStackLayout>
+        <Entry Text="{Binding Username}" Placeholder="Username" />
+        <Entry Text="{Binding Email}" Placeholder="Email address" />
+        <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Password" />
+        <!-- Add confirm password -->
+        <Button Command="{Binding SignUpCommand}" Text="Sign Up" />
+        <Button Command="{Binding NavigateSignInCommand}" Text="Already have an account? Sign in" />
+    </VerticalStackLayout>
+</ContentPage>
