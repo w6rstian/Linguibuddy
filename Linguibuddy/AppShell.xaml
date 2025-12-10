@@ -15,6 +15,12 @@
     </FlyoutItem>
     <FlyoutItem Title="Dictionary">
         <ShellContent
+            Title="Dictionary"
+            ContentTemplate="{DataTemplate views:DictionaryPage}"
+            Route="DictionaryPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Flashcards">
+        <ShellContent
             Title="Flashcards"
             ContentTemplate="{DataTemplate views:FlashcardsPage}"
             Route="FlashcardsPage" />
