@@ -8,6 +8,7 @@ namespace Linguibuddy.Models
 {
     public class Flashcard
     {
+        public int Id { get; set; }
         public string Word { get; set; }
         public string Translation { get; set; }
         public string PartOfSpeech { get; set; }
