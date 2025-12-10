@@ -20,6 +20,10 @@
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
+
+            <Button Text="Sign out" 
+                    Command="{Binding SignOutCommand}" />
+
             <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
                 <Label Text="Users" FontSize="32" HorizontalOptions="Center" />
                 <CollectionView ItemsSource="{Binding Users}">
