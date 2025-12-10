@@ -9,7 +9,7 @@ namespace Linguibuddy.Services
         public DeepLTranslationService(string? apiKey)
         {
             if (string.IsNullOrEmpty(apiKey))
-                throw new ArgumentException("Missing DeepL API key. Please ensure you have a .env file with DEEPL_API_KEY set.");
+                throw new ArgumentException("API key is required", nameof(apiKey));
 
             _client = new DeepLClient(apiKey);
         }
