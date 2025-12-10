@@ -10,6 +10,7 @@ using CommunityToolkit.Maui;
 using Linguibuddy.Views;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
+using Firebase.Auth.Repository;
 
 namespace Linguibuddy
 {
@@ -63,7 +64,8 @@ namespace Linguibuddy
                 Providers = new FirebaseAuthProvider[]
                 {
                     new EmailProvider()
-                }
+                },
+                UserRepository = new FileUserRepository("Linguibuddy")
             }));
 
             builder.Services.AddSingleton<SignInPage>();
