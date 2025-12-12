@@ -20,7 +20,7 @@ namespace Linguibuddy.ViewModels
         private readonly DeepLTranslationService _translationService;
 
         [ObservableProperty]
-        public partial WordEntry? Word { get; set; }
+        public partial DictionaryWord? Word { get; set; }
         [ObservableProperty]
         public partial string? InputText { get; set; }
         [ObservableProperty]
