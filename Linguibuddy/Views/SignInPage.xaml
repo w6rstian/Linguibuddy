@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Linguibuddy.Views.SignInPage"
              Title="Sign In">
-    <FlexLayout Direction="Column"
-                AlignItems="Center"
-                JustifyContent="Start"
+    <VerticalStackLayout
                 Margin="0,30,0,0">
         <Label Text="Linguibuddy"
                HorizontalTextAlignment="Center"
@@ -29,5 +27,5 @@
                 <Button Command="{Binding NavigateSignUpCommand}" Text="Need an account? Sign up" />
             </VerticalStackLayout>
         </FlexLayout>
-    </FlexLayout>
+    </VerticalStackLayout>
 </ContentPage>
