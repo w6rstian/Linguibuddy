@@ -10,11 +10,11 @@ namespace Linguibuddy.ViewModels
         private Queue<Flashcard> _flashcardsQueue;
 
         [ObservableProperty]
-        private Flashcard currentFlashcard;
+        private Flashcard _currentFlashcard;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsLearning))]
-        private bool isFinished;
+        private bool _isFinished;
 
         public bool IsLearning => !IsFinished;
 

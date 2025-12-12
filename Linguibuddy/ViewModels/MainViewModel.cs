@@ -22,7 +22,6 @@ namespace Linguibuddy.ViewModels
         private readonly DataContext _dataContext;
         private readonly FirebaseAuthClient _authClient;
         private readonly IServiceProvider _services;
-        public ObservableCollection<Models.User> Users { get; set; }
 
         [ObservableProperty]
         private string? apiResponseStatus;
@@ -33,9 +32,7 @@ namespace Linguibuddy.ViewModels
             _openAiService = openAiService;
             _authClient = authClient;
             _services = services;
-            Users = [];
             ApiResponseStatus = "Kliknij przycisk, aby przetestować API";
-            LoadUsers();
         }
 
         [RelayCommand]
@@ -50,24 +47,6 @@ namespace Linguibuddy.ViewModels
             catch (Exception ex)
             {
                 ApiResponseStatus = $"Błąd podczas testu OpenAI: {ex.Message}";
-            }
-        }
-
-        private async void LoadUsers()
-        {
-            try
-            {
-                await _dataContext.Database.EnsureCreatedAsync();
-
-                var users = await _dataContext.Users.ToListAsync();
-                foreach(var user in users)
-                {
-                    Users.Add(user);
-                }
-            }
-            catch(Exception ex)
-            {
-                return;
             }
         }
 
