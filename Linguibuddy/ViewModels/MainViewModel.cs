@@ -25,6 +25,8 @@ namespace Linguibuddy.ViewModels
 
         [ObservableProperty]
         private string? apiResponseStatus;
+        [ObservableProperty]
+        private string _username;
 
         public MainViewModel(DataContext dataContext, OpenAiService openAiService, FirebaseAuthClient authClient, IServiceProvider services)
         {
@@ -33,6 +35,8 @@ namespace Linguibuddy.ViewModels
             _authClient = authClient;
             _services = services;
             ApiResponseStatus = "Kliknij przycisk, aby przetestować API";
+
+            Username = _authClient.User.Info.DisplayName;
         }
 
         [RelayCommand]
