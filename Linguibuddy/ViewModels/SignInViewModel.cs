@@ -32,6 +32,7 @@ namespace Linguibuddy.ViewModels
         [RelayCommand]
         private async Task SignIn()
         {
+            LabelErrorOpacity = 0;
             try
             {
                 await _authClient.SignInWithEmailAndPasswordAsync(Email, Password);
