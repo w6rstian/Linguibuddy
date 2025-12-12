@@ -34,12 +34,17 @@ namespace Linguibuddy.ViewModels
         {
             _authClient = authClient;
             _services = services;
+            LabelUsernameErrorOpacity = 0;
             LabelEmailErrorOpacity = 0;
             LabelPasswordErrorOpacity = 0;
         }
         [RelayCommand]
         private async Task SignUp()
         {
+            LabelUsernameErrorOpacity = 0;
+            LabelEmailErrorOpacity = 0;
+            LabelPasswordErrorOpacity = 0;
+
             if (string.IsNullOrWhiteSpace(Username))
                 LabelUsernameErrorOpacity = 1;
 
