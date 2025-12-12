@@ -59,9 +59,8 @@ namespace Linguibuddy.ViewModels
                 return;
 
             await _authClient.CreateUserWithEmailAndPasswordAsync(Email, Password, Username);
-            var signInPage = _services.GetRequiredService<SignInPage>();
 
-            Application.Current.Windows[0].Page = new NavigationPage(signInPage);
+            Application.Current.Windows[0].Page = new AppShell();
         }
         [RelayCommand]
         private async Task NavigateSignIn()
