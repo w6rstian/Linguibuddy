@@ -69,7 +69,7 @@ namespace Linguibuddy
 
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
             builder.Services.AddSingleton(new OpenAiService(githubAiKey));
-            builder.Services.AddSingleton<DictionaryApiService>();
+            builder.Services.AddTransient<DictionaryApiService>();
 
             builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
             {
@@ -92,22 +92,16 @@ namespace Linguibuddy
 
             var app = builder.Build();
 
-            /*
             using (var scope = app.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<DataContext>();
-                context.Database.EnsureCreated();
 
-                if (!context.Users.Any())
-                {
-                    context.Users.AddRange(
-                        new Models.User { UserName = "admin" },
-                        new Models.User { UserName = "testuser" }
-                        );
-                    context.SaveChanges();
-                }
+                // ODKOMENTUJ TĘ LINIJKĘ, ABY ZRESETOWAĆ BAZĘ:
+                //context.Database.EnsureDeleted();
+
+                context.Database.EnsureCreated();
             }
-            */
+
             return app;
         }
     }
