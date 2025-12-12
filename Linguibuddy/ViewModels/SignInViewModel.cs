@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
+using Firebase.Auth.Providers;
 using Linguibuddy.Views;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,14 @@ namespace Linguibuddy.ViewModels
         private string _email;
         [ObservableProperty]
         private string _password;
+        [ObservableProperty]
+        private float _labelErrorOpacity;
 
         public SignInViewModel(FirebaseAuthClient authClient, IServiceProvider services)
         {
             _authClient = authClient;
             _services = services;
+            LabelErrorOpacity = 0;
         }
         [RelayCommand]
         private async Task SignIn()
@@ -34,7 +38,7 @@ namespace Linguibuddy.ViewModels
             }
             catch (Exception ex)
             {
-                // TODO: show error message
+                LabelErrorOpacity = 1;
                 return;
             }
 

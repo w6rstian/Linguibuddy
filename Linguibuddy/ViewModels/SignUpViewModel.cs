@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Linguibuddy.ViewModels
@@ -22,20 +23,36 @@ namespace Linguibuddy.ViewModels
         private string _username;
         [ObservableProperty]
         private string _password;
+        [ObservableProperty]
+        private float _labelUsernameErrorOpacity;
+        [ObservableProperty]
+        private float _labelEmailErrorOpacity;
+        [ObservableProperty]
+        private float _labelPasswordErrorOpacity;
 
         public SignUpViewModel(FirebaseAuthClient authClient, IServiceProvider services)
         {
             _authClient = authClient;
             _services = services;
+            LabelEmailErrorOpacity = 0;
+            LabelPasswordErrorOpacity = 0;
         }
         [RelayCommand]
         private async Task SignUp()
         {
-            if (Email == "" || Password.Length < 6 || Username == "")
-            {
-                // TODO Error handling, message for the user
+            if (string.IsNullOrWhiteSpace(Username))
+                LabelUsernameErrorOpacity = 1;
+
+            const string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            if (string.IsNullOrWhiteSpace(Email) || !Regex.IsMatch(Email, pattern))
+                LabelEmailErrorOpacity = 1;
+
+            if (string.IsNullOrWhiteSpace(Password) || Password.Length < 6)
+                LabelPasswordErrorOpacity = 1;
+
+            if (LabelUsernameErrorOpacity == 1 || LabelEmailErrorOpacity == 1 || LabelPasswordErrorOpacity == 1)
                 return;
-            }
+
             await _authClient.CreateUserWithEmailAndPasswordAsync(Email, Password, Username);
             var signInPage = _services.GetRequiredService<SignInPage>();
 

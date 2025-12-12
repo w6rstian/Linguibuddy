@@ -3,10 +3,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Linguibuddy.Views.SignInPage"
              Title="Sign In">
-    <VerticalStackLayout>
-        <Entry Text="{Binding Email}" Placeholder="Email address" />
-        <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Password" />
-        <Button Command="{Binding SignInCommand}" Text="Sign In" />
-        <Button Command="{Binding NavigateSignUpCommand}" Text="Need an account? Sign up" />
-    </VerticalStackLayout>
+    <FlexLayout Direction="Column"
+                AlignItems="Center"
+                JustifyContent="Start"
+                Margin="0,30,0,0">
+        <Label Text="Linguibuddy"
+               HorizontalTextAlignment="Center"
+               FontSize="Header" />
+        <Label Text="Welcome! Sign in to continue"
+               HorizontalTextAlignment="Center"
+               FontSize="Subtitle"
+               Margin="0,0,0,20"/>
+        <FlexLayout Direction="Column"
+                    AlignItems="Center">
+            <VerticalStackLayout Spacing="20">
+                <Entry Text="{Binding Email}" Placeholder="Email address" />
+                <VerticalStackLayout>
+                    <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Password" />
+                    <Label Text="Email or password incorrect"
+                           FontSize="12"
+                           TextColor="Red"
+                           Opacity="{Binding LabelErrorOpacity}" />
+                </VerticalStackLayout>
+                <Button Command="{Binding SignInCommand}" Text="Sign In" />
+                <Button Command="{Binding NavigateSignUpCommand}" Text="Need an account? Sign up" />
+            </VerticalStackLayout>
+        </FlexLayout>
+    </FlexLayout>
 </ContentPage>
