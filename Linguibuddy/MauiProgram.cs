@@ -53,6 +53,13 @@ namespace Linguibuddy
             builder.Services.AddTransient<FlashcardsPage>();
             builder.Services.AddTransient<FlashcardsViewModel>();
 
+            builder.Services.AddTransient<SignInPage>();
+            builder.Services.AddTransient<SignInViewModel>();
+
+            builder.Services.AddTransient<SignUpPage>();
+            builder.Services.AddTransient<SignUpViewModel>();
+
+
             var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
             //var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
             var githubAiKey = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
@@ -82,10 +89,6 @@ namespace Linguibuddy
                 UserRepository = new FileUserRepository("Linguibuddy")
             }));
 
-            builder.Services.AddTransient<SignInPage>();
-            builder.Services.AddTransient<SignInViewModel>();
-            builder.Services.AddTransient<SignUpPage>();
-            builder.Services.AddTransient<SignUpViewModel>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
