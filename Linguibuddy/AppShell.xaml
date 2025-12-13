@@ -25,5 +25,12 @@
             ContentTemplate="{DataTemplate views:FlashcardsPage}"
             Route="FlashcardsPage" />
     </FlyoutItem>
+    
+    <FlyoutItem Title="Settings">
+        <ShellContent 
+            Title="Settings"
+            ContentTemplate="{DataTemplate views:SettingsPage}"
+            Route="SettingsPage"/>
+    </FlyoutItem>
 
 </Shell>
