@@ -126,16 +126,34 @@
   <data name="ErrorText" xml:space="preserve">
     <value>❌ Błąd</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Język</value>
+  </data>
+  <data name="LanguageName" xml:space="preserve">
+    <value>Polski</value>
+  </data>
   <data name="NoResultsFoundText" xml:space="preserve">
     <value>Nie znaleziono wyników 😞</value>
   </data>
   <data name="SearchingText" xml:space="preserve">
     <value>⏳ Wyszukiwanie...</value>
   </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Motyw</value>
+  </data>
+  <data name="ThemeNameLight" xml:space="preserve">
+    <value>Jasny</value>
+  </data>
+  <data name="ThemeNameDark" xml:space="preserve">
+    <value>Ciemny</value>
+  </data>
   <data name="TranslationText" xml:space="preserve">
     <value>🌐 Tłumaczenie (PL)</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Witaj w Linguibuddy,</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Ustawienia</value>
   </data>
 </root>

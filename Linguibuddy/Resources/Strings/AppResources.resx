@@ -126,16 +126,34 @@
   <data name="ErrorText" xml:space="preserve">
     <value>❌ Error</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageName" xml:space="preserve">
+    <value>English</value>
+  </data>
   <data name="NoResultsFoundText" xml:space="preserve">
     <value>No results found 😞</value>
   </data>
   <data name="SearchingText" xml:space="preserve">
     <value>⏳ Searching...</value>
   </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="ThemeNameLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="ThemeNameDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
   <data name="TranslationText" xml:space="preserve">
     <value>🌐 Translation (PL)</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome to Linguibuddy,</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
   </data>
 </root>
