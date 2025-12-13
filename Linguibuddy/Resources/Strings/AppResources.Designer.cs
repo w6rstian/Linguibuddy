@@ -115,7 +115,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome to Linguibuddy!.
+        ///   Looks up a localized string similar to Welcome to Linguibuddy,.
         /// </summary>
         internal static string Welcome {
             get {
