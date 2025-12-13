@@ -8,57 +8,50 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a hovercraft number nine" />
+            <FlexLayout Direction="Column"
+                        AlignItems="Center">
+                <HorizontalStackLayout Spacing="10" Margin="0,0,0,25">
+                    <Label
+                        Text="{loc:Translate Welcome}"
+                        Style="{StaticResource SubHeadline}" />
 
-            <Label
-                Text="{loc:Translate Welcome}"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
+                    <Label Text="{Binding Username}"
+                           Style="{StaticResource SubHeadline}"/>
+                    
+                    <Button Text="Sign out" 
+                            Command="{Binding SignOutCommand}"
+                            MinimumHeightRequest="20"
+                            Padding="5,0"/>
+                </HorizontalStackLayout>
 
-            <Label Text="{Binding Username}"/>
+                <VerticalStackLayout Spacing="20">
+                    <HorizontalStackLayout Spacing="50">
+                        <Button Text="Dictionary"
+                                Command=""
+                                FontSize="Medium"
+                                Padding="40,30" 
+                                MinimumWidthRequest="200"/>
+                        <Button Text="Minigames"
+                                Command=""
+                                FontSize="Medium"
+                                Padding="40,30" 
+                                MinimumWidthRequest="200" />
+                    </HorizontalStackLayout>
 
-            <Button Text="Sign out" 
-                    Command="{Binding SignOutCommand}" />
-
-            <Border StrokeShape="RoundRectangle 10" 
-                    Background="#f0f0f0" 
-                    Padding="10" 
-                    StrokeThickness="0">
-
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="OpenAI Connection Test" FontAttributes="Bold" HorizontalOptions="Center"/>
-
-                    <Button Text="Check API Key" 
-                            Command="{Binding TestOpenAiCommand}"
-                            BackgroundColor="#512BD4"
-                            TextColor="White"/>
-
-                    <Label Text="{Binding ApiResponseStatus}" 
-                           TextColor="Black"
-                           HorizontalOptions="Center"
-                           HorizontalTextAlignment="Center"/>
+                    <HorizontalStackLayout Spacing="50">
+                        <Button Text="Awards"
+                                Command=""
+                                FontSize="Medium"
+                                Padding="40,30" 
+                                MinimumWidthRequest="200" />
+                        <Button Text="Settings"
+                                Command=""
+                                FontSize="Medium"
+                                Padding="40,30"
+                                MinimumWidthRequest="200" />
+                    </HorizontalStackLayout>
                 </VerticalStackLayout>
-            </Border>
-            <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
-                <Label Text="Users" FontSize="32" HorizontalOptions="Center" />
-                <CollectionView ItemsSource="{Binding Users}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Padding="10" ColumnDefinitions="*,Auto,Auto">
-                                <Label Grid.Column="0"
-                                       Text="{Binding UserName}"
-                                       VerticalOptions="Center" />
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </VerticalStackLayout>
-
+            </FlexLayout>
         </VerticalStackLayout>
     </ScrollView>
 
