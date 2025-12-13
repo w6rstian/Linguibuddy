@@ -53,7 +53,11 @@ namespace Linguibuddy.ViewModels
                 ApiResponseStatus = $"Błąd podczas testu OpenAI: {ex.Message}";
             }
         }
-
+        [RelayCommand]
+        private async Task NavigateToSettings()
+        {
+            await Shell.Current.GoToAsync("//SettingsPage");
+        }
         [RelayCommand]
         private async Task SignOut()
         {
