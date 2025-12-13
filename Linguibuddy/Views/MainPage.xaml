@@ -27,12 +27,10 @@
                 <VerticalStackLayout Spacing="20">
                     <HorizontalStackLayout Spacing="50">
                         <Button Text="Dictionary"
-                                Command=""
                                 FontSize="Medium"
                                 Padding="40,30" 
                                 MinimumWidthRequest="200"/>
                         <Button Text="Minigames"
-                                Command=""
                                 FontSize="Medium"
                                 Padding="40,30" 
                                 MinimumWidthRequest="200" />
@@ -40,12 +38,10 @@
 
                     <HorizontalStackLayout Spacing="50">
                         <Button Text="Awards"
-                                Command=""
                                 FontSize="Medium"
                                 Padding="40,30" 
                                 MinimumWidthRequest="200" />
                         <Button Text="Settings"
-                                Command=""
                                 FontSize="Medium"
                                 Padding="40,30"
                                 MinimumWidthRequest="200" />
