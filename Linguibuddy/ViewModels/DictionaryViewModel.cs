@@ -4,12 +4,7 @@ using Linguibuddy.Data;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Linguibuddy.ViewModels
 {

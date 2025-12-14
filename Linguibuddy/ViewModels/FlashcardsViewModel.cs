@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
-using System.Collections.Generic;
 
 namespace Linguibuddy.ViewModels
 {
