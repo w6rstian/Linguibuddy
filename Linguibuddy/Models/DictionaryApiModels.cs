@@ -77,5 +77,8 @@ namespace Linguibuddy.Models
 
         [JsonProperty("antonyms")]
         public List<string> Antonyms { get; set; } = [];
+
+        // tłumaczenie z API
+        public string? Translation { get; set; }
     }
 }
