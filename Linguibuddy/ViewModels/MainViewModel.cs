@@ -49,13 +49,12 @@ namespace Linguibuddy.ViewModels
                 ApiResponseStatus = $"Błąd podczas testu OpenAI: {ex.Message}";
             }
         }
-
-        private async Task CreateSampleCollection()
+        
+        [RelayCommand]
+        private async Task NavigateToSettings()
         {
-            await _flashcardService.CreateCollectionAsync("Moja pierwsza kolekcja");
+            await Shell.Current.GoToAsync("//SettingsPage");
         }
-
-
         [RelayCommand]
         private async Task SignOut()
         {

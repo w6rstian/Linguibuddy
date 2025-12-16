@@ -128,12 +128,31 @@
   </data>
   <data name="AddedToCollectionMessage" xml:space="preserve">
     <value>Added to: {0}</value>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageName" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="NoResultsFoundText" xml:space="preserve">
+    <value>No results found 😞</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>Collections</value>
   </data>
   <data name="NewCollection" xml:space="preserve">
     <value>New collection</value>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="ThemeNameLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="ThemeNameDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="TranslationText" xml:space="preserve">
+    <value>🌐 Translation (PL)</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
@@ -191,5 +210,8 @@
   </data>
   <data name="IDontKnow" xml:space="preserve">
     <value>I don't know</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
   </data>
 </root>

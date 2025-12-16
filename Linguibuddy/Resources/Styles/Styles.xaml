@@ -18,6 +18,16 @@
         <Setter Property="StrokeShape" Value="Rectangle"/>
         <Setter Property="StrokeThickness" Value="1"/>
     </Style>
+    
+    <Style x:Key="SettingsRoundedBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+        <Setter Property="StrokeThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Border.StrokeShape">
+            <RoundRectangle CornerRadius="20"/>
+        </Setter>
+    </Style>
 
     <Style TargetType="BoxView">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />

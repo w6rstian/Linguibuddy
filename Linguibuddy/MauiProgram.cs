@@ -58,6 +58,9 @@ namespace Linguibuddy
             builder.Services.AddTransient<SignUpPage>();
             builder.Services.AddTransient<SignUpViewModel>();
 
+            builder.Services.AddTransient<SettingsPage>();
+            builder.Services.AddTransient<SettingsViewModel>();
+
 
             var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
             //var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");

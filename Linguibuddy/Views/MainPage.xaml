@@ -43,6 +43,7 @@
                                 MinimumWidthRequest="200" />
                         <Button Text="Settings"
                                 FontSize="Medium"
+                                Command="{Binding NavigateToSettingsCommand}"
                                 Padding="40,30"
                                 MinimumWidthRequest="200" />
                     </HorizontalStackLayout>
