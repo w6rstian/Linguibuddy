@@ -22,8 +22,8 @@
     <FlyoutItem Title="Flashcards">
         <ShellContent
             Title="Flashcards"
-            ContentTemplate="{DataTemplate views:FlashcardsPage}"
-            Route="FlashcardsPage" />
+            ContentTemplate="{DataTemplate views:FlashcardsCollectionsPage}"
+            Route="FlashcardsCollectionsPage" />
     </FlyoutItem>
 
 </Shell>

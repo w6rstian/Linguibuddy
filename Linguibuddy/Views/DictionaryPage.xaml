@@ -2,27 +2,150 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:resx="clr-namespace:Linguibuddy.Resources.Strings"
+             xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Linguibuddy.Views.DictionaryPage"
+             x:DataType="vm:DictionaryViewModel"
              Title="Dictionary">
-    <ScrollView>
-        <VerticalStackLayout Margin="30,0">
-            <Entry Text="{Binding InputText}"
-                   Placeholder="{x:Static resx:AppResources.DictionarySearchFieldPlaceholder}"
-                   ReturnCommand="{Binding LookupWordCommand}">
-                <!--<Entry.Behaviors>
-                    <toolkit:EventToCommandBehavior 
-                        EventName="Completed"
-                        Command="{Binding LookupWordCommand}" />
-                </Entry.Behaviors>-->
-            </Entry>
+    
+    <Grid RowDefinitions="Auto, Auto, *">
 
-            <ScrollView>
-                <Label Text="{Binding ResultsText}"
-                       FontSize="16"
-                       TextColor="Black" />
-            </ScrollView>
+        <Border Margin="15,15,15,5">
+            <Grid ColumnDefinitions="*, Auto" Padding="10,0">
+                <Entry Text="{Binding InputText}" 
+                       Placeholder="{x:Static resx:AppResources.DictionarySearchFieldPlaceholder}"
+                       ReturnCommand="{Binding LookupWordCommand}"
+                       VerticalOptions="Center"/>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                <ActivityIndicator IsRunning="{Binding IsLoading}" 
+                                   IsVisible="{Binding IsLoading}" 
+                                   Grid.Column="1"
+                                   HeightRequest="20"
+                                   WidthRequest="20"/>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnDefinitions="Auto, *" Margin="20,0,20,10">
+            <Label Text="Zapisz do: " 
+                   VerticalOptions="Center" 
+                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+
+            <Picker Grid.Column="1"
+                    ItemsSource="{Binding UserCollections}"
+                    SelectedItem="{Binding SelectedCollection}"
+                    ItemDisplayBinding="{Binding Name}"
+                    Title="Wybierz kolekcję"/>
+        </Grid>
+
+        <CollectionView Grid.Row="2" 
+                        ItemsSource="{Binding SearchResults}"
+                        Margin="15,0,15,0"
+                        SelectionMode="None">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:SearchResultItem">
+                    <Border Padding="15" StrokeShape="RoundRectangle 10">
+                        <Grid RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="*, Auto">
+
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
+                                <HorizontalStackLayout Spacing="10">
+                                    <Label Text="{Binding Word}" 
+                                           FontSize="18" 
+                                           FontAttributes="Bold"/>
+
+                                    <Label Text="{Binding Phonetic, StringFormat='/{0}/'}" 
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
+                                           VerticalOptions="Center"/>
+
+                                    <Label Text="{Binding PartOfSpeech}" 
+                                           TextColor="{StaticResource Primary}" 
+                                           FontAttributes="Bold"
+                                           TextTransform="Uppercase"
+                                           FontSize="12"
+                                           VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+
+                                <Label Text="{Binding Definition}" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"/>
+                            </VerticalStackLayout>
+
+                            <Button Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"
+                                    Text="+"
+                                    FontSize="20"
+                                    Padding="0"
+                                    HeightRequest="44"
+                                    WidthRequest="44"
+                                    VerticalOptions="Start"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=AddItemToFlashcardsCommand}"
+                                    CommandParameter="{Binding .}"/>
+
+                            <BoxView Grid.Row="1" HeightRequest="1" Margin="0,10" Opacity="0.2"/>
+
+                            <Grid Grid.Row="2" Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Button Text="Przetłumacz"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=TranslateItemCommand}"
+                                        CommandParameter="{Binding .}"
+                                        HorizontalOptions="Start"
+                                        HeightRequest="35"
+                                        FontSize="12"
+                                        Padding="10,0"
+                                        IsVisible="{Binding ShowTranslateButton}"/>
+
+                                <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                                                   IsVisible="{Binding IsBusy}"
+                                                   HorizontalOptions="Start"
+                                                   HeightRequest="25"
+                                                   WidthRequest="25"/>
+
+                                <VerticalStackLayout Grid.Row="1" Spacing="4">
+                                    <VerticalStackLayout.Triggers>
+                                        <DataTrigger TargetType="VerticalStackLayout" Binding="{Binding Translation}" Value="{x:Null}">
+                                            <Setter Property="IsVisible" Value="False"/>
+                                        </DataTrigger>
+                                    </VerticalStackLayout.Triggers>
+
+                                    <Label Text="{Binding Translation, StringFormat='🇵🇱 {0}'}" 
+                                           TextColor="{StaticResource Primary}"
+                                           FontAttributes="Bold"/>
+
+                                    <Label Text="{Binding Example, StringFormat='Np: {0}'}" 
+                                           FontSize="12" 
+                                           FontAttributes="Italic"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding Example}" Value="">
+                                                <Setter Property="IsVisible" Value="False"/>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding Example}" Value="{x:Null}">
+                                                <Setter Property="IsVisible" Value="False"/>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </VerticalStackLayout>
+                            </Grid>
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+                    <Label Text="Wpisz słowo, aby wyszukać" 
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+        </CollectionView>
+    </Grid>
 </ContentPage>
