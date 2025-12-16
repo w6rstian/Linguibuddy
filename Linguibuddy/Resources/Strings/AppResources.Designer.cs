@@ -160,6 +160,24 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        internal static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        internal static string LanguageName {
+            get {
+                return ResourceManager.GetString("LanguageName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Learn.
         /// </summary>
         internal static string Learn {
@@ -192,6 +210,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string NewCollection {
             get {
                 return ResourceManager.GetString("NewCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No results found 😞.
+        /// </summary>
+        internal static string NoResultsFoundText {
+            get {
+                return ResourceManager.GetString("NoResultsFoundText", resourceCulture);
             }
         }
         
@@ -241,6 +268,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Success.
         /// </summary>
         internal static string Success {
@@ -251,48 +287,10 @@ namespace Linguibuddy.Resources.Strings {
         
         /// <summary>
         ///   Looks up a localized string similar to Tap to flip.
-        ///   Looks up a localized string similar to Language.
-        /// </summary>
-        internal static string Language {
-            get {
-                return ResourceManager.GetString("Language", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to English.
-        /// </summary>
-        internal static string LanguageName {
-            get {
-                return ResourceManager.GetString("LanguageName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No results found 😞.
         /// </summary>
         internal static string TapToFlip {
             get {
                 return ResourceManager.GetString("TapToFlip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Translate.
-        /// </summary>
-        internal static string Translate {
-            get {
-                return ResourceManager.GetString("Translate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Translation error.
-        ///   Looks up a localized string similar to Settings.
-        /// </summary>
-        internal static string Settings {
-            get {
-                return ResourceManager.GetString("Settings", resourceCulture);
             }
         }
         
@@ -324,11 +322,29 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 🌐 Translation (PL).
+        ///   Looks up a localized string similar to Translate.
+        /// </summary>
+        internal static string Translate {
+            get {
+                return ResourceManager.GetString("Translate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation error.
         /// </summary>
         internal static string TranslationError {
             get {
                 return ResourceManager.GetString("TranslationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🌐 Translation (PL).
+        /// </summary>
+        internal static string TranslationText {
+            get {
+                return ResourceManager.GetString("TranslationText", resourceCulture);
             }
         }
         

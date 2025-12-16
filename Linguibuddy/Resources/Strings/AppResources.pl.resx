@@ -128,6 +128,7 @@
   </data>
   <data name="AddedToCollectionMessage" xml:space="preserve">
     <value>Dodano do: {0}</value>
+  </data>
   <data name="Language" xml:space="preserve">
     <value>Język</value>
   </data>
@@ -142,6 +143,7 @@
   </data>
   <data name="NewCollection" xml:space="preserve">
     <value>Nowa kolekcja</value>
+  </data>
   <data name="Theme" xml:space="preserve">
     <value>Motyw</value>
   </data>
