@@ -123,38 +123,55 @@
   <data name="Dictionary" xml:space="preserve">
     <value>Słownik</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="SaveTo" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="SelectCollectionPlaceholder" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="Translate" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="Welcome" xml:space="preserve">
     <value>Witaj w Linguibuddy,</value>
-  </data>
-  <data name="SearchEmpty" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="Error" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="Success" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="SelectCollectionError" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
   </data>
   <data name="AddedToCollectionMessage" xml:space="preserve">
     <value>Dodano do: {0}</value>
   </data>
-  <data name="TranslationError" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Collections" xml:space="preserve">
+    <value>Kolekcje</value>
   </data>
-  <data name="NoTranslation" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="NewCollection" xml:space="preserve">
+    <value>Nowa kolekcja</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Błąd</value>
+  </data>
+  <data name="NoTranslation" xml:space="preserve">
+    <value>Brak tłumaczenia</value>
+  </data>
+  <data name="SaveTo" xml:space="preserve">
+    <value>Zapisz do</value>
+  </data>
+  <data name="SearchEmpty" xml:space="preserve">
+    <value>Wpisz słowo, aby wyszukać</value>
+  </data>
+  <data name="SelectCollectionError" xml:space="preserve">
+    <value>Wybierz lub stwórz kolekcję (w zakładce Fiszki), aby zapisać słowo.</value>
+  </data>
+  <data name="SelectCollectionPlaceholder" xml:space="preserve">
+    <value>Wybierz kolekcję</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Sukces</value>
+  </data>
+  <data name="Translate" xml:space="preserve">
+    <value>Przetłumacz</value>
+  </data>
+  <data name="TranslationError" xml:space="preserve">
+    <value>Błąd tłumaczenia</value>
+  </data>
+  <data name="Learn" xml:space="preserve">
+    <value>Nauka</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edytuj</value>
+  </data>
+  <data name="FlashcardsCount" xml:space="preserve">
+    <value>fiszek</value>
+  </data>
+  <data name="NameEntry" xml:space="preserve">
+    <value>Podaj nazwę:</value>
   </data>
 </root>

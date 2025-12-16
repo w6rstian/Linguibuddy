@@ -70,6 +70,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collections.
+        /// </summary>
+        internal static string Collections {
+            get {
+                return ResourceManager.GetString("Collections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dictionary.
         /// </summary>
         internal static string Dictionary {
@@ -88,11 +97,56 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        internal static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         internal static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to flashcards.
+        /// </summary>
+        internal static string FlashcardsCount {
+            get {
+                return ResourceManager.GetString("FlashcardsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn.
+        /// </summary>
+        internal static string Learn {
+            get {
+                return ResourceManager.GetString("Learn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter name:.
+        /// </summary>
+        internal static string NameEntry {
+            get {
+                return ResourceManager.GetString("NameEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New collection.
+        /// </summary>
+        internal static string NewCollection {
+            get {
+                return ResourceManager.GetString("NewCollection", resourceCulture);
             }
         }
         
@@ -106,7 +160,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save to:.
+        ///   Looks up a localized string similar to Save to.
         /// </summary>
         internal static string SaveTo {
             get {

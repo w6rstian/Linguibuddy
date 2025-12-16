@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using Linguibuddy.Views;
 using System.Collections.ObjectModel;
@@ -38,7 +39,10 @@ namespace Linguibuddy.ViewModels
         public async Task CreateCollection()
         {
             // string result = await Shell.Current.DisplayPromptAsync("Nowa kolekcja", "Podaj nazwę:");
-            string result = await Application.Current!.Windows[0].Page!.DisplayPromptAsync("Nowa kolekcja", "Podaj nazwę:");
+            string result = await Application.Current!.Windows[0].Page!.DisplayPromptAsync(
+                AppResources.NewCollection,
+                AppResources.NameEntry);
+
             if (!string.IsNullOrWhiteSpace(result))
             {
                 await _flashcardService.CreateCollectionAsync(result);
@@ -57,6 +61,14 @@ namespace Linguibuddy.ViewModels
             };
 
             await Shell.Current.GoToAsync(nameof(FlashcardsPage), navigationParameter);
+        }
+
+        [RelayCommand]
+        public async Task EditCollection(FlashcardCollection collection)
+        {
+            if (collection == null) return;
+
+            // TODO: Logika edycji kolekcji
         }
     }
 }
