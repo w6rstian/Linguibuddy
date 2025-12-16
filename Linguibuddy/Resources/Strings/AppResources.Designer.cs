@@ -70,11 +70,29 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to list.
+        /// </summary>
+        internal static string BackToList {
+            get {
+                return ResourceManager.GetString("BackToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collections.
         /// </summary>
         internal static string Collections {
             get {
                 return ResourceManager.GetString("Collections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Congratulations!.
+        /// </summary>
+        internal static string Congratulations {
+            get {
+                return ResourceManager.GetString("Congratulations", resourceCulture);
             }
         }
         
@@ -124,11 +142,38 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I don&apos;t know.
+        /// </summary>
+        internal static string IDontKnow {
+            get {
+                return ResourceManager.GetString("IDontKnow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I know.
+        /// </summary>
+        internal static string IKnow {
+            get {
+                return ResourceManager.GetString("IKnow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Learn.
         /// </summary>
         internal static string Learn {
             get {
                 return ResourceManager.GetString("Learn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learning session finished..
+        /// </summary>
+        internal static string LearningFinished {
+            get {
+                return ResourceManager.GetString("LearningFinished", resourceCulture);
             }
         }
         
@@ -201,6 +246,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Success {
             get {
                 return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap to flip.
+        /// </summary>
+        internal static string TapToFlip {
+            get {
+                return ResourceManager.GetString("TapToFlip", resourceCulture);
             }
         }
         

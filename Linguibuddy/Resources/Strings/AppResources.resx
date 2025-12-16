@@ -174,4 +174,22 @@
   <data name="NameEntry" xml:space="preserve">
     <value>Enter name:</value>
   </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Congratulations!</value>
+  </data>
+  <data name="LearningFinished" xml:space="preserve">
+    <value>Learning session finished.</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Back to list</value>
+  </data>
+  <data name="TapToFlip" xml:space="preserve">
+    <value>Tap to flip</value>
+  </data>
+  <data name="IKnow" xml:space="preserve">
+    <value>I know</value>
+  </data>
+  <data name="IDontKnow" xml:space="preserve">
+    <value>I don't know</value>
+  </data>
 </root>

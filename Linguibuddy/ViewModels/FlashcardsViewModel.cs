@@ -69,6 +69,21 @@ namespace Linguibuddy.ViewModels
         }
 
         [RelayCommand]
+        public void MarkAsKnown()
+        {
+            // TO DO: Logika fiszek
+            NextCard();
+        }
+
+        [RelayCommand]
+        public void MarkAsUnknown()
+        {
+            // TO DO: Logika fiszek
+            // _flashcardsQueue.Enqueue(CurrentFlashcard!); 
+            NextCard();
+        }
+
+        [RelayCommand]
         public async Task GoBack()
         {
             await Shell.Current.GoToAsync("..");

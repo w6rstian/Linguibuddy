@@ -174,4 +174,22 @@
   <data name="NameEntry" xml:space="preserve">
     <value>Podaj nazwę:</value>
   </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Gratulacje!</value>
+  </data>
+  <data name="LearningFinished" xml:space="preserve">
+    <value>Sesja nauki zakończona.</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Wróć do listy</value>
+  </data>
+  <data name="TapToFlip" xml:space="preserve">
+    <value>Kliknij, aby obrócić</value>
+  </data>
+  <data name="IKnow" xml:space="preserve">
+    <value>Umiem</value>
+  </data>
+  <data name="IDontKnow" xml:space="preserve">
+    <value>Nie umiem</value>
+  </data>
 </root>
