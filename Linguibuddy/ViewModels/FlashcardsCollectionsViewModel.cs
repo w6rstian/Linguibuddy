@@ -39,7 +39,7 @@ namespace Linguibuddy.ViewModels
         public async Task CreateCollection()
         {
             // string result = await Shell.Current.DisplayPromptAsync("Nowa kolekcja", "Podaj nazwę:");
-            string result = await Application.Current!.Windows[0].Page!.DisplayPromptAsync(
+            string result = await Shell.Current.DisplayPromptAsync(
                 AppResources.NewCollection,
                 AppResources.NameEntry);
 

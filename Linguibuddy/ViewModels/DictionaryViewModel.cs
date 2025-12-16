@@ -137,7 +137,7 @@ namespace Linguibuddy.ViewModels
         {
             if (SelectedCollection == null)
             {
-                await Application.Current!.Windows[0].Page!.DisplayAlert(
+                await Shell.Current.DisplayAlert(
                     AppResources.Error,
                     AppResources.SelectCollectionError,
                     "OK");
@@ -158,17 +158,11 @@ namespace Linguibuddy.ViewModels
                 await _flashcardService.AddFlashcardAsync(flashcard);
 
                 var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
-
-                var toast = Toast.Make(
-                    message,
-                    ToastDuration.Short,
-                    14);
-
-                await toast.Show();
+                await Shell.Current.DisplayAlert("Sukces", message, "OK");
             }
             catch (Exception ex)
             {
-                await Application.Current!.Windows[0].Page!.DisplayAlert(AppResources.Error, ex.Message, "OK");
+                await Shell.Current.DisplayAlert(AppResources.Error, ex.Message, "OK");
             }
         }
 
