@@ -120,22 +120,40 @@
   <data name="DictionarySearchFieldPlaceholder" xml:space="preserve">
     <value>Enter an English word</value>
   </data>
-  <data name="EnterWordWarning" xml:space="preserve">
-    <value>⚠️ Please enter a word.</value>
+  <data name="Dictionary" xml:space="preserve">
+    <value>Dictionary</value>
   </data>
-  <data name="ErrorText" xml:space="preserve">
-    <value>❌ Error</value>
+  <data name="SaveTo" xml:space="preserve">
+    <value>Save to:</value>
   </data>
-  <data name="NoResultsFoundText" xml:space="preserve">
-    <value>No results found 😞</value>
+  <data name="SelectCollectionPlaceholder" xml:space="preserve">
+    <value>Select collection</value>
   </data>
-  <data name="SearchingText" xml:space="preserve">
-    <value>⏳ Searching...</value>
-  </data>
-  <data name="TranslationText" xml:space="preserve">
-    <value>🌐 Translation (PL)</value>
+  <data name="Translate" xml:space="preserve">
+    <value>Translate</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome to Linguibuddy,</value>
+  </data>
+  <data name="SearchEmpty" xml:space="preserve">
+    <value>Enter a word to search</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="SelectCollectionError" xml:space="preserve">
+    <value>Please select or create a collection first.</value>
+  </data>
+  <data name="AddedToCollectionMessage" xml:space="preserve">
+    <value>Added to: {0}</value>
+  </data>
+  <data name="TranslationError" xml:space="preserve">
+    <value>Translation error</value>
+  </data>
+  <data name="NoTranslation" xml:space="preserve">
+    <value>No translation</value>
   </data>
 </root>

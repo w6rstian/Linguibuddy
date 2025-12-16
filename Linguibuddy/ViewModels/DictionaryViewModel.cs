@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Data;
 using Linguibuddy.Models;
@@ -135,14 +137,17 @@ namespace Linguibuddy.ViewModels
         {
             if (SelectedCollection == null)
             {
-                await Application.Current!.Windows[0].Page!.DisplayAlert("Błąd", "Wybierz lub stwórz kolekcję (w zakładce Fiszki), aby zapisać słowo.", "OK");
+                await Application.Current!.Windows[0].Page!.DisplayAlert(
+                    AppResources.Error,
+                    AppResources.SelectCollectionError,
+                    "OK");
                 return;
             }
 
             var flashcard = new Flashcard
             {
                 Word = item.Word,
-                Translation = item.Translation ?? "Brak tłumaczenia",
+                Translation = item.Translation ?? AppResources.NoTranslation,
                 PartOfSpeech = item.PartOfSpeech,
                 ExampleSentence = item.Example ?? "",
                 CollectionId = SelectedCollection.Id
@@ -152,11 +157,18 @@ namespace Linguibuddy.ViewModels
             {
                 await _flashcardService.AddFlashcardAsync(flashcard);
 
-                await Application.Current!.Windows[0].Page!.DisplayAlert("Sukces", $"Dodano do: {SelectedCollection.Name}", "OK");
+                var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
+
+                var toast = Toast.Make(
+                    message,
+                    ToastDuration.Short,
+                    14);
+
+                await toast.Show();
             }
             catch (Exception ex)
             {
-                await Application.Current!.Windows[0].Page!.DisplayAlert("Błąd", ex.Message, "OK");
+                await Application.Current!.Windows[0].Page!.DisplayAlert(AppResources.Error, ex.Message, "OK");
             }
         }
 
@@ -188,7 +200,7 @@ namespace Linguibuddy.ViewModels
             }
             catch
             {
-                item.Translation = "Błąd tłumaczenia";
+                item.Translation = AppResources.TranslationError;
             }
             finally
             {

@@ -61,6 +61,24 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Added to: {0}.
+        /// </summary>
+        internal static string AddedToCollectionMessage {
+            get {
+                return ResourceManager.GetString("AddedToCollectionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dictionary.
+        /// </summary>
+        internal static string Dictionary {
+            get {
+                return ResourceManager.GetString("Dictionary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter an English word.
         /// </summary>
         internal static string DictionarySearchFieldPlaceholder {
@@ -70,47 +88,83 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ⚠️ Please enter a word..
+        ///   Looks up a localized string similar to Error.
         /// </summary>
-        internal static string EnterWordWarning {
+        internal static string Error {
             get {
-                return ResourceManager.GetString("EnterWordWarning", resourceCulture);
+                return ResourceManager.GetString("Error", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ❌ Error.
+        ///   Looks up a localized string similar to No translation.
         /// </summary>
-        internal static string ErrorText {
+        internal static string NoTranslation {
             get {
-                return ResourceManager.GetString("ErrorText", resourceCulture);
+                return ResourceManager.GetString("NoTranslation", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No results found 😞.
+        ///   Looks up a localized string similar to Save to:.
         /// </summary>
-        internal static string NoResultsFoundText {
+        internal static string SaveTo {
             get {
-                return ResourceManager.GetString("NoResultsFoundText", resourceCulture);
+                return ResourceManager.GetString("SaveTo", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ⏳ Searching....
+        ///   Looks up a localized string similar to Enter a word to search.
         /// </summary>
-        internal static string SearchingText {
+        internal static string SearchEmpty {
             get {
-                return ResourceManager.GetString("SearchingText", resourceCulture);
+                return ResourceManager.GetString("SearchEmpty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 🌐 Translation (PL).
+        ///   Looks up a localized string similar to Please select or create a collection first..
         /// </summary>
-        internal static string TranslationText {
+        internal static string SelectCollectionError {
             get {
-                return ResourceManager.GetString("TranslationText", resourceCulture);
+                return ResourceManager.GetString("SelectCollectionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select collection.
+        /// </summary>
+        internal static string SelectCollectionPlaceholder {
+            get {
+                return ResourceManager.GetString("SelectCollectionPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        internal static string Success {
+            get {
+                return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translate.
+        /// </summary>
+        internal static string Translate {
+            get {
+                return ResourceManager.GetString("Translate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation error.
+        /// </summary>
+        internal static string TranslationError {
+            get {
+                return ResourceManager.GetString("TranslationError", resourceCulture);
             }
         }
         
