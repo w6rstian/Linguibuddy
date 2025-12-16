@@ -38,14 +38,14 @@ namespace Linguibuddy.ViewModels
             }
 
             //await Shell.Current.GoToAsync("//MainPage");
-            Application.Current.Windows[0].Page = new AppShell();
+            Application.Current!.Windows[0].Page = new AppShell();
         }
         [RelayCommand]
         private async Task NavigateSignUp()
         {
             var signUpPage = _services.GetRequiredService<SignUpPage>();
 
-            Application.Current.Windows[0].Page = new NavigationPage(signUpPage);
+            Application.Current!.Windows[0].Page = new NavigationPage(signUpPage);
         }
     }
 }
