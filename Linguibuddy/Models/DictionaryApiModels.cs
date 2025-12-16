@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Linguibuddy.Models
 {
@@ -77,5 +77,8 @@ namespace Linguibuddy.Models
 
         [JsonProperty("antonyms")]
         public List<string> Antonyms { get; set; } = [];
+
+        // tłumaczenie z API
+        public string? Translation { get; set; }
     }
 }

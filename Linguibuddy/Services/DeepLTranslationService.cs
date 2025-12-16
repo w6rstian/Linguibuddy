@@ -14,46 +14,28 @@ namespace Linguibuddy.Services
             _client = new DeepLClient(apiKey);
         }
 
-        public async Task<string> TranslateTextAsync(string text, string targetLang = "PL", string? partOfSpeech = null)
+        public async Task<string> TranslateWithContextAsync(string word, string definition, string partOfSpeech, string targetLang = "PL")
         {
-            if (string.IsNullOrWhiteSpace(text))
-                return string.Empty;
+            if (string.IsNullOrWhiteSpace(word)) return string.Empty;
 
             try
             {
-                string contextualText = partOfSpeech?.ToLower() switch
-                {
-                    "verb" => $"to {text}",
-                    "noun" => $"the {text}",
-                    "adjective" => $"something {text}",
-                    _ => text
-                };
+                var contextString = $"{partOfSpeech}. {definition}";
 
                 var options = new TextTranslateOptions
                 {
-                    SentenceSplittingMode = SentenceSplittingMode.Off, // nie dzieli na zdania
-                    PreserveFormatting = true,
-                    Formality = Formality.Default,
-                    Context = "Translate this as a dictionary entry for language learners, focusing on the most common Polish meaning."
+                    Context = contextString,
+                    Formality = Formality.Less,
+                    SentenceSplittingMode = SentenceSplittingMode.Off
                 };
+                var result = await _client.TranslateTextAsync(word, sourceLanguageCode: "EN", targetLang, options);
 
-                var result = await _client.TranslateTextAsync(contextualText, null, targetLang, options);
-
-                var translated = result.Text
-                    .Replace("to ", "", StringComparison.OrdinalIgnoreCase)
-                    .Replace("the ", "", StringComparison.OrdinalIgnoreCase)
-                    .Replace("something ", "", StringComparison.OrdinalIgnoreCase)
-                    .Trim();
-
-                if (translated.Equals(text, StringComparison.OrdinalIgnoreCase))
-                    return text;
-
-                return translated;
+                return result.Text;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Translation error: {ex.Message}");
-                return $"[Translation error: {ex.Message}]";
+                System.Diagnostics.Debug.WriteLine($"DeepL Error: {ex.Message}");
+                return word;
             }
         }
     }

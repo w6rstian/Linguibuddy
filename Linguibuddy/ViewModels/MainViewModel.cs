@@ -1,23 +1,15 @@
-﻿using CommunityToolkit.Mvvm;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
 using Linguibuddy.Data;
-using Linguibuddy.Models;
 using Linguibuddy.Services;
 using Linguibuddy.Views;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linguibuddy.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
+        private readonly FlashcardService _flashcardService; // flashcard service
         private readonly OpenAiService _openAiService; // test AI
         private readonly DataContext _dataContext;
         private readonly FirebaseAuthClient _authClient;
@@ -28,15 +20,19 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private string _username;
 
-        public MainViewModel(DataContext dataContext, OpenAiService openAiService, FirebaseAuthClient authClient, IServiceProvider services)
+        public MainViewModel(DataContext dataContext, OpenAiService openAiService, FirebaseAuthClient authClient, IServiceProvider services, FlashcardService flashcardService)
         {
             _dataContext = dataContext;
             _openAiService = openAiService;
             _authClient = authClient;
             _services = services;
+            _flashcardService = flashcardService;
             ApiResponseStatus = "Kliknij przycisk, aby przetestować API";
 
             Username = _authClient.User.Info.DisplayName;
+            _flashcardService = flashcardService;
+
+            //CreateSampleCollection().ConfigureAwait(false);
         }
 
         [RelayCommand]
@@ -53,6 +49,7 @@ namespace Linguibuddy.ViewModels
                 ApiResponseStatus = $"Błąd podczas testu OpenAI: {ex.Message}";
             }
         }
+        
         [RelayCommand]
         private async Task NavigateToSettings()
         {

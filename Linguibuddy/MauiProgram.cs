@@ -1,19 +1,15 @@
 ﻿using CommunityToolkit.Maui;
+using Firebase.Auth;
+using Firebase.Auth.Providers;
+using Firebase.Auth.Repository;
 using Linguibuddy.Data;
-using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using Linguibuddy.ViewModels;
 using Linguibuddy.Views;
 using LocalizationResourceManager.Maui;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
-using CommunityToolkit.Maui;
-using Linguibuddy.Views;
-using Firebase.Auth;
-using Firebase.Auth.Providers;
-using Firebase.Auth.Repository;
 
 namespace Linguibuddy
 {
@@ -53,6 +49,9 @@ namespace Linguibuddy
             builder.Services.AddTransient<FlashcardsPage>();
             builder.Services.AddTransient<FlashcardsViewModel>();
 
+            builder.Services.AddTransient<FlashcardsCollectionsPage>();
+            builder.Services.AddTransient<FlashcardsCollectionsViewModel>();
+
             builder.Services.AddTransient<SignInPage>();
             builder.Services.AddTransient<SignInViewModel>();
 
@@ -80,6 +79,7 @@ namespace Linguibuddy
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
             builder.Services.AddSingleton(new OpenAiService(githubAiKey));
             builder.Services.AddTransient<DictionaryApiService>();
+            builder.Services.AddTransient<FlashcardService>();
 
             builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
             {

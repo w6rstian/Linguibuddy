@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
+             xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             xmlns:models="clr-namespace:Linguibuddy.Models"
+             x:Class="Linguibuddy.Views.FlashcardsCollectionsPage"
+             x:DataType="vm:FlashcardsCollectionsViewModel"
+             Title="{loc:Translate Collections}">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <Button Text="{loc:Translate NewCollection}"
+                Command="{Binding CreateCollectionCommand}"
+                Margin="20,15"
+                BackgroundColor="{StaticResource Primary}"
+                TextColor="{StaticResource White}"
+                FontAttributes="Bold"
+                HeightRequest="50"
+                CornerRadius="10">
+            <Button.Shadow>
+                <Shadow Brush="{StaticResource PrimaryBrush}" Radius="5" Opacity="0.4" Offset="0,4"/>
+            </Button.Shadow>
+        </Button>
+
+        <CollectionView Grid.Row="1" 
+                        ItemsSource="{Binding Collections}" 
+                        Margin="20,0,20,20"
+                        SelectionMode="None">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="15"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:FlashcardCollection">
+                    <Border StrokeShape="RoundRectangle 12" 
+                            Padding="15"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}"
+                            Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}">
+
+                        <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+
+                            <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="2">
+                                <Label Text="{Binding Name}" 
+                                       FontAttributes="Bold" 
+                                       FontSize="16"
+                                       LineBreakMode="TailTruncation"
+                                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+
+                                <!--ciężko dodać napis {ilość} fiszek do tłumaczeń-->
+                                <Label Text="{Binding Flashcards.Count, StringFormat='{0} fiszek'}" 
+                                       FontSize="12"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                            </VerticalStackLayout>
+
+                            <HorizontalStackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
+
+                                <Button Text="{loc:Translate Edit}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FlashcardsCollectionsViewModel}}, Path=EditCollectionCommand}"
+                                        CommandParameter="{Binding .}"
+                                        FontSize="12"
+                                        Padding="10,0"
+                                        HeightRequest="36"
+                                        BackgroundColor="Transparent"
+                                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}"
+                                        BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                                        BorderWidth="1"
+                                        CornerRadius="8"/>
+
+                                <Button Text="{loc:Translate Learn}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FlashcardsCollectionsViewModel}}, Path=GoToLearningCommand}"
+                                        CommandParameter="{Binding .}"
+                                        FontSize="12"
+                                        FontAttributes="Bold"
+                                        Padding="15,0"
+                                        HeightRequest="36"
+                                        BackgroundColor="{StaticResource Primary}"
+                                        TextColor="{StaticResource White}"
+                                        CornerRadius="8"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <Label Text="Brak kolekcji. Dodaj pierwszą!" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center"
+                       TextColor="{StaticResource Gray500}"/>
+            </CollectionView.EmptyView>
+
+        </CollectionView>
+    </Grid>
+</ContentPage>

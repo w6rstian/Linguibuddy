@@ -1,11 +1,6 @@
 ﻿using Linguibuddy.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linguibuddy.Data
 {
@@ -13,6 +8,7 @@ namespace Linguibuddy.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<Flashcard> Flashcards { get; set; }
+        public DbSet<FlashcardCollection> FlashcardCollections { get; set; }
         public DbSet<DictionaryWord> DictionaryWords { get; set; }
         //public DbSet<Phonetic> Phonetics { get; set; }
         //public DbSet<Meaning> Meanings { get; set; }
@@ -22,6 +18,7 @@ namespace Linguibuddy.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // usuniecie słowa z bazy usunie powiązane znaczenia i fonetyki
             modelBuilder.Entity<DictionaryWord>()
                 .HasMany(w => w.Meanings)
                 .WithOne()
@@ -48,6 +45,13 @@ namespace Linguibuddy.Data
                 .HasConversion(
                     v => JsonConvert.SerializeObject(v),
                     v => JsonConvert.DeserializeObject<List<string>>(v) ?? new List<string>());
+
+            // usunięcie kolekcji usunie fiszki z bazy
+            modelBuilder.Entity<FlashcardCollection>()
+                .HasMany(c => c.Flashcards)
+                .WithOne(f => f.Collection)
+                .HasForeignKey(f => f.CollectionId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

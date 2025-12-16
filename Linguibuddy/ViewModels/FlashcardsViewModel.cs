@@ -1,16 +1,21 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
-using System.Collections.Generic;
+using Linguibuddy.Services;
 
 namespace Linguibuddy.ViewModels
 {
+    [QueryProperty(nameof(Collection), "Collection")]
     public partial class FlashcardsViewModel : ObservableObject
     {
-        private Queue<Flashcard> _flashcardsQueue;
+        private readonly FlashcardService _flashcardService;
+        private Queue<Flashcard> _flashcardsQueue = new();
 
         [ObservableProperty]
-        private Flashcard _currentFlashcard;
+        private FlashcardCollection? _collection;
+
+        [ObservableProperty]
+        private Flashcard? _currentFlashcard;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsLearning))]
@@ -18,23 +23,34 @@ namespace Linguibuddy.ViewModels
 
         public bool IsLearning => !IsFinished;
 
-        public FlashcardsViewModel()
+        public FlashcardsViewModel(FlashcardService flashcardService)
         {
-            LoadData();
-            NextCard();
+            _flashcardService = flashcardService;
         }
 
-        private void LoadData()
+        async partial void OnCollectionChanged(FlashcardCollection? value)
         {
-            // Przyk³adowe dane
-            var data = new List<Flashcard>
+            if (value != null)
             {
-                new Flashcard { Word = "Serendipity", Translation = "Szczêœliwy traf", PartOfSpeech = "noun", ExampleSentence = "It was pure serendipity that we met." },
-                new Flashcard { Word = "To develop", Translation = "Rozwijaæ (siê)", PartOfSpeech = "verb", ExampleSentence = "He wants to develop his skills." },
-                new Flashcard { Word = "Resilient", Translation = "Odporny", PartOfSpeech = "adjective", ExampleSentence = "Bamboo is a resilient material." }
-            };
+                await StartLearning(value);
+            }
+        }
 
-            _flashcardsQueue = new Queue<Flashcard>(data);
+        private async Task StartLearning(FlashcardCollection collection)
+        {
+            var cards = await _flashcardService.GetFlashcardsForCollection(collection.Id);
+
+            if (cards.Count == 0)
+            {
+                IsFinished = true;
+                return;
+            }
+
+            var shuffled = cards.OrderBy(a => Guid.NewGuid()).ToList();
+            _flashcardsQueue = new Queue<Flashcard>(shuffled);
+
+            IsFinished = false;
+            NextCard();
         }
 
         [RelayCommand]
@@ -50,6 +66,27 @@ namespace Linguibuddy.ViewModels
                 CurrentFlashcard = null;
                 IsFinished = true;
             }
+        }
+
+        [RelayCommand]
+        public void MarkAsKnown()
+        {
+            // TO DO: Logika fiszek
+            NextCard();
+        }
+
+        [RelayCommand]
+        public void MarkAsUnknown()
+        {
+            // TO DO: Logika fiszek
+            // _flashcardsQueue.Enqueue(CurrentFlashcard!); 
+            NextCard();
+        }
+
+        [RelayCommand]
+        public async Task GoBack()
+        {
+            await Shell.Current.GoToAsync("..");
         }
     }
 }

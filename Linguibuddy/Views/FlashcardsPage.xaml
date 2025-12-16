@@ -1,43 +1,65 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              x:Class="Linguibuddy.Views.FlashcardsPage"
              x:DataType="vm:FlashcardsViewModel"
-             Title="Flashcards">
+             Title="{Binding Collection.Name}">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding IsFinished}"
-                             VerticalOptions="Center"
-                             HorizontalOptions="Center"
-                             Spacing="20">
-            <Label Text="Gratulacje!"
-                   FontSize="28"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   TextColor="#2E7D32"/>
-            <Label Text="Przerobiłeś wszystkie fiszki na dziś."
-                   FontSize="16"
-                   TextColor="#666"/>
+                             VerticalOptions="Center" 
+                             HorizontalOptions="Center" 
+                             Spacing="25">
+
+            <Border Stroke="{StaticResource Primary}"
+                    StrokeThickness="2"
+                    StrokeShape="RoundRectangle 50"
+                    HeightRequest="100"
+                    WidthRequest="100"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Center">
+                <Label Text="✔" 
+                       FontSize="50" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center" 
+                       TextColor="{StaticResource Primary}"/>
+            </Border>
+
+            <Label Text="{loc:Translate Congratulations}" 
+                   FontSize="32" 
+                   FontAttributes="Bold" 
+                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                   HorizontalOptions="Center"/>
+
+            <Label Text="{loc:Translate LearningFinished}" 
+                   FontSize="16" 
+                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
+                   HorizontalOptions="Center"/>
+
+            <Button Text="{loc:Translate BackToList}" 
+                    Command="{Binding GoBackCommand}"
+                    Margin="0,20,0,0"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="{StaticResource White}"
+                    WidthRequest="200"/>
         </VerticalStackLayout>
 
+        <Grid RowDefinitions="*, Auto" IsVisible="{Binding IsLearning}" Margin="20">
 
-        <Grid RowDefinitions="*, Auto" 
-              IsVisible="{Binding IsLearning}">
-
-            <VerticalStackLayout VerticalOptions="Center" Spacing="20">
+            <VerticalStackLayout VerticalOptions="Center" Spacing="0">
                 <Border x:Name="FlashcardBorder"
-                        Stroke="Transparent"
-                        BackgroundColor="White"
-                        HeightRequest="350"
-                        WidthRequest="300"
-                        MaximumWidthRequest="400">
-
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="20"/>
-                    </Border.StrokeShape>
+                        Stroke="Transparent" 
+                        BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}"
+                        HeightRequest="400" 
+                        WidthRequest="320"
+                        StrokeShape="RoundRectangle 20">
 
                     <Border.Shadow>
-                        <Shadow Brush="Black" Offset="0,10" Radius="20" Opacity="0.1"/>
+                        <Shadow Brush="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" 
+                                Offset="0,5" 
+                                Radius="15" 
+                                Opacity="0.1"/>
                     </Border.Shadow>
 
                     <Border.GestureRecognizers>
@@ -47,45 +69,51 @@
                     <Grid Padding="30">
                         <VerticalStackLayout x:Name="FrontView" 
                                              VerticalOptions="Center" 
-                                             HorizontalOptions="Center"
+                                             HorizontalOptions="Center" 
+                                             Spacing="10"
                                              IsVisible="True">
+
                             <Label Text="{Binding CurrentFlashcard.Word}" 
-                                   FontSize="36" 
+                                   FontSize="40" 
                                    FontAttributes="Bold" 
-                                   TextColor="#333" 
-                                   HorizontalOptions="Center"/>
+                                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" 
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center"/>
 
                             <Label Text="{Binding CurrentFlashcard.PartOfSpeech}" 
-                                   FontSize="14" 
-                                   TextColor="#888" 
-                                   HorizontalOptions="Center" 
-                                   Margin="0,5,0,0"/>
+                                   FontSize="16" 
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" 
+                                   HorizontalOptions="Center"
+                                   TextTransform="Uppercase"/>
 
-                            <Label Text="Kliknij, aby sprawdzić" 
+                            <Label Text="{loc:Translate TapToFlip}" 
                                    FontSize="12" 
-                                   TextColor="#CCC" 
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" 
                                    HorizontalOptions="Center" 
-                                   Margin="0,40,0,0"/>
+                                   Margin="0,50,0,0"/>
                         </VerticalStackLayout>
 
                         <VerticalStackLayout x:Name="BackView" 
                                              VerticalOptions="Center" 
-                                             HorizontalOptions="Center"
+                                             HorizontalOptions="Center" 
+                                             Spacing="15"
                                              IsVisible="False">
+
                             <Label Text="{Binding CurrentFlashcard.Translation}" 
                                    FontSize="32" 
                                    FontAttributes="Bold" 
-                                   TextColor="#2D7D9A" 
-                                   HorizontalOptions="Center"/>
+                                   TextColor="{StaticResource Primary}" 
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center"/>
 
                             <BoxView HeightRequest="1" 
-                                     Color="#EEE" 
-                                     WidthRequest="150" 
-                                     Margin="0,20"/>
+                                     WidthRequest="50" 
+                                     Color="{StaticResource Gray200}" 
+                                     HorizontalOptions="Center"/>
 
                             <Label Text="{Binding CurrentFlashcard.ExampleSentence}" 
-                                   FontSize="16" 
-                                   TextColor="#555" 
+                                   FontSize="18" 
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" 
                                    FontAttributes="Italic" 
                                    HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
@@ -93,27 +121,32 @@
                 </Border>
             </VerticalStackLayout>
 
-            <HorizontalStackLayout Grid.Row="1" 
-                                   Spacing="20" 
-                                   HorizontalOptions="Center" 
-                                   Margin="0,0,0,40">
+            <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="20" Margin="0,0,0,20">
 
-                <Button Text="Jeszcze nie" 
-                        BackgroundColor="#FFCDD2" 
-                        TextColor="#C62828"
-                        Command="{Binding NextCardCommand}"
+                <Button Grid.Column="0"
+                        Text="{loc:Translate IDontKnow}" 
+                        BackgroundColor="{AppThemeBinding Light=#FFEBEE, Dark=#3E2723}" 
+                        TextColor="#D32F2F" 
+                        BorderColor="#D32F2F"
+                        BorderWidth="1"
+                        Command="{Binding MarkAsUnknownCommand}" 
                         Clicked="OnNextCardClicked" 
-                        WidthRequest="120"
-                        CornerRadius="25"/>
+                        HeightRequest="50"
+                        CornerRadius="25"
+                        FontAttributes="Bold"/>
 
-                <Button Text="Umiem!" 
-                        BackgroundColor="#C8E6C9" 
-                        TextColor="#2E7D32"
-                        Command="{Binding NextCardCommand}"
-                        Clicked="OnNextCardClicked"
-                        WidthRequest="120"
-                        CornerRadius="25"/>
-            </HorizontalStackLayout>
+                <Button Grid.Column="1"
+                        Text="{loc:Translate IKnow}" 
+                        BackgroundColor="{AppThemeBinding Light=#E8F5E9, Dark=#1B5E20}" 
+                        TextColor="{AppThemeBinding Light=#2E7D32, Dark=White}" 
+                        BorderColor="#2E7D32"
+                        BorderWidth="1"
+                        Command="{Binding MarkAsKnownCommand}" 
+                        Clicked="OnNextCardClicked" 
+                        HeightRequest="50"
+                        CornerRadius="25"
+                        FontAttributes="Bold"/>
+            </Grid>
         </Grid>
     </Grid>
 </ContentPage>

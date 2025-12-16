@@ -61,6 +61,51 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Added to: {0}.
+        /// </summary>
+        internal static string AddedToCollectionMessage {
+            get {
+                return ResourceManager.GetString("AddedToCollectionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to list.
+        /// </summary>
+        internal static string BackToList {
+            get {
+                return ResourceManager.GetString("BackToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collections.
+        /// </summary>
+        internal static string Collections {
+            get {
+                return ResourceManager.GetString("Collections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Congratulations!.
+        /// </summary>
+        internal static string Congratulations {
+            get {
+                return ResourceManager.GetString("Congratulations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dictionary.
+        /// </summary>
+        internal static string Dictionary {
+            get {
+                return ResourceManager.GetString("Dictionary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter an English word.
         /// </summary>
         internal static string DictionarySearchFieldPlaceholder {
@@ -70,24 +115,142 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ⚠️ Please enter a word..
+        ///   Looks up a localized string similar to Edit.
         /// </summary>
-        internal static string EnterWordWarning {
+        internal static string Edit {
             get {
-                return ResourceManager.GetString("EnterWordWarning", resourceCulture);
+                return ResourceManager.GetString("Edit", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ❌ Error.
+        ///   Looks up a localized string similar to Error.
         /// </summary>
-        internal static string ErrorText {
+        internal static string Error {
             get {
-                return ResourceManager.GetString("ErrorText", resourceCulture);
+                return ResourceManager.GetString("Error", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to flashcards.
+        /// </summary>
+        internal static string FlashcardsCount {
+            get {
+                return ResourceManager.GetString("FlashcardsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I don&apos;t know.
+        /// </summary>
+        internal static string IDontKnow {
+            get {
+                return ResourceManager.GetString("IDontKnow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I know.
+        /// </summary>
+        internal static string IKnow {
+            get {
+                return ResourceManager.GetString("IKnow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn.
+        /// </summary>
+        internal static string Learn {
+            get {
+                return ResourceManager.GetString("Learn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learning session finished..
+        /// </summary>
+        internal static string LearningFinished {
+            get {
+                return ResourceManager.GetString("LearningFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter name:.
+        /// </summary>
+        internal static string NameEntry {
+            get {
+                return ResourceManager.GetString("NameEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New collection.
+        /// </summary>
+        internal static string NewCollection {
+            get {
+                return ResourceManager.GetString("NewCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No translation.
+        /// </summary>
+        internal static string NoTranslation {
+            get {
+                return ResourceManager.GetString("NoTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save to.
+        /// </summary>
+        internal static string SaveTo {
+            get {
+                return ResourceManager.GetString("SaveTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a word to search.
+        /// </summary>
+        internal static string SearchEmpty {
+            get {
+                return ResourceManager.GetString("SearchEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select or create a collection first..
+        /// </summary>
+        internal static string SelectCollectionError {
+            get {
+                return ResourceManager.GetString("SelectCollectionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select collection.
+        /// </summary>
+        internal static string SelectCollectionPlaceholder {
+            get {
+                return ResourceManager.GetString("SelectCollectionPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        internal static string Success {
+            get {
+                return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap to flip.
         ///   Looks up a localized string similar to Language.
         /// </summary>
         internal static string Language {
@@ -108,22 +271,23 @@ namespace Linguibuddy.Resources.Strings {
         /// <summary>
         ///   Looks up a localized string similar to No results found 😞.
         /// </summary>
-        internal static string NoResultsFoundText {
+        internal static string TapToFlip {
             get {
-                return ResourceManager.GetString("NoResultsFoundText", resourceCulture);
+                return ResourceManager.GetString("TapToFlip", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ⏳ Searching....
+        ///   Looks up a localized string similar to Translate.
         /// </summary>
-        internal static string SearchingText {
+        internal static string Translate {
             get {
-                return ResourceManager.GetString("SearchingText", resourceCulture);
+                return ResourceManager.GetString("Translate", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Translation error.
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string Settings {
@@ -162,9 +326,9 @@ namespace Linguibuddy.Resources.Strings {
         /// <summary>
         ///   Looks up a localized string similar to 🌐 Translation (PL).
         /// </summary>
-        internal static string TranslationText {
+        internal static string TranslationError {
             get {
-                return ResourceManager.GetString("TranslationText", resourceCulture);
+                return ResourceManager.GetString("TranslationError", resourceCulture);
             }
         }
         

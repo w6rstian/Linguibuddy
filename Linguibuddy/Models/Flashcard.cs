@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Linguibuddy.Models
 {
@@ -21,5 +17,10 @@ namespace Linguibuddy.Models
         public string PartOfSpeech { get; set; } = string.Empty;
         [StringLength(512, ErrorMessage = "{0} can have a max of {1} characters")]
         public string ExampleSentence { get; set; } = string.Empty;
+
+        public int CollectionId { get; set; }
+
+        [ForeignKey(nameof(CollectionId))]
+        public FlashcardCollection? Collection { get; set; }
     }
 }

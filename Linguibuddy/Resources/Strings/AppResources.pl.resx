@@ -120,12 +120,14 @@
   <data name="DictionarySearchFieldPlaceholder" xml:space="preserve">
     <value>Wpisz angielskie słowo</value>
   </data>
-  <data name="EnterWordWarning" xml:space="preserve">
-    <value>⚠️ Proszę wpisać słowo.</value>
+  <data name="Dictionary" xml:space="preserve">
+    <value>Słownik</value>
   </data>
-  <data name="ErrorText" xml:space="preserve">
-    <value>❌ Błąd</value>
+  <data name="Welcome" xml:space="preserve">
+    <value>Witaj w Linguibuddy,</value>
   </data>
+  <data name="AddedToCollectionMessage" xml:space="preserve">
+    <value>Dodano do: {0}</value>
   <data name="Language" xml:space="preserve">
     <value>Język</value>
   </data>
@@ -135,9 +137,11 @@
   <data name="NoResultsFoundText" xml:space="preserve">
     <value>Nie znaleziono wyników 😞</value>
   </data>
-  <data name="SearchingText" xml:space="preserve">
-    <value>⏳ Wyszukiwanie...</value>
+  <data name="Collections" xml:space="preserve">
+    <value>Kolekcje</value>
   </data>
+  <data name="NewCollection" xml:space="preserve">
+    <value>Nowa kolekcja</value>
   <data name="Theme" xml:space="preserve">
     <value>Motyw</value>
   </data>
@@ -150,8 +154,62 @@
   <data name="TranslationText" xml:space="preserve">
     <value>🌐 Tłumaczenie (PL)</value>
   </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Witaj w Linguibuddy,</value>
+  <data name="Error" xml:space="preserve">
+    <value>Błąd</value>
+  </data>
+  <data name="NoTranslation" xml:space="preserve">
+    <value>Brak tłumaczenia</value>
+  </data>
+  <data name="SaveTo" xml:space="preserve">
+    <value>Zapisz do</value>
+  </data>
+  <data name="SearchEmpty" xml:space="preserve">
+    <value>Wpisz słowo, aby wyszukać</value>
+  </data>
+  <data name="SelectCollectionError" xml:space="preserve">
+    <value>Wybierz lub stwórz kolekcję (w zakładce Fiszki), aby zapisać słowo.</value>
+  </data>
+  <data name="SelectCollectionPlaceholder" xml:space="preserve">
+    <value>Wybierz kolekcję</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Sukces</value>
+  </data>
+  <data name="Translate" xml:space="preserve">
+    <value>Przetłumacz</value>
+  </data>
+  <data name="TranslationError" xml:space="preserve">
+    <value>Błąd tłumaczenia</value>
+  </data>
+  <data name="Learn" xml:space="preserve">
+    <value>Nauka</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edytuj</value>
+  </data>
+  <data name="FlashcardsCount" xml:space="preserve">
+    <value>fiszek</value>
+  </data>
+  <data name="NameEntry" xml:space="preserve">
+    <value>Podaj nazwę:</value>
+  </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Gratulacje!</value>
+  </data>
+  <data name="LearningFinished" xml:space="preserve">
+    <value>Sesja nauki zakończona.</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Wróć do listy</value>
+  </data>
+  <data name="TapToFlip" xml:space="preserve">
+    <value>Kliknij, aby obrócić</value>
+  </data>
+  <data name="IKnow" xml:space="preserve">
+    <value>Umiem</value>
+  </data>
+  <data name="IDontKnow" xml:space="preserve">
+    <value>Nie umiem</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Ustawienia</value>

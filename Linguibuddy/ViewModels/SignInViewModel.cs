@@ -1,13 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
-using Firebase.Auth.Providers;
 using Linguibuddy.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linguibuddy.ViewModels
 {
@@ -44,14 +38,14 @@ namespace Linguibuddy.ViewModels
             }
 
             //await Shell.Current.GoToAsync("//MainPage");
-            Application.Current.Windows[0].Page = new AppShell();
+            Application.Current!.Windows[0].Page = new AppShell();
         }
         [RelayCommand]
         private async Task NavigateSignUp()
         {
             var signUpPage = _services.GetRequiredService<SignUpPage>();
 
-            Application.Current.Windows[0].Page = new NavigationPage(signUpPage);
+            Application.Current!.Windows[0].Page = new NavigationPage(signUpPage);
         }
     }
 }
