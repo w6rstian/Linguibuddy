@@ -23,7 +23,7 @@ namespace Linguibuddy.Services
         }
 
         public async Task<DictionaryWord?> GetEnglishWordAsync(string englishWord)
-       {
+        {
             if (string.IsNullOrWhiteSpace(englishWord))
                 return null;
 
@@ -34,7 +34,7 @@ namespace Linguibuddy.Services
                 var localWord = await _context.DictionaryWords
                     .Include(w => w.Phonetics)
                     .Include(w => w.Meanings)
-                        .ThenInclude(m => m.Definitions)
+                    .ThenInclude(m => m.Definitions)
                     .FirstOrDefaultAsync(w => w.Word.ToLower() == searchWord);
 
                 if (localWord != null)
@@ -58,6 +58,26 @@ namespace Linguibuddy.Services
 
                 if (fetchedWord != null)
                 {
+                    var perfectMatch = fetchedWord.Phonetics
+                        .FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Text) && !string.IsNullOrWhiteSpace(p.Audio));
+
+                    if (string.IsNullOrWhiteSpace(fetchedWord.Phonetic))
+                    {
+                        if (perfectMatch != null)
+                        {
+                            fetchedWord.Phonetic = perfectMatch.Text;
+                        }
+                        else
+                        {
+                            fetchedWord.Phonetic = fetchedWord.Phonetics
+                                .FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Text))?.Text ?? "";
+                        }
+                    }
+
+                    fetchedWord.Audio = perfectMatch?.Audio
+                                        ?? fetchedWord.Phonetics.FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Audio))?.Audio
+                                        ?? "";
+
                     try
                     {
                         _context.DictionaryWords.Add(fetchedWord);
@@ -84,6 +104,33 @@ namespace Linguibuddy.Services
                 Console.WriteLine($"Api error: {e.Message}");
                 return null;
             }
+        }
+
+        public async Task<List<DictionaryWord>> GetRandomWordsForGameAsync(int count = 4)
+        {
+            var validIds = await _context.DictionaryWords
+                .Where(w => !string.IsNullOrEmpty(w.Audio) && !string.IsNullOrEmpty(w.Phonetic))
+                .Select(w => w.Id)
+                .ToListAsync();
+
+            if (validIds.Count < count)
+            {
+                if (validIds.Count == 0) return new List<DictionaryWord>();
+
+                count = validIds.Count;
+            }
+
+            var random = new Random();
+            var selectedIds = validIds
+                .OrderBy(x => random.Next())
+                .Take(count)
+                .ToList();
+
+            var randomWords = await _context.DictionaryWords
+                .Where(w => selectedIds.Contains(w.Id))
+                .ToListAsync();
+
+            return randomWords;
         }
     }
 }
