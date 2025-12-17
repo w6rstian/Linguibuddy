@@ -58,6 +58,8 @@ namespace Linguibuddy
             builder.Services.AddTransient<SignUpPage>();
             builder.Services.AddTransient<SignUpViewModel>();
 
+            builder.Services.AddTransient<AwardsPage>();
+
             builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddTransient<SettingsViewModel>();
 

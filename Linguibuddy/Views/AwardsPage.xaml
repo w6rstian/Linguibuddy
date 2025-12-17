@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Linguibuddy.Views.AwardsPage"
+             Title="Awards">
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="20"
+            HorizontalOptions="Center"
+            MaximumWidthRequest="500">
+
+            <!-- Nagłówek -->
+            <Label
+                Text="Twoje Osiągnięcia"
+                FontSize="24"
+                FontAttributes="Bold"
+                HorizontalOptions="Center" />
+
+            <!-- Lista nagród -->
+            <VerticalStackLayout Spacing="15" HorizontalOptions="Fill">
+
+                <!-- Odblokowane osiągnięcie -->
+                <Border
+                    StrokeShape="RoundRectangle 10"
+                    Stroke="#E0FFE0"
+                    BackgroundColor="#E0FFE0"
+                    Padding="15">
+
+                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Image Source="https://cdn-icons-png.flaticon.com/512/1152/1152912.png" WidthRequest="40" HeightRequest="40"/>
+                        <Label Text="Naucz się 20 fiszek" FontSize="18" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <!-- Zablokowane osiągnięcia -->
+                <Border
+                    StrokeShape="RoundRectangle 10"
+                    Stroke="#CCCCCC"
+                    BackgroundColor="#F0F0F0"
+                    Padding="15"
+                    Opacity="0.5">
+
+                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Image Source="https://cdn-icons-png.flaticon.com/512/2889/2889676.png" WidthRequest="40" HeightRequest="40"/>
+                        <Label Text="Naucz się 50 fiszek" FontSize="18" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Border
+                    StrokeShape="RoundRectangle 10"
+                    Stroke="#CCCCCC"
+                    BackgroundColor="#F0F0F0"
+                    Padding="15"
+                    Opacity="0.5">
+
+                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Image Source="https://cdn-icons-png.flaticon.com/512/2889/2889676.png" WidthRequest="40" HeightRequest="40"/>
+                        <Label Text="Ukończ 5 minigier" FontSize="18" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Border
+                    StrokeShape="RoundRectangle 10"
+                    Stroke="#CCCCCC"
+                    BackgroundColor="#F0F0F0"
+                    Padding="15"
+                    Opacity="0.5">
+                    
+                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Image Source="https://cdn-icons-png.flaticon.com/512/2889/2889676.png" WidthRequest="40" HeightRequest="40"/>
+                        <Label Text="Zdobądź wszystkie nagrody" FontSize="18" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
