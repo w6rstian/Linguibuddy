@@ -70,6 +70,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audio error.
+        /// </summary>
+        internal static string AudioError {
+            get {
+                return ResourceManager.GetString("AudioError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to list.
         /// </summary>
         internal static string BackToList {
@@ -246,6 +255,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string NoTranslation {
             get {
                 return ResourceManager.GetString("NoTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The recording could not be played..
+        /// </summary>
+        internal static string PlaybackError {
+            get {
+                return ResourceManager.GetString("PlaybackError", resourceCulture);
             }
         }
         

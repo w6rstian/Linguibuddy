@@ -222,4 +222,10 @@
   <data name="Flashcards" xml:space="preserve">
     <value>Fiszki</value>
   </data>
+  <data name="AudioError" xml:space="preserve">
+    <value>Błąd audio</value>
+  </data>
+  <data name="PlaybackError" xml:space="preserve">
+    <value>Nie udało się odtworzyć nagrania.</value>
+  </data>
 </root>

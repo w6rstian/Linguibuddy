@@ -10,6 +10,7 @@ using Linguibuddy.Views;
 using LocalizationResourceManager.Maui;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Plugin.Maui.Audio;
 
 namespace Linguibuddy
 {
@@ -76,6 +77,7 @@ namespace Linguibuddy
                 System.Diagnostics.Debug.WriteLine("GITHUB_TOKEN is not set in environment variables.");
             }
 
+            builder.Services.AddSingleton(AudioManager.Current);
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
             builder.Services.AddSingleton(new OpenAiService(githubAiKey));
             builder.Services.AddTransient<DictionaryApiService>();
