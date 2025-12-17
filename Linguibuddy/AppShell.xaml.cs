@@ -9,6 +9,7 @@ namespace Linguibuddy
             InitializeComponent();
 
             Routing.RegisterRoute(nameof(FlashcardsPage), typeof(FlashcardsPage));
+            Routing.RegisterRoute(nameof(AudioQuizPage), typeof(AudioQuizPage));
         }
     }
 }

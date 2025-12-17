@@ -55,6 +55,13 @@ namespace Linguibuddy.ViewModels
         {
             await Shell.Current.GoToAsync("//SettingsPage");
         }
+
+        [RelayCommand]
+        private async Task NavigateToMiniGames()
+        {
+            await Shell.Current.GoToAsync("//MiniGamesPage");
+        }
+
         [RelayCommand]
         private async Task SignOut()
         {

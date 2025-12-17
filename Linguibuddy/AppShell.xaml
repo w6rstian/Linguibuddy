@@ -32,5 +32,11 @@
             ContentTemplate="{DataTemplate views:SettingsPage}"
             Route="SettingsPage"/>
     </FlyoutItem>
+    <FlyoutItem Title="Mini Games">
+        <ShellContent 
+            Title="Mini Games"
+            ContentTemplate="{DataTemplate views:MiniGamesPage}"
+            Route="MiniGamesPage"/>
+    </FlyoutItem>
 
 </Shell>

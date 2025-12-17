@@ -34,6 +34,7 @@
                                 MinimumWidthRequest="200"/>
                         <Button Text="Minigames"
                                 FontSize="Medium"
+                                Command="{Binding NavigateToMiniGamesCommand}"
                                 Padding="40,30" 
                                 MinimumWidthRequest="200" />
                     </HorizontalStackLayout>
