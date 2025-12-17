@@ -133,11 +133,29 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flashcards.
+        /// </summary>
+        internal static string Flashcards {
+            get {
+                return ResourceManager.GetString("Flashcards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to flashcards.
         /// </summary>
         internal static string FlashcardsCount {
             get {
                 return ResourceManager.GetString("FlashcardsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        internal static string Home {
+            get {
+                return ResourceManager.GetString("Home", resourceCulture);
             }
         }
         

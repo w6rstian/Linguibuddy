@@ -216,4 +216,10 @@
   <data name="Settings" xml:space="preserve">
     <value>Ustawienia</value>
   </data>
+  <data name="Home" xml:space="preserve">
+    <value>Strona główna</value>
+  </data>
+  <data name="Flashcards" xml:space="preserve">
+    <value>Fiszki</value>
+  </data>
 </root>
