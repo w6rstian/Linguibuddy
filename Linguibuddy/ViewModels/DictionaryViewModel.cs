@@ -187,12 +187,11 @@ namespace Linguibuddy.ViewModels
                 _audioPlayer.PlaybackEnded += (s, e) =>
                 {
                     fileStream.Dispose();
-                    // _audioPlayer.Dispose(); // Można odkomentować, ale ostrożnie przy szybkim klikaniu
                 };
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Błąd audio", $"Nie udało się odtworzyć: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
                 System.Diagnostics.Debug.WriteLine($"Audio Error: {ex.Message}");
             }
         }
