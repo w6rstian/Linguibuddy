@@ -57,6 +57,15 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow 
+                        Brush="{StaticResource PrimaryBrush}" 
+                        Radius="5" 
+                        Opacity="0.4" 
+                        Offset="0,4"/>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="CheckBox">
