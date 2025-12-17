@@ -108,28 +108,6 @@ namespace Linguibuddy.ViewModels
 
                 if (entry != null)
                 {
-                    string finalAudio = "";
-                    string finalPhoneticText = "";
-
-                    var perfectMatch = entry.Phonetics
-                        .FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Text) && !string.IsNullOrWhiteSpace(p.Audio));
-
-                    if (perfectMatch != null)
-                    {
-                        finalAudio = perfectMatch.Audio;
-                        finalPhoneticText = perfectMatch.Text;
-                    }
-                    else
-                    {
-                        finalAudio = entry.Phonetics
-                            .FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Audio))?.Audio ?? "";
-
-                        finalPhoneticText = entry.Phonetics
-                                        .FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Text))?.Text
-                                    ?? entry.Phonetic
-                                    ?? "";
-                    }
-
                     foreach (var meaning in entry.Meanings)
                     {
                         foreach (var def in meaning.Definitions)
@@ -137,8 +115,8 @@ namespace Linguibuddy.ViewModels
                             SearchResults.Add(new SearchResultItem
                             {
                                 Word = entry.Word,
-                                Phonetic = finalPhoneticText,
-                                AudioUrl = finalAudio,
+                                Phonetic = entry.Phonetic,
+                                AudioUrl = entry.Audio,
                                 PartOfSpeech = meaning.PartOfSpeech,
                                 Definition = def.DefinitionText,
                                 Example = def.Example,
