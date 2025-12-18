@@ -13,7 +13,7 @@
                    FontSize="18" TextColor="Gray" HorizontalOptions="Center"/>
 
             <Border StrokeShape="RoundRectangle 20"
-                    Stroke="{StaticResource Primary}"
+                    Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                     StrokeThickness="2"
                     HeightRequest="350" 
                     MaximumWidthRequest="400"
@@ -64,13 +64,14 @@
                 Text="Następne pytanie"
                 Command="{Binding NextQuestionCommand}"
                 IsVisible="{Binding IsAnswered}"
-                BackgroundColor="{StaticResource Primary}"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                TextColor="{AppThemeBinding Light=White, Dark={StaticResource PrimaryDarkText}}"
                 Margin="0,0,0,10"/>
 
         <ActivityIndicator Grid.RowSpan="4" 
                            IsRunning="{Binding IsBusy}" 
                            IsVisible="{Binding IsBusy}" 
-                           Color="{StaticResource Primary}"
+                           Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                            HorizontalOptions="Center" VerticalOptions="Center"/>
     </Grid>
 </ContentPage>

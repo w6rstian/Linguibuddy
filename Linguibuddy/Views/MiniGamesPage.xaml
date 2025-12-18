@@ -42,7 +42,7 @@
                     <TapGestureRecognizer Command="{Binding NavigateToImageQuizCommand}"/>
                 </Frame.GestureRecognizers>
 
-                <Grid ColumnDefinitions="100, *" BackgroundColor="{StaticResource Primary}">
+                <Grid ColumnDefinitions="100, *" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
                     <Image Source="image_icon.png" 
                            Aspect="AspectFit" 
                            Margin="20"

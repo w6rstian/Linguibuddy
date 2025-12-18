@@ -102,7 +102,7 @@
                             <Label Text="{Binding CurrentFlashcard.Translation}" 
                                    FontSize="32" 
                                    FontAttributes="Bold" 
-                                   TextColor="{StaticResource Primary}" 
+                                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDarkText}"
                                    HorizontalOptions="Center"
                                    HorizontalTextAlignment="Center"/>
 
