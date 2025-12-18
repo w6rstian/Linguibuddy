@@ -17,7 +17,7 @@ namespace Linguibuddy.ViewModels
         public QuizOption(DictionaryWord word)
         {
             Word = word;
-            BackgroundColor = Application.Current.Resources["Gray600"] as Color ?? Colors.LightGray;
+            BackgroundColor = Application.Current.Resources["Primary"] as Color ?? Colors.LightGray;
             IsEnabled = true;
         }
     }
