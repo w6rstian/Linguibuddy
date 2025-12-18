@@ -193,7 +193,7 @@ namespace Linguibuddy.ViewModels
                 await _flashcardService.AddFlashcardAsync(flashcard);
 
                 var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
-                await Shell.Current.DisplayAlert("Sukces", message, "OK");
+                await Shell.Current.DisplayAlert(AppResources.Success, message, "OK");
             }
             catch (Exception ex)
             {
