@@ -60,6 +60,14 @@
                         HorizontalOptions="Fill" />
 
                     <Button
+                        Text="Flashcards"
+                        FontSize="Medium"
+                        Command="{Binding NavigateToFlashcardsCommand}"
+                        Padding="40,10"
+                        CornerRadius="25"
+                        HorizontalOptions="Fill" />
+                    
+                    <Button
                         Text="Minigames"
                         FontSize="Medium"
                         Command="{Binding NavigateToMinigamesCommand}"
