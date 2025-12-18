@@ -7,9 +7,7 @@ namespace Linguibuddy
         public AppShell()
         {
             InitializeComponent();
-
-            Routing.RegisterRoute(nameof(FlashcardsPage), typeof(FlashcardsPage));
-            Routing.RegisterRoute(nameof(AudioQuizPage), typeof(AudioQuizPage));
+            App.RegisterRoutes();
         }
     }
 }

@@ -35,5 +35,11 @@ namespace Linguibuddy
 
             return new AppShell();
         }
+
+        public static void RegisterRoutes()
+        {
+            Routing.RegisterRoute(nameof(FlashcardsPage), typeof(FlashcardsPage));
+            Routing.RegisterRoute(nameof(AudioQuizPage), typeof(AudioQuizPage));
+        }
     }
 }
