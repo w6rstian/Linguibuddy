@@ -59,7 +59,7 @@ namespace Linguibuddy.ViewModels
 
             // Pobranie koloru Primary z zasobów aplikacji (bezpieczny sposób)
             Color primaryColor = Colors.Purple;
-            if (Application.Current.Resources.TryGetValue("PrimaryDark", out var colorRes))
+            if (Application.Current.Resources.TryGetValue("Primary", out var colorRes))
             {
                 primaryColor = (Color)colorRes;
             }
