@@ -69,8 +69,8 @@ namespace Linguibuddy
                 }
                 );
 
-            builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddSingleton<MainViewModel>();
+            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<MainViewModel>();
 
             builder.Services.AddTransient<DictionaryPage>();
             builder.Services.AddTransient<DictionaryViewModel>();
