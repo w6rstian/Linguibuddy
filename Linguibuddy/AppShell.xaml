@@ -27,24 +27,24 @@
             Route="FlashcardsCollectionsPage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Awards">
-        <ShellContent 
-            Title="Awards"
-            ContentTemplate="{DataTemplate views:AwardsPage}"
-            Route="AwardsPage"/>
-    </FlyoutItem>
-    
-    <FlyoutItem Title="{loc:Translate Settings}">
-        <ShellContent 
-            Title="{loc:Translate Settings}"
-            ContentTemplate="{DataTemplate views:SettingsPage}"
-            Route="SettingsPage"/>
-    </FlyoutItem>
     <FlyoutItem Title="Mini Games">
         <ShellContent 
             Title="Mini Games"
             ContentTemplate="{DataTemplate views:MiniGamesPage}"
             Route="MiniGamesPage"/>
     </FlyoutItem>
+    
+    <FlyoutItem Title="Awards">
+        <ShellContent 
+            Title="Awards"
+            ContentTemplate="{DataTemplate views:AwardsPage}"
+            Route="AwardsPage"/>
+    </FlyoutItem>
 
+    <FlyoutItem Title="{loc:Translate Settings}">
+        <ShellContent 
+            Title="{loc:Translate Settings}"
+            ContentTemplate="{DataTemplate views:SettingsPage}"
+            Route="SettingsPage"/>
+    </FlyoutItem>
 </Shell>
