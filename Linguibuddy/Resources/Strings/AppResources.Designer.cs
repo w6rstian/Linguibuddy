@@ -367,6 +367,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Translation API in dictionary.
+        /// </summary>
+        internal static string TranslationApi {
+            get {
+                return ResourceManager.GetString("TranslationApi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Translation error.
         /// </summary>
         internal static string TranslationError {

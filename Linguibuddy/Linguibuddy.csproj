@@ -114,10 +114,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Helpers\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Compile Update="Resources\Strings\AppResources.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>

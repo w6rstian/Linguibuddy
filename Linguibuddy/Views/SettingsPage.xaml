@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              x:Class="Linguibuddy.Views.SettingsPage"
+             xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             x:DataType="vm:SettingsViewModel"
              Title="Settings">
     <VerticalStackLayout Spacing="50" Margin="20,0">
         <Label 
@@ -10,8 +12,9 @@
             FontSize="Header"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+
         <Grid ColumnDefinitions="*,*"
-              RowDefinitions="*,*"
+              RowDefinitions="*,*,*"
               MaximumWidthRequest="500"
               RowSpacing="20">
 
@@ -53,6 +56,28 @@
                     </Grid>
                 </Border>
             </ContentView>
+
+            <ContentView Grid.ColumnSpan="2"
+                         Grid.Row="2"
+                         HorizontalOptions="Fill">
+                <Border Style="{StaticResource SettingsRoundedBorder}">
+                    <Grid ColumnDefinitions="*,*">
+                        <Button Text="{loc:Translate TranslationApi}"
+                                Command="{Binding ChangeTranslationApiCommand}"
+                                Background="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                                MaximumWidthRequest="250" />
+
+                        <Button Grid.Column="1"
+                                Text="{Binding TranslationApiName}"
+                                Command="{Binding ChangeTranslationApiCommand}" 
+                                Background="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                                MaximumWidthRequest="250" />
+                    </Grid>
+                </Border>
+            </ContentView>
+
         </Grid>
     </VerticalStackLayout>
 </ContentPage>

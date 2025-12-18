@@ -6,6 +6,7 @@ using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using Plugin.Maui.Audio;
 using System.Collections.ObjectModel;
+using Linguibuddy.Helpers;
 
 namespace Linguibuddy.ViewModels
 {
@@ -18,12 +19,10 @@ namespace Linguibuddy.ViewModels
         public string Phonetic { get; set; } = string.Empty;
         public string? AudioUrl { get; set; }
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(ShowTranslateButton))]
+        [ObservableProperty] [NotifyPropertyChangedFor(nameof(ShowTranslateButton))]
         private string? _translation;
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(ShowTranslateButton))]
+        [ObservableProperty] [NotifyPropertyChangedFor(nameof(ShowTranslateButton))]
         private bool _isBusy;
 
         public bool ShowTranslateButton => string.IsNullOrEmpty(Translation) && !IsBusy;
@@ -39,18 +38,15 @@ namespace Linguibuddy.ViewModels
         private readonly FlashcardService _flashcardService;
         private readonly IAudioManager _audioManager;
 
-        [ObservableProperty]
-        private string? _inputText;
+        [ObservableProperty] private string? _inputText;
 
-        [ObservableProperty]
-        private bool _isLoading;
+        [ObservableProperty] private bool _isLoading;
 
         public ObservableCollection<SearchResultItem> SearchResults { get; } = [];
 
         public ObservableCollection<FlashcardCollection> UserCollections { get; } = [];
 
-        [ObservableProperty]
-        private FlashcardCollection? _selectedCollection;
+        [ObservableProperty] private FlashcardCollection? _selectedCollection;
 
         private IAudioPlayer? _audioPlayer;
 
@@ -162,10 +158,7 @@ namespace Linguibuddy.ViewModels
                 _audioPlayer = _audioManager.CreatePlayer(fileStream);
                 _audioPlayer.Play();
 
-                _audioPlayer.PlaybackEnded += (s, e) =>
-                {
-                    fileStream.Dispose();
-                };
+                _audioPlayer.PlaybackEnded += (s, e) => { fileStream.Dispose(); };
             }
             catch (Exception ex)
             {
@@ -217,20 +210,28 @@ namespace Linguibuddy.ViewModels
 
             try
             {
-                // DeepL API
-                //var translation = await _translationService.TranslateWithContextAsync(
-                //    item.Word,
-                //    item.Definition,
-                //    item.PartOfSpeech,
-                //    "PL"
-                //);
+                int apiInt = Preferences.Default.Get(Constants.TranslationApiKey, (int)TranslationProvider.DeepL);
+                var provider = (TranslationProvider)apiInt;
 
-                // OpenAI
-                var translation = await _openAiService.TranslateWithContextAsync(
-                    item.Word,
-                    item.Definition,
-                    item.PartOfSpeech
-                );
+                string? translation = null;
+
+                if (provider == TranslationProvider.OpenAi)
+                {
+                    translation = await _openAiService.TranslateWithContextAsync(
+                        item.Word,
+                        item.Definition,
+                        item.PartOfSpeech
+                    );
+                }
+                else
+                {
+                    translation = await _translationService.TranslateWithContextAsync(
+                        item.Word,
+                        item.Definition,
+                        item.PartOfSpeech,
+                        "PL"
+                    );
+                }
 
                 item.Translation = translation;
             }
