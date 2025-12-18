@@ -3,25 +3,26 @@
     x:Class="Linguibuddy.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
     xmlns:local="clr-namespace:Linguibuddy"
     xmlns:views="clr-namespace:Linguibuddy.Views"
     Title="Linguibuddy">
 
-    <FlyoutItem Title="Home">
+    <FlyoutItem Title="{loc:Translate Home}">
         <ShellContent
-            Title="Home"
+            Title="{loc:Translate Home}"
             ContentTemplate="{DataTemplate views:MainPage}"
             Route="MainPage" />
     </FlyoutItem>
-    <FlyoutItem Title="Dictionary">
+    <FlyoutItem Title="{loc:Translate Dictionary}">
         <ShellContent
-            Title="Dictionary"
+            Title="{loc:Translate Dictionary}"
             ContentTemplate="{DataTemplate views:DictionaryPage}"
             Route="DictionaryPage" />
     </FlyoutItem>
-    <FlyoutItem Title="Flashcards">
+    <FlyoutItem Title="{loc:Translate Flashcards}">
         <ShellContent
-            Title="Flashcards"
+            Title="{loc:Translate Flashcards}"
             ContentTemplate="{DataTemplate views:FlashcardsCollectionsPage}"
             Route="FlashcardsCollectionsPage" />
     </FlyoutItem>
@@ -33,11 +34,17 @@
             Route="AwardsPage"/>
     </FlyoutItem>
     
-    <FlyoutItem Title="Settings">
+    <FlyoutItem Title="{loc:Translate Settings}">
         <ShellContent 
-            Title="Settings"
+            Title="{loc:Translate Settings}"
             ContentTemplate="{DataTemplate views:SettingsPage}"
             Route="SettingsPage"/>
+    </FlyoutItem>
+    <FlyoutItem Title="Mini Games">
+        <ShellContent 
+            Title="Mini Games"
+            ContentTemplate="{DataTemplate views:MiniGamesPage}"
+            Route="MiniGamesPage"/>
     </FlyoutItem>
 
 </Shell>

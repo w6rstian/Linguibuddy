@@ -70,6 +70,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audio error.
+        /// </summary>
+        internal static string AudioError {
+            get {
+                return ResourceManager.GetString("AudioError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to list.
         /// </summary>
         internal static string BackToList {
@@ -133,11 +142,29 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flashcards.
+        /// </summary>
+        internal static string Flashcards {
+            get {
+                return ResourceManager.GetString("Flashcards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to flashcards.
         /// </summary>
         internal static string FlashcardsCount {
             get {
                 return ResourceManager.GetString("FlashcardsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        internal static string Home {
+            get {
+                return ResourceManager.GetString("Home", resourceCulture);
             }
         }
         
@@ -228,6 +255,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string NoTranslation {
             get {
                 return ResourceManager.GetString("NoTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The recording could not be played..
+        /// </summary>
+        internal static string PlaybackError {
+            get {
+                return ResourceManager.GetString("PlaybackError", resourceCulture);
             }
         }
         

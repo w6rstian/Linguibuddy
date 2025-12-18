@@ -9,7 +9,11 @@ using Linguibuddy.ViewModels;
 using Linguibuddy.Views;
 using LocalizationResourceManager.Maui;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
+using System.Text.Json;
+using Plugin.Maui.Audio;
 
 namespace Linguibuddy
 {
@@ -31,6 +35,31 @@ namespace Linguibuddy
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            var assembly = Assembly.GetExecutingAssembly();
+
+            using var stream = assembly.GetManifestResourceStream("Linguibuddy.appsettings.json");
+            if (stream == null) throw new Exception("Nie znaleziono pliku appsettings.json w zasobach.");
+
+            using var reader = new StreamReader(stream);
+            string json = reader.ReadToEnd();
+
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+
+            if (!root.TryGetProperty("DEEPL_API_KEY", out JsonElement apiKeyElement))
+            {
+                throw new Exception("Nie znaleziono klucza DEEPL_API_KEY w JSON.");
+            }
+
+            var deeplApiKey = apiKeyElement.GetString();
+
+            if (!root.TryGetProperty("GITHUB_TOKEN", out apiKeyElement))
+            {
+                throw new Exception("Nie znaleziono klucza GITHUB_TOKEN w JSON.");
+            }
+
+            var githubToken = apiKeyElement.GetString();
 
             builder.Services.AddDbContext<DataContext>(
                 options =>
@@ -64,10 +93,17 @@ namespace Linguibuddy
             builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddTransient<SettingsViewModel>();
 
+            builder.Services.AddTransient<AudioQuizPage>();
+            builder.Services.AddTransient<AudioQuizViewModel>();
 
-            var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
+            builder.Services.AddTransient<MiniGamesPage>();
+            builder.Services.AddTransient<MiniGamesViewModel>();
+
+            //var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
+            var deepLKey = deeplApiKey;
             //var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
-            var githubAiKey = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
+            //var githubAiKey = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
+            var githubAiKey = githubToken;
 
             if (string.IsNullOrEmpty(deepLKey))
             {
@@ -79,6 +115,7 @@ namespace Linguibuddy
                 System.Diagnostics.Debug.WriteLine("GITHUB_TOKEN is not set in environment variables.");
             }
 
+            builder.Services.AddSingleton(AudioManager.Current);
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
             builder.Services.AddSingleton(new OpenAiService(githubAiKey));
             builder.Services.AddTransient<DictionaryApiService>();

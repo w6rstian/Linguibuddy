@@ -23,6 +23,9 @@ namespace Linguibuddy.Models
 
         [JsonProperty("meanings")]
         public List<Meaning> Meanings { get; set; } = [];
+
+        // moje pole audio
+        public string Audio { get; set; } = string.Empty;
     }
 
     public class Phonetic

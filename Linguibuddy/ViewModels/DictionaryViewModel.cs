@@ -1,15 +1,11 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Data;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Maui;
+using Plugin.Maui.Audio;
 using System.Collections.ObjectModel;
-using System.Text;
 
 namespace Linguibuddy.ViewModels
 {
@@ -20,6 +16,7 @@ namespace Linguibuddy.ViewModels
         public string Definition { get; set; } = string.Empty;
         public string? Example { get; set; }
         public string Phonetic { get; set; } = string.Empty;
+        public string? AudioUrl { get; set; }
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(ShowTranslateButton))]
@@ -30,6 +27,8 @@ namespace Linguibuddy.ViewModels
         private bool _isBusy;
 
         public bool ShowTranslateButton => string.IsNullOrEmpty(Translation) && !IsBusy;
+
+        public bool HasAudio => !string.IsNullOrWhiteSpace(AudioUrl);
     }
 
     public partial class DictionaryViewModel : ObservableObject
@@ -38,6 +37,7 @@ namespace Linguibuddy.ViewModels
         private readonly DeepLTranslationService _translationService;
         private readonly OpenAiService _openAiService;
         private readonly FlashcardService _flashcardService;
+        private readonly IAudioManager _audioManager;
 
         [ObservableProperty]
         private string? _inputText;
@@ -52,17 +52,21 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private FlashcardCollection? _selectedCollection;
 
+        private IAudioPlayer? _audioPlayer;
+
         public DictionaryViewModel(DataContext dataContext,
             DictionaryApiService dictionaryService,
             DeepLTranslationService translationService,
             OpenAiService openAiService,
-            FlashcardService flashcardService)
+            FlashcardService flashcardService,
+            IAudioManager audioManager)
         {
             _dictionaryService = dictionaryService;
             _translationService = translationService;
             _openAiService = openAiService;
             _openAiService = openAiService;
             _flashcardService = flashcardService;
+            _audioManager = audioManager;
 
             LoadCollectionsCommand.Execute(null);
         }
@@ -111,7 +115,8 @@ namespace Linguibuddy.ViewModels
                             SearchResults.Add(new SearchResultItem
                             {
                                 Word = entry.Word,
-                                Phonetic = entry.Phonetic ?? "",
+                                Phonetic = entry.Phonetic,
+                                AudioUrl = entry.Audio,
                                 PartOfSpeech = meaning.PartOfSpeech,
                                 Definition = def.DefinitionText,
                                 Example = def.Example,
@@ -129,6 +134,43 @@ namespace Linguibuddy.ViewModels
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        public async Task PlayAudio(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url)) return;
+
+            if (_audioPlayer != null && _audioPlayer.IsPlaying)
+            {
+                _audioPlayer.Dispose();
+            }
+
+            try
+            {
+                using var client = new HttpClient();
+                var audioBytes = await client.GetByteArrayAsync(url);
+
+                string fileName = "temp_pronunciation.mp3";
+                string filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+
+                await File.WriteAllBytesAsync(filePath, audioBytes);
+
+                var fileStream = File.OpenRead(filePath);
+
+                _audioPlayer = _audioManager.CreatePlayer(fileStream);
+                _audioPlayer.Play();
+
+                _audioPlayer.PlaybackEnded += (s, e) =>
+                {
+                    fileStream.Dispose();
+                };
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
+                System.Diagnostics.Debug.WriteLine($"Audio Error: {ex.Message}");
             }
         }
 

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             x:Class="Linguibuddy.Views.AudioQuizPage"
+             x:DataType="vm:AudioQuizViewModel"
+             Title="Audio Quiz">
+    <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="20" RowSpacing="20">
+
+        <VerticalStackLayout Grid.Row="0" Spacing="15" HorizontalOptions="Center">
+            <Label Text="Posłuchaj i wybierz słowo" 
+                   FontSize="18" 
+                   TextColor="Gray"
+                   HorizontalOptions="Center"/>
+
+            <Frame CornerRadius="40" 
+                   HeightRequest="80" 
+                   WidthRequest="80" 
+                   BackgroundColor="{StaticResource Primary}"
+                   HasShadow="True"
+                   Padding="0">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding PlayAudioCommand}"/>
+                </Frame.GestureRecognizers>
+
+                <!--<ImageButton Source="speaker_icon.png" 
+                             Command="{Binding PlayAudioCommand}"
+                             HeightRequest="40" 
+                             WidthRequest="40"
+                             VerticalOptions="Center" 
+                             HorizontalOptions="Center"
+                             BackgroundColor="Transparent"/>-->
+
+                <Button Text="🔊" 
+                        Command="{Binding PlayAudioCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource Primary}"
+                        Padding="0"
+                        HeightRequest="30"
+                        WidthRequest="30"/>
+            </Frame>
+
+            <Label Text="Kliknij, aby odsłuchać" FontSize="12" HorizontalOptions="Center" TextColor="Gray"/>
+
+            <Label Text="{Binding TargetWord.Phonetic, StringFormat='/{0}/'}" 
+                   FontSize="24" 
+                   FontAttributes="Italic"
+                   TextColor="{StaticResource Primary}"
+                   HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+
+        <Label Grid.Row="1" 
+               Text="{Binding FeedbackMessage}" 
+               TextColor="{Binding FeedbackColor}"
+               FontSize="18"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center"/>
+
+        <Grid Grid.Row="2" 
+              BindableLayout.ItemsSource="{Binding Options}"
+              ColumnDefinitions="*,*" 
+              RowDefinitions="*,*" 
+              ColumnSpacing="15" 
+              RowSpacing="15">
+
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="vm:QuizOption">
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </Grid>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Options}" SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="10" VerticalItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:QuizOption">
+                    <Button Text="{Binding Word.Word}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AudioQuizViewModel}}, Path=SelectAnswerCommand}"
+                            CommandParameter="{Binding .}"
+                            BackgroundColor="{Binding BackgroundColor}"
+                            TextColor="White"
+                            HeightRequest="80"
+                            IsEnabled="{Binding IsEnabled}"
+                            FontSize="16"
+                            CornerRadius="10"/>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Grid.Row="3"
+                Text="Następne pytanie"
+                Command="{Binding NextQuestionCommand}"
+                IsVisible="{Binding IsAnswered}"
+                BackgroundColor="{StaticResource Primary}"
+                Margin="0,0,0,20"/>
+
+        <ActivityIndicator Grid.RowSpan="4" 
+                           IsRunning="{Binding IsBusy}" 
+                           IsVisible="{Binding IsBusy}" 
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center"
+                           Color="{StaticResource Primary}"/>
+    </Grid>
+</ContentPage>

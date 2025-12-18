@@ -76,6 +76,29 @@
                                            VerticalOptions="Center"
                                            FontSize="14"/>
 
+                                    <Button Text="🔊" 
+                                            IsVisible="{Binding HasAudio}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=PlayAudioCommand}"
+                                            CommandParameter="{Binding AudioUrl}"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{StaticResource Primary}"
+                                            Padding="0"
+                                            HeightRequest="30"
+                                            WidthRequest="30"/>
+
+                                    <!--<ImageButton Source="{AppThemeBinding Light='speaker_icon_black.png', Dark='speaker_icon_white.png'}"
+                                                 IsVisible="{Binding HasAudio}"
+                                                 HeightRequest="24"
+                                                 WidthRequest="24"
+                                                 VerticalOptions="Center"
+                                                 BackgroundColor="Transparent"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=PlayAudioCommand}"
+                                                 CommandParameter="{Binding AudioUrl}">
+                                        <ImageButton.Shadow>
+                                            <Shadow Brush="Black" Opacity="0.2" Radius="2" Offset="1,1"/>
+                                        </ImageButton.Shadow>
+                                    </ImageButton>-->
+
                                     <Label Text="{Binding PartOfSpeech}" 
                                            TextColor="{StaticResource Primary}" 
                                            FontAttributes="Bold"

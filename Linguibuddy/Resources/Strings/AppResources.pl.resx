@@ -216,4 +216,16 @@
   <data name="Settings" xml:space="preserve">
     <value>Ustawienia</value>
   </data>
+  <data name="Home" xml:space="preserve">
+    <value>Strona główna</value>
+  </data>
+  <data name="Flashcards" xml:space="preserve">
+    <value>Fiszki</value>
+  </data>
+  <data name="AudioError" xml:space="preserve">
+    <value>Błąd audio</value>
+  </data>
+  <data name="PlaybackError" xml:space="preserve">
+    <value>Nie udało się odtworzyć nagrania.</value>
+  </data>
 </root>
