@@ -9,47 +9,42 @@ namespace Linguibuddy.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
-        private readonly FlashcardService _flashcardService; // flashcard service
-        private readonly OpenAiService _openAiService; // test AI
-        private readonly DataContext _dataContext;
         private readonly FirebaseAuthClient _authClient;
         private readonly IServiceProvider _services;
+        private readonly MockDataSeeder _dataSeeder;
 
         [ObservableProperty]
         private string? apiResponseStatus;
         [ObservableProperty]
         private string _username;
 
-        public MainViewModel(DataContext dataContext, OpenAiService openAiService, FirebaseAuthClient authClient, IServiceProvider services, FlashcardService flashcardService)
+        public MainViewModel(
+            FirebaseAuthClient authClient, 
+            IServiceProvider services, 
+            MockDataSeeder dataSeeder)
         {
-            _dataContext = dataContext;
-            _openAiService = openAiService;
             _authClient = authClient;
             _services = services;
-            _flashcardService = flashcardService;
-            ApiResponseStatus = "Kliknij przycisk, aby przetestować API";
+            _dataSeeder = dataSeeder;
 
-            Username = _authClient.User.Info.DisplayName;
-            _flashcardService = flashcardService;
+            if (_authClient.User != null)
+                Username = _authClient.User.Info.DisplayName;
 
-            //CreateSampleCollection().ConfigureAwait(false);
+            Task.Run(InitializeData);
         }
 
-        [RelayCommand]
-        private async Task TestOpenAiAsync()
+        private async Task InitializeData()
         {
             try
             {
-                ApiResponseStatus = "Łączenie z OpenAI...";
-                var result = await _openAiService.TestConnectionAsync();
-                ApiResponseStatus = $"Odpowiedź API: {result}";
+                await _dataSeeder.SeedAsync();
             }
             catch (Exception ex)
             {
-                ApiResponseStatus = $"Błąd podczas testu OpenAI: {ex.Message}";
+                System.Diagnostics.Debug.WriteLine($"Seeding error: {ex.Message}");
             }
         }
-        
+
         [RelayCommand]
         private async Task NavigateToSettings()
         {
