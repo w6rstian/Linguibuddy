@@ -41,6 +41,8 @@ namespace Linguibuddy
             Routing.RegisterRoute(nameof(FlashcardsPage), typeof(FlashcardsPage));
             Routing.RegisterRoute(nameof(AudioQuizPage), typeof(AudioQuizPage));
             Routing.RegisterRoute(nameof(ImageQuizPage), typeof(ImageQuizPage));
+            Routing.RegisterRoute(nameof(SentenceQuizPage), typeof(SentenceQuizPage));
+            Routing.RegisterRoute(nameof(HangmanPage), typeof(HangmanPage));
         }
     }
 }

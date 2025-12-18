@@ -102,6 +102,12 @@ namespace Linguibuddy
             builder.Services.AddTransient<ImageQuizPage>();
             builder.Services.AddTransient<ImageQuizViewModel>();
 
+            builder.Services.AddTransient<SentenceQuizViewModel>();
+            builder.Services.AddTransient<SentenceQuizPage>();
+
+            builder.Services.AddTransient<HangmanViewModel>();
+            builder.Services.AddTransient<HangmanPage>();
+
             //var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
             //var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
             //var githubAiKey = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
