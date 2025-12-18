@@ -23,7 +23,7 @@ namespace Linguibuddy.ViewModels
         [RelayCommand]
         private async Task NavigateToImageQuizAsync()
         {
-            await Shell.Current.DisplayAlert("Coming Soon", "Ten tryb będzie dostępny wkrótce!", "OK");
+            await Shell.Current.GoToAsync(nameof(ImageQuizPage));
         }
     }
 }

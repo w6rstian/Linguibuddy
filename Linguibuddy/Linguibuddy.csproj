@@ -119,6 +119,9 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>AppResources.resx</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\ImageQuizPage.xaml.cs">
+	    <DependentUpon>ImageQuizPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -145,6 +148,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\MiniGamesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ImageQuizPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SettingsPage.xaml">

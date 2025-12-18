@@ -13,7 +13,7 @@ namespace Linguibuddy.Services
         {
             { "apple", "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg" },
             { "dog", "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg" },
-            { "cat", "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg" },
+            { "cat", "https://images.pexels.com/photos/57416/cat-sweet-kitty-animals-57416.jpeg" },
             { "car", "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg" },
             { "book", "https://images.pexels.com/photos/1516983/pexels-photo-1516983.jpeg" },
             { "tree", "https://images.pexels.com/photos/1459495/pexels-photo-1459495.jpeg" },
