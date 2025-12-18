@@ -52,7 +52,6 @@ namespace Linguibuddy.ViewModels
             if (LabelUsernameErrorOpacity == 1 || LabelEmailErrorOpacity == 1 || LabelPasswordErrorOpacity == 1)
                 return;
 
-            _authClient.SignOut();
             await _authClient.CreateUserWithEmailAndPasswordAsync(Email, Password, Username);
 
             Application.Current.Windows[0].Page = App.GetMainShell();
