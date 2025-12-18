@@ -37,7 +37,7 @@
 
                     </FlexLayout>
                         <Button
-                            Text="Sign out"
+                            Text="{loc:Translate SignOut}"
                             Command="{Binding SignOutCommand}"
                             Padding="5,0"
                             CornerRadius="20"
@@ -52,7 +52,7 @@
                     HorizontalOptions="Fill">
 
                     <Button
-                        Text="Dictionary"
+                        Text="{loc:Translate Dictionary}"
                         FontSize="Medium"
                         Command="{Binding NavigateToDictionaryCommand}"
                         Padding="40,10"
@@ -60,7 +60,7 @@
                         HorizontalOptions="Fill" />
 
                     <Button
-                        Text="Flashcards"
+                        Text="{loc:Translate Flashcards}"
                         FontSize="Medium"
                         Command="{Binding NavigateToFlashcardsCommand}"
                         Padding="40,10"
@@ -68,7 +68,7 @@
                         HorizontalOptions="Fill" />
                     
                     <Button
-                        Text="Minigames"
+                        Text="{loc:Translate Minigames}"
                         FontSize="Medium"
                         Command="{Binding NavigateToMinigamesCommand}"
                         Padding="40,10"
@@ -76,7 +76,7 @@
                         HorizontalOptions="Fill" />
 
                     <Button
-                        Text="Awards"
+                        Text="{loc:Translate Awards}"
                         FontSize="Medium"
                         Command="{Binding NavigateToAwardsCommand}"
                         Padding="40,10"
@@ -84,7 +84,7 @@
                         HorizontalOptions="Fill" />
 
                     <Button
-                        Text="Settings"
+                        Text="{loc:Translate Settings}"
                         FontSize="Medium"
                         Command="{Binding NavigateToSettingsCommand}"
                         Padding="40,10"

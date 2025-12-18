@@ -79,6 +79,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Awards.
+        /// </summary>
+        internal static string Awards {
+            get {
+                return ResourceManager.GetString("Awards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to list.
         /// </summary>
         internal static string BackToList {
@@ -223,6 +232,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Minigames.
+        /// </summary>
+        internal static string Minigames {
+            get {
+                return ResourceManager.GetString("Minigames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter name:.
         /// </summary>
         internal static string NameEntry {
@@ -309,6 +327,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign out.
+        /// </summary>
+        internal static string SignOut {
+            get {
+                return ResourceManager.GetString("SignOut", resourceCulture);
             }
         }
         

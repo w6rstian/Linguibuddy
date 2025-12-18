@@ -231,4 +231,13 @@
   <data name="TranslationApi" xml:space="preserve">
     <value>API tłumaczące</value>
   </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Wyloguj</value>
+  </data>
+  <data name="Minigames" xml:space="preserve">
+    <value>Minigry</value>
+  </data>
+  <data name="Awards" xml:space="preserve">
+    <value>Osiągnięcia</value>
+  </data>
 </root>
