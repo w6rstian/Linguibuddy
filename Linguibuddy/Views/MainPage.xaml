@@ -54,6 +54,7 @@
                     <Button
                         Text="Dictionary"
                         FontSize="Medium"
+                        Command="{Binding NavigateToDictionaryCommand}"
                         Padding="40,10"
                         CornerRadius="25"
                         HorizontalOptions="Fill" />
@@ -61,6 +62,7 @@
                     <Button
                         Text="Minigames"
                         FontSize="Medium"
+                        Command="{Binding NavigateToMinigamesCommand}"
                         Padding="40,10"
                         CornerRadius="25"
                         HorizontalOptions="Fill" />
@@ -68,6 +70,7 @@
                     <Button
                         Text="Awards"
                         FontSize="Medium"
+                        Command="{Binding NavigateToAwardsCommand}"
                         Padding="40,10"
                         CornerRadius="25"
                         HorizontalOptions="Fill" />
