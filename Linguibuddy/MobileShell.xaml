@@ -20,13 +20,16 @@
             <ShellContent ContentTemplate="{DataTemplate views:FlashcardsCollectionsPage}" Route="FlashcardsCollectionsPage" />
         </Tab>
 
-        <Tab Title="{loc:Translate Settings}" Icon="settings_100dp_light.png">
-            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage"/>
-        </Tab>
-
-        <Tab Title="Mini Games" Icon="joystick_100dp_light.png">
+        <Tab Title="{loc:Translate Minigames}" Icon="joystick_100dp_light.png">
             <ShellContent ContentTemplate="{DataTemplate views:MiniGamesPage}" Route="MiniGamesPage"/>
         </Tab>
 
+        <Tab Title="{loc:Translate Awards}" Icon="trophy_100dp_light.png">
+            <ShellContent ContentTemplate="{DataTemplate views:AwardsPage}" Route="AwardsPage"/>
+        </Tab>
+        
+        <Tab Title="{loc:Translate Settings}" Icon="settings_100dp_light.png">
+            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage"/>
+        </Tab>
     </TabBar>
 </Shell>
