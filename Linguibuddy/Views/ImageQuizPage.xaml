@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              x:Class="Linguibuddy.Views.ImageQuizPage"
              x:DataType="vm:ImageQuizViewModel"
-             Title="Image Quiz">
+             Title="Dopasuj do obrazka">
 
     <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="20" RowSpacing="20">
 

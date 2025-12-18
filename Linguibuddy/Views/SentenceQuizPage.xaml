@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              x:Class="Linguibuddy.Views.SentenceQuizPage"
              x:DataType="vm:SentenceQuizViewModel"
-             Title="Sentence Quiz"
+             Title="Szyk zdań"
              BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}">
 
     <Grid RowDefinitions="Auto, *, Auto, Auto" Padding="20" RowSpacing="20">

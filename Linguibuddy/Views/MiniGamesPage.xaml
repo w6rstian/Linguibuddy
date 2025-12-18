@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              x:DataType="vm:MiniGamesViewModel"
              x:Class="Linguibuddy.Views.MiniGamesPage"
-             Title="Mini Games">
+             Title="Mini gry">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
@@ -12,99 +12,144 @@
                    FontSize="22" 
                    FontAttributes="Bold"
                    HorizontalOptions="Center" 
-                   Margin="0,10,0,20"/>
+                   Margin="0,10,0,10"
+                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
 
-            <Frame HeightRequest="100" CornerRadius="15" HasShadow="True" Padding="0" IsClippedToBounds="True">
-                <Frame.GestureRecognizers>
+            <Border HeightRequest="100" 
+                    StrokeShape="RoundRectangle 15" 
+                    StrokeThickness="0"
+                    Padding="0"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+
+                <Border.Shadow>
+                    <Shadow Brush="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            Offset="0,5" Radius="10" Opacity="0.4"/>
+                </Border.Shadow>
+
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding NavigateToAudioQuizCommand}"/>
-                </Frame.GestureRecognizers>
+                </Border.GestureRecognizers>
 
-                <Grid ColumnDefinitions="100, *" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+                <Grid ColumnDefinitions="100, *">
                     <Image Source="{AppThemeBinding Light=spatial_audio_off_150dp_light.png, Dark=spatial_audio_off_150dp_dark.png}"
                            Aspect="AspectFit" 
-                           Margin="20"
+                           Margin="25"
                            Grid.Column="0"/>
 
-                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="10,0">
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="0,0,15,0">
                         <Label Text="Rozpoznaj audio" 
                                FontSize="20" 
                                FontAttributes="Bold" 
-                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
+                               TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"/>
                         <Label Text="Dopasuj słowo do dźwięku" 
                                FontSize="14" 
-                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
+                               TextColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource PrimaryDarkText}}"
+                               Opacity="0.8"/>
                     </VerticalStackLayout>
                 </Grid>
-            </Frame>
+            </Border>
 
-            <Frame HeightRequest="100" CornerRadius="15" HasShadow="True" Padding="0">
-                <Frame.GestureRecognizers>
+            <Border HeightRequest="100" 
+                    StrokeShape="RoundRectangle 15" 
+                    StrokeThickness="0"
+                    Padding="0"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+
+                <Border.Shadow>
+                    <Shadow Brush="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            Offset="0,5" Radius="10" Opacity="0.4"/>
+                </Border.Shadow>
+
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding NavigateToImageQuizCommand}"/>
-                </Frame.GestureRecognizers>
+                </Border.GestureRecognizers>
 
-                <Grid ColumnDefinitions="100, *" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+                <Grid ColumnDefinitions="100, *">
                     <Image Source="{AppThemeBinding Light=image_search_150dp_light.png, Dark=image_search_150dp_dark.png}"
                            Aspect="AspectFit" 
-                           Margin="20"
+                           Margin="25"
                            Grid.Column="0"/>
 
-                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="10,0">
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="0,0,15,0">
                         <Label Text="Dopasuj do obrazka" 
                                FontSize="20" 
                                FontAttributes="Bold" 
-                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
+                               TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"/>
                         <Label Text="Co widzisz na obrazku?" 
                                FontSize="14" 
-                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
+                               TextColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource PrimaryDarkText}}"
+                               Opacity="0.8"/>
                     </VerticalStackLayout>
                 </Grid>
-            </Frame>
+            </Border>
 
-            <Frame HeightRequest="100" CornerRadius="15" HasShadow="True" Padding="0">
-                <Frame.GestureRecognizers>
+            <Border HeightRequest="100" 
+                    StrokeShape="RoundRectangle 15" 
+                    StrokeThickness="0"
+                    Padding="0"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+
+                <Border.Shadow>
+                    <Shadow Brush="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            Offset="0,5" Radius="10" Opacity="0.4"/>
+                </Border.Shadow>
+
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding NavigateToSentenceQuizCommand}"/>
-                </Frame.GestureRecognizers>
+                </Border.GestureRecognizers>
 
-                <Grid ColumnDefinitions="100, *" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+                <Grid ColumnDefinitions="100, *">
                     <Image Source="{AppThemeBinding Light=repartition_150dp_light.png, Dark=repartition_150dp_dark.png}"
                            Aspect="AspectFit" 
-                           Margin="20"
+                           Margin="25"
                            Grid.Column="0"/>
 
-                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="10,0">
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="0,0,15,0">
                         <Label Text="Szyk zdań" 
                                FontSize="20" 
                                FontAttributes="Bold" 
-                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
+                               TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"/>
                         <Label Text="Ułóż szyk zdania" 
                                FontSize="14" 
-                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
+                               TextColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource PrimaryDarkText}}"
+                               Opacity="0.8"/>
                     </VerticalStackLayout>
                 </Grid>
-            </Frame>
+            </Border>
 
-            <Frame HeightRequest="100" CornerRadius="15" HasShadow="True" Padding="0">
-                <Frame.GestureRecognizers>
+            <Border HeightRequest="100" 
+                    StrokeShape="RoundRectangle 15" 
+                    StrokeThickness="0"
+                    Padding="0"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+
+                <Border.Shadow>
+                    <Shadow Brush="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            Offset="0,5" Radius="10" Opacity="0.4"/>
+                </Border.Shadow>
+
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding NavigateToHangmanCommand}"/>
-                </Frame.GestureRecognizers>
+                </Border.GestureRecognizers>
 
-                <Grid ColumnDefinitions="100, *" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+                <Grid ColumnDefinitions="100, *">
                     <Image Source="{AppThemeBinding Light=sentiment_very_dissatisfied_150dp_light.png, Dark=sentiment_very_dissatisfied_150dp_dark.png}"
                            Aspect="AspectFit" 
-                           Margin="20"
+                           Margin="25"
                            Grid.Column="0"/>
 
-                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="10,0">
-                        <Label Text="Wisielec"
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="0,0,15,0">
+                        <Label Text="Wisielec" 
                                FontSize="20" 
                                FontAttributes="Bold" 
-                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
+                               TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"/>
                         <Label Text="Gra w wisielca" 
                                FontSize="14" 
-                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
+                               TextColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource PrimaryDarkText}}"
+                               Opacity="0.8"/>
                     </VerticalStackLayout>
                 </Grid>
-            </Frame>
+            </Border>
 
         </VerticalStackLayout>
     </ScrollView>
