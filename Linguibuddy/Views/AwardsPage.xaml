@@ -28,8 +28,11 @@
                     Padding="15">
 
                     <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                        <Image Source="{AppThemeBinding Light=trophy_100dp_light.png, Dark=trophy_100dp_dark.png}" WidthRequest="40" HeightRequest="40"/>
-                        <Label Text="Naucz się 20 fiszek" FontSize="18" VerticalOptions="Center"/>
+                        <Image Source="{AppThemeBinding Light=trophy_100dp_light.png, Dark=trophy_100dp_light.png}" WidthRequest="40" HeightRequest="40"/>
+                        <Label Text="Naucz się 20 fiszek"
+                               FontSize="18"
+                               TextColor="Black"
+                               VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                 </Border>
 
@@ -43,7 +46,9 @@
 
                     <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                         <Image Source="{AppThemeBinding Light=lock_100dp_light.png, Dark=lock_100dp_dark.png}" WidthRequest="40" HeightRequest="40"/>
-                        <Label Text="Naucz się 50 fiszek" FontSize="18" VerticalOptions="Center"/>
+                        <Label Text="Naucz się 50 fiszek"
+                               FontSize="18"
+                               VerticalOptions="Center" />
                     </HorizontalStackLayout>
                 </Border>
 

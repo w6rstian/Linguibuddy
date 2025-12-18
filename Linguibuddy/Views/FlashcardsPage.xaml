@@ -12,7 +12,7 @@
                              HorizontalOptions="Center" 
                              Spacing="25">
 
-            <Border Stroke="{StaticResource Primary}"
+            <Border Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                     StrokeThickness="2"
                     StrokeShape="RoundRectangle 50"
                     HeightRequest="100"
@@ -29,7 +29,7 @@
             <Label Text="{loc:Translate Congratulations}" 
                    FontSize="32" 
                    FontAttributes="Bold" 
-                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryDarkText}, Dark={StaticResource White}}"
                    HorizontalOptions="Center"/>
 
             <Label Text="{loc:Translate LearningFinished}" 
@@ -40,8 +40,8 @@
             <Button Text="{loc:Translate BackToList}" 
                     Command="{Binding GoBackCommand}"
                     Margin="0,20,0,0"
-                    BackgroundColor="{StaticResource Primary}"
-                    TextColor="{StaticResource White}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
                     WidthRequest="200"/>
         </VerticalStackLayout>
 

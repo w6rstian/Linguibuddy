@@ -19,7 +19,7 @@
                     <TapGestureRecognizer Command="{Binding NavigateToAudioQuizCommand}"/>
                 </Frame.GestureRecognizers>
 
-                <Grid ColumnDefinitions="100, *" BackgroundColor="{StaticResource Primary}">
+                <Grid ColumnDefinitions="100, *" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
                     <Image Source="speaker_icon.png" 
                            Aspect="AspectFit" 
                            Margin="20"
@@ -29,10 +29,10 @@
                         <Label Text="Audio Quiz" 
                                FontSize="20" 
                                FontAttributes="Bold" 
-                               TextColor="White"/>
+                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
                         <Label Text="Dopasuj słowo do dźwięku" 
                                FontSize="14" 
-                               TextColor="#E0E0E0"/>
+                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
                     </VerticalStackLayout>
                 </Grid>
             </Frame>

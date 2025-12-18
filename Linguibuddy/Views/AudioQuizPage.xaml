@@ -16,7 +16,7 @@
             <Frame CornerRadius="40" 
                    HeightRequest="80" 
                    WidthRequest="80" 
-                   BackgroundColor="{StaticResource Primary}"
+                   BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                    HasShadow="True"
                    Padding="0">
                 <Frame.GestureRecognizers>
@@ -31,11 +31,10 @@
                              HorizontalOptions="Center"
                              BackgroundColor="Transparent"/>-->
 
-                <Button Text="Odtwórz"
-                        ImageSource="{AppThemeBinding Light=text_to_speech_100dp_light.png, Dark=text_to_speech_100dp_dark.png}"
+                <ImageButton
+                        Source="{AppThemeBinding Light=text_to_speech_100dp_dark.png, Dark=text_to_speech_100dp_light.png}"
                         Command="{Binding PlayAudioCommand}"
                         BackgroundColor="Transparent"
-                        TextColor="{StaticResource Primary}"
                         Padding="0"
                         HeightRequest="30"
                         WidthRequest="30"/>

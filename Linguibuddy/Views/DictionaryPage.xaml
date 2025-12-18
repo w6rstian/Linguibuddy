@@ -66,7 +66,8 @@
 
                             <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
                                 <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                                    <Label Text="{Binding Word}" 
+                                    <Label Text="{Binding Word}"
+                                           VerticalTextAlignment="Center"
                                            FontSize="20" 
                                            FontAttributes="Bold"
                                            TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
@@ -103,7 +104,7 @@
                                     </ImageButton>
 
                                     <Label Text="{Binding PartOfSpeech}" 
-                                           TextColor="{StaticResource Primary}" 
+                                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" 
                                            FontAttributes="Bold"
                                            TextTransform="Uppercase"
                                            FontSize="11"
@@ -129,12 +130,11 @@
                                        TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"/>
                             </VerticalStackLayout>
 
-                            <Button Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"
-                                    Text="+"
-                                    FontSize="24"
-                                    FontAttributes="Bold"
-                                    TextColor="{StaticResource White}"
-                                    BackgroundColor="{StaticResource Primary}"
+                            
+                            <ImageButton Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"
+                                    Source="{AppThemeBinding Light=library_add_24dp_dark.png, Dark=library_add_24dp_light.png}"
+                                    Aspect="Center"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                                     HeightRequest="44"
                                     WidthRequest="44"
                                     CornerRadius="22"
@@ -143,10 +143,10 @@
                                     Margin="10,0,0,0"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=AddItemToFlashcardsCommand}"
                                     CommandParameter="{Binding .}">
-                                <Button.Shadow>
+                                <ImageButton.Shadow>
                                     <Shadow Brush="{StaticResource PrimaryBrush}" Radius="5" Opacity="0.3" Offset="0,4"/>
-                                </Button.Shadow>
-                            </Button>
+                                </ImageButton.Shadow>
+                            </ImageButton>
 
                             <BoxView Grid.Row="1" Grid.Column="0" 
                                      HeightRequest="1" 
@@ -164,8 +164,8 @@
                                             Padding="15,0"
                                             CornerRadius="18"
                                             BackgroundColor="Transparent"
-                                            TextColor="{StaticResource Primary}"
-                                            BorderColor="{StaticResource Primary}"
+                                            TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                            BorderColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                                             BorderWidth="1"
                                             IsVisible="{Binding ShowTranslateButton}"/>
 
@@ -174,7 +174,7 @@
                                                        IsVisible="{Binding IsBusy}"
                                                        HeightRequest="25"
                                                        WidthRequest="25"
-                                                       Color="{StaticResource Primary}"
+                                                       Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                                                        Margin="10,0,0,0"/>
                                 </Grid>
 
@@ -182,7 +182,7 @@
                                     <HorizontalStackLayout>
                                         <Image Source="{AppThemeBinding Light=translate_100dp_light.png, Dark=translate_100dp_dark.png}" WidthRequest="30"/>
                                         <Label Text="{Binding Translation, StringFormat='{0}'}" 
-                                               TextColor="{StaticResource Primary}"
+                                               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                                                FontAttributes="Bold"
                                                FontSize="16"/>
                                     </HorizontalStackLayout>

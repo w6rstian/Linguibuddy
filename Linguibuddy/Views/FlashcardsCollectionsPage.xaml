@@ -13,13 +13,13 @@
         <Button Text="{loc:Translate NewCollection}"
                 Command="{Binding CreateCollectionCommand}"
                 Margin="20,15"
-                BackgroundColor="{StaticResource Primary}"
-                TextColor="{StaticResource White}"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
                 FontAttributes="Bold"
                 HeightRequest="50"
                 CornerRadius="10">
             <Button.Shadow>
-                <Shadow Brush="{StaticResource PrimaryBrush}" Radius="5" Opacity="0.4" Offset="0,4"/>
+                <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDark}}" Radius="5" Opacity="0.4" Offset="0,4"/>
             </Button.Shadow>
         </Button>
 
@@ -75,8 +75,8 @@
                                         FontAttributes="Bold"
                                         Padding="15,0"
                                         HeightRequest="36"
-                                        BackgroundColor="{StaticResource Primary}"
-                                        TextColor="{StaticResource White}"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                        TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"
                                         CornerRadius="8"/>
                             </HorizontalStackLayout>
                         </Grid>

@@ -16,7 +16,8 @@
                 Spacing="25"
                 HorizontalOptions="Fill">
 
-                <Grid ColumnDefinitions="*,Auto">
+                <Grid ColumnDefinitions="*,Auto"
+                      Margin="{OnPlatform Android='0,10,0,0', WinUI='0'}">
                     <FlexLayout
                         Direction="Row"
                         Wrap="Wrap"
@@ -40,7 +41,9 @@
                             Command="{Binding SignOutCommand}"
                             Padding="5,0"
                             CornerRadius="20"
-                            Grid.Column="1"/>
+                            Grid.Column="1"
+                            MaximumHeightRequest="50"
+                            MinimumHeightRequest="40"/>
                 </Grid>
 
 
