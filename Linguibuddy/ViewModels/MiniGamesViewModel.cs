@@ -25,5 +25,17 @@ namespace Linguibuddy.ViewModels
         {
             await Shell.Current.GoToAsync(nameof(ImageQuizPage));
         }
+
+        [RelayCommand]
+        private async Task NavigateToSentenceQuizAsync()
+        {
+            await Shell.Current.GoToAsync(nameof(SentenceQuizPage));
+        }
+
+        [RelayCommand]
+        private async Task NavigateToHangman()
+        {
+            await Shell.Current.GoToAsync(nameof(HangmanPage));
+        }
     }
 }

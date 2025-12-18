@@ -26,7 +26,7 @@
                            Grid.Column="0"/>
 
                     <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="10,0">
-                        <Label Text="Audio Quiz" 
+                        <Label Text="Rozpoznaj audio" 
                                FontSize="20" 
                                FontAttributes="Bold" 
                                TextColor="White"/>
@@ -49,11 +49,57 @@
                            Grid.Column="0"/>
 
                     <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="10,0">
-                        <Label Text="Image Quiz" 
+                        <Label Text="Dopasuj do obrazka" 
                                FontSize="20" 
                                FontAttributes="Bold" 
                                TextColor="White"/>
                         <Label Text="Co widzisz na obrazku?" 
+                               FontSize="14" 
+                               TextColor="#E0E0E0"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+            <Frame HeightRequest="100" CornerRadius="15" HasShadow="True" Padding="0">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToSentenceQuizCommand}"/>
+                </Frame.GestureRecognizers>
+
+                <Grid ColumnDefinitions="100, *" BackgroundColor="{StaticResource Primary}">
+                    <Image Source="image_icon.png" 
+                           Aspect="AspectFit" 
+                           Margin="20"
+                           Grid.Column="0"/>
+
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="10,0">
+                        <Label Text="Szyk zdań" 
+                               FontSize="20" 
+                               FontAttributes="Bold" 
+                               TextColor="White"/>
+                        <Label Text="Ułóż szyk zdania" 
+                               FontSize="14" 
+                               TextColor="#E0E0E0"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+            <Frame HeightRequest="100" CornerRadius="15" HasShadow="True" Padding="0">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToHangmanCommand}"/>
+                </Frame.GestureRecognizers>
+
+                <Grid ColumnDefinitions="100, *" BackgroundColor="{StaticResource Primary}">
+                    <Image Source="image_icon.png" 
+                           Aspect="AspectFit" 
+                           Margin="20"
+                           Grid.Column="0"/>
+
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="10,0">
+                        <Label Text="Wisielec"
+                               FontSize="20" 
+                               FontAttributes="Bold" 
+                               TextColor="White"/>
+                        <Label Text="Gra w wisielca" 
                                FontSize="14" 
                                TextColor="#E0E0E0"/>
                     </VerticalStackLayout>
