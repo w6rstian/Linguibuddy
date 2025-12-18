@@ -38,7 +38,7 @@ namespace Linguibuddy.ViewModels
             }
 
             //await Shell.Current.GoToAsync("//MainPage");
-            Application.Current!.Windows[0].Page = new AppShell();
+            Application.Current!.Windows[0].Page = App.GetMainShell();
         }
         [RelayCommand]
         private async Task NavigateSignUp()

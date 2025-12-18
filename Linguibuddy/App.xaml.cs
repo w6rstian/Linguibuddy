@@ -22,8 +22,18 @@ namespace Linguibuddy
             }
             else
             {
-                return new Window(new AppShell());
+                return new Window(GetMainShell());
             }
+        }
+
+        public static Page GetMainShell()
+        {
+            if (DeviceInfo.Idiom == DeviceIdiom.Phone)
+            {
+                return new MobileShell();
+            }
+
+            return new AppShell();
         }
     }
 }
