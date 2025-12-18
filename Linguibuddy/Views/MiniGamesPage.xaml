@@ -37,25 +37,23 @@
                 </Grid>
             </Frame>
 
-            <Frame HeightRequest="100" CornerRadius="15" HasShadow="True" Padding="0" Opacity="0.6">
+            <Frame HeightRequest="100" CornerRadius="15" HasShadow="True" Padding="0">
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding NavigateToImageQuizCommand}"/>
                 </Frame.GestureRecognizers>
 
-                <Grid ColumnDefinitions="100, *" BackgroundColor="Gray">
-                    <Label Text="?" 
-                           FontSize="40" 
-                           TextColor="White" 
-                           HorizontalOptions="Center" 
-                           VerticalOptions="Center"
+                <Grid ColumnDefinitions="100, *" BackgroundColor="{StaticResource Primary}">
+                    <Image Source="image_icon.png" 
+                           Aspect="AspectFit" 
+                           Margin="20"
                            Grid.Column="0"/>
 
                     <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="10,0">
-                        <Label Text="Image Match" 
+                        <Label Text="Image Quiz" 
                                FontSize="20" 
                                FontAttributes="Bold" 
                                TextColor="White"/>
-                        <Label Text="Wkrótce dostępne" 
+                        <Label Text="Co widzisz na obrazku?" 
                                FontSize="14" 
                                TextColor="#E0E0E0"/>
                     </VerticalStackLayout>
