@@ -53,7 +53,7 @@ namespace Linguibuddy.ViewModels
             IsBusy = true;
             IsAnswered = false;
             Mistakes = 0;
-            CurrentImage = "hangman_0.png"; // Upewnij się, że masz ten plik w Resources/Images
+            CurrentImage = "hangman_0.jpg"; // Upewnij się, że masz ten plik w Resources/Images
             FeedbackMessage = "";
             FeedbackColor = Colors.Transparent;
 
