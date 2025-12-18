@@ -76,20 +76,23 @@
                                            VerticalOptions="Center"
                                            FontSize="14"/>
 
-                                    <Button Text="🔊" 
+                                    <!--<Button Text="🔊"
+                                            ImageSource="{AppThemeBinding Light=text_to_speech_100dp_light.png, Dark=text_to_speech_100dp_dark.png}"
                                             IsVisible="{Binding HasAudio}"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=PlayAudioCommand}"
                                             CommandParameter="{Binding AudioUrl}"
                                             BackgroundColor="Transparent"
                                             TextColor="{StaticResource Primary}"
                                             Padding="0"
-                                            HeightRequest="30"
-                                            WidthRequest="30"/>
+                                            HeightRequest="15"
+                                            WidthRequest="15"/>-->
 
-                                    <!--<ImageButton Source="{AppThemeBinding Light='speaker_icon_black.png', Dark='speaker_icon_white.png'}"
+                                    <ImageButton Source="{AppThemeBinding Light=text_to_speech_24dp_light.png, Dark=text_to_speech_24dp_dark.png}"
                                                  IsVisible="{Binding HasAudio}"
-                                                 HeightRequest="24"
-                                                 WidthRequest="24"
+                                                 HeightRequest="40"
+                                                 WidthRequest="40"
+                                                 Aspect="AspectFit"
+                                                 Padding="0"
                                                  VerticalOptions="Center"
                                                  BackgroundColor="Transparent"
                                                  Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=PlayAudioCommand}"
@@ -97,7 +100,7 @@
                                         <ImageButton.Shadow>
                                             <Shadow Brush="Black" Opacity="0.2" Radius="2" Offset="1,1"/>
                                         </ImageButton.Shadow>
-                                    </ImageButton>-->
+                                    </ImageButton>
 
                                     <Label Text="{Binding PartOfSpeech}" 
                                            TextColor="{StaticResource Primary}" 
@@ -176,10 +179,13 @@
                                 </Grid>
 
                                 <VerticalStackLayout Spacing="4" IsVisible="{Binding Translation, Converter={toolkit:IsNotNullConverter}}">
-                                    <Label Text="{Binding Translation, StringFormat='🇵🇱 {0}'}" 
-                                           TextColor="{StaticResource Primary}"
-                                           FontAttributes="Bold"
-                                           FontSize="16"/>
+                                    <HorizontalStackLayout>
+                                        <Image Source="{AppThemeBinding Light=translate_100dp_light.png, Dark=translate_100dp_dark.png}" WidthRequest="30"/>
+                                        <Label Text="{Binding Translation, StringFormat='{0}'}" 
+                                               TextColor="{StaticResource Primary}"
+                                               FontAttributes="Bold"
+                                               FontSize="16"/>
+                                    </HorizontalStackLayout>
 
                                     <Label Text="{Binding Example, StringFormat='Np: {0}'}" 
                                            FontSize="13" 

@@ -28,7 +28,7 @@
                     Padding="15">
 
                     <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                        <Image Source="https://cdn-icons-png.flaticon.com/512/1152/1152912.png" WidthRequest="40" HeightRequest="40"/>
+                        <Image Source="{AppThemeBinding Light=trophy_100dp_light.png, Dark=trophy_100dp_dark.png}" WidthRequest="40" HeightRequest="40"/>
                         <Label Text="Naucz się 20 fiszek" FontSize="18" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                 </Border>
@@ -42,7 +42,7 @@
                     Opacity="0.5">
 
                     <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                        <Image Source="https://cdn-icons-png.flaticon.com/512/2889/2889676.png" WidthRequest="40" HeightRequest="40"/>
+                        <Image Source="{AppThemeBinding Light=lock_100dp_light.png, Dark=lock_100dp_dark.png}" WidthRequest="40" HeightRequest="40"/>
                         <Label Text="Naucz się 50 fiszek" FontSize="18" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                 </Border>
@@ -55,7 +55,7 @@
                     Opacity="0.5">
 
                     <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                        <Image Source="https://cdn-icons-png.flaticon.com/512/2889/2889676.png" WidthRequest="40" HeightRequest="40"/>
+                        <Image Source="{AppThemeBinding Light=lock_100dp_light.png, Dark=lock_100dp_dark.png}" WidthRequest="40" HeightRequest="40"/>
                         <Label Text="Ukończ 5 minigier" FontSize="18" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                 </Border>
@@ -68,7 +68,7 @@
                     Opacity="0.5">
                     
                     <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                        <Image Source="https://cdn-icons-png.flaticon.com/512/2889/2889676.png" WidthRequest="40" HeightRequest="40"/>
+                        <Image Source="{AppThemeBinding Light=lock_100dp_light.png, Dark=lock_100dp_dark.png}" WidthRequest="40" HeightRequest="40"/>
                         <Label Text="Zdobądź wszystkie nagrody" FontSize="18" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                 </Border>

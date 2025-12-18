@@ -99,10 +99,14 @@
 	  <None Remove="Resources\Icons\home_100dp_light.svg" />
 	  <None Remove="Resources\Icons\joystick_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\joystick_100dp_light.svg" />
+	  <None Remove="Resources\Icons\lock_100dp_dark.svg" />
+	  <None Remove="Resources\Icons\lock_100dp_light.svg" />
 	  <None Remove="Resources\Icons\settings_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\settings_100dp_light.svg" />
 	  <None Remove="Resources\Icons\text_to_speech_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\text_to_speech_100dp_light.svg" />
+	  <None Remove="Resources\Icons\text_to_speech_24dp_dark.svg" />
+	  <None Remove="Resources\Icons\text_to_speech_24dp_light.svg" />
 	  <None Remove="Resources\Icons\translate_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\translate_100dp_light.svg" />
 	  <None Remove="Resources\Icons\trophy_100dp_dark.svg" />
@@ -142,10 +146,14 @@
 	  <MauiImage Include="Resources\Icons\home_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\joystick_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\joystick_100dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\lock_100dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\lock_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\settings_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\settings_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\text_to_speech_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\text_to_speech_100dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\text_to_speech_24dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\text_to_speech_24dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\translate_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\translate_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\trophy_100dp_dark.svg" />
@@ -169,6 +177,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="MobileShell.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\Icons.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AwardsPage.xaml">

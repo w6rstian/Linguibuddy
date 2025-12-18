@@ -31,7 +31,8 @@
                              HorizontalOptions="Center"
                              BackgroundColor="Transparent"/>-->
 
-                <Button Text="🔊" 
+                <Button Text="Odtwórz"
+                        ImageSource="{AppThemeBinding Light=text_to_speech_100dp_light.png, Dark=text_to_speech_100dp_dark.png}"
                         Command="{Binding PlayAudioCommand}"
                         BackgroundColor="Transparent"
                         TextColor="{StaticResource Primary}"

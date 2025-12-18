@@ -8,23 +8,23 @@
     Title="Linguibuddy"
     FlyoutBehavior="Disabled">
     <TabBar>
-        <Tab Title="{loc:Translate Home}" Icon="home.png">
+        <Tab Title="{loc:Translate Home}" Icon="home_100dp_light.png">
             <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage" />
         </Tab>
 
-        <Tab Title="{loc:Translate Dictionary}" Icon="dictionary.png">
+        <Tab Title="{loc:Translate Dictionary}" Icon="dictionary_100dp_light.png">
             <ShellContent ContentTemplate="{DataTemplate views:DictionaryPage}" Route="DictionaryPage" />
         </Tab>
 
-        <Tab Title="{loc:Translate Flashcards}" Icon="flashcards.png">
+        <Tab Title="{loc:Translate Flashcards}" Icon="cards_stack_100dp_light.png">
             <ShellContent ContentTemplate="{DataTemplate views:FlashcardsCollectionsPage}" Route="FlashcardsCollectionsPage" />
         </Tab>
 
-        <Tab Title="{loc:Translate Settings}" Icon="settings.png">
+        <Tab Title="{loc:Translate Settings}" Icon="settings_100dp_light.png">
             <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage"/>
         </Tab>
 
-        <Tab Title="Mini Games" Icon="games.png">
+        <Tab Title="Mini Games" Icon="joystick_100dp_light.png">
             <ShellContent ContentTemplate="{DataTemplate views:MiniGamesPage}" Route="MiniGamesPage"/>
         </Tab>
 
