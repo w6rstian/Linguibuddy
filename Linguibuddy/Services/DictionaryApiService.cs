@@ -132,5 +132,33 @@ namespace Linguibuddy.Services
 
             return randomWords;
         }
+
+        public async Task<List<DictionaryWord>> GetRandomWordsWithImagesAsync(int count = 4)
+        {
+            var validIds = await _context.DictionaryWords
+                .Where(w => !string.IsNullOrEmpty(w.Audio)
+                            && !string.IsNullOrEmpty(w.Phonetic)
+                            && !string.IsNullOrEmpty(w.ImageUrl))
+                .Select(w => w.Id)
+                .ToListAsync();
+
+            if (validIds.Count < count)
+            {
+                if (validIds.Count == 0) return new List<DictionaryWord>();
+                count = validIds.Count;
+            }
+
+            var random = new Random();
+            var selectedIds = validIds
+                .OrderBy(x => random.Next())
+                .Take(count)
+                .ToList();
+
+            var randomWords = await _context.DictionaryWords
+                .Where(w => selectedIds.Contains(w.Id))
+                .ToListAsync();
+
+            return randomWords;
+        }
     }
 }

@@ -99,25 +99,19 @@ namespace Linguibuddy
             builder.Services.AddTransient<MiniGamesPage>();
             builder.Services.AddTransient<MiniGamesViewModel>();
 
+            builder.Services.AddTransient<ImageQuizPage>();
+            builder.Services.AddTransient<ImageQuizViewModel>();
+
             //var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
-            var deepLKey = deeplApiKey;
             //var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
             //var githubAiKey = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
+            var deepLKey = deeplApiKey;
             var githubAiKey = githubToken;
-
-            if (string.IsNullOrEmpty(deepLKey))
-            {
-                System.Diagnostics.Debug.WriteLine("DEEPL_API_KEY is not set in environment variables.");
-            }
-
-            if (string.IsNullOrEmpty(githubAiKey))
-            {
-                System.Diagnostics.Debug.WriteLine("GITHUB_TOKEN is not set in environment variables.");
-            }
 
             builder.Services.AddSingleton(AudioManager.Current);
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
             builder.Services.AddSingleton(new OpenAiService(githubAiKey));
+            builder.Services.AddSingleton<MockDataSeeder>();
             builder.Services.AddTransient<DictionaryApiService>();
             builder.Services.AddTransient<FlashcardService>();
 

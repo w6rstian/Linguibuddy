@@ -1,12 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Linguibuddy.Models;
+using LocalizationResourceManager.Maui;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LocalizationResourceManager.Maui;
-using System.Globalization;
+using Linguibuddy.Helpers;
 
 namespace Linguibuddy.ViewModels
 {
@@ -18,11 +20,16 @@ namespace Linguibuddy.ViewModels
 
         [ObservableProperty]
         private string _themeName;
+
+        [ObservableProperty]
+        private string _translationApiName;
+
         public SettingsViewModel(ILocalizationResourceManager resourceManager)
         {
             _resourceManager = resourceManager;
 
             UpdateThemeName();
+            UpdateApiName();
         }
 
         [RelayCommand]
@@ -57,6 +64,31 @@ namespace Linguibuddy.ViewModels
             }
 
             UpdateThemeName();
+        }
+
+        [RelayCommand]
+        public void ChangeTranslationApi()
+        {
+            int currentApiInt = Preferences.Default.Get(Constants.TranslationApiKey, (int)TranslationProvider.DeepL);
+            var currentProvider = (TranslationProvider)currentApiInt;
+
+            var newProvider = currentProvider == TranslationProvider.DeepL
+                ? TranslationProvider.OpenAi
+                : TranslationProvider.DeepL;
+
+            Preferences.Default.Set(Constants.TranslationApiKey, (int)newProvider);
+
+            UpdateApiName();
+        }
+
+        private void UpdateApiName()
+        {
+            int currentApiInt = Preferences.Default.Get(Constants.TranslationApiKey, (int)TranslationProvider.DeepL);
+            var provider = (TranslationProvider)currentApiInt;
+
+            TranslationApiName = provider == TranslationProvider.OpenAi
+                ? "OpenAI (GPT)" 
+                : "DeepL";
         }
 
         private void UpdateThemeName()

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             x:Class="Linguibuddy.Views.ImageQuizPage"
+             x:DataType="vm:ImageQuizViewModel"
+             Title="Image Quiz">
+
+    <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="20" RowSpacing="20">
+
+        <VerticalStackLayout Grid.Row="0" Spacing="15">
+            <Label Text="Co widzisz na obrazku?" 
+                   FontSize="18" TextColor="Gray" HorizontalOptions="Center"/>
+
+            <Border StrokeShape="RoundRectangle 20"
+                    Stroke="{StaticResource Primary}"
+                    StrokeThickness="2"
+                    HeightRequest="350" 
+                    MaximumWidthRequest="400"
+                    HorizontalOptions="Center"
+                    Padding="0"
+                    BackgroundColor="#F5F5F5">
+
+                <Border.Shadow>
+                    <Shadow Brush="Black" Offset="0,4" Radius="10" Opacity="0.2"/>
+                </Border.Shadow>
+
+                <Image Source="{Binding TargetWord.ImageUrl}" 
+                       Aspect="AspectFit"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+            </Border>
+        </VerticalStackLayout>
+
+        <Label Grid.Row="1" 
+               Text="{Binding FeedbackMessage}" 
+               TextColor="{Binding FeedbackColor}"
+               FontSize="20"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center"/>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Options}" SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="2" 
+                                 HorizontalItemSpacing="15" VerticalItemSpacing="15"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:QuizOption">
+                    <Button Text="{Binding Word.Word}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ImageQuizViewModel}}, Path=SelectAnswerCommand}"
+                            CommandParameter="{Binding .}"
+                            BackgroundColor="{Binding BackgroundColor}"
+                            TextColor="White"
+                            HeightRequest="70"
+                            IsEnabled="{Binding IsEnabled}"
+                            FontSize="16"
+                            CornerRadius="12"/>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Grid.Row="3"
+                Text="Następne pytanie"
+                Command="{Binding NextQuestionCommand}"
+                IsVisible="{Binding IsAnswered}"
+                BackgroundColor="{StaticResource Primary}"
+                Margin="0,0,0,10"/>
+
+        <ActivityIndicator Grid.RowSpan="4" 
+                           IsRunning="{Binding IsBusy}" 
+                           IsVisible="{Binding IsBusy}" 
+                           Color="{StaticResource Primary}"
+                           HorizontalOptions="Center" VerticalOptions="Center"/>
+    </Grid>
+</ContentPage>

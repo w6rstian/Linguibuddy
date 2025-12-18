@@ -228,4 +228,7 @@
   <data name="PlaybackError" xml:space="preserve">
     <value>The recording could not be played.</value>
   </data>
+  <data name="TranslationApi" xml:space="preserve">
+    <value>Translation API in dictionary</value>
+  </data>
 </root>
