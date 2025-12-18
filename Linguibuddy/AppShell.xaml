@@ -26,6 +26,14 @@
             ContentTemplate="{DataTemplate views:FlashcardsCollectionsPage}"
             Route="FlashcardsCollectionsPage" />
     </FlyoutItem>
+
+    <FlyoutItem Title="Awards">
+        <ShellContent 
+            Title="Awards"
+            ContentTemplate="{DataTemplate views:AwardsPage}"
+            Route="AwardsPage"/>
+    </FlyoutItem>
+    
     <FlyoutItem Title="{loc:Translate Settings}">
         <ShellContent 
             Title="{loc:Translate Settings}"

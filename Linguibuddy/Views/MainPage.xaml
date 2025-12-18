@@ -7,52 +7,78 @@
              x:Class="Linguibuddy.Views.MainPage">
 
     <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <FlexLayout Direction="Column"
-                        AlignItems="Center">
-                <HorizontalStackLayout Spacing="10" Margin="0,0,0,25">
-                    <Label
-                        Text="{loc:Translate Welcome}"
-                        Style="{StaticResource SubHeadline}" />
+        <Grid
+            HorizontalOptions="Fill"
+            MaximumWidthRequest="500">
 
-                    <Label Text="{Binding Username}"
-                           Style="{StaticResource SubHeadline}"/>
-                    
-                    <Button Text="Sign out" 
+            <VerticalStackLayout
+                Padding="30,0"
+                Spacing="25"
+                HorizontalOptions="Fill">
+
+                <Grid ColumnDefinitions="*,Auto">
+                    <FlexLayout
+                        Direction="Row"
+                        Wrap="Wrap"
+                        JustifyContent="Center"
+                        AlignItems="Center"
+                        AlignContent="Center"
+                        HorizontalOptions="Fill">
+
+                        <Label
+                            Text="{loc:Translate Welcome}"
+                            Style="{StaticResource SubHeadline}"
+                            Margin="0,0,5,0"/>
+
+                        <Label
+                            Text="{Binding Username}"
+                            Style="{StaticResource SubHeadline}" />
+
+                    </FlexLayout>
+                        <Button
+                            Text="Sign out"
                             Command="{Binding SignOutCommand}"
-                            MinimumHeightRequest="20"
-                            Padding="5,0"/>
-                </HorizontalStackLayout>
+                            Padding="5,0"
+                            CornerRadius="20"
+                            Grid.Column="1"/>
+                </Grid>
 
-                <VerticalStackLayout Spacing="20">
-                    <HorizontalStackLayout Spacing="50">
-                        <Button Text="Dictionary"
-                                FontSize="Medium"
-                                Padding="40,30" 
-                                MinimumWidthRequest="200"/>
-                        <Button Text="Minigames"
-                                FontSize="Medium"
-                                Command="{Binding NavigateToMiniGamesCommand}"
-                                Padding="40,30" 
-                                MinimumWidthRequest="200" />
-                    </HorizontalStackLayout>
 
-                    <HorizontalStackLayout Spacing="50">
-                        <Button Text="Awards"
-                                FontSize="Medium"
-                                Padding="40,30" 
-                                MinimumWidthRequest="200" />
-                        <Button Text="Settings"
-                                FontSize="Medium"
-                                Command="{Binding NavigateToSettingsCommand}"
-                                Padding="40,30"
-                                MinimumWidthRequest="200" />
-                    </HorizontalStackLayout>
+                <VerticalStackLayout
+                    Spacing="15"
+                    HorizontalOptions="Fill">
+
+                    <Button
+                        Text="Dictionary"
+                        FontSize="Medium"
+                        Padding="40,10"
+                        CornerRadius="25"
+                        HorizontalOptions="Fill" />
+
+                    <Button
+                        Text="Minigames"
+                        FontSize="Medium"
+                        Padding="40,10"
+                        CornerRadius="25"
+                        HorizontalOptions="Fill" />
+
+                    <Button
+                        Text="Awards"
+                        FontSize="Medium"
+                        Padding="40,10"
+                        CornerRadius="25"
+                        HorizontalOptions="Fill" />
+
+                    <Button
+                        Text="Settings"
+                        FontSize="Medium"
+                        Command="{Binding NavigateToSettingsCommand}"
+                        Padding="40,10"
+                        CornerRadius="25"
+                        HorizontalOptions="Fill" />
                 </VerticalStackLayout>
-            </FlexLayout>
-        </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
     </ScrollView>
 
 </ContentPage>

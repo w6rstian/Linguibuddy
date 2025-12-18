@@ -133,6 +133,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\AwardsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
 	  <MauiXaml Update="Views\AudioQuizPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
