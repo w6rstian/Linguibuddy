@@ -99,6 +99,12 @@
 	  <None Remove="Resources\Icons\home_100dp_light.svg" />
 	  <None Remove="Resources\Icons\joystick_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\joystick_100dp_light.svg" />
+	  <None Remove="Resources\Icons\library_add_100dp_dark.svg" />
+	  <None Remove="Resources\Icons\library_add_100dp_light.svg" />
+	  <None Remove="Resources\Icons\library_add_24dp_dark.svg" />
+	  <None Remove="Resources\Icons\library_add_24dp_light.svg" />
+	  <None Remove="Resources\Icons\library_add_48dp_dark.svg" />
+	  <None Remove="Resources\Icons\library_add_48dp_light.svg" />
 	  <None Remove="Resources\Icons\lock_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\lock_100dp_light.svg" />
 	  <None Remove="Resources\Icons\settings_100dp_dark.svg" />
@@ -146,6 +152,12 @@
 	  <MauiImage Include="Resources\Icons\home_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\joystick_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\joystick_100dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\library_add_100dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\library_add_100dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\library_add_24dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\library_add_24dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\library_add_48dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\library_add_48dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\lock_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\lock_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\settings_100dp_dark.svg" />
