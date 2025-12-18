@@ -53,7 +53,7 @@ namespace Linguibuddy.ViewModels
             IsBusy = true;
             IsAnswered = false;
             Mistakes = 0;
-            CurrentImage = "hangman_0.png"; // Upewnij się, że masz ten plik w Resources/Images
+            CurrentImage = "hangman_0.jpg"; // Upewnij się, że masz ten plik w Resources/Images
             FeedbackMessage = "";
             FeedbackColor = Colors.Transparent;
 
@@ -162,7 +162,7 @@ namespace Linguibuddy.ViewModels
                 letterObj.TextColor = Colors.White;
 
                 Mistakes++;
-                CurrentImage = $"hangman_{Mistakes}.png"; // Zmiana obrazka
+                CurrentImage = $"hangman_{Mistakes}jpg"; // Zmiana obrazka
 
                 if (Mistakes >= MaxMistakes)
                 {
