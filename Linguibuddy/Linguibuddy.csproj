@@ -97,6 +97,8 @@
 	  <None Remove="Resources\Icons\dictionary_100dp_light.svg" />
 	  <None Remove="Resources\Icons\home_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\home_100dp_light.svg" />
+	  <None Remove="Resources\Icons\image_search_150dp_dark.svg" />
+	  <None Remove="Resources\Icons\image_search_150dp_light.svg" />
 	  <None Remove="Resources\Icons\joystick_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\joystick_100dp_light.svg" />
 	  <None Remove="Resources\Icons\library_add_100dp_dark.svg" />
@@ -107,8 +109,14 @@
 	  <None Remove="Resources\Icons\library_add_48dp_light.svg" />
 	  <None Remove="Resources\Icons\lock_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\lock_100dp_light.svg" />
+	  <None Remove="Resources\Icons\repartition_150dp_dark.svg" />
+	  <None Remove="Resources\Icons\repartition_150dp_light.svg" />
+	  <None Remove="Resources\Icons\sentiment_very_dissatisfied_150dp_dark.svg" />
+	  <None Remove="Resources\Icons\sentiment_very_dissatisfied_150dp_light.svg" />
 	  <None Remove="Resources\Icons\settings_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\settings_100dp_light.svg" />
+	  <None Remove="Resources\Icons\spatial_audio_off_150dp_dark.svg" />
+	  <None Remove="Resources\Icons\spatial_audio_off_150dp_light.svg" />
 	  <None Remove="Resources\Icons\text_to_speech_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\text_to_speech_100dp_light.svg" />
 	  <None Remove="Resources\Icons\text_to_speech_24dp_dark.svg" />
@@ -146,6 +154,8 @@
 	  <MauiImage Include="Resources\Icons\dictionary_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\home_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\home_100dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\image_search_150dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\image_search_150dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\joystick_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\joystick_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\library_add_100dp_dark.svg" />
@@ -156,8 +166,14 @@
 	  <MauiImage Include="Resources\Icons\library_add_48dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\lock_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\lock_100dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\repartition_150dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\repartition_150dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\sentiment_very_dissatisfied_150dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\sentiment_very_dissatisfied_150dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\settings_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\settings_100dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\spatial_audio_off_150dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\spatial_audio_off_150dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\text_to_speech_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\text_to_speech_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\text_to_speech_24dp_dark.svg" />

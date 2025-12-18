@@ -20,7 +20,7 @@
                 </Frame.GestureRecognizers>
 
                 <Grid ColumnDefinitions="100, *" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
-                    <Image Source="speaker_icon.png" 
+                    <Image Source="{AppThemeBinding Light=spatial_audio_off_150dp_light.png, Dark=spatial_audio_off_150dp_dark.png}"
                            Aspect="AspectFit" 
                            Margin="20"
                            Grid.Column="0"/>
@@ -43,7 +43,7 @@
                 </Frame.GestureRecognizers>
 
                 <Grid ColumnDefinitions="100, *" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
-                    <Image Source="image_icon.png" 
+                    <Image Source="{AppThemeBinding Light=image_search_150dp_light.png, Dark=image_search_150dp_dark.png}"
                            Aspect="AspectFit" 
                            Margin="20"
                            Grid.Column="0"/>
@@ -52,10 +52,10 @@
                         <Label Text="Dopasuj do obrazka" 
                                FontSize="20" 
                                FontAttributes="Bold" 
-                               TextColor="White"/>
+                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
                         <Label Text="Co widzisz na obrazku?" 
                                FontSize="14" 
-                               TextColor="#E0E0E0"/>
+                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
                     </VerticalStackLayout>
                 </Grid>
             </Frame>
@@ -65,8 +65,8 @@
                     <TapGestureRecognizer Command="{Binding NavigateToSentenceQuizCommand}"/>
                 </Frame.GestureRecognizers>
 
-                <Grid ColumnDefinitions="100, *" BackgroundColor="{StaticResource Primary}">
-                    <Image Source="image_icon.png" 
+                <Grid ColumnDefinitions="100, *" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+                    <Image Source="{AppThemeBinding Light=repartition_150dp_light.png, Dark=repartition_150dp_dark.png}"
                            Aspect="AspectFit" 
                            Margin="20"
                            Grid.Column="0"/>
@@ -75,10 +75,10 @@
                         <Label Text="Szyk zdań" 
                                FontSize="20" 
                                FontAttributes="Bold" 
-                               TextColor="White"/>
+                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
                         <Label Text="Ułóż szyk zdania" 
                                FontSize="14" 
-                               TextColor="#E0E0E0"/>
+                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
                     </VerticalStackLayout>
                 </Grid>
             </Frame>
@@ -88,8 +88,8 @@
                     <TapGestureRecognizer Command="{Binding NavigateToHangmanCommand}"/>
                 </Frame.GestureRecognizers>
 
-                <Grid ColumnDefinitions="100, *" BackgroundColor="{StaticResource Primary}">
-                    <Image Source="image_icon.png" 
+                <Grid ColumnDefinitions="100, *" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+                    <Image Source="{AppThemeBinding Light=sentiment_very_dissatisfied_150dp_light.png, Dark=sentiment_very_dissatisfied_150dp_dark.png}"
                            Aspect="AspectFit" 
                            Margin="20"
                            Grid.Column="0"/>
@@ -98,10 +98,10 @@
                         <Label Text="Wisielec"
                                FontSize="20" 
                                FontAttributes="Bold" 
-                               TextColor="White"/>
+                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
                         <Label Text="Gra w wisielca" 
                                FontSize="14" 
-                               TextColor="#E0E0E0"/>
+                               TextColor="{AppThemeBinding Light=#E0E0E0, Dark={StaticResource PrimaryDarkText}}"/>
                     </VerticalStackLayout>
                 </Grid>
             </Frame>
