@@ -11,9 +11,11 @@ using LocalizationResourceManager.Maui;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PexelsDotNetSDK.Api;
+using Plugin.Maui.Audio;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.Json;
-using Plugin.Maui.Audio;
 
 namespace Linguibuddy
 {
@@ -60,6 +62,13 @@ namespace Linguibuddy
             }
 
             var githubToken = apiKeyElement.GetString();
+
+            if (!root.TryGetProperty("PEXELS_API_KEY", out apiKeyElement))
+            {
+                throw new Exception("Nie znaleziono klucza PEXELS_API_KEY w JSON.");
+            }
+
+            var pexelsApiKey = apiKeyElement.GetString();
 
             builder.Services.AddDbContext<DataContext>(
                 options =>
@@ -117,9 +126,19 @@ namespace Linguibuddy
             builder.Services.AddSingleton(AudioManager.Current);
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
             builder.Services.AddSingleton(new OpenAiService(githubAiKey));
-            builder.Services.AddSingleton<MockDataSeeder>();
-            builder.Services.AddTransient<DictionaryApiService>();
+            builder.Services.AddTransient<MockDataSeeder>();
             builder.Services.AddTransient<FlashcardService>();
+
+            builder.Services.AddHttpClient<DictionaryApiService>(client =>
+            {
+                client.BaseAddress = new Uri("https://api.dictionaryapi.dev/api/v2/entries/en/");
+            });
+
+            // 1. Rejestrujemy klienta z paczki NuGet (Singleton jest OK, bo to tylko wrapper API)
+            builder.Services.AddSingleton<PexelsClient>(sp => new PexelsClient(pexelsApiKey));
+
+            // 2. Rejestrujemy Twój serwis (jako zwykły serwis, już nie przez AddHttpClient)
+            builder.Services.AddSingleton<PexelsImageService>();
 
             builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
             {
