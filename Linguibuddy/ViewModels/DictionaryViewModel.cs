@@ -190,7 +190,14 @@ namespace Linguibuddy.ViewModels
 
             try
             {
-                await _flashcardService.AddFlashcardAsync(flashcard);
+                if (flashcard.Translation == AppResources.NoTranslation)
+                {
+                    // w przyszłości popup - opcja tłumaczenia przed dodaniem ręcznie lub API
+                    return;
+                }
+                else {
+                    await _flashcardService.AddFlashcardAsync(flashcard);
+                }
 
                 var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
                 await Shell.Current.DisplayAlert(AppResources.Success, message, "OK");
