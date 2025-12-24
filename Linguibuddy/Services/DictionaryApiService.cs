@@ -10,16 +10,11 @@ namespace Linguibuddy.Services
     {
         private readonly HttpClient _httpClient;
         private readonly DataContext _context;
-        private const string BaseUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
-        public DictionaryApiService(DataContext context)
+        public DictionaryApiService(HttpClient httpClient, DataContext context)
         {
+            _httpClient = httpClient;
             _context = context;
-
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(BaseUrl)
-            };
         }
 
         public async Task<DictionaryWord?> GetEnglishWordAsync(string englishWord)
@@ -50,11 +45,17 @@ namespace Linguibuddy.Services
 
             try
             {
-                var url = $"{BaseUrl}{englishWord}";
-                var json = await _httpClient.GetStringAsync(url);
-                var response = JsonConvert.DeserializeObject<List<DictionaryWord>>(json);
+                var response = await _httpClient.GetAsync(searchWord);
 
-                var fetchedWord = response?.FirstOrDefault();
+                if (!response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine($"[API ERROR] Kod: {response.StatusCode} dla słowa {searchWord}");
+                    return null;
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonConvert.DeserializeObject<List<DictionaryWord>>(json);
+                var fetchedWord = apiResponse?.FirstOrDefault();
 
                 if (fetchedWord != null)
                 {
@@ -94,16 +95,12 @@ namespace Linguibuddy.Services
 
                 return fetchedWord;
             }
-            catch (HttpRequestException e)
+            catch (Exception ex)
             {
-                Debug.WriteLine($"[API ERROR] Błąd połączenia: {e.Message}");
-                throw new Exception($"Nie znaleziono słowa lokalnie, a wystąpił błąd sieci: {e.Message}");
+                Debug.WriteLine($"[API EXCEPTION] {ex.Message}");
             }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Api error: {e.Message}");
-                return null;
-            }
+
+            return null;
         }
 
         public async Task<List<DictionaryWord>> GetRandomWordsForGameAsync(int count = 4)
