@@ -6,71 +6,73 @@ namespace Linguibuddy.Services
 {
     public class MockDataSeeder
     {
-        private readonly DictionaryApiService _apiService;
+        private readonly DictionaryApiService _dictionaryApi;
+        private readonly PexelsImageService _imageApi;
         private readonly DataContext _context;
 
-        private readonly Dictionary<string, string> _wordsToSeed = new()
+        private readonly List<string> _wordsToSeed = new()
         {
-            { "apple", "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg" },
-            { "dog", "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg" },
-            { "cat", "https://images.pexels.com/photos/57416/cat-sweet-kitty-animals-57416.jpeg" },
-            { "car", "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg" },
-            { "book", "https://images.pexels.com/photos/1516983/pexels-photo-1516983.jpeg" },
-            { "tree", "https://images.pexels.com/photos/1459495/pexels-photo-1459495.jpeg" },
-            { "house", "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg" },
-            { "sun", "https://images.pexels.com/photos/301599/pexels-photo-301599.jpeg" },
-            { "moon", "https://images.pexels.com/photos/47367/full-moon-moon-bright-sky-47367.jpeg" },
-            { "computer", "https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg" }
+            "apple", "dog", "cat", "car", "book", "tree", "house",
+            "sun", "moon", "computer", "mountain", "ocean", "coffee",
+            "bicycle"
         };
 
-
-        public MockDataSeeder(DictionaryApiService apiService, DataContext context)
+        public MockDataSeeder(DictionaryApiService dictionaryApi, PexelsImageService imageApi, DataContext context)
         {
-            _apiService = apiService;
+            _dictionaryApi = dictionaryApi;
+            _imageApi = imageApi;
             _context = context;
         }
 
         public async Task SeedAsync()
         {
-            int addedCount = 0;
+            int addedOrUpdatedCount = 0;
 
-            foreach (var item in _wordsToSeed)
+            foreach (var wordText in _wordsToSeed)
             {
-                var wordText = item.Key;
-                var imageUrl = item.Value;
-
                 try
                 {
-                    var existingWord = await _context.DictionaryWords
+                        var existingWord = await _context.DictionaryWords
                         .FirstOrDefaultAsync(w => w.Word.ToLower() == wordText);
 
                     if (existingWord == null)
                     {
-                        existingWord = await _apiService.GetEnglishWordAsync(wordText);
-                        addedCount++;
+                        existingWord = await _dictionaryApi.GetEnglishWordAsync(wordText);
+
+                        await Task.Delay(100);
                     }
 
                     if (existingWord != null && string.IsNullOrEmpty(existingWord.ImageUrl))
                     {
-                        existingWord.ImageUrl = imageUrl;
+                        var imageUrl = await _imageApi.GetImageUrlAsync(wordText);
 
-                        _context.DictionaryWords.Update(existingWord);
+                        if (!string.IsNullOrEmpty(imageUrl))
+                        {
+                            existingWord.ImageUrl = imageUrl;
+
+                            _context.DictionaryWords.Update(existingWord);
+                            addedOrUpdatedCount++;
+
+                            Debug.WriteLine($"[SEEDER] Pobrano zdjęcie dla: {wordText}");
+
+                            await Task.Delay(250);
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[SEEDER ERROR] Nie udało się dodać słowa {wordText}: {ex.Message}");
+                    Debug.WriteLine($"[SEEDER ERROR] Błąd przy słowie {wordText}: {ex.Message}");
                 }
             }
 
-            if (addedCount > 0 || _context.ChangeTracker.HasChanges())
+            if (addedOrUpdatedCount > 0 || _context.ChangeTracker.HasChanges())
             {
                 await _context.SaveChangesAsync();
-                Debug.WriteLine($"[SEEDER] Zakończono mockowanie. Dodano/zaktualizowano słowa.");
+                Debug.WriteLine($"[SEEDER] Zakończono. Zaktualizowano {addedOrUpdatedCount} zdjęć/słów.");
             }
             else
             {
-                Debug.WriteLine($"[SEEDER] Wszystkie słowa już istnieją w bazie.");
+                Debug.WriteLine($"[SEEDER] Wszystkie słowa są aktualne.");
             }
         }
     }
