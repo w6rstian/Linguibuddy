@@ -9,13 +9,11 @@ using Linguibuddy.ViewModels;
 using Linguibuddy.Views;
 using LocalizationResourceManager.Maui;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using PexelsDotNetSDK.Api;
 using Plugin.Maui.Audio;
-using System.Net.Http.Headers;
 using System.Reflection;
-using System.Text.Json;
 
 namespace Linguibuddy
 {
@@ -46,29 +44,19 @@ namespace Linguibuddy
             using var reader = new StreamReader(stream);
             string json = reader.ReadToEnd();
 
-            using var doc = JsonDocument.Parse(json);
-            var root = doc.RootElement;
+            var settings = JObject.Parse(json);
 
-            if (!root.TryGetProperty("DEEPL_API_KEY", out JsonElement apiKeyElement))
-            {
+            var deeplApiKey = settings["DEEPL_API_KEY"]?.ToString();
+            if (string.IsNullOrEmpty(deeplApiKey))
                 throw new Exception("Nie znaleziono klucza DEEPL_API_KEY w JSON.");
-            }
 
-            var deeplApiKey = apiKeyElement.GetString();
-
-            if (!root.TryGetProperty("GITHUB_TOKEN", out apiKeyElement))
-            {
+            var githubToken = settings["GITHUB_TOKEN"]?.ToString();
+            if (string.IsNullOrEmpty(githubToken))
                 throw new Exception("Nie znaleziono klucza GITHUB_TOKEN w JSON.");
-            }
 
-            var githubToken = apiKeyElement.GetString();
-
-            if (!root.TryGetProperty("PEXELS_API_KEY", out apiKeyElement))
-            {
+            var pexelsApiKey = settings["PEXELS_API_KEY"]?.ToString();
+            if (string.IsNullOrEmpty(pexelsApiKey))
                 throw new Exception("Nie znaleziono klucza PEXELS_API_KEY w JSON.");
-            }
-
-            var pexelsApiKey = apiKeyElement.GetString();
 
             builder.Services.AddDbContext<DataContext>(
                 options =>
@@ -134,10 +122,7 @@ namespace Linguibuddy
                 client.BaseAddress = new Uri("https://api.dictionaryapi.dev/api/v2/entries/en/");
             });
 
-            // 1. Rejestrujemy klienta z paczki NuGet (Singleton jest OK, bo to tylko wrapper API)
             builder.Services.AddSingleton<PexelsClient>(sp => new PexelsClient(pexelsApiKey));
-
-            // 2. Rejestrujemy Twój serwis (jako zwykły serwis, już nie przez AddHttpClient)
             builder.Services.AddSingleton<PexelsImageService>();
 
             builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
