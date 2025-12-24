@@ -7,9 +7,9 @@ namespace Linguibuddy.Data
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-        public DbSet<Flashcard> Flashcards { get; set; }
-        public DbSet<FlashcardCollection> FlashcardCollections { get; set; }
         public DbSet<DictionaryWord> DictionaryWords { get; set; }
+        public DbSet<WordCollection> WordCollections { get; set; }
+        public DbSet<CollectionItem> CollectionItems { get; set; }
         //public DbSet<Phonetic> Phonetics { get; set; }
         //public DbSet<Meaning> Meanings { get; set; }
         //public DbSet<Definition> Definitions { get; set; }
@@ -46,9 +46,9 @@ namespace Linguibuddy.Data
                     v => JsonConvert.SerializeObject(v),
                     v => JsonConvert.DeserializeObject<List<string>>(v) ?? new List<string>());
 
-            // usunięcie kolekcji usunie fiszki z bazy
-            modelBuilder.Entity<FlashcardCollection>()
-                .HasMany(c => c.Flashcards)
+            // usunięcie kolekcji usunie elementy kolekcji z bazy
+            modelBuilder.Entity<WordCollection>()
+                .HasMany(c => c.Items)
                 .WithOne(f => f.Collection)
                 .HasForeignKey(f => f.CollectionId)
                 .OnDelete(DeleteBehavior.Cascade);
