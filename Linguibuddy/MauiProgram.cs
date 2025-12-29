@@ -115,7 +115,7 @@ namespace Linguibuddy
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
             builder.Services.AddSingleton(new OpenAiService(githubAiKey));
             builder.Services.AddTransient<MockDataSeeder>();
-            builder.Services.AddTransient<FlashcardService>();
+            builder.Services.AddTransient<CollectionService>();
 
             builder.Services.AddHttpClient<DictionaryApiService>(client =>
             {

@@ -19,6 +19,8 @@ namespace Linguibuddy.ViewModels
         public string Phonetic { get; set; } = string.Empty;
         public string? AudioUrl { get; set; }
 
+        public DictionaryWord? SourceWordObject { get; set; }
+
         [ObservableProperty] [NotifyPropertyChangedFor(nameof(ShowTranslateButton))]
         private string? _translation;
 
@@ -35,7 +37,7 @@ namespace Linguibuddy.ViewModels
         private readonly DictionaryApiService _dictionaryService;
         private readonly DeepLTranslationService _translationService;
         private readonly OpenAiService _openAiService;
-        private readonly FlashcardService _flashcardService;
+        private readonly CollectionService _CollectionService;
         private readonly IAudioManager _audioManager;
 
         [ObservableProperty] private string? _inputText;
@@ -44,9 +46,9 @@ namespace Linguibuddy.ViewModels
 
         public ObservableCollection<SearchResultItem> SearchResults { get; } = [];
 
-        public ObservableCollection<FlashcardCollection> UserCollections { get; } = [];
+        public ObservableCollection<WordCollection> UserCollections { get; } = [];
 
-        [ObservableProperty] private FlashcardCollection? _selectedCollection;
+        [ObservableProperty] private WordCollection? _selectedCollection;
 
         private IAudioPlayer? _audioPlayer;
 
@@ -54,14 +56,14 @@ namespace Linguibuddy.ViewModels
             DictionaryApiService dictionaryService,
             DeepLTranslationService translationService,
             OpenAiService openAiService,
-            FlashcardService flashcardService,
+            CollectionService CollectionService,
             IAudioManager audioManager)
         {
             _dictionaryService = dictionaryService;
             _translationService = translationService;
             _openAiService = openAiService;
             _openAiService = openAiService;
-            _flashcardService = flashcardService;
+            _CollectionService = CollectionService;
             _audioManager = audioManager;
 
             LoadCollectionsCommand.Execute(null);
@@ -72,7 +74,7 @@ namespace Linguibuddy.ViewModels
         {
             try
             {
-                var collections = await _flashcardService.GetUserCollectionsAsync();
+                var collections = await _CollectionService.GetUserCollectionsAsync();
                 UserCollections.Clear();
                 foreach (var col in collections)
                 {
@@ -117,7 +119,9 @@ namespace Linguibuddy.ViewModels
                                 Definition = def.DefinitionText,
                                 Example = def.Example,
                                 Translation = null,
-                                IsBusy = false
+                                IsBusy = false,
+
+                                SourceWordObject = entry
                             });
                         }
                     }
@@ -179,25 +183,35 @@ namespace Linguibuddy.ViewModels
                 return;
             }
 
-            var flashcard = new Flashcard
+            if (item.SourceWordObject == null)
             {
-                Word = item.Word,
-                Translation = item.Translation ?? AppResources.NoTranslation,
+                await Shell.Current.DisplayAlert("Błąd", "Brak danych źródłowych słowa.", "OK");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(item.Translation))
+            {
+                bool translate = await Shell.Current.DisplayAlert("Brak tłumaczenia", "Przetłumaczyć przed dodaniem?", "Tak", "Nie");
+                if (translate)
+                {
+                    await TranslateItem(item);
+                    if (string.IsNullOrEmpty(item.Translation)) return;
+                }
+                else return;
+            }
+
+            var dto = new FlashcardCreationDto
+            {
+                ParentWord = item.SourceWordObject,
                 PartOfSpeech = item.PartOfSpeech,
-                ExampleSentence = item.Example ?? "",
-                CollectionId = SelectedCollection.Id
+                Definition = item.Definition,
+                Translation = item.Translation,
+                Example = item.Example ?? ""
             };
 
             try
             {
-                if (flashcard.Translation == AppResources.NoTranslation)
-                {
-                    // w przyszłości popup - opcja tłumaczenia przed dodaniem ręcznie lub API
-                    return;
-                }
-                else {
-                    await _flashcardService.AddFlashcardAsync(flashcard);
-                }
+                await _CollectionService.AddFlashcardFromDtoAsync(SelectedCollection.Id, dto);
 
                 var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
                 await Shell.Current.DisplayAlert(AppResources.Success, message, "OK");

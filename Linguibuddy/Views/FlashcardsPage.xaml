@@ -73,14 +73,14 @@
                                              Spacing="10"
                                              IsVisible="True">
 
-                            <Label Text="{Binding CurrentFlashcard.Word}" 
+                            <Label Text="{Binding CurrentWordText}" 
                                    FontSize="40" 
                                    FontAttributes="Bold" 
                                    TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" 
                                    HorizontalOptions="Center"
                                    HorizontalTextAlignment="Center"/>
 
-                            <Label Text="{Binding CurrentFlashcard.PartOfSpeech}" 
+                            <Label Text="{Binding CurrentPartOfSpeech}" 
                                    FontSize="16" 
                                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" 
                                    HorizontalOptions="Center"
@@ -99,7 +99,7 @@
                                              Spacing="15"
                                              IsVisible="False">
 
-                            <Label Text="{Binding CurrentFlashcard.Translation}" 
+                            <Label Text="{Binding CurrentTranslation}" 
                                    FontSize="32" 
                                    FontAttributes="Bold" 
                                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDarkText}}"
@@ -111,7 +111,7 @@
                                      Color="{StaticResource Gray200}" 
                                      HorizontalOptions="Center"/>
 
-                            <Label Text="{Binding CurrentFlashcard.ExampleSentence}" 
+                            <Label Text="{Binding CurrentExample}" 
                                    FontSize="18" 
                                    TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" 
                                    FontAttributes="Italic" 

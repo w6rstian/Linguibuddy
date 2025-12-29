@@ -28,22 +28,23 @@
         </Grid>
 
         <Grid Grid.Row="1" ColumnDefinitions="Auto, *" Margin="20,0" ColumnSpacing="15">
-
             <Label Text="{loc:Translate SaveTo}" 
                    VerticalOptions="Center" 
                    FontAttributes="Bold"
                    FontSize="14"
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
 
-            <Picker Grid.Column="1"
-                    ItemsSource="{Binding UserCollections}"
-                    SelectedItem="{Binding SelectedCollection}"
-                    ItemDisplayBinding="{Binding Name}"
-                    Title="{loc:Translate SelectCollectionPlaceholder}"
-                    TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
-                    TitleColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray500}}"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Fill"/>
+            <Border Grid.Column="1" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" 
+                    BackgroundColor="Transparent" Padding="10,10">
+                <Picker ItemsSource="{Binding UserCollections}"
+                        SelectedItem="{Binding SelectedCollection}"
+                        ItemDisplayBinding="{Binding Name}"
+                        Title="{loc:Translate SelectCollectionPlaceholder}"
+                        TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                        TitleColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray500}}"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Fill"/>
+            </Border>
         </Grid>
 
         <CollectionView Grid.Row="2" 
@@ -76,17 +77,6 @@
                                            TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                                            VerticalOptions="Center"
                                            FontSize="14"/>
-
-                                    <!--<Button Text="🔊"
-                                            ImageSource="{AppThemeBinding Light=text_to_speech_100dp_light.png, Dark=text_to_speech_100dp_dark.png}"
-                                            IsVisible="{Binding HasAudio}"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=PlayAudioCommand}"
-                                            CommandParameter="{Binding AudioUrl}"
-                                            BackgroundColor="Transparent"
-                                            TextColor="{StaticResource Primary}"
-                                            Padding="0"
-                                            HeightRequest="15"
-                                            WidthRequest="15"/>-->
 
                                     <ImageButton Source="{AppThemeBinding Light=text_to_speech_24dp_light.png, Dark=text_to_speech_24dp_dark.png}"
                                                  IsVisible="{Binding HasAudio}"
@@ -159,7 +149,7 @@
                                     <Button Text="{loc:Translate Translate}"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=TranslateItemCommand}"
                                             CommandParameter="{Binding .}"
-                                            HeightRequest="36"
+                                            HeightRequest="30"
                                             FontSize="12"
                                             Padding="15,0"
                                             CornerRadius="18"
@@ -179,12 +169,14 @@
                                 </Grid>
 
                                 <VerticalStackLayout Spacing="4" IsVisible="{Binding Translation, Converter={toolkit:IsNotNullConverter}}">
-                                    <HorizontalStackLayout>
-                                        <Image Source="{AppThemeBinding Light=translate_100dp_light.png, Dark=translate_100dp_dark.png}" WidthRequest="30"/>
+                                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <Image Source="{AppThemeBinding Light=translate_100dp_light.png, Dark=translate_100dp_dark.png}" 
+                                               WidthRequest="20" Aspect="AspectFit" VerticalOptions="Center"/>  
                                         <Label Text="{Binding Translation, StringFormat='{0}'}" 
                                                TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                                                FontAttributes="Bold"
-                                               FontSize="16"/>
+                                               FontSize="16"
+                                               VerticalOptions="Center"/>
                                     </HorizontalStackLayout>
 
                                     <Label Text="{Binding Example, StringFormat='Np: {0}'}" 

@@ -8,14 +8,67 @@ namespace Linguibuddy.ViewModels
     [QueryProperty(nameof(Collection), "Collection")]
     public partial class FlashcardsViewModel : ObservableObject
     {
-        private readonly FlashcardService _flashcardService;
-        private Queue<Flashcard> _flashcardsQueue = new();
+        private readonly CollectionService _collectionService;
+        private Queue<CollectionItem> _itemsQueue = new();
 
         [ObservableProperty]
-        private FlashcardCollection? _collection;
+        private WordCollection? _collection;
 
         [ObservableProperty]
-        private Flashcard? _currentFlashcard;
+        private CollectionItem? _currentItem;
+
+        public string CurrentWordText => _currentItem?.DictionaryWord?.Word ?? "";
+
+        public string CurrentPhonetic => _currentItem?.DictionaryWord?.Phonetic ?? "";
+
+        public string CurrentAudio => _currentItem?.DictionaryWord?.Audio ?? "";
+
+        public string CurrentImageUrl => _currentItem?.DictionaryWord?.ImageUrl ?? "";
+
+        public string CurrentTranslation =>
+            !string.IsNullOrEmpty(_currentItem?.SavedTranslation)
+                ? _currentItem.SavedTranslation
+                : "Brak t³umaczenia";
+
+        public string CurrentDefinition
+        {
+            get
+            {
+                if (_currentItem == null) return "";
+
+                if (!string.IsNullOrEmpty(_currentItem.SavedDefinition))
+                    return _currentItem.SavedDefinition;
+
+                return _currentItem.DictionaryWord?.Meanings.FirstOrDefault()?.Definitions.FirstOrDefault()?.DefinitionText
+                       ?? "Brak definicji";
+            }
+        }
+
+        public string CurrentExample
+        {
+            get
+            {
+                if (_currentItem == null) return "";
+
+                if (!string.IsNullOrEmpty(_currentItem.SavedExample))
+                    return _currentItem.SavedExample;
+
+                return _currentItem.DictionaryWord?.Meanings.FirstOrDefault()?.Definitions.FirstOrDefault()?.Example ?? "";
+            }
+        }
+
+        public string CurrentPartOfSpeech
+        {
+            get
+            {
+                if (_currentItem == null) return "";
+
+                if (!string.IsNullOrEmpty(_currentItem.Context))
+                    return _currentItem.Context; // np. "noun"
+
+                return _currentItem.DictionaryWord?.Meanings.FirstOrDefault()?.PartOfSpeech ?? "";
+            }
+        }
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsLearning))]
@@ -23,12 +76,12 @@ namespace Linguibuddy.ViewModels
 
         public bool IsLearning => !IsFinished;
 
-        public FlashcardsViewModel(FlashcardService flashcardService)
+        public FlashcardsViewModel(CollectionService collectionService)
         {
-            _flashcardService = flashcardService;
+            _collectionService = collectionService;
         }
 
-        async partial void OnCollectionChanged(FlashcardCollection? value)
+        async partial void OnCollectionChanged(WordCollection? value)
         {
             if (value != null)
             {
@@ -36,9 +89,9 @@ namespace Linguibuddy.ViewModels
             }
         }
 
-        private async Task StartLearning(FlashcardCollection collection)
+        private async Task StartLearning(WordCollection collection)
         {
-            var cards = await _flashcardService.GetFlashcardsForCollection(collection.Id);
+            var cards = await _collectionService.GetItemsForLearning(collection.Id);
 
             if (cards.Count == 0)
             {
@@ -47,7 +100,7 @@ namespace Linguibuddy.ViewModels
             }
 
             var shuffled = cards.OrderBy(a => Guid.NewGuid()).ToList();
-            _flashcardsQueue = new Queue<Flashcard>(shuffled);
+            _itemsQueue = new Queue<CollectionItem>(shuffled);
 
             IsFinished = false;
             NextCard();
@@ -56,14 +109,23 @@ namespace Linguibuddy.ViewModels
         [RelayCommand]
         public void NextCard()
         {
-            if (_flashcardsQueue.Count > 0)
+            if (_itemsQueue.Count > 0)
             {
-                CurrentFlashcard = _flashcardsQueue.Dequeue();
+                CurrentItem = _itemsQueue.Dequeue();
                 IsFinished = false;
+
+                OnPropertyChanged(nameof(CurrentWordText));
+                OnPropertyChanged(nameof(CurrentPhonetic));
+                OnPropertyChanged(nameof(CurrentTranslation));
+                OnPropertyChanged(nameof(CurrentDefinition));
+                OnPropertyChanged(nameof(CurrentExample));
+                OnPropertyChanged(nameof(CurrentPartOfSpeech));
+                OnPropertyChanged(nameof(CurrentImageUrl));
+                OnPropertyChanged(nameof(CurrentAudio));
             }
             else
             {
-                CurrentFlashcard = null;
+                CurrentItem = null;
                 IsFinished = true;
             }
         }
@@ -71,15 +133,22 @@ namespace Linguibuddy.ViewModels
         [RelayCommand]
         public void MarkAsKnown()
         {
-            // TO DO: Logika fiszek
+            if (CurrentItem != null)
+            {
+                // postêp w bazie (¿e u¿ytkownik ju¿ umie to s³owo)
+                // CurrentItem.IsLearned = true;
+                // await _collectionService.UpdateItemAsync(CurrentItem);
+            }
             NextCard();
         }
 
         [RelayCommand]
         public void MarkAsUnknown()
         {
-            // TO DO: Logika fiszek
-            // _flashcardsQueue.Enqueue(CurrentFlashcard!); 
+            if (CurrentItem != null)
+            {
+                //_itemsQueue.Enqueue(CurrentItem);
+            }
             NextCard();
         }
 
