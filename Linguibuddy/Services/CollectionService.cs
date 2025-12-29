@@ -126,5 +126,14 @@ namespace Linguibuddy.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<DictionaryWord>> GetWordsWithImagesFromCollectionAsync(int collectionId)
+        {
+            return await _context.CollectionItems
+                .Where(i => i.CollectionId == collectionId
+                         && i.DictionaryWord != null
+                         && !string.IsNullOrEmpty(i.DictionaryWord.ImageUrl))
+                .Select(i => i.DictionaryWord!)
+                .ToListAsync();
+        }
     }
 }
