@@ -5,8 +5,6 @@ namespace Linguibuddy.Models
 {
     public partial class WordCollection : ObservableObject
     {
-        private string name = string.Empty;
-
         [Key]
         public int Id { get; set; }
 
