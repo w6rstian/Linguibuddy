@@ -202,11 +202,16 @@ namespace Linguibuddy.ViewModels
 
             var dto = new FlashcardCreationDto
             {
-                ParentWord = item.SourceWordObject,
+                Word = item.SourceWordObject.Word,
+                Phonetic = item.SourceWordObject.Phonetic,
+                Audio = item.SourceWordObject.Audio,
+                ImageUrl = item.SourceWordObject.ImageUrl,
+
                 PartOfSpeech = item.PartOfSpeech,
                 Definition = item.Definition,
-                Translation = item.Translation,
-                Example = item.Example ?? ""
+                Example = item.Example ?? string.Empty,
+
+                Translation = item.Translation
             };
 
             try
@@ -225,7 +230,7 @@ namespace Linguibuddy.ViewModels
         [RelayCommand]
         public async Task TranslateItem(SearchResultItem item)
         {
-            if (item == null || item.IsBusy) return;
+            if (item == null || item.IsBusy || !string.IsNullOrWhiteSpace(item.Translation)) return;
 
             item.IsBusy = true;
 

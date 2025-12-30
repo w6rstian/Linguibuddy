@@ -17,13 +17,10 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private CollectionItem? _currentItem;
 
-        public string CurrentWordText => _currentItem?.DictionaryWord?.Word ?? "";
-
-        public string CurrentPhonetic => _currentItem?.DictionaryWord?.Phonetic ?? "";
-
-        public string CurrentAudio => _currentItem?.DictionaryWord?.Audio ?? "";
-
-        public string CurrentImageUrl => _currentItem?.DictionaryWord?.ImageUrl ?? "";
+        public string CurrentWordText => _currentItem?.Word ?? "";
+        public string CurrentPhonetic => _currentItem?.Phonetic ?? "";
+        public string CurrentAudio => _currentItem?.Audio ?? "";
+        public string CurrentImageUrl => _currentItem?.ImageUrl ?? "";
 
         public string CurrentTranslation =>
             !string.IsNullOrEmpty(_currentItem?.SavedTranslation)
@@ -36,11 +33,7 @@ namespace Linguibuddy.ViewModels
             {
                 if (_currentItem == null) return "";
 
-                if (!string.IsNullOrEmpty(_currentItem.SavedDefinition))
-                    return _currentItem.SavedDefinition;
-
-                return _currentItem.DictionaryWord?.Meanings.FirstOrDefault()?.Definitions.FirstOrDefault()?.DefinitionText
-                       ?? "Brak definicji";
+                return _currentItem?.Definition ?? "";
             }
         }
 
@@ -50,10 +43,7 @@ namespace Linguibuddy.ViewModels
             {
                 if (_currentItem == null) return "";
 
-                if (!string.IsNullOrEmpty(_currentItem.SavedExample))
-                    return _currentItem.SavedExample;
-
-                return _currentItem.DictionaryWord?.Meanings.FirstOrDefault()?.Definitions.FirstOrDefault()?.Example ?? "";
+                return _currentItem?.Example ?? "";
             }
         }
 
@@ -63,10 +53,7 @@ namespace Linguibuddy.ViewModels
             {
                 if (_currentItem == null) return "";
 
-                if (!string.IsNullOrEmpty(_currentItem.Context))
-                    return _currentItem.Context; // np. "noun"
-
-                return _currentItem.DictionaryWord?.Meanings.FirstOrDefault()?.PartOfSpeech ?? "";
+                return _currentItem?.PartOfSpeech ?? "";
             }
         }
 

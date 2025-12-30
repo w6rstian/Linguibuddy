@@ -30,7 +30,6 @@ namespace Linguibuddy.Services
             return await _context.WordCollections
                 .Where(c => c.UserId == userId)
                 .Include(c => c.Items)
-                .ThenInclude(i => i.DictionaryWord)
                 .ToListAsync();
         }
 
@@ -55,68 +54,40 @@ namespace Linguibuddy.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddWordToCollectionAsync(int collectionId, DictionaryWord word)
-        {
-            var dbWord = await _context.DictionaryWords.FirstOrDefaultAsync(w => w.Word == word.Word);
-
-            if (dbWord == null)
-            {
-                return;
-            }
-
-            var exists = await _context.CollectionItems
-                .AnyAsync(ci => ci.CollectionId == collectionId && ci.DictionaryWordId == dbWord.Id);
-
-            if (exists) return;
-
-            var newItem = new CollectionItem
-            {
-                CollectionId = collectionId,
-                DictionaryWordId = dbWord.Id
-            };
-
-            _context.CollectionItems.Add(newItem);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<List<CollectionItem>> GetItemsForLearning(int collectionId)
         {
             return await _context.CollectionItems
-               .Where(i => i.CollectionId == collectionId)
-               .Include(i => i.DictionaryWord)
-               .ThenInclude(dw => dw.Meanings)
-               .ThenInclude(m => m.Definitions)
-               .Include(i => i.DictionaryWord)
-               .ThenInclude(dw => dw.Phonetics)
-               .ToListAsync();
+                .Where(i => i.CollectionId == collectionId && !i.IsLearned)
+                .OrderBy(i => i.AddedDate)
+                .ToListAsync();
         }
 
-        public async Task AddFlashcardFromDtoAsync(int collectionId, Linguibuddy.Models.FlashcardCreationDto dto)
+        public async Task AddFlashcardFromDtoAsync(int collectionId, FlashcardCreationDto dto)
         {
-            var dbWord = await _context.DictionaryWords
-                .FirstOrDefaultAsync(w => w.Word.ToLower() == dto.ParentWord.Word.ToLower());
+            bool exists = await _context.CollectionItems.AnyAsync(i =>
+                i.CollectionId == collectionId &&
+                i.Word.ToLower() == dto.Word.ToLower() &&
+                i.PartOfSpeech == dto.PartOfSpeech &&
+                i.Definition == dto.Definition
+            );
 
-            if (dbWord == null)
-            {
-                //// Słowa nie ma w bazie -> Dodajemy cały obiekt pobrany z API
-                //// Ważne: dto.ParentWord musi być pełnym obiektem DictionaryWord
-                //_context.DictionaryWords.Add(dto.ParentWord);
-                //await _context.SaveChangesAsync();
-                //dbWord = dto.ParentWord; // Teraz dbWord ma już nadane ID z bazy
-                System.Diagnostics.Debug.WriteLine("Słowa nie ma w bazie");
-                throw new Exception("Słowa nie ma w bazie");
-
-            }
+            if (exists)
+                return;
 
             var newItem = new CollectionItem
             {
                 CollectionId = collectionId,
-                DictionaryWordId = dbWord.Id,
 
-                Context = dto.PartOfSpeech,
-                SavedDefinition = dto.Definition,
+                Word = dto.Word,
+                Phonetic = dto.Phonetic,
+                Audio = dto.Audio,
+                ImageUrl = dto.ImageUrl,
+
+                PartOfSpeech = dto.PartOfSpeech,
+                Definition = dto.Definition,
+                Example = dto.Example,
+
                 SavedTranslation = dto.Translation,
-                SavedExample = dto.Example,
 
                 IsLearned = false,
                 AddedDate = DateTime.UtcNow
@@ -126,13 +97,12 @@ namespace Linguibuddy.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<DictionaryWord>> GetWordsWithImagesFromCollectionAsync(int collectionId)
+        public async Task<List<string>> GetWordsWithImagesFromCollectionAsync(int collectionId)
         {
             return await _context.CollectionItems
                 .Where(i => i.CollectionId == collectionId
-                         && i.DictionaryWord != null
-                         && !string.IsNullOrEmpty(i.DictionaryWord.ImageUrl))
-                .Select(i => i.DictionaryWord!)
+                         && !string.IsNullOrEmpty(i.ImageUrl))
+                .Select(i => i.ImageUrl!)
                 .ToListAsync();
         }
     }
