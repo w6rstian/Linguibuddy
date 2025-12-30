@@ -64,7 +64,12 @@ namespace Linguibuddy.ViewModels
             if (!string.IsNullOrWhiteSpace(result) && result != collection.Name)
             {
                 await _collectionService.RenameCollectionAsync(collection, result);
-                await LoadCollections();
+
+                // jesli wordcollection nie jest observable, to trzeba odświeżyć listę (i tk się nie zmienia dziadostwo)
+                //await LoadCollections();
+
+                // jesli jest observable, to wystarczy zmienić nazwę (nie wiem czy tak się robi ale działa)
+                collection.Name = result;
             }
         }
 
