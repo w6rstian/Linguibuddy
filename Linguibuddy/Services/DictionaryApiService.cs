@@ -10,11 +10,13 @@ namespace Linguibuddy.Services
     {
         private readonly HttpClient _httpClient;
         private readonly DataContext _context;
+        private readonly PexelsImageService _pexelsService;
 
-        public DictionaryApiService(HttpClient httpClient, DataContext context)
+        public DictionaryApiService(HttpClient httpClient, DataContext context, PexelsImageService pexelsService)
         {
             _httpClient = httpClient;
             _context = context;
+            _pexelsService = pexelsService;
         }
 
         public async Task<DictionaryWord?> GetEnglishWordAsync(string englishWord)
@@ -78,6 +80,20 @@ namespace Linguibuddy.Services
                     fetchedWord.Audio = perfectMatch?.Audio
                                         ?? fetchedWord.Phonetics.FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Audio))?.Audio
                                         ?? "";
+
+                    //próba pobrania też zdjęcia do słowa od razu
+                    try
+                    {
+                        var imageUrl = await _pexelsService.GetImageUrlAsync(fetchedWord.Word);
+                        if (!string.IsNullOrEmpty(imageUrl))
+                        {
+                            fetchedWord.ImageUrl = imageUrl;
+                        }
+                    }
+                    catch (Exception imgEx)
+                    {
+                        Debug.WriteLine($"[PEXELS ERROR] Nie udało się pobrać zdjęcia: {imgEx.Message}");
+                    }
 
                     try
                     {
