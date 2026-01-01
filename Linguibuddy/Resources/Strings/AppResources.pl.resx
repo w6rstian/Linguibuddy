@@ -240,4 +240,10 @@
   <data name="Awards" xml:space="preserve">
     <value>Osiągnięcia</value>
   </data>
+  <data name="ChooseCollection" xml:space="preserve">
+    <value>Wybierz kolekcję</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
 </root>
