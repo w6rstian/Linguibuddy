@@ -105,6 +105,8 @@ namespace Linguibuddy
             builder.Services.AddTransient<HangmanViewModel>();
             builder.Services.AddTransient<HangmanPage>();
 
+            builder.Services.AddTransientPopup<WordCollectionPopup, WordCollectionPopupViewModel>();
+
             //var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
             //var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
             //var githubAiKey = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
