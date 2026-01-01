@@ -14,18 +14,23 @@ namespace Linguibuddy.Models
         [ForeignKey(nameof(CollectionId))]
         public WordCollection? Collection { get; set; }
 
-        public int DictionaryWordId { get; set; }
+        [Required]
+        public string Word { get; set; } = string.Empty;
 
-        [ForeignKey(nameof(DictionaryWordId))]
-        public DictionaryWord? DictionaryWord { get; set; }
+        public string Phonetic { get; set; } = string.Empty;
+        public string Audio { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
 
-        public string Context { get; set; } = string.Empty;
+        [Required]
+        public string PartOfSpeech { get; set; } = string.Empty;
 
-        public string SavedDefinition { get; set; } = string.Empty;
+        public int DefinitionId { get; set; }
+
+        public string Definition { get; set; } = string.Empty;
+        public string Example { get; set; } = string.Empty;
 
         public string SavedTranslation { get; set; } = string.Empty;
 
-        public string SavedExample { get; set; } = string.Empty;
 
         public bool IsLearned { get; set; } = false;
 
