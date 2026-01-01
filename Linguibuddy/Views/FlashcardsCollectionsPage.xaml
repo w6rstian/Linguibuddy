@@ -29,43 +29,59 @@
                         SelectionMode="None">
 
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="15"/>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="12"/>
             </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:FlashcardCollection">
+                <DataTemplate x:DataType="models:WordCollection">
                     <Border StrokeShape="RoundRectangle 12" 
                             Padding="15"
                             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}"
-                            Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}">
+                            Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}"
+                            StrokeThickness="1">
+                        
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Offset="0,2" Radius="5" Opacity="0.05"/>
+                        </Border.Shadow>
 
                         <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
 
                             <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="2">
                                 <Label Text="{Binding Name}" 
                                        FontAttributes="Bold" 
-                                       FontSize="16"
+                                       FontSize="17"
                                        LineBreakMode="TailTruncation"
                                        TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
 
                                 <!--ciężko dodać napis {ilość} fiszek do tłumaczeń-->
-                                <Label Text="{Binding Flashcards.Count, StringFormat='{0} fiszek'}" 
-                                       FontSize="12"
+                                <Label Text="{Binding Items.Count, StringFormat='{0} fiszek'}" 
+                                       FontSize="13"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
                             </VerticalStackLayout>
 
-                            <HorizontalStackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
+                            <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
 
                                 <Button Text="{loc:Translate Edit}"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FlashcardsCollectionsViewModel}}, Path=EditCollectionCommand}"
                                         CommandParameter="{Binding .}"
                                         FontSize="12"
-                                        Padding="10,0"
+                                        Padding="12,0"
                                         HeightRequest="36"
                                         BackgroundColor="Transparent"
-                                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}"
-                                        BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Secondary}}"
+                                        BorderColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Secondary}}"
                                         BorderWidth="1"
+                                        CornerRadius="8"/>
+
+                                <Button Text="✕"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FlashcardsCollectionsViewModel}}, Path=DeleteCollectionCommand}"
+                                        CommandParameter="{Binding .}"
+                                        FontSize="14"
+                                        WidthRequest="36"
+                                        HeightRequest="36"
+                                        Padding="0"
+                                        BackgroundColor="{AppThemeBinding Light=#FFEBEE, Dark=#3E2723}"
+                                        TextColor="Red"
                                         CornerRadius="8"/>
 
                                 <Button Text="{loc:Translate Learn}"
@@ -85,10 +101,14 @@
             </CollectionView.ItemTemplate>
 
             <CollectionView.EmptyView>
-                <Label Text="Brak kolekcji. Dodaj pierwszą!" 
-                       HorizontalOptions="Center" 
-                       VerticalOptions="Center"
-                       TextColor="{StaticResource Gray500}"/>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+                    <Label Text="Brak kolekcji" 
+                           FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"
+                           TextColor="{StaticResource Gray500}"/>
+                    <Label Text="Stwórz pierwszą kolekcję przyciskiem powyżej." 
+                           FontSize="14" HorizontalOptions="Center"
+                           TextColor="{StaticResource Gray400}"/>
+                </VerticalStackLayout>
             </CollectionView.EmptyView>
 
         </CollectionView>

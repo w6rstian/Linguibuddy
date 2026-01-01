@@ -9,11 +9,11 @@ using Linguibuddy.ViewModels;
 using Linguibuddy.Views;
 using LocalizationResourceManager.Maui;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System.Reflection;
-using System.Text.Json;
+using Newtonsoft.Json.Linq;
+using PexelsDotNetSDK.Api;
 using Plugin.Maui.Audio;
+using System.Reflection;
 
 namespace Linguibuddy
 {
@@ -44,22 +44,19 @@ namespace Linguibuddy
             using var reader = new StreamReader(stream);
             string json = reader.ReadToEnd();
 
-            using var doc = JsonDocument.Parse(json);
-            var root = doc.RootElement;
+            var settings = JObject.Parse(json);
 
-            if (!root.TryGetProperty("DEEPL_API_KEY", out JsonElement apiKeyElement))
-            {
+            var deeplApiKey = settings["DEEPL_API_KEY"]?.ToString();
+            if (string.IsNullOrEmpty(deeplApiKey))
                 throw new Exception("Nie znaleziono klucza DEEPL_API_KEY w JSON.");
-            }
 
-            var deeplApiKey = apiKeyElement.GetString();
-
-            if (!root.TryGetProperty("GITHUB_TOKEN", out apiKeyElement))
-            {
+            var githubToken = settings["GITHUB_TOKEN"]?.ToString();
+            if (string.IsNullOrEmpty(githubToken))
                 throw new Exception("Nie znaleziono klucza GITHUB_TOKEN w JSON.");
-            }
 
-            var githubToken = apiKeyElement.GetString();
+            var pexelsApiKey = settings["PEXELS_API_KEY"]?.ToString();
+            if (string.IsNullOrEmpty(pexelsApiKey))
+                throw new Exception("Nie znaleziono klucza PEXELS_API_KEY w JSON.");
 
             builder.Services.AddDbContext<DataContext>(
                 options =>
@@ -117,9 +114,16 @@ namespace Linguibuddy
             builder.Services.AddSingleton(AudioManager.Current);
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
             builder.Services.AddSingleton(new OpenAiService(githubAiKey));
-            builder.Services.AddSingleton<MockDataSeeder>();
-            builder.Services.AddTransient<DictionaryApiService>();
-            builder.Services.AddTransient<FlashcardService>();
+            builder.Services.AddTransient<MockDataSeeder>();
+            builder.Services.AddTransient<CollectionService>();
+
+            builder.Services.AddHttpClient<DictionaryApiService>(client =>
+            {
+                client.BaseAddress = new Uri("https://api.dictionaryapi.dev/api/v2/entries/en/");
+            });
+
+            builder.Services.AddSingleton<PexelsClient>(sp => new PexelsClient(pexelsApiKey));
+            builder.Services.AddSingleton<PexelsImageService>();
 
             builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
             {

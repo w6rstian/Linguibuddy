@@ -10,13 +10,13 @@ namespace Linguibuddy.ViewModels
 {
     public partial class FlashcardsCollectionsViewModel : ObservableObject
     {
-        private readonly FlashcardService _flashcardService;
+        private readonly CollectionService _collectionService;
 
-        public ObservableCollection<FlashcardCollection> Collections { get; } = [];
+        public ObservableCollection<WordCollection> Collections { get; } = [];
 
-        public FlashcardsCollectionsViewModel(FlashcardService flashcardService)
+        public FlashcardsCollectionsViewModel(CollectionService collectionService)
         {
-            _flashcardService = flashcardService;
+            _collectionService = collectionService;
         }
 
         [RelayCommand]
@@ -24,7 +24,7 @@ namespace Linguibuddy.ViewModels
         {
             try
             {
-                var list = await _flashcardService.GetUserCollectionsAsync();
+                var list = await _collectionService.GetUserCollectionsAsync();
                 Collections.Clear();
                 foreach (var item in list)
                     Collections.Add(item);
@@ -38,20 +38,60 @@ namespace Linguibuddy.ViewModels
         [RelayCommand]
         public async Task CreateCollection()
         {
-            // string result = await Shell.Current.DisplayPromptAsync("Nowa kolekcja", "Podaj nazwę:");
             string result = await Shell.Current.DisplayPromptAsync(
-                AppResources.NewCollection,
-                AppResources.NameEntry);
+                AppResources.NewCollection, 
+                AppResources.NameEntry,
+                "OK", "Anuluj");
 
             if (!string.IsNullOrWhiteSpace(result))
             {
-                await _flashcardService.CreateCollectionAsync(result);
+                await _collectionService.CreateCollectionAsync(result);
                 await LoadCollections();
             }
         }
 
         [RelayCommand]
-        public async Task GoToLearning(FlashcardCollection collection)
+        public async Task EditCollection(WordCollection collection)
+        {
+            if (collection == null) return;
+
+            string result = await Shell.Current.DisplayPromptAsync(
+                "Edytuj kolekcję",
+                "Zmień nazwę:",
+                "Zapisz", "Anuluj",
+                initialValue: collection.Name);
+
+            if (!string.IsNullOrWhiteSpace(result) && result != collection.Name)
+            {
+                await _collectionService.RenameCollectionAsync(collection, result);
+
+                // jesli wordcollection nie jest observable, to trzeba odświeżyć listę (i tk się nie zmienia dziadostwo)
+                //await LoadCollections();
+
+                // jesli jest observable, to wystarczy zmienić nazwę (nie wiem czy tak się robi ale działa)
+                collection.Name = result;
+            }
+        }
+
+        [RelayCommand]
+        public async Task DeleteCollection(WordCollection collection)
+        {
+            if (collection == null) return;
+
+            bool confirm = await Shell.Current.DisplayAlert(
+                "Usuń kolekcję",
+                $"Czy na pewno chcesz usunąć '{collection.Name}' i wszystkie słowa w niej?",
+                "Tak, usuń", "Nie");
+
+            if (confirm)
+            {
+                await _collectionService.DeleteCollectionAsync(collection);
+                await LoadCollections();
+            }
+        }
+
+        [RelayCommand]
+        public async Task GoToLearning(WordCollection collection)
         {
             if (collection == null) return;
 
@@ -61,14 +101,6 @@ namespace Linguibuddy.ViewModels
             };
 
             await Shell.Current.GoToAsync(nameof(FlashcardsPage), navigationParameter);
-        }
-
-        [RelayCommand]
-        public async Task EditCollection(FlashcardCollection collection)
-        {
-            if (collection == null) return;
-
-            // TODO: Logika edycji kolekcji
         }
     }
 }

@@ -4,18 +4,17 @@ namespace Linguibuddy.Views;
 
 public partial class FlashcardsCollectionsPage : ContentPage
 {
+    private readonly FlashcardsCollectionsViewModel _viewModel;
+
     public FlashcardsCollectionsPage(FlashcardsCollectionsViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        BindingContext = _viewModel = viewModel;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        if (BindingContext is FlashcardsCollectionsViewModel vm)
-        {
-            vm.LoadCollectionsCommand.Execute(null);
-        }
+        await _viewModel.LoadCollectionsCommand.ExecuteAsync(null);
     }
 }

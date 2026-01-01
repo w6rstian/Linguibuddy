@@ -7,19 +7,51 @@ using System.Diagnostics;
 
 namespace Linguibuddy.ViewModels
 {
+    public enum QuizSourceType
+    {
+        Random,
+        Collection
+    }
+
     public partial class ImageQuizViewModel : BaseQuizViewModel
     {
         private readonly DictionaryApiService _dictionaryService;
+        private readonly CollectionService _collectionService;
+
+        [ObservableProperty]
+        private bool _isSetupVisible = true;
+
+        [ObservableProperty]
+        private bool _isGameVisible = false;
+
+        [ObservableProperty]
+        private QuizSourceType _selectedSourceType = QuizSourceType.Random;
+
+        [ObservableProperty]
+        private WordCollection? _selectedCollection;
+
+        public ObservableCollection<WordCollection> AvailableCollections { get; } = new();
+
+        private List<DictionaryWord> _collectionPool = new();
 
         [ObservableProperty]
         private DictionaryWord? _targetWord;
 
         public ObservableCollection<QuizOption> Options { get; } = new();
 
-        public ImageQuizViewModel(DictionaryApiService dictionaryService)
+        public ImageQuizViewModel(DictionaryApiService dictionaryService, CollectionService collectionService)
         {
             _dictionaryService = dictionaryService;
-            Title = "Image Quiz";
+            _collectionService = collectionService;
+
+            LoadCollectionsAsync();
+        }
+
+        private async void LoadCollectionsAsync()
+        {
+            var collections = await _collectionService.GetUserCollectionsAsync();
+            AvailableCollections.Clear();
+            foreach (var c in collections) AvailableCollections.Add(c);
         }
 
         public override async Task LoadQuestionAsync()
