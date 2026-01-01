@@ -1,5 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Extensions;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Linguibuddy.Models;
+using Linguibuddy.Services;
 using Linguibuddy.Views;
 using System;
 using System.Collections.Generic;
@@ -11,12 +16,31 @@ namespace Linguibuddy.ViewModels
 {
     public partial class MiniGamesViewModel : ObservableObject
     {
-        public MiniGamesViewModel()
-        { }
+        private readonly IPopupService _popupService;
+        private readonly CollectionService _collectionService;
+        public MiniGamesViewModel(CollectionService collectionService, IPopupService popupService)
+        {
+            _collectionService = collectionService;
+            _popupService = popupService;
+        }
+
+        private async Task<IPopupResult> DisplayPopup()
+        {
+            var popup = new WordCollectionPopup(
+                new WordCollectionPopupViewModel(_collectionService, _popupService)
+                );
+
+            return await Shell.Current.ShowPopupAsync<WordCollection?>(popup);
+        }
 
         [RelayCommand]
         private async Task NavigateToAudioQuizAsync()
         {
+            var result = await DisplayPopup();
+
+            var selectedCollection = result;
+            
+
             await Shell.Current.GoToAsync(nameof(AudioQuizPage));
         }
 
