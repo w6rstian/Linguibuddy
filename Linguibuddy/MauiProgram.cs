@@ -66,45 +66,19 @@ namespace Linguibuddy
                 }
                 );
 
-            builder.Services.AddTransient<MainPage>();
-            builder.Services.AddTransient<MainViewModel>();
-
-            builder.Services.AddTransient<DictionaryPage>();
-            builder.Services.AddTransient<DictionaryViewModel>();
-
-            builder.Services.AddTransient<FlashcardsPage>();
-            builder.Services.AddTransient<FlashcardsViewModel>();
-
-            builder.Services.AddTransient<FlashcardsCollectionsPage>();
-            builder.Services.AddTransient<FlashcardsCollectionsViewModel>();
-
-            builder.Services.AddTransient<SignInPage>();
-            builder.Services.AddTransient<SignInViewModel>();
-
-            builder.Services.AddTransient<SignUpPage>();
-            builder.Services.AddTransient<SignUpViewModel>();
-
-            builder.Services.AddTransient<AwardsPage>();
-            builder.Services.AddTransient<AwardsViewModel>();
-
-            builder.Services.AddTransient<SettingsPage>();
-            builder.Services.AddTransient<SettingsViewModel>();
-
-            builder.Services.AddTransient<AudioQuizPage>();
-            builder.Services.AddTransient<AudioQuizViewModel>();
-
-            builder.Services.AddTransient<MiniGamesPage>();
-            builder.Services.AddTransient<MiniGamesViewModel>();
-
-            builder.Services.AddTransient<ImageQuizPage>();
-            builder.Services.AddTransient<ImageQuizViewModel>();
-
-            builder.Services.AddTransient<SentenceQuizViewModel>();
-            builder.Services.AddTransient<SentenceQuizPage>();
-
-            builder.Services.AddTransient<HangmanViewModel>();
-            builder.Services.AddTransient<HangmanPage>();
-
+            builder.Services.AddTransient<MainPage, MainViewModel>();
+            builder.Services.AddTransient<DictionaryPage, DictionaryViewModel>();
+            builder.Services.AddTransient<FlashcardsPage, FlashcardsViewModel>();
+            builder.Services.AddTransient<FlashcardsCollectionsPage, FlashcardsCollectionsViewModel>();
+            builder.Services.AddTransient<SignInPage, SignInViewModel>();
+            builder.Services.AddTransient<SignUpPage, SignUpViewModel>();
+            builder.Services.AddTransient<AwardsPage, AwardsViewModel>();
+            builder.Services.AddTransient<SettingsPage, SettingsViewModel>();
+            builder.Services.AddTransient<AudioQuizPage, AudioQuizViewModel>();
+            builder.Services.AddTransient<MiniGamesPage, MiniGamesViewModel>();
+            builder.Services.AddTransient<ImageQuizPage, ImageQuizViewModel>();
+            builder.Services.AddTransient<SentenceQuizPage, SentenceQuizViewModel>();
+            builder.Services.AddTransient<HangmanPage, HangmanViewModel>();            
             builder.Services.AddTransientPopup<WordCollectionPopup, WordCollectionPopupViewModel>();
 
             //var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
