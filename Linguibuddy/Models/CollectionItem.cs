@@ -29,8 +29,6 @@ namespace Linguibuddy.Models
         public string Definition { get; set; } = string.Empty;
         public string Example { get; set; } = string.Empty;
 
-        public string Context { get; set; } = string.Empty;
-
         public string SavedTranslation { get; set; } = string.Empty;
 
 
