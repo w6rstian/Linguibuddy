@@ -33,6 +33,12 @@ namespace Linguibuddy.Services
                 .ToListAsync();
         }
 
+        public async Task<WordCollection?> GetCollection(int id)
+        {
+            return await _context.WordCollections
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
         public async Task CreateCollectionAsync(string name)
         {
             var userId = GetUserId();
