@@ -41,10 +41,14 @@ namespace Linguibuddy.ViewModels
             if (result.WasDismissedByTappingOutsideOfPopup || result.Result is null)
                 return;
 
-            var selectedCollection = result;
-            
+            var selectedCollection = result.Result;
 
-            await Shell.Current.GoToAsync(nameof(AudioQuizPage));
+            var parameters = new Dictionary<string, object>
+            {
+                { "SelectedCollection", selectedCollection }
+            };
+
+            await Shell.Current.GoToAsync(nameof(AudioQuizPage), parameters);
         }
 
         [RelayCommand]
