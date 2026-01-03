@@ -6,7 +6,7 @@ namespace Linguibuddy.ViewModels
 {
     public partial class QuizOption : ObservableObject
     {
-        public DictionaryWord Word { get; }
+        public CollectionItem Word { get; }
 
         [ObservableProperty]
         private Color _backgroundColor;
@@ -14,7 +14,7 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private bool _isEnabled;
 
-        public QuizOption(DictionaryWord word)
+        public QuizOption(CollectionItem word)
         {
             Word = word;
             BackgroundColor = Application.Current.Resources["Primary"] as Color ?? Colors.LightGray;
