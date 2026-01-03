@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
 using Linguibuddy.Services;
+using LocalizationResourceManager.Maui;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -15,6 +16,7 @@ namespace Linguibuddy.ViewModels
 
     public partial class ImageQuizViewModel : BaseQuizViewModel
     {
+        private readonly ILocalizationResourceManager _resourceManager;
         private readonly DictionaryApiService _dictionaryService;
         private readonly CollectionService _collectionService;
 
@@ -35,14 +37,22 @@ namespace Linguibuddy.ViewModels
         private List<DictionaryWord> _collectionPool = new();
 
         [ObservableProperty]
-        private DictionaryWord? _targetWord;
+        private CollectionItem? _targetWord;
+
+        [ObservableProperty]
+        private List<CollectionItem> _hasAppeared;
+        [ObservableProperty]
+        private bool _isFinished;
+        [ObservableProperty]
+        private int _score;
 
         public ObservableCollection<QuizOption> Options { get; } = new();
 
-        public ImageQuizViewModel(DictionaryApiService dictionaryService, CollectionService collectionService)
+        public ImageQuizViewModel(DictionaryApiService dictionaryService, CollectionService collectionService, ILocalizationResourceManager locResourceManager)
         {
             _dictionaryService = dictionaryService;
             _collectionService = collectionService;
+            _resourceManager = locResourceManager;
 
             LoadCollectionsAsync();
         }
@@ -71,21 +81,44 @@ namespace Linguibuddy.ViewModels
 
             try
             {
-                var words = await _dictionaryService.GetRandomWordsWithImagesAsync(4);
+                var allWords = SelectedCollection.Items;
 
-                if (words.Count < 4)
+                if (allWords.Count < 4)
                 {
-                    FeedbackMessage = "Za mało słów ze zdjęciami w bazie.";
+                    FeedbackMessage = _resourceManager["TooLittleWords"];
                     return;
                 }
 
-                var random = new Random();
-                TargetWord = words[random.Next(words.Count)];
+                var validWords = allWords.Except(HasAppeared).ToList();
 
-                foreach (var word in words)
+                if (validWords.Count == 0)
+                {
+                    // QUIZ IS FINISHED HERE
+                    IsFinished = true;
+                    return;
+                }
+
+                var random = Random.Shared;
+                TargetWord = validWords[random.Next(allWords.Count)];
+
+                var wrongOptions = allWords
+                    .Where(w => w != TargetWord)
+                    .OrderBy(_ => random.Next())
+                    .Take(3)
+                    .ToList();
+
+                var optionsList = new List<CollectionItem> { TargetWord };
+                optionsList.AddRange(wrongOptions);
+                optionsList = optionsList
+                    .OrderBy(_ => random.Next())
+                    .ToList();
+
+                foreach (var word in optionsList)
                 {
                     Options.Add(new QuizOption(word));
                 }
+
+                HasAppeared.Add(TargetWord);
             }
             catch (Exception ex)
             {
