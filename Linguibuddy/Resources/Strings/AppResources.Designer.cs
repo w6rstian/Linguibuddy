@@ -106,6 +106,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t load the question.
+        /// </summary>
+        internal static string CantLoadQuestion {
+            get {
+                return ResourceManager.GetString("CantLoadQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose a collection.
         /// </summary>
         internal static string ChooseCollection {
@@ -129,6 +138,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Congratulations {
             get {
                 return ResourceManager.GetString("Congratulations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Awesome! It&apos;s the correct answer..
+        /// </summary>
+        internal static string CorrectAnswer {
+            get {
+                return ResourceManager.GetString("CorrectAnswer", resourceCulture);
             }
         }
         
@@ -210,6 +228,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string IKnow {
             get {
                 return ResourceManager.GetString("IKnow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unfortunately, no. The correct answer is:.
+        /// </summary>
+        internal static string IncorrectAnswer {
+            get {
+                return ResourceManager.GetString("IncorrectAnswer", resourceCulture);
             }
         }
         
@@ -399,6 +426,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string ThemeNameLight {
             get {
                 return ResourceManager.GetString("ThemeNameLight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not enough words in the collection to make a quiz..
+        /// </summary>
+        internal static string TooLittleWords {
+            get {
+                return ResourceManager.GetString("TooLittleWords", resourceCulture);
             }
         }
         

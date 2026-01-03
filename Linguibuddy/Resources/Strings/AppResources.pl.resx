@@ -246,4 +246,16 @@
   <data name="Cancel" xml:space="preserve">
     <value>Anuluj</value>
   </data>
+  <data name="TooLittleWords" xml:space="preserve">
+    <value>Za mało słów w kolekcji, by utworzyć quiz.</value>
+  </data>
+  <data name="CantLoadQuestion" xml:space="preserve">
+    <value>Nie można załadować pytania</value>
+  </data>
+  <data name="CorrectAnswer" xml:space="preserve">
+    <value>Świetnie! To poprawna odpowiedź.</value>
+  </data>
+  <data name="IncorrectAnswer" xml:space="preserve">
+    <value>Niestety. Prawidłowa odpowiedź to:</value>
+  </data>
 </root>
