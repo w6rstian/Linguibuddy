@@ -23,10 +23,7 @@
                         FontAttributes="Bold" />
 
                     <CollectionView
-                        ItemsSource="{Binding Collections}"
-                        SelectionMode="Single"
-                        SelectedItem="{Binding SelectedCollection}"
-                        SelectionChangedCommand="{Binding CollectionSelectedCommand}">
+                        ItemsSource="{Binding Collections}">
 
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
@@ -36,6 +33,11 @@
                                     Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                                     StrokeThickness="1"
                                     StrokeShape="RoundRectangle 8">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Popup}}, Path=BindingContext.CollectionSelectedCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
 
                                     <Label Text="{Binding Name}" />
                                 </Border>

@@ -24,7 +24,7 @@ namespace Linguibuddy.ViewModels
             _popupService = popupService;
         }
 
-        private async Task<IPopupResult> DisplayPopup()
+        private async Task<IPopupResult<WordCollection?>> DisplayPopup()
         {
             var popup = new WordCollectionPopup(
                 new WordCollectionPopupViewModel(_collectionService, _popupService)
@@ -37,6 +37,9 @@ namespace Linguibuddy.ViewModels
         private async Task NavigateToAudioQuizAsync()
         {
             var result = await DisplayPopup();
+
+            if (result.WasDismissedByTappingOutsideOfPopup || result.Result is null)
+                return;
 
             var selectedCollection = result;
             

@@ -36,16 +36,9 @@ namespace Linguibuddy.ViewModels
         }
 
         [RelayCommand]
-        private async Task CollectionSelected()
+        private async Task CollectionSelected(WordCollection? selected)
         {
-            if (SelectedCollection != null)
-            {
-                await _popupService.ClosePopupAsync<WordCollection?>(Shell.Current, SelectedCollection);
-            }
-            else
-            {
-                await _popupService.ClosePopupAsync<WordCollection?>(Shell.Current, null);
-            }
+            await _popupService.ClosePopupAsync<WordCollection?>(Shell.Current, selected);
         }
 
         [RelayCommand]
