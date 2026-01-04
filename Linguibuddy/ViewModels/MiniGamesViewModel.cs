@@ -78,7 +78,19 @@ namespace Linguibuddy.ViewModels
         [RelayCommand]
         private async Task NavigateToHangman()
         {
-            await Shell.Current.GoToAsync(nameof(HangmanPage));
+            var result = await DisplayPopup();
+
+            if (result.WasDismissedByTappingOutsideOfPopup || result.Result is null)
+                return;
+
+            var selectedCollection = result.Result;
+
+            var parameters = new Dictionary<string, object>
+            {
+                { "SelectedCollection", selectedCollection }
+            };
+
+            await Shell.Current.GoToAsync(nameof(HangmanPage), parameters);
         }
     }
 }

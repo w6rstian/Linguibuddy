@@ -9,6 +9,7 @@ using System.Text;
 
 namespace Linguibuddy.ViewModels
 {
+    [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class HangmanViewModel : BaseQuizViewModel
     {
         private readonly DictionaryApiService _dictionaryService;
@@ -27,12 +28,22 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private string _currentImage;
 
+        [ObservableProperty]
+        private WordCollection? _selectedCollection;
+        [ObservableProperty]
+        private List<CollectionItem> _hasAppeared;
+        [ObservableProperty]
+        private bool _isFinished;
+        [ObservableProperty]
+        private int _score;
+
         // Klawiatura A-Z
         public ObservableCollection<HangmanLetter> Keyboard { get; } = new();
 
         public HangmanViewModel(DictionaryApiService dictionaryService)
         {
             _dictionaryService = dictionaryService;
+            _hasAppeared = [];
             Title = "Hangman";
             // Inicjalizacja klawiatury pustymi wartościami, zostanie odświeżona przy LoadQuestion
             GenerateKeyboard();
@@ -76,14 +87,17 @@ namespace Linguibuddy.ViewModels
 
             try
             {
-                // Pobieramy 1 losowe słowo
-                var words = await _dictionaryService.GetRandomWordsForGameAsync(1);
+                // Pobieramy 1 losowe słowo z kolekcji
+                var allWords = SelectedCollection.Items;
+                var validWords = allWords.Except(HasAppeared).ToList();
 
-                if (words != null && words.Any())
+                if (allWords is not null && allWords.Any())
                 {
-                    var wordObj = words.First();
+                    var random = Random.Shared;
+                    var wordObj = validWords[random.Next(validWords.Count)];
                     // Normalizujemy słowo (tylko litery, uppercase)
                     _secretWord = wordObj.Word.Trim().ToUpper();
+                    HasAppeared.Add(wordObj);
 
                     UpdateMaskedWord();
                 }
