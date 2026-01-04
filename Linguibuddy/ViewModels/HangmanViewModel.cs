@@ -91,6 +91,13 @@ namespace Linguibuddy.ViewModels
                 var allWords = SelectedCollection.Items;
                 var validWords = allWords.Except(HasAppeared).ToList();
 
+                if (!validWords.Any())
+                {
+                    // NO WORDS REMAINING. END GAME
+                    IsFinished = true;
+                    return;
+                }
+
                 if (allWords is not null && allWords.Any())
                 {
                     var random = Random.Shared;
@@ -193,6 +200,7 @@ namespace Linguibuddy.ViewModels
             {
                 FeedbackMessage = AppResources.Victory;
                 FeedbackColor = Colors.Green;
+                Score++;
             }
             else
             {
@@ -207,6 +215,12 @@ namespace Linguibuddy.ViewModels
         private async Task NextGameAsync()
         {
             await LoadQuestionAsync();
+
+            if (IsFinished)
+            {
+                var ScoreText = $"{Score}/{SelectedCollection!.Items.Count}";
+                // TODO: Post-game summary
+            }
         }
     }
 }
