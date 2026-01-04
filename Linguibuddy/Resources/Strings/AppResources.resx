@@ -317,4 +317,7 @@
   <data name="ErrorCorrect" xml:space="preserve">
     <value>Error. \nCorrect:</value>
   </data>
+  <data name="NextWord" xml:space="preserve">
+    <value>Next word</value>
+  </data>
 </root>

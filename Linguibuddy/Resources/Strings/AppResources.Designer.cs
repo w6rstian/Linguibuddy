@@ -358,6 +358,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next word.
+        /// </summary>
+        internal static string NextWord {
+            get {
+                return ResourceManager.GetString("NextWord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         internal static string No {

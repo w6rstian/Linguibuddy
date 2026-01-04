@@ -315,4 +315,7 @@
   <data name="ErrorCorrect" xml:space="preserve">
     <value>Błąd.\nPoprawnie:</value>
   </data>
+  <data name="NextWord" xml:space="preserve">
+    <value>Następne słowo</value>
+  </data>
 </root>
