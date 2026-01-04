@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -88,14 +89,14 @@ namespace Linguibuddy.ViewModels
                 }
                 else
                 {
-                    FeedbackMessage = "Brak słów w bazie.";
+                    FeedbackMessage = AppResources.NoWordsInDatabase;
                     MaskedWord = "ERROR";
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Hangman error: {ex.Message}");
-                await Shell.Current.DisplayAlert("Błąd", "Nie udało się pobrać słowa", "OK");
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
             }
             finally
             {
@@ -176,12 +177,12 @@ namespace Linguibuddy.ViewModels
             IsAnswered = true;
             if (won)
             {
-                FeedbackMessage = "ZWYCIĘSTWO!";
+                FeedbackMessage = AppResources.Victory;
                 FeedbackColor = Colors.Green;
             }
             else
             {
-                FeedbackMessage = $"PRZEGRANA. Słowo to:\n{_secretWord}";
+                FeedbackMessage = $"{AppResources.Defeat}. {AppResources.TheWordIs}:\n{_secretWord}";
                 FeedbackColor = Colors.Red;
                 // Odkrywamy całe hasło na koniec
                 MaskedWord = string.Join(" ", _secretWord.ToCharArray());

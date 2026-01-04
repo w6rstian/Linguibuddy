@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using LocalizationResourceManager.Maui;
 using System.Collections.ObjectModel;
@@ -16,7 +17,6 @@ namespace Linguibuddy.ViewModels
 
     public partial class ImageQuizViewModel : BaseQuizViewModel
     {
-        private readonly ILocalizationResourceManager _resourceManager;
         private readonly DictionaryApiService _dictionaryService;
         private readonly CollectionService _collectionService;
 
@@ -48,11 +48,10 @@ namespace Linguibuddy.ViewModels
 
         public ObservableCollection<QuizOption> Options { get; } = new();
 
-        public ImageQuizViewModel(DictionaryApiService dictionaryService, CollectionService collectionService, ILocalizationResourceManager locResourceManager)
+        public ImageQuizViewModel(DictionaryApiService dictionaryService, CollectionService collectionService)
         {
             _dictionaryService = dictionaryService;
             _collectionService = collectionService;
-            _resourceManager = locResourceManager;
 
             LoadCollectionsAsync();
         }
@@ -74,7 +73,7 @@ namespace Linguibuddy.ViewModels
 
             if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
             {
-                await Shell.Current.DisplayAlert("Brak sieci", "Ten quiz wymaga połączenia z internetem.", "OK");
+                await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
                 IsBusy = false;
                 return;
             }
@@ -85,7 +84,7 @@ namespace Linguibuddy.ViewModels
 
                 if (allWords.Count < 4)
                 {
-                    FeedbackMessage = _resourceManager["TooLittleWords"];
+                    FeedbackMessage = AppResources.TooLittleWords;
                     return;
                 }
 
@@ -123,7 +122,7 @@ namespace Linguibuddy.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Image Quiz Error: {ex.Message}");
-                await Shell.Current.DisplayAlert("Błąd", "Nie udało się załadować pytania", "OK");
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
             }
             finally
             {
@@ -141,13 +140,13 @@ namespace Linguibuddy.ViewModels
             if (selectedOption.Word.Id == TargetWord.Id)
             {
                 selectedOption.BackgroundColor = Colors.LightGreen;
-                FeedbackMessage = "Świetnie! Dobra odpowiedź.";
+                FeedbackMessage = AppResources.CorrectAnswer;
                 FeedbackColor = Colors.Green;
             }
             else
             {
                 selectedOption.BackgroundColor = Colors.Salmon;
-                FeedbackMessage = $"Niestety... To jest: {TargetWord.Word}";
+                FeedbackMessage = $"{AppResources.IncorrectAnswer} {TargetWord.Word}";
                 FeedbackColor = Colors.Red;
 
                 var correct = Options.FirstOrDefault(o => o.Word.Id == TargetWord.Id);

@@ -41,7 +41,7 @@ namespace Linguibuddy.ViewModels
             string result = await Shell.Current.DisplayPromptAsync(
                 AppResources.NewCollection, 
                 AppResources.NameEntry,
-                "OK", "Anuluj");
+                "OK", AppResources.Cancel);
 
             if (!string.IsNullOrWhiteSpace(result))
             {
@@ -56,9 +56,9 @@ namespace Linguibuddy.ViewModels
             if (collection == null) return;
 
             string result = await Shell.Current.DisplayPromptAsync(
-                "Edytuj kolekcję",
-                "Zmień nazwę:",
-                "Zapisz", "Anuluj",
+                AppResources.EditCollection,
+                $"{AppResources.Rename} :",
+                AppResources.Save, AppResources.Cancel,
                 initialValue: collection.Name);
 
             if (!string.IsNullOrWhiteSpace(result) && result != collection.Name)
@@ -79,9 +79,9 @@ namespace Linguibuddy.ViewModels
             if (collection == null) return;
 
             bool confirm = await Shell.Current.DisplayAlert(
-                "Usuń kolekcję",
-                $"Czy na pewno chcesz usunąć '{collection.Name}' i wszystkie słowa w niej?",
-                "Tak, usuń", "Nie");
+                AppResources.RemoveCollection,
+                $"{AppResources.RemoveCollectionDesc1} '{collection.Name}' {AppResources.RemoveCollectionDesc2}",
+                AppResources.Yes, AppResources.No);
 
             if (confirm)
             {

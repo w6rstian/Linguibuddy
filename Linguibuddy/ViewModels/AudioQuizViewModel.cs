@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using LocalizationResourceManager.Maui;
 using Plugin.Maui.Audio;
@@ -13,7 +14,6 @@ namespace Linguibuddy.ViewModels
     [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class AudioQuizViewModel : BaseQuizViewModel
     {
-        private readonly ILocalizationResourceManager _resourceManager;
         private readonly DictionaryApiService _dictionaryService;
         private readonly IAudioManager _audioManager;
         private IAudioPlayer? _audioPlayer;
@@ -33,11 +33,10 @@ namespace Linguibuddy.ViewModels
 
         public ObservableCollection<QuizOption> Options { get; } = new();
 
-        public AudioQuizViewModel(DictionaryApiService dictionaryService, IAudioManager audioManager, ILocalizationResourceManager locResourceManager)
+        public AudioQuizViewModel(DictionaryApiService dictionaryService, IAudioManager audioManager)
         {
             _dictionaryService = dictionaryService;
             _audioManager = audioManager;
-            _resourceManager = locResourceManager;
             HasAppeared = [];
             IsFinished = false;
             Score = 0;
@@ -58,7 +57,7 @@ namespace Linguibuddy.ViewModels
 
                 if (allWords.Count < 4)
                 {
-                    FeedbackMessage = _resourceManager["TooLittleWords"];
+                    FeedbackMessage = AppResources.TooLittleWords;
                     return;
                 }
 
@@ -98,7 +97,7 @@ namespace Linguibuddy.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error loading quiz: {ex.Message}");
-                await Shell.Current.DisplayAlert(_resourceManager["Error"], _resourceManager["CantLoadQuestion"], "OK");
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
             }
             finally
             {
@@ -116,14 +115,14 @@ namespace Linguibuddy.ViewModels
             if (selectedOption.Word.Id == TargetWord.Id)
             {
                 selectedOption.BackgroundColor = Colors.LightGreen;
-                FeedbackMessage = _resourceManager["CorrectAnswer"];
+                FeedbackMessage = AppResources.CorrectAnswer;
                 FeedbackColor = Colors.Green;
                 Score++;
             }
             else
             {
                 selectedOption.BackgroundColor = Colors.Salmon;
-                FeedbackMessage = $"{_resourceManager["IncorrectAnswer"]} {TargetWord.Word}";
+                FeedbackMessage = $"{AppResources.IncorrectAnswer} {TargetWord.Word}";
                 FeedbackColor = Colors.Red;
 
                 var correctOption = Options.FirstOrDefault(o => o.Word.Id == TargetWord.Id);
@@ -168,7 +167,7 @@ namespace Linguibuddy.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert(_resourceManager["AudioError"], _resourceManager["PlaybackError"], "OK");
+                await Shell.Current.DisplayAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
                 Debug.WriteLine($"Audio Error: {ex.Message}");
             }
         }

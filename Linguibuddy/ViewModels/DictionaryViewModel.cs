@@ -185,13 +185,13 @@ namespace Linguibuddy.ViewModels
 
             if (item.SourceWordObject == null)
             {
-                await Shell.Current.DisplayAlert("Błąd", "Brak danych źródłowych słowa.", "OK");
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.NoSourceData, "OK");
                 return;
             }
 
             if (string.IsNullOrEmpty(item.Translation))
             {
-                bool translate = await Shell.Current.DisplayAlert("Brak tłumaczenia", "Przetłumaczyć przed dodaniem?", "Tak", "Nie");
+                bool translate = await Shell.Current.DisplayAlert(AppResources.TranslationError, AppResources.TranslateBeforeAdding, AppResources.Yes, AppResources.No);
                 if (translate)
                 {
                     await TranslateItem(item);
