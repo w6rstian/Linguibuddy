@@ -240,4 +240,7 @@
   <data name="Awards" xml:space="preserve">
     <value>Osiągnięcia</value>
   </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
 </root>

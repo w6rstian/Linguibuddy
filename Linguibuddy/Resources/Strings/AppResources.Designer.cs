@@ -286,6 +286,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Profile.
+        /// </summary>
+        internal static string Profile {
+            get {
+                return ResourceManager.GetString("Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save to.
         /// </summary>
         internal static string SaveTo {

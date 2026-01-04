@@ -109,6 +109,8 @@
 	  <None Remove="Resources\Icons\library_add_48dp_light.svg" />
 	  <None Remove="Resources\Icons\lock_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\lock_100dp_light.svg" />
+	  <None Remove="Resources\Icons\person_120dp_dark.svg" />
+	  <None Remove="Resources\Icons\person_120dp_light.svg" />
 	  <None Remove="Resources\Icons\repartition_150dp_dark.svg" />
 	  <None Remove="Resources\Icons\repartition_150dp_light.svg" />
 	  <None Remove="Resources\Icons\sentiment_very_dissatisfied_150dp_dark.svg" />
@@ -166,6 +168,8 @@
 	  <MauiImage Include="Resources\Icons\library_add_48dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\lock_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\lock_100dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\person_120dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\person_120dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\repartition_150dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\repartition_150dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\sentiment_very_dissatisfied_150dp_dark.svg" />
@@ -228,6 +232,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ImageQuizPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SentenceQuizPage.xaml">
