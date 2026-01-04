@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              x:Class="Linguibuddy.Views.HangmanPage"
              x:DataType="vm:HangmanViewModel"
              Title="Wisielec">
@@ -18,6 +19,7 @@
                Text="{Binding MaskedWord}"
                Style="{StaticResource Headline}"
                VerticalOptions="Center"
+               HorizontalOptions="Fill"
                CharacterSpacing="4"/>
 
         <Label Grid.Row="2"
@@ -58,7 +60,7 @@
                 </BindableLayout.ItemTemplate>
             </FlexLayout>
 
-            <Button Text="Następne słowo"
+            <Button Text="{loc:Translate NextWord}"
                     Command="{Binding NextGameCommand}"
                     IsVisible="{Binding IsAnswered}"
                     HorizontalOptions="Fill"/>
