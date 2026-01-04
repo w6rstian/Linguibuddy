@@ -249,13 +249,70 @@
   <data name="TooLittleWords" xml:space="preserve">
     <value>Za mało słów w kolekcji, by utworzyć quiz.</value>
   </data>
-  <data name="CantLoadQuestion" xml:space="preserve">
-    <value>Nie można załadować pytania</value>
-  </data>
   <data name="CorrectAnswer" xml:space="preserve">
     <value>Świetnie! To poprawna odpowiedź.</value>
   </data>
   <data name="IncorrectAnswer" xml:space="preserve">
     <value>Niestety. Prawidłowa odpowiedź to:</value>
+  </data>
+  <data name="NetworkError" xml:space="preserve">
+    <value>Błąd sieci</value>
+  </data>
+  <data name="NetworkRequired" xml:space="preserve">
+    <value>Wymagane połączenie z siecią.</value>
+  </data>
+  <data name="NoSourceData" xml:space="preserve">
+    <value>Brak danych źródłowych słowa.</value>
+  </data>
+  <data name="TranslateBeforeAdding" xml:space="preserve">
+    <value>Przetłumaczyć przed dodaniem?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Tak</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nie</value>
+  </data>
+  <data name="EditCollection" xml:space="preserve">
+    <value>Edytuj kolekcję</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Zmień nazwę</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Zapisz</value>
+  </data>
+  <data name="RemoveCollection" xml:space="preserve">
+    <value>Usuń kolekcję</value>
+  </data>
+  <data name="RemoveCollectionDesc1" xml:space="preserve">
+    <value>Czy na pewno chcesz usunąć</value>
+  </data>
+  <data name="RemoveCollectionDesc2" xml:space="preserve">
+    <value>i wszystkie słowa w niej?</value>
+  </data>
+  <data name="NoWordsInDatabase" xml:space="preserve">
+    <value>Brak słów w bazie.</value>
+  </data>
+  <data name="FailedWordRetrieval" xml:space="preserve">
+    <value>Nie udało się pobrać słowa</value>
+  </data>
+  <data name="Victory" xml:space="preserve">
+    <value>ZWYCIĘSTWO</value>
+  </data>
+  <data name="TheWordIs" xml:space="preserve">
+    <value>Słowo to</value>
+  </data>
+  <data name="Defeat" xml:space="preserve">
+    <value>PORAŻKA</value>
+  </data>
+  <data name="FailedLoadQuestion" xml:space="preserve">
+    <value>Nie można załadować pytania</value>
+  </data>
+  <data name="Perfect" xml:space="preserve">
+    <value>Perfekcyjnie!</value>
+  </data>
+  <data name="ErrorCorrect" xml:space="preserve">
+    <value>Błąd.\nPoprawnie:</value>
   </data>
 </root>

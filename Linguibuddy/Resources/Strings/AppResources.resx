@@ -249,13 +249,72 @@
   <data name="TooLittleWords" xml:space="preserve">
     <value>Not enough words in the collection to make a quiz.</value>
   </data>
-  <data name="CantLoadQuestion" xml:space="preserve">
-    <value>Can't load the question</value>
-  </data>
   <data name="CorrectAnswer" xml:space="preserve">
     <value>Awesome! It's the correct answer.</value>
   </data>
   <data name="IncorrectAnswer" xml:space="preserve">
     <value>Unfortunately, no. The correct answer is:</value>
+  </data>
+  <data name="NetworkError" xml:space="preserve">
+    <value>Network error</value>
+  </data>
+  <data name="NetworkRequired" xml:space="preserve">
+    <value>Network connection is required.</value>
+  </data>
+  <data name="NoSourceData" xml:space="preserve">
+    <value>No source data for the word.</value>
+  </data>
+  <data name="TranslateBeforeAdding" xml:space="preserve">
+    <value>Translate before adding?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="EditCollection" xml:space="preserve">
+    <value>Edit collection</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="RemoveCollection" xml:space="preserve">
+    <value>Remove collection</value>
+  </data>
+  <data name="RemoveCollectionDesc1" xml:space="preserve">
+    <value>Are you sure you want to delete</value>
+  </data>
+  <data name="RemoveCollectionDesc2" xml:space="preserve">
+    <value>and all the words in it?</value>
+  </data>
+  <data name="NoWordsInDatabase" xml:space="preserve">
+    <value>No words in the database.</value>
+  </data>
+  <data name="FailedWordRetrieval" xml:space="preserve">
+    <value>Failed to retrieve word</value>
+  </data>
+  <data name="Victory" xml:space="preserve">
+    <value>VICTORY</value>
+    <comment>All caps</comment>
+  </data>
+  <data name="TheWordIs" xml:space="preserve">
+    <value>The word is</value>
+  </data>
+  <data name="Defeat" xml:space="preserve">
+    <value>DEFEAT</value>
+    <comment>All caps</comment>
+  </data>
+  <data name="FailedLoadQuestion" xml:space="preserve">
+    <value>Failed to load the question</value>
+  </data>
+  <data name="Perfect" xml:space="preserve">
+    <value>Perfect!</value>
+  </data>
+  <data name="ErrorCorrect" xml:space="preserve">
+    <value>Error. \nCorrect:</value>
   </data>
 </root>
