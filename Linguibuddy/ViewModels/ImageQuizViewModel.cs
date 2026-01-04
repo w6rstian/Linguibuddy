@@ -15,6 +15,7 @@ namespace Linguibuddy.ViewModels
         Collection
     }
 
+    [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class ImageQuizViewModel : BaseQuizViewModel
     {
         private readonly DictionaryApiService _dictionaryService;
@@ -52,6 +53,7 @@ namespace Linguibuddy.ViewModels
         {
             _dictionaryService = dictionaryService;
             _collectionService = collectionService;
+            _hasAppeared = [];
 
             LoadCollectionsAsync();
         }
@@ -98,7 +100,7 @@ namespace Linguibuddy.ViewModels
                 }
 
                 var random = Random.Shared;
-                TargetWord = validWords[random.Next(allWords.Count)];
+                TargetWord = validWords[random.Next(validWords.Count)];
 
                 var wrongOptions = allWords
                     .Where(w => w != TargetWord)
@@ -158,6 +160,11 @@ namespace Linguibuddy.ViewModels
         private async Task NextQuestionAsync()
         {
             await LoadQuestionAsync();
+
+            if (IsFinished)
+            {
+                //
+            }
         }
     }
 }
