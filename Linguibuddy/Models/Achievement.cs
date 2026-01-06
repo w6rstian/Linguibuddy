@@ -8,10 +8,10 @@ namespace Linguibuddy.Models
 {
     public class Achievement
     {
-        public int Id;
-        public string Name = string.Empty;
-        public string Description = string.Empty;
-        public string IconUrl = string.Empty;
-        public string Crieria = string.Empty; // Jakieś warunki odblokowania w Json
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string IconUrl { get; set; } = string.Empty;
+        public string Crieria { get; set; } = string.Empty; // Jakieś warunki odblokowania w Json
     }
 }
