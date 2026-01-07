@@ -1,4 +1,5 @@
 ﻿using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -10,6 +11,9 @@ namespace Linguibuddy.Data
         public DbSet<DictionaryWord> DictionaryWords { get; set; }
         public DbSet<WordCollection> WordCollections { get; set; }
         public DbSet<CollectionItem> CollectionItems { get; set; }
+        public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<UserAchievement> UserAchievements { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
         //public DbSet<Phonetic> Phonetics { get; set; }
         //public DbSet<Meaning> Meanings { get; set; }
         //public DbSet<Definition> Definitions { get; set; }
@@ -52,6 +56,32 @@ namespace Linguibuddy.Data
                 .WithOne(f => f.Collection)
                 .HasForeignKey(f => f.CollectionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Achievement>()
+                .HasKey(e => e.Id);
+
+            modelBuilder.Entity<Achievement>()
+                .HasData(
+                    new Achievement { 
+                        Id = 1, 
+                        Name = AppResources.Achievement1Name, 
+                        Description = AppResources.Achievement1Description, 
+                        IconUrl = "" }
+                );
+
+            modelBuilder.Entity<UserAchievement>()
+                .HasKey(ua => ua.Id);
+
+            modelBuilder.Entity<UserAchievement>()
+                .HasOne(ua => ua.AppUser)
+                .WithMany(u => u.UserAchievements)
+                .HasForeignKey(ua => ua.AppUserId);
+
+            modelBuilder.Entity<UserAchievement>()
+                .HasOne(ua => ua.Achievement)
+                .WithMany(a => a.UserAchievements)
+                .HasForeignKey(ua => ua.AchievementId);
+
         }
     }
 }
