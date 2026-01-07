@@ -61,6 +61,24 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get your first point.
+        /// </summary>
+        internal static string Achievement1Description {
+            get {
+                return ResourceManager.GetString("Achievement1Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First steps.
+        /// </summary>
+        internal static string Achievement1Name {
+            get {
+                return ResourceManager.GetString("Achievement1Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Added to: {0}.
         /// </summary>
         internal static string AddedToCollectionMessage {

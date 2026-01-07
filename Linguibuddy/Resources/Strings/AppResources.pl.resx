@@ -318,4 +318,10 @@
   <data name="NextWord" xml:space="preserve">
     <value>Następne słowo</value>
   </data>
+  <data name="Achievement1Name" xml:space="preserve">
+    <value>Pierwsze kroki</value>
+  </data>
+  <data name="Achievement1Description" xml:space="preserve">
+    <value>Zdobądź swój pierwszy punkt</value>
+  </data>
 </root>

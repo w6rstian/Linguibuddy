@@ -320,4 +320,10 @@
   <data name="NextWord" xml:space="preserve">
     <value>Next word</value>
   </data>
+  <data name="Achievement1Name" xml:space="preserve">
+    <value>First steps</value>
+  </data>
+  <data name="Achievement1Description" xml:space="preserve">
+    <value>Get your first point</value>
+  </data>
 </root>
