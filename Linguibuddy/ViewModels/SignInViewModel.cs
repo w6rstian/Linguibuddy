@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
+using Linguibuddy.Data;
+using Linguibuddy.Models;
 using Linguibuddy.Views;
 
 namespace Linguibuddy.ViewModels
@@ -9,6 +11,7 @@ namespace Linguibuddy.ViewModels
     {
         private readonly FirebaseAuthClient _authClient;
         private readonly IServiceProvider _services;
+        private readonly DataContext db;
 
         [ObservableProperty]
         private string _email;
@@ -17,10 +20,11 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private float _labelErrorOpacity;
 
-        public SignInViewModel(FirebaseAuthClient authClient, IServiceProvider services)
+        public SignInViewModel(FirebaseAuthClient authClient, IServiceProvider services, DataContext dataContext)
         {
             _authClient = authClient;
             _services = services;
+            db = dataContext;
             LabelErrorOpacity = 0;
         }
         [RelayCommand]
@@ -37,6 +41,16 @@ namespace Linguibuddy.ViewModels
                 return;
             }
 
+            var appUser = await db.AppUsers.FindAsync(_authClient.User.Uid);
+            if (appUser == null)
+            {
+                appUser = new AppUser
+                {
+                    Id = _authClient.User.Uid
+                };
+                db.AppUsers.Add(appUser);
+                await db.SaveChangesAsync();
+            }
             //await Shell.Current.GoToAsync("//MainPage");
             Application.Current!.Windows[0].Page = App.GetMainShell();
         }
