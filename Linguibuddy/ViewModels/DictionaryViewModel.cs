@@ -216,7 +216,7 @@ namespace Linguibuddy.ViewModels
 
             try
             {
-                await _CollectionService.AddFlashcardFromDtoAsync(SelectedCollection.Id, dto);
+                await _CollectionService.AddCollectionItemFromDtoAsync(SelectedCollection.Id, dto);
 
                 var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
                 await Shell.Current.DisplayAlert(AppResources.Success, message, "OK");
