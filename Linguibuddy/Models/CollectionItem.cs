@@ -31,7 +31,7 @@ namespace Linguibuddy.Models
         public string SavedTranslation { get; set; } = string.Empty;
 
 
-        public bool IsLearned { get; set; } = false;
+        //public bool IsLearned { get; set; } = false;
 
         public DateTime AddedDate { get; set; } = DateTime.UtcNow;
 
