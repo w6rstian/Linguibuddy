@@ -14,6 +14,9 @@ namespace Linguibuddy.ViewModels
 
         public ObservableCollection<WordCollection> Collections { get; } = [];
 
+        [ObservableProperty]
+        private bool _isSpacedRepetitionEnabled;
+
         public FlashcardsCollectionsViewModel(CollectionService collectionService)
         {
             _collectionService = collectionService;
@@ -95,9 +98,14 @@ namespace Linguibuddy.ViewModels
         {
             if (collection == null) return;
 
+            LearningMode mode = IsSpacedRepetitionEnabled
+                ? LearningMode.SpacedRepetition
+                : LearningMode.Standard;
+
             var navigationParameter = new Dictionary<string, object>
             {
-                { "Collection", collection }
+                { "Collection", collection },
+                { "Mode", mode }
             };
 
             await Shell.Current.GoToAsync(nameof(FlashcardsPage), navigationParameter);
