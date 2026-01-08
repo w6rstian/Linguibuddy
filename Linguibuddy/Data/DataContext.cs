@@ -10,6 +10,7 @@ namespace Linguibuddy.Data
         public DbSet<DictionaryWord> DictionaryWords { get; set; }
         public DbSet<WordCollection> WordCollections { get; set; }
         public DbSet<CollectionItem> CollectionItems { get; set; }
+        public DbSet<Flashcard> Flashcards { get; set; }
         //public DbSet<Phonetic> Phonetics { get; set; }
         //public DbSet<Meaning> Meanings { get; set; }
         //public DbSet<Definition> Definitions { get; set; }
