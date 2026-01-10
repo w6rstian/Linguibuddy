@@ -3,14 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
-             x:Class="Linguibuddy.Views.WordCollectionPopup">
-
-    <Grid Padding="24">
-        <Border
-            BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-            Stroke="{StaticResource PrimaryBrush}"
-            StrokeThickness="1"
-            StrokeShape="RoundRectangle 12">
+             x:Class="Linguibuddy.Views.WordCollectionPopup"
+               Padding="0"
+               Margin="0">
+    
+    <Grid Padding="0">
+        <Border StrokeThickness="0">
+            <!--StrokeThickness="2"
+StrokeShape="RoundRectangle 12"
+Stroke="{StaticResource PrimaryBrush}"-->
 
             <ScrollView>
                 <VerticalStackLayout
@@ -46,7 +47,7 @@
                     </CollectionView>
 
                     <Button
-                        Text="{StaticResource Cancel}"
+                        Text="{loc:Translate Cancel}"
                         Command="{Binding CancelCommand}" />
                 </VerticalStackLayout>
             </ScrollView>

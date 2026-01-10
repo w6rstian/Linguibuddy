@@ -4,8 +4,10 @@ using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using Linguibuddy.Views;
+using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +32,33 @@ namespace Linguibuddy.ViewModels
                 new WordCollectionPopupViewModel(_collectionService, _popupService)
                 );
 
-            return await Shell.Current.ShowPopupAsync<WordCollection?>(popup);
+            Shape shape;
+
+            if (Application.Current.RequestedTheme == AppTheme.Light)
+            {
+                shape = new RoundRectangle
+                {
+                    CornerRadius = new CornerRadius(12),
+                    Stroke = Application.Current.Resources["Primary"] as Color,
+                    StrokeThickness = 2
+                };
+            }
+            else
+            {
+                shape = new RoundRectangle
+                {
+                    CornerRadius = new CornerRadius(12),
+                    Stroke = Application.Current.Resources["PrimaryDark"] as Color,
+                    StrokeThickness = 2
+                };
+            }
+
+            var options = new PopupOptions
+            {
+                Shape = shape 
+            };
+
+            return await Shell.Current.ShowPopupAsync<WordCollection?>(popup, options);
         }
 
         [RelayCommand]
