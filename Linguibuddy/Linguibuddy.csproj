@@ -210,9 +210,6 @@
 	  <MauiXaml Update="MobileShell.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Resources\Styles\Icons.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\AchievementsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
