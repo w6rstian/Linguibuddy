@@ -24,8 +24,8 @@
             <ShellContent ContentTemplate="{DataTemplate views:MiniGamesPage}" Route="MiniGamesPage"/>
         </Tab>
 
-        <Tab Title="{loc:Translate Awards}" Icon="trophy_100dp_light.png">
-            <ShellContent ContentTemplate="{DataTemplate views:AwardsPage}" Route="AwardsPage"/>
+        <Tab Title="{loc:Translate Achievements}" Icon="trophy_100dp_light.png">
+            <ShellContent ContentTemplate="{DataTemplate views:AchievementsPage}" Route="AchievementsPage"/>
         </Tab>
         
         <Tab Title="{loc:Translate Settings}" Icon="settings_100dp_light.png">

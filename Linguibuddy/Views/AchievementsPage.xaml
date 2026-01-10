@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Linguibuddy.Models"
+             xmlns:converters="clr-namespace:Linguibuddy.Helpers"
+             x:Class="Linguibuddy.Views.AchievementsPage"
+             Title="Osiągnięcia">
+    <ContentPage.Resources>
+        <converters:AchievementIconConverter x:Key="AchievementIconConverter" />
+    </ContentPage.Resources>
+    
+    <ScrollView>
+        <StackLayout Padding="20">
+            <!-- Loader -->
+            <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" Color="Blue" />
+
+            <!-- Lista osiągnięć -->
+            <CollectionView ItemsSource="{Binding Achievements}"
+                        EmptyView="Brak osiągnięć do wyświetlenia.">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:UserAchievement">
+                        <!-- Zakładam namespace models dla modeli -->
+                        <Frame BorderColor="LightGray" CornerRadius="10" Padding="10" Margin="5">
+                            <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
+                                <!-- Ikona z konwerterem -->
+                                <Image Source="{Binding ., Converter={StaticResource AchievementIconConverter}}" 
+                                   WidthRequest="50" HeightRequest="50" 
+                                   Grid.RowSpan="2" />
+
+                                <!-- Nazwa -->
+                                <Label Text="{Binding Achievement.Name}" 
+                                   FontAttributes="Bold" 
+                                   FontSize="Medium" 
+                                   Grid.Column="1" />
+
+                                <!-- Opis -->
+                                <Label Text="{Binding Achievement.Description}" 
+                                   FontSize="Small" 
+                                   TextColor="Gray" 
+                                   Grid.Column="1" Grid.Row="1" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

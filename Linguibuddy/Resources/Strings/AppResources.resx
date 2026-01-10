@@ -237,8 +237,8 @@
   <data name="Minigames" xml:space="preserve">
     <value>Minigames</value>
   </data>
-  <data name="Awards" xml:space="preserve">
-    <value>Awards</value>
+  <data name="Achievements" xml:space="preserve">
+    <value>Achievements</value>
   </data>
   <data name="ChooseCollection" xml:space="preserve">
     <value>Choose a collection</value>
@@ -319,5 +319,11 @@
   </data>
   <data name="NextWord" xml:space="preserve">
     <value>Next word</value>
+  </data>
+  <data name="Achievement1Name" xml:space="preserve">
+    <value>First steps</value>
+  </data>
+  <data name="Achievement1Description" xml:space="preserve">
+    <value>Get your first point</value>
   </data>
 </root>

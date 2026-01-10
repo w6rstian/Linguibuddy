@@ -72,7 +72,7 @@ namespace Linguibuddy
             builder.Services.AddTransient<FlashcardsCollectionsPage, FlashcardsCollectionsViewModel>();
             builder.Services.AddTransient<SignInPage, SignInViewModel>();
             builder.Services.AddTransient<SignUpPage, SignUpViewModel>();
-            builder.Services.AddTransient<AwardsPage, AwardsViewModel>();
+            builder.Services.AddTransient<AchievementsPage, AchievementsViewModel>();
             builder.Services.AddTransient<SettingsPage, SettingsViewModel>();
             builder.Services.AddTransient<AudioQuizPage, AudioQuizViewModel>();
             builder.Services.AddTransient<MiniGamesPage, MiniGamesViewModel>();
@@ -80,6 +80,8 @@ namespace Linguibuddy
             builder.Services.AddTransient<SentenceQuizPage, SentenceQuizViewModel>();
             builder.Services.AddTransient<HangmanPage, HangmanViewModel>();            
             builder.Services.AddTransientPopup<WordCollectionPopup, WordCollectionPopupViewModel>();
+
+            builder.Services.AddTransient<AchievementService>();
 
             //var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
             //var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
@@ -124,7 +126,7 @@ namespace Linguibuddy
                 var context = scope.ServiceProvider.GetRequiredService<DataContext>();
 
                 // ODKOMENTUJ TĘ LINIJKĘ, ABY ZRESETOWAĆ BAZĘ:
-                //context.Database.EnsureDeleted();
+                context.Database.EnsureDeleted();
 
                 context.Database.EnsureCreated();
             }

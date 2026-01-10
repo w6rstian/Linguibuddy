@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
+using Linguibuddy.Data;
+using Linguibuddy.Models;
 using Linguibuddy.Views;
 using System.Text.RegularExpressions;
 
@@ -10,6 +12,7 @@ namespace Linguibuddy.ViewModels
     {
         private readonly FirebaseAuthClient _authClient;
         private readonly IServiceProvider _services;
+        private readonly DataContext db;
 
         [ObservableProperty]
         private string _email;
@@ -24,10 +27,11 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private float _labelPasswordErrorOpacity;
 
-        public SignUpViewModel(FirebaseAuthClient authClient, IServiceProvider services)
+        public SignUpViewModel(FirebaseAuthClient authClient, IServiceProvider services, DataContext dataContext)
         {
             _authClient = authClient;
             _services = services;
+            db = dataContext;
             LabelUsernameErrorOpacity = 0;
             LabelEmailErrorOpacity = 0;
             LabelPasswordErrorOpacity = 0;
@@ -53,6 +57,18 @@ namespace Linguibuddy.ViewModels
                 return;
 
             await _authClient.CreateUserWithEmailAndPasswordAsync(Email, Password, Username);
+
+            // This check is excessive but I'd rather have it than not, for safety =)
+            var appUser = await db.AppUsers.FindAsync(_authClient.User.Uid);
+            if (appUser == null)
+            {
+                appUser = new AppUser
+                {
+                    Id = _authClient.User.Uid
+                };
+                db.AppUsers.Add(appUser);
+                await db.SaveChangesAsync();
+            }
 
             Application.Current.Windows[0].Page = App.GetMainShell();
         }

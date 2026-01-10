@@ -2,9 +2,9 @@ using Linguibuddy.ViewModels;
 
 namespace Linguibuddy.Views;
 
-public partial class AwardsPage : ContentPage
+public partial class AchievementsPage : ContentPage
 {
-	public AwardsPage(AwardsViewModel viewModel)
+	public AchievementsPage(AchievementsViewModel viewModel)
 	{
 		InitializeComponent();
 		BindingContext = viewModel;

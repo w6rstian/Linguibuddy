@@ -34,11 +34,11 @@
             Route="MiniGamesPage"/>
     </FlyoutItem>
     
-    <FlyoutItem Title="{loc:Translate Awards}">
+    <FlyoutItem Title="{loc:Translate Achievements}">
         <ShellContent 
-            Title="Awards"
-            ContentTemplate="{DataTemplate views:AwardsPage}"
-            Route="AwardsPage"/>
+            Title="Achievements"
+            ContentTemplate="{DataTemplate views:AchievementsPage}"
+            Route="AchievementsPage"/>
     </FlyoutItem>
 
     <FlyoutItem Title="{loc:Translate Settings}">

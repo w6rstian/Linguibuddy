@@ -191,6 +191,9 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>AppResources.resx</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\AchievementsPage.xaml.cs">
+	    <DependentUpon>AchievementsPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\ImageQuizPage.xaml.cs">
 	    <DependentUpon>ImageQuizPage.xaml</DependentUpon>
 	  </Compile>
@@ -210,7 +213,7 @@
 	  <MauiXaml Update="Resources\Styles\Icons.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\AwardsPage.xaml">
+	  <MauiXaml Update="Views\AchievementsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
 	  <MauiXaml Update="Views\AudioQuizPage.xaml">

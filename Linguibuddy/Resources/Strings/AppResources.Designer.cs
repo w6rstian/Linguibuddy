@@ -61,6 +61,33 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get your first point.
+        /// </summary>
+        internal static string Achievement1Description {
+            get {
+                return ResourceManager.GetString("Achievement1Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First steps.
+        /// </summary>
+        internal static string Achievement1Name {
+            get {
+                return ResourceManager.GetString("Achievement1Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Achievements.
+        /// </summary>
+        internal static string Achievements {
+            get {
+                return ResourceManager.GetString("Achievements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Added to: {0}.
         /// </summary>
         internal static string AddedToCollectionMessage {
@@ -75,15 +102,6 @@ namespace Linguibuddy.Resources.Strings {
         internal static string AudioError {
             get {
                 return ResourceManager.GetString("AudioError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Awards.
-        /// </summary>
-        internal static string Awards {
-            get {
-                return ResourceManager.GetString("Awards", resourceCulture);
             }
         }
         
