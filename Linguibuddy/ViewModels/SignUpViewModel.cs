@@ -4,6 +4,7 @@ using Firebase.Auth;
 using Linguibuddy.Data;
 using Linguibuddy.Models;
 using Linguibuddy.Views;
+using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
 namespace Linguibuddy.ViewModels
@@ -67,6 +68,20 @@ namespace Linguibuddy.ViewModels
                     Id = _authClient.User.Uid
                 };
                 db.AppUsers.Add(appUser);
+
+                var allAchievements = await db.Achievements.ToListAsync(); // Pobierz wszystkie globalne osiągnięcia
+
+                foreach (var achievement in allAchievements)
+                {
+                    var userAchievement = new UserAchievement
+                    {
+                        AppUserId = appUser.Id,
+                        AchievementId = achievement.Id,
+                        IsUnlocked = false
+                    };
+                    db.UserAchievements.Add(userAchievement);
+                }
+
                 await db.SaveChangesAsync();
             }
 
