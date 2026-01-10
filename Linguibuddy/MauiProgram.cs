@@ -81,6 +81,8 @@ namespace Linguibuddy
             builder.Services.AddTransient<HangmanPage, HangmanViewModel>();            
             builder.Services.AddTransientPopup<WordCollectionPopup, WordCollectionPopupViewModel>();
 
+            builder.Services.AddTransient<AchievementService>();
+
             //var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
             //var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
             //var githubAiKey = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
@@ -123,7 +125,7 @@ namespace Linguibuddy
                 var context = scope.ServiceProvider.GetRequiredService<DataContext>();
 
                 // ODKOMENTUJ TĘ LINIJKĘ, ABY ZRESETOWAĆ BAZĘ:
-                //context.Database.EnsureDeleted();
+                context.Database.EnsureDeleted();
 
                 context.Database.EnsureCreated();
             }

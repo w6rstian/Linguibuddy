@@ -61,7 +61,7 @@ namespace Linguibuddy.ViewModels
             await Shell.Current.GoToAsync("//MiniGamesPage");
         }
         [RelayCommand]
-        private async Task NavigateToAwards()
+        private async Task NavigateToAchievements()
         {
             await Shell.Current.GoToAsync("//AchievementsPage");
         }
