@@ -63,7 +63,7 @@ namespace Linguibuddy.ViewModels
         [RelayCommand]
         private async Task NavigateToAwards()
         {
-            await Shell.Current.GoToAsync("//AwardsPage");
+            await Shell.Current.GoToAsync("//AchievementsPage");
         }
 
         [RelayCommand]

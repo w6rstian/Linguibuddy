@@ -72,7 +72,7 @@ namespace Linguibuddy
             builder.Services.AddTransient<FlashcardsCollectionsPage, FlashcardsCollectionsViewModel>();
             builder.Services.AddTransient<SignInPage, SignInViewModel>();
             builder.Services.AddTransient<SignUpPage, SignUpViewModel>();
-            builder.Services.AddTransient<AwardsPage, AwardsViewModel>();
+            builder.Services.AddTransient<AchievementsPage, AchievementsViewModel>();
             builder.Services.AddTransient<SettingsPage, SettingsViewModel>();
             builder.Services.AddTransient<AudioQuizPage, AudioQuizViewModel>();
             builder.Services.AddTransient<MiniGamesPage, MiniGamesViewModel>();
