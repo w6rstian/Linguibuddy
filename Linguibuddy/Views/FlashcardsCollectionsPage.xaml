@@ -37,7 +37,8 @@
                     HeightRequest="55"
                     VerticalOptions="Center">
 
-                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center"
+                                       MaximumWidthRequest="110">
 
                     <Label Text="Spaced&#10;Repetition" 
                            FontSize="11" 
@@ -51,7 +52,8 @@
                             OnColor="{StaticResource Primary}"
                             ThumbColor="{AppThemeBinding Light=White, Dark={StaticResource Gray200}}"
                             Scale="1"
-                            Margin="0,0,-100,0"
+                            Margin="0,0,0,0"
+                            
                             VerticalOptions="Center"/>
                 </HorizontalStackLayout>
             </Border>
@@ -84,7 +86,8 @@
                                 <Label Text="{Binding Name}" 
                                        FontAttributes="Bold" 
                                        FontSize="17"
-                                       LineBreakMode="TailTruncation"
+                                       LineBreakMode="WordWrap"
+                                       Margin="0,0,10,0"    
                                        TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
 
                                 <!--ciężko dodać napis {ilość} fiszek do tłumaczeń-->
