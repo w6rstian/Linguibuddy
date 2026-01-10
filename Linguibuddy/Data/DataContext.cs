@@ -14,6 +14,7 @@ namespace Linguibuddy.Data
         public DbSet<Achievement> Achievements { get; set; }
         public DbSet<UserAchievement> UserAchievements { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<Flashcard> Flashcards { get; set; }
         //public DbSet<Phonetic> Phonetics { get; set; }
         //public DbSet<Meaning> Meanings { get; set; }
         //public DbSet<Definition> Definitions { get; set; }

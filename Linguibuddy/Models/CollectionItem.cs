@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Cryptography;
 
 namespace Linguibuddy.Models
 {
@@ -32,9 +31,11 @@ namespace Linguibuddy.Models
         public string SavedTranslation { get; set; } = string.Empty;
 
 
-        public bool IsLearned { get; set; } = false;
+        //public bool IsLearned { get; set; } = false;
 
         public DateTime AddedDate { get; set; } = DateTime.UtcNow;
+
+        public Flashcard? FlashcardProgress { get; set; }
 
     }
 }

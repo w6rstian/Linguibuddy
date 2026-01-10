@@ -94,6 +94,7 @@ namespace Linguibuddy
             builder.Services.AddSingleton(new OpenAiService(githubAiKey));
             builder.Services.AddTransient<MockDataSeeder>();
             builder.Services.AddTransient<CollectionService>();
+            builder.Services.AddTransient<SpacedRepetitionService>();
 
             builder.Services.AddHttpClient<DictionaryApiService>(client =>
             {

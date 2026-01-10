@@ -10,18 +10,54 @@
 
     <Grid RowDefinitions="Auto, *">
 
-        <Button Text="{loc:Translate NewCollection}"
-                Command="{Binding CreateCollectionCommand}"
-                Margin="20,15"
-                BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
-                FontAttributes="Bold"
-                HeightRequest="50"
-                CornerRadius="10">
-            <Button.Shadow>
-                <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDark}}" Radius="5" Opacity="0.4" Offset="0,4"/>
-            </Button.Shadow>
-        </Button>
+        <Grid Grid.Row="0" 
+              ColumnDefinitions="*, Auto" 
+              ColumnSpacing="10" 
+              Margin="20,15">
+
+            <Button Grid.Column="0"
+                    Text="{loc:Translate NewCollection}"
+                    Command="{Binding CreateCollectionCommand}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                    FontAttributes="Bold"
+                    FontSize="15"
+                    HeightRequest="55"
+                    CornerRadius="12">
+                <Button.Shadow>
+                    <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDark}}" Radius="5" Opacity="0.4" Offset="0,4"/>
+                </Button.Shadow>
+            </Button>
+
+            <Border Grid.Column="1" 
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}"
+                    Padding="12,0"
+                    HeightRequest="55"
+                    VerticalOptions="Center">
+
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center"
+                                       MaximumWidthRequest="110">
+
+                    <Label Text="Spaced&#10;Repetition" 
+                           FontSize="11" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"
+                           VerticalOptions="Center"
+                           HorizontalTextAlignment="End"/>
+
+                    <!--ocb on jest jakiś strasznie szeroki-->
+                    <Switch IsToggled="{Binding IsSpacedRepetitionEnabled}" 
+                            OnColor="{StaticResource Primary}"
+                            ThumbColor="{AppThemeBinding Light=White, Dark={StaticResource Gray200}}"
+                            Scale="1"
+                            Margin="0,0,0,0"
+                            
+                            VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
 
         <CollectionView Grid.Row="1" 
                         ItemsSource="{Binding Collections}" 
@@ -50,7 +86,8 @@
                                 <Label Text="{Binding Name}" 
                                        FontAttributes="Bold" 
                                        FontSize="17"
-                                       LineBreakMode="TailTruncation"
+                                       LineBreakMode="WordWrap"
+                                       Margin="0,0,10,0"    
                                        TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
 
                                 <!--ciężko dodać napis {ilość} fiszek do tłumaczeń-->
