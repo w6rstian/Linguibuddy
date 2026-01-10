@@ -5,10 +5,19 @@ using Linguibuddy.Services;
 
 namespace Linguibuddy.ViewModels
 {
+    public enum LearningMode
+    {
+        Standard,
+        SpacedRepetition
+    }
+
     [QueryProperty(nameof(Collection), "Collection")]
+    [QueryProperty(nameof(CurrentLearningMode), "Mode")]
     public partial class FlashcardsViewModel : ObservableObject
     {
         private readonly CollectionService _collectionService;
+        private readonly SpacedRepetitionService _srsService;
+
         private Queue<CollectionItem> _itemsQueue = new();
 
         [ObservableProperty]
@@ -16,6 +25,23 @@ namespace Linguibuddy.ViewModels
 
         [ObservableProperty]
         private CollectionItem? _currentItem;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsStandardMode))]
+        [NotifyPropertyChangedFor(nameof(IsSrsMode))]
+        private LearningMode _currentLearningMode;
+        public bool IsStandardMode => CurrentLearningMode == LearningMode.Standard;
+        public bool IsSrsMode => CurrentLearningMode == LearningMode.SpacedRepetition;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanShowButtons))]
+        private bool _isAnswerRevealed;
+        public bool CanShowButtons => IsAnswerRevealed;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsLearning))]
+        private bool _isFinished;
+        public bool IsLearning => !IsFinished;
 
         public string CurrentWordText => _currentItem?.Word ?? "";
         public string CurrentPhonetic => _currentItem?.Phonetic ?? "";
@@ -57,45 +83,59 @@ namespace Linguibuddy.ViewModels
             }
         }
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsLearning))]
-        private bool _isFinished;
-
-        public bool IsLearning => !IsFinished;
-
-        public FlashcardsViewModel(CollectionService collectionService)
+        public FlashcardsViewModel(CollectionService collectionService, SpacedRepetitionService srsService)
         {
             _collectionService = collectionService;
+            _srsService = srsService;
         }
 
         async partial void OnCollectionChanged(WordCollection? value)
         {
             if (value != null)
             {
-                await StartLearning(value);
+                await StartSession();
             }
         }
 
-        private async Task StartLearning(WordCollection collection)
+        private async Task StartSession()
         {
-            var cards = await _collectionService.GetItemsForLearning(collection.Id);
+            if (Collection == null) return;
+            List<CollectionItem> items;
 
-            if (cards.Count == 0)
+            if (IsSrsMode)
             {
-                IsFinished = true;
-                return;
+                items = await _collectionService.GetItemsDueForLearning(Collection.Id);
+                if (items.Count == 0)
+                {
+                    //komunikat o braku fiszek do nauki
+                    return;
+                }
+            }
+            else
+            {
+                items = await _collectionService.GetItemsForLearning(Collection.Id);
+                var rng = new Random();
+                items = items.OrderBy(x => rng.Next()).ToList();
             }
 
-            var shuffled = cards.OrderBy(a => Guid.NewGuid()).ToList();
-            _itemsQueue = new Queue<CollectionItem>(shuffled);
-
+            _itemsQueue = new Queue<CollectionItem>(items);
             IsFinished = false;
             NextCard();
         }
 
         [RelayCommand]
+        public void RevealAnswer()
+        {
+            IsAnswerRevealed = true;
+            OnPropertyChanged(nameof(CanShowButtons));
+        }
+
+        [RelayCommand]
         public void NextCard()
         {
+            IsAnswerRevealed = false;
+            OnPropertyChanged(nameof(CanShowButtons));
+
             if (_itemsQueue.Count > 0)
             {
                 CurrentItem = _itemsQueue.Dequeue();
@@ -118,12 +158,43 @@ namespace Linguibuddy.ViewModels
         }
 
         [RelayCommand]
+        public async Task GradeNull() => await ProcessSrsGrade(SuperMemoGrade.Null); // 0 (Blackout)
+
+        [RelayCommand]
+        public async Task GradeHard() => await ProcessSrsGrade(SuperMemoGrade.Fail); // 2 (Incorrect/Hard)
+
+        [RelayCommand]
+        public async Task GradeGood() => await ProcessSrsGrade(SuperMemoGrade.Good); // 4 (Good)
+
+        [RelayCommand]
+        public async Task GradeEasy() => await ProcessSrsGrade(SuperMemoGrade.Bright); // 5 (Perfect)
+
+        private async Task ProcessSrsGrade(int grade)
+        {
+            if (CurrentItem?.FlashcardProgress == null)
+            {
+                NextCard();
+                return;
+            }
+
+            _srsService.ProcessResult(CurrentItem.FlashcardProgress, grade);
+            await _collectionService.UpdateFlashcardProgress(CurrentItem.FlashcardProgress);
+
+            if (grade < SuperMemoGrade.PassingThreshold)
+            {
+                _itemsQueue.Enqueue(CurrentItem);
+            }
+
+            NextCard();
+        }
+
+        [RelayCommand]
         public void MarkAsKnown()
         {
             if (CurrentItem != null)
             {
                 // postêp w bazie (¿e u¿ytkownik ju¿ umie to s³owo)
-                // CurrentItem.IsLearned = true;
+                //CurrentItem.IsLearned = true;
                 // await _collectionService.UpdateItemAsync(CurrentItem);
             }
             NextCard();
@@ -134,7 +205,7 @@ namespace Linguibuddy.ViewModels
         {
             if (CurrentItem != null)
             {
-                //_itemsQueue.Enqueue(CurrentItem);
+                _itemsQueue.Enqueue(CurrentItem);
             }
             NextCard();
         }

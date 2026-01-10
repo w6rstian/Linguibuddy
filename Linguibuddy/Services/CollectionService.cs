@@ -33,6 +33,12 @@ namespace Linguibuddy.Services
                 .ToListAsync();
         }
 
+        public async Task<WordCollection?> GetCollection(int id)
+        {
+            return await _context.WordCollections
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
         public async Task CreateCollectionAsync(string name)
         {
             var userId = GetUserId();
@@ -57,12 +63,33 @@ namespace Linguibuddy.Services
         public async Task<List<CollectionItem>> GetItemsForLearning(int collectionId)
         {
             return await _context.CollectionItems
-                .Where(i => i.CollectionId == collectionId && !i.IsLearned)
+                .Include(i => i.FlashcardProgress)
+                .Where(i => i.CollectionId == collectionId)
                 .OrderBy(i => i.AddedDate)
                 .ToListAsync();
         }
 
-        public async Task AddFlashcardFromDtoAsync(int collectionId, FlashcardCreationDto dto)
+        // pobranie fiszek do powtórki na dziś
+        public async Task<List<CollectionItem>> GetItemsDueForLearning(int collectionId)
+        {
+            var today = DateTime.UtcNow;
+
+            return await _context.CollectionItems
+                .Include(i => i.FlashcardProgress)
+                .Where(i => i.CollectionId == collectionId
+                            && i.FlashcardProgress != null
+                            && i.FlashcardProgress.NextReviewDate <= today)
+                .OrderBy(i => i.FlashcardProgress.NextReviewDate)
+                .ToListAsync();
+        }
+
+        public async Task UpdateFlashcardProgress(Flashcard flashcard)
+        {
+            _context.Set<Flashcard>().Update(flashcard);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddCollectionItemFromDtoAsync(int collectionId, FlashcardCreationDto dto)
         {
             bool exists = await _context.CollectionItems.AnyAsync(i =>
                 i.CollectionId == collectionId &&
@@ -86,11 +113,18 @@ namespace Linguibuddy.Services
                 PartOfSpeech = dto.PartOfSpeech,
                 Definition = dto.Definition,
                 Example = dto.Example,
-
                 SavedTranslation = dto.Translation,
 
-                IsLearned = false,
-                AddedDate = DateTime.UtcNow
+                AddedDate = DateTime.UtcNow,
+
+                // SRS init
+                FlashcardProgress = new Flashcard
+                {
+                    NextReviewDate = DateTime.UtcNow,
+                    Interval = 0,
+                    Repetitions = 0,
+                    EaseFactor = 2.5
+                }
             };
 
             _context.CollectionItems.Add(newItem);

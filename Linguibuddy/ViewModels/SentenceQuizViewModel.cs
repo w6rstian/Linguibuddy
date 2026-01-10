@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -104,12 +105,12 @@ namespace Linguibuddy.ViewModels
 
             if (isCorrect)
             {
-                FeedbackMessage = "Perfekcyjnie!";
+                FeedbackMessage = AppResources.Perfect;
                 FeedbackColor = Colors.Green;
             }
             else
             {
-                FeedbackMessage = $"Błąd.\nPoprawnie: {_currentQuestion.EnglishSentence}";
+                FeedbackMessage = $"{AppResources.ErrorCorrect} {_currentQuestion.EnglishSentence}";
                 FeedbackColor = Colors.Red;
             }
         }

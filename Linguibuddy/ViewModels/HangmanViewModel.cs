@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -8,6 +9,7 @@ using System.Text;
 
 namespace Linguibuddy.ViewModels
 {
+    [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class HangmanViewModel : BaseQuizViewModel
     {
         private readonly DictionaryApiService _dictionaryService;
@@ -26,12 +28,22 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private string _currentImage;
 
+        [ObservableProperty]
+        private WordCollection? _selectedCollection;
+        [ObservableProperty]
+        private List<CollectionItem> _hasAppeared;
+        [ObservableProperty]
+        private bool _isFinished;
+        [ObservableProperty]
+        private int _score;
+
         // Klawiatura A-Z
         public ObservableCollection<HangmanLetter> Keyboard { get; } = new();
 
         public HangmanViewModel(DictionaryApiService dictionaryService)
         {
             _dictionaryService = dictionaryService;
+            _hasAppeared = [];
             Title = "Hangman";
             // Inicjalizacja klawiatury pustymi wartościami, zostanie odświeżona przy LoadQuestion
             GenerateKeyboard();
@@ -75,27 +87,37 @@ namespace Linguibuddy.ViewModels
 
             try
             {
-                // Pobieramy 1 losowe słowo
-                var words = await _dictionaryService.GetRandomWordsForGameAsync(1);
+                // Pobieramy 1 losowe słowo z kolekcji
+                var allWords = SelectedCollection.Items;
+                var validWords = allWords.Except(HasAppeared).ToList();
 
-                if (words != null && words.Any())
+                if (!validWords.Any())
                 {
-                    var wordObj = words.First();
+                    // NO WORDS REMAINING. END GAME
+                    IsFinished = true;
+                    return;
+                }
+
+                if (allWords is not null && allWords.Any())
+                {
+                    var random = Random.Shared;
+                    var wordObj = validWords[random.Next(validWords.Count)];
                     // Normalizujemy słowo (tylko litery, uppercase)
                     _secretWord = wordObj.Word.Trim().ToUpper();
+                    HasAppeared.Add(wordObj);
 
                     UpdateMaskedWord();
                 }
                 else
                 {
-                    FeedbackMessage = "Brak słów w bazie.";
+                    FeedbackMessage = AppResources.NoWordsInDatabase;
                     MaskedWord = "ERROR";
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Hangman error: {ex.Message}");
-                await Shell.Current.DisplayAlert("Błąd", "Nie udało się pobrać słowa", "OK");
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
             }
             finally
             {
@@ -176,12 +198,13 @@ namespace Linguibuddy.ViewModels
             IsAnswered = true;
             if (won)
             {
-                FeedbackMessage = "ZWYCIĘSTWO!";
+                FeedbackMessage = AppResources.Victory;
                 FeedbackColor = Colors.Green;
+                Score++;
             }
             else
             {
-                FeedbackMessage = $"PRZEGRANA. Słowo to:\n{_secretWord}";
+                FeedbackMessage = $"{AppResources.Defeat}. {AppResources.TheWordIs}:\n{_secretWord}";
                 FeedbackColor = Colors.Red;
                 // Odkrywamy całe hasło na koniec
                 MaskedWord = string.Join(" ", _secretWord.ToCharArray());
@@ -192,6 +215,12 @@ namespace Linguibuddy.ViewModels
         private async Task NextGameAsync()
         {
             await LoadQuestionAsync();
+
+            if (IsFinished)
+            {
+                var ScoreText = $"{Score}/{SelectedCollection!.Items.Count}";
+                // TODO: Post-game summary
+            }
         }
     }
 }

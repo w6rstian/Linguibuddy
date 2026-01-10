@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Linguibuddy.Helpers;
+using Linguibuddy.Resources.Strings;
 
 namespace Linguibuddy.ViewModels
 {
@@ -94,8 +95,8 @@ namespace Linguibuddy.ViewModels
         private void UpdateThemeName()
         {
             ThemeName = Application.Current.RequestedTheme == AppTheme.Light
-                ? _resourceManager["ThemeNameLight"]
-                : _resourceManager["ThemeNameDark"];
+                ? AppResources.ThemeNameLight
+                : AppResources.ThemeNameDark;
         }
     }
 }

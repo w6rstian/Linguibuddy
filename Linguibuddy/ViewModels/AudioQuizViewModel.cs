@@ -1,13 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
+using LocalizationResourceManager.Maui;
 using Plugin.Maui.Audio;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Linguibuddy.ViewModels
 {
+    [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class AudioQuizViewModel : BaseQuizViewModel
     {
         private readonly DictionaryApiService _dictionaryService;
@@ -15,7 +19,17 @@ namespace Linguibuddy.ViewModels
         private IAudioPlayer? _audioPlayer;
 
         [ObservableProperty]
-        private DictionaryWord? _targetWord;
+        private CollectionItem? _targetWord;
+
+        [ObservableProperty]
+        private WordCollection? _selectedCollection;
+
+        [ObservableProperty]
+        private List<CollectionItem> _hasAppeared;
+        [ObservableProperty]
+        private bool _isFinished;
+        [ObservableProperty]
+        private int _score;
 
         public ObservableCollection<QuizOption> Options { get; } = new();
 
@@ -23,6 +37,9 @@ namespace Linguibuddy.ViewModels
         {
             _dictionaryService = dictionaryService;
             _audioManager = audioManager;
+            HasAppeared = [];
+            IsFinished = false;
+            Score = 0;
         }
 
         public override async Task LoadQuestionAsync()
@@ -35,27 +52,52 @@ namespace Linguibuddy.ViewModels
 
             try
             {
-                // 4 losowe słowa z bazy (te, które mają audio)
-                var words = await _dictionaryService.GetRandomWordsForGameAsync(4);
+                // We only choose allWords that have not been asked as the next word. All allWords can appear as an incorrect QuizOption.
+                var allWords = SelectedCollection.Items;
 
-                if (words.Count < 4)
+                if (allWords.Count < 4)
                 {
-                    FeedbackMessage = "Za mało słów w bazie, by utworzyć quiz.";
+                    FeedbackMessage = AppResources.TooLittleWords;
                     return;
                 }
 
-                var random = new Random();
-                TargetWord = words[random.Next(words.Count)];
+                var validWords = allWords.Except(HasAppeared).ToList();
 
-                foreach (var word in words)
+                if (validWords.Count == 0)
+                {
+                    // QUIZ IS FINISHED HERE
+                    IsFinished = true;
+                    return;
+                }
+
+                var random = Random.Shared;
+                TargetWord = validWords[random.Next(validWords.Count)];
+
+                // TODO: CHECK IF TARGET WORD HAS AUDIO AND PHONETIC SPELLING. HANDLE IF NOT
+
+                var wrongOptions = allWords
+                    .Where(w => w != TargetWord)
+                    .OrderBy(_ => random.Next())
+                    .Take(3)
+                    .ToList();
+
+                var optionsList = new List<CollectionItem> { TargetWord };
+                optionsList.AddRange(wrongOptions);
+                optionsList = optionsList
+                    .OrderBy(_ => random.Next())
+                    .ToList();
+
+                foreach (var word in optionsList)
                 {
                     Options.Add(new QuizOption(word));
                 }
+
+                HasAppeared.Add(TargetWord);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error loading quiz: {ex.Message}");
-                await Shell.Current.DisplayAlert("Błąd", "Nie udało się załadować pytania", "OK");
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
             }
             finally
             {
@@ -73,13 +115,14 @@ namespace Linguibuddy.ViewModels
             if (selectedOption.Word.Id == TargetWord.Id)
             {
                 selectedOption.BackgroundColor = Colors.LightGreen;
-                FeedbackMessage = "Świetnie! To poprawna odpowiedź.";
+                FeedbackMessage = AppResources.CorrectAnswer;
                 FeedbackColor = Colors.Green;
+                Score++;
             }
             else
             {
                 selectedOption.BackgroundColor = Colors.Salmon;
-                FeedbackMessage = $"Niestety. Prawidłowa odpowiedź to: {TargetWord.Word}";
+                FeedbackMessage = $"{AppResources.IncorrectAnswer} {TargetWord.Word}";
                 FeedbackColor = Colors.Red;
 
                 var correctOption = Options.FirstOrDefault(o => o.Word.Id == TargetWord.Id);
@@ -124,7 +167,7 @@ namespace Linguibuddy.ViewModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Błąd Audio", "Nie udało się odtworzyć dźwięku.", "OK");
+                await Shell.Current.DisplayAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
                 Debug.WriteLine($"Audio Error: {ex.Message}");
             }
         }
@@ -133,6 +176,25 @@ namespace Linguibuddy.ViewModels
         private async Task NextQuestionAsync()
         {
             await LoadQuestionAsync();
+
+            if (IsFinished)
+            {
+                // TODO: DisplayResultScreen()
+                // Nie rozumiem do końca jak jest zrobiony ekran końcowy w fiszkach, ale tutaj powinno być podobnie.
+                // Wyżej przy prawidłowej odpowiedzi jest robiony Score++.
+                // Można wyświetlić score/allwords.count, np. "5/10 poprawnych odpowiedzi"
+
+                // A ten score się przyda może do punktów do grywalizacji albo można dodać jeszcze jakieś kolekcje/pola do CollectionItem,
+                // żeby śledzić jakie słowa użytkownik umie/nie umie (analiza wyników dla AI).
+
+                // Myślałem, żeby każde słowo w danej kolekcji miało win ratio (czyli potrzebne 2 pola, poprawneOdpCount i wszystkieOdpCount).
+                // Oraz dodatkowo pole "ostatnia odp" czy poprawna czy nie. Może to wystarczy, żeby AI zdecydowało czy dane słowo już jest nauczone.
+            }
+        }
+
+        private async Task DisplayResultScreen()
+        {
+
         }
     }
 }

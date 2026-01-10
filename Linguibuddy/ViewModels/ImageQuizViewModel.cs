@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
+using LocalizationResourceManager.Maui;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -13,6 +15,7 @@ namespace Linguibuddy.ViewModels
         Collection
     }
 
+    [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class ImageQuizViewModel : BaseQuizViewModel
     {
         private readonly DictionaryApiService _dictionaryService;
@@ -35,7 +38,14 @@ namespace Linguibuddy.ViewModels
         private List<DictionaryWord> _collectionPool = new();
 
         [ObservableProperty]
-        private DictionaryWord? _targetWord;
+        private CollectionItem? _targetWord;
+
+        [ObservableProperty]
+        private List<CollectionItem> _hasAppeared;
+        [ObservableProperty]
+        private bool _isFinished;
+        [ObservableProperty]
+        private int _score;
 
         public ObservableCollection<QuizOption> Options { get; } = new();
 
@@ -43,6 +53,7 @@ namespace Linguibuddy.ViewModels
         {
             _dictionaryService = dictionaryService;
             _collectionService = collectionService;
+            _hasAppeared = [];
 
             LoadCollectionsAsync();
         }
@@ -64,33 +75,58 @@ namespace Linguibuddy.ViewModels
 
             if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
             {
-                await Shell.Current.DisplayAlert("Brak sieci", "Ten quiz wymaga połączenia z internetem.", "OK");
+                await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
                 IsBusy = false;
                 return;
             }
 
             try
             {
-                var words = await _dictionaryService.GetRandomWordsWithImagesAsync(4);
+                // TODO: This minigame crashes app without errors/exceptions???
 
-                if (words.Count < 4)
+                var allWords = SelectedCollection.Items;
+
+                if (allWords.Count < 4)
                 {
-                    FeedbackMessage = "Za mało słów ze zdjęciami w bazie.";
+                    FeedbackMessage = AppResources.TooLittleWords;
                     return;
                 }
 
-                var random = new Random();
-                TargetWord = words[random.Next(words.Count)];
+                var validWords = allWords.Except(HasAppeared).ToList();
 
-                foreach (var word in words)
+                if (validWords.Count == 0)
+                {
+                    // QUIZ IS FINISHED HERE
+                    IsFinished = true;
+                    return;
+                }
+
+                var random = Random.Shared;
+                TargetWord = validWords[random.Next(validWords.Count)];
+
+                var wrongOptions = allWords
+                    .Where(w => w != TargetWord)
+                    .OrderBy(_ => random.Next())
+                    .Take(3)
+                    .ToList();
+
+                var optionsList = new List<CollectionItem> { TargetWord };
+                optionsList.AddRange(wrongOptions);
+                optionsList = optionsList
+                    .OrderBy(_ => random.Next())
+                    .ToList();
+
+                foreach (var word in optionsList)
                 {
                     Options.Add(new QuizOption(word));
                 }
+
+                HasAppeared.Add(TargetWord);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Image Quiz Error: {ex.Message}");
-                await Shell.Current.DisplayAlert("Błąd", "Nie udało się załadować pytania", "OK");
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
             }
             finally
             {
@@ -108,13 +144,13 @@ namespace Linguibuddy.ViewModels
             if (selectedOption.Word.Id == TargetWord.Id)
             {
                 selectedOption.BackgroundColor = Colors.LightGreen;
-                FeedbackMessage = "Świetnie! Dobra odpowiedź.";
+                FeedbackMessage = AppResources.CorrectAnswer;
                 FeedbackColor = Colors.Green;
             }
             else
             {
                 selectedOption.BackgroundColor = Colors.Salmon;
-                FeedbackMessage = $"Niestety... To jest: {TargetWord.Word}";
+                FeedbackMessage = $"{AppResources.IncorrectAnswer} {TargetWord.Word}";
                 FeedbackColor = Colors.Red;
 
                 var correct = Options.FirstOrDefault(o => o.Word.Id == TargetWord.Id);
@@ -126,6 +162,11 @@ namespace Linguibuddy.ViewModels
         private async Task NextQuestionAsync()
         {
             await LoadQuestionAsync();
+
+            if (IsFinished)
+            {
+                //
+            }
         }
     }
 }

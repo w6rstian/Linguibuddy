@@ -76,9 +76,9 @@
                         HorizontalOptions="Fill" />
 
                     <Button
-                        Text="{loc:Translate Awards}"
+                        Text="{loc:Translate Achievements}"
                         FontSize="Medium"
-                        Command="{Binding NavigateToAwardsCommand}"
+                        Command="{Binding NavigateToAchievementsCommand}"
                         Padding="40,10"
                         CornerRadius="25"
                         HorizontalOptions="Fill" />
