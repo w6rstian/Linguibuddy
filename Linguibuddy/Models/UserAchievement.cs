@@ -22,6 +22,6 @@ namespace Linguibuddy.Models
         public bool IsUnlocked { get; set; }
         public DateTime UnlockDate { get; set; }
 
-        // public float progress { get; set;}
+        public float Progress { get; set;}
     }
 }
