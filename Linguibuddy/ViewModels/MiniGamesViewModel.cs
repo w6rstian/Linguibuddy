@@ -4,15 +4,9 @@ using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
-using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using Linguibuddy.Views;
 using Microsoft.Maui.Controls.Shapes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linguibuddy.ViewModels
 {
@@ -26,43 +20,55 @@ namespace Linguibuddy.ViewModels
             _popupService = popupService;
         }
 
+        [RelayCommand]
+        private Task NavigateToAudioQuizAsync()
+        {
+            return NavigateToGameWithCollectionAsync(nameof(AudioQuizPage));
+        }
+
+        [RelayCommand]
+        private Task NavigateToImageQuizAsync()
+        {
+            return NavigateToGameWithCollectionAsync(nameof(ImageQuizPage));
+        }
+
+        [RelayCommand]
+        private Task NavigateToSentenceQuizAsync()
+        {
+            return NavigateToGameWithCollectionAsync(nameof(SentenceQuizPage));
+        }
+
+        [RelayCommand]
+        private Task NavigateToHangman()
+        {
+            return NavigateToGameWithCollectionAsync(nameof(HangmanPage));
+        }
+
         private async Task<IPopupResult<WordCollection?>> DisplayPopup()
         {
             var popup = new WordCollectionPopup(
                 new WordCollectionPopupViewModel(_collectionService, _popupService)
-                );
+            );
 
-            Shape shape;
+            string colorResourceKey = Application.Current.RequestedTheme == AppTheme.Light ? "Primary" : "PrimaryDark";
+            var strokeColor = Application.Current.Resources[colorResourceKey] as Color;
 
-            if (Application.Current.RequestedTheme == AppTheme.Light)
+            var shape = new RoundRectangle
             {
-                shape = new RoundRectangle
-                {
-                    CornerRadius = new CornerRadius(12),
-                    Stroke = Application.Current.Resources["Primary"] as Color,
-                    StrokeThickness = 2
-                };
-            }
-            else
-            {
-                shape = new RoundRectangle
-                {
-                    CornerRadius = new CornerRadius(12),
-                    Stroke = Application.Current.Resources["PrimaryDark"] as Color,
-                    StrokeThickness = 2
-                };
-            }
+                CornerRadius = new CornerRadius(12),
+                Stroke = strokeColor,
+                StrokeThickness = 2
+            };
 
             var options = new PopupOptions
             {
-                Shape = shape 
+                Shape = shape
             };
 
             return await Shell.Current.ShowPopupAsync<WordCollection?>(popup, options);
         }
 
-        [RelayCommand]
-        private async Task NavigateToAudioQuizAsync()
+        private async Task NavigateToGameWithCollectionAsync(string route)
         {
             var result = await DisplayPopup();
 
@@ -71,54 +77,18 @@ namespace Linguibuddy.ViewModels
 
             var selectedCollection = result.Result;
 
-            var parameters = new Dictionary<string, object>
+            if (!selectedCollection.Items.Any())
             {
-                { "SelectedCollection", selectedCollection }
-            };
-
-            await Shell.Current.GoToAsync(nameof(AudioQuizPage), parameters);
-        }
-
-        [RelayCommand]
-        private async Task NavigateToImageQuizAsync()
-        {
-            var result = await DisplayPopup();
-
-            if (result.WasDismissedByTappingOutsideOfPopup || result.Result is null)
+                await Shell.Current.DisplayAlert("Błąd", "Kolekcja jest pusta.", "OK");
                 return;
-
-            var selectedCollection = result.Result;
-
-            var parameters = new Dictionary<string, object>
-            {
-                { "SelectedCollection", selectedCollection }
-            };
-
-            await Shell.Current.GoToAsync(nameof(ImageQuizPage), parameters);
-        }
-
-        [RelayCommand]
-        private async Task NavigateToSentenceQuizAsync()
-        {
-            await Shell.Current.GoToAsync(nameof(SentenceQuizPage));
-        }
-
-        [RelayCommand]
-        private async Task NavigateToHangman()
-        {
-            var result = await DisplayPopup();
-
-            if (result.WasDismissedByTappingOutsideOfPopup || result.Result is null)
-                return;
-
-            var selectedCollection = result.Result;
+            }
 
             var parameters = new Dictionary<string, object>
             {
                 { "SelectedCollection", selectedCollection }
             };
 
-            await Shell.Current.GoToAsync(nameof(HangmanPage), parameters);
+            await Shell.Current.GoToAsync(route, parameters);
         }
     }
 }

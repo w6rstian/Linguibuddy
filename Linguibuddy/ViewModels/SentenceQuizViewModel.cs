@@ -2,15 +2,35 @@
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
+using Linguibuddy.Services;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Linguibuddy.Helpers;
 
 namespace Linguibuddy.ViewModels
 {
+    [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class SentenceQuizViewModel : BaseQuizViewModel
     {
-        public ObservableCollection<WordTile> AvailableWords { get; } = new();
+        private readonly OpenAiService _openAiService;
 
-        public ObservableCollection<WordTile> SelectedWords { get; } = new();
+        [ObservableProperty]
+        private WordCollection? _selectedCollection;
+
+        [ObservableProperty]
+        private CollectionItem? _targetWord;
+
+        [ObservableProperty]
+        private List<CollectionItem> _hasAppeared;
+
+        [ObservableProperty]
+        private bool _isFinished;
+
+        [ObservableProperty]
+        private int _score;
+
+        public ObservableCollection<WordTile> AvailableWords { get; } = [];
+        public ObservableCollection<WordTile> SelectedWords { get; } = [];
 
         public bool IsNotAnswered => !IsAnswered;
 
@@ -23,13 +43,19 @@ namespace Linguibuddy.ViewModels
 
         private SentenceQuestion? _currentQuestion;
 
-        public SentenceQuizViewModel()
+        public SentenceQuizViewModel(OpenAiService openAiService)
         {
-            Title = "Sentence Builder";
+            _openAiService = openAiService;
+
+            HasAppeared = [];
+            IsFinished = false;
+            Score = 0;
         }
 
         public override async Task LoadQuestionAsync()
         {
+            if (IsBusy) return;
+
             IsBusy = true;
             IsAnswered = false;
             FeedbackMessage = string.Empty;
@@ -37,32 +63,79 @@ namespace Linguibuddy.ViewModels
 
             AvailableWords.Clear();
             SelectedWords.Clear();
+            PolishTranslation = "Generowanie zdania...";
 
-            // --- MOCK DANYCH (W przyszłości z serwisu/AI) ---
-            var mockSentences = new List<SentenceQuestion>
+            try
             {
-                new() { EnglishSentence = "The cat creates a plan", PolishTranslation = "Kot tworzy plan" },
-                new() { EnglishSentence = "I would like to order a coffee", PolishTranslation = "Chciałbym zamówić kawę" },
-                new() { EnglishSentence = "Learning programming is fun and useful", PolishTranslation = "Nauka programowania jest fajna i przydatna" },
-                new() { EnglishSentence = "Where is the nearest bus stop", PolishTranslation = "Gdzie jest najbliższy przystanek autobusowy" }
-            };
+                if (SelectedCollection == null || SelectedCollection.Items == null || !SelectedCollection.Items.Any())
+                {
+                    FeedbackMessage = "Kolekcja jest pusta.";
+                    IsFinished = true;
+                    return;
+                }
 
-            var random = new Random();
-            _currentQuestion = mockSentences[random.Next(mockSentences.Count)];
+                var validWords = SelectedCollection.Items.Except(HasAppeared).ToList();
 
-            PolishTranslation = _currentQuestion.PolishTranslation;
+                if (validWords.Count == 0)
+                {
+                    IsFinished = true;
+                    PolishTranslation = string.Empty;
+                    return;
+                }
 
-            var words = _currentQuestion.EnglishSentence.Split(' ').ToList();
+                var random = Random.Shared;
+                TargetWord = validWords[random.Next(validWords.Count)];
 
-            // Prosty shuffle
-            words = words.OrderBy(x => random.Next()).ToList();
+                int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
+                string difficultyString = ((DifficultyLevel)difficultyInt).ToString();
 
-            foreach (var word in words)
-            {
-                AvailableWords.Add(new WordTile(word));
+                var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString);
+
+                if (generatedData != null)
+                {
+                    _currentQuestion = new SentenceQuestion
+                    {
+                        EnglishSentence = generatedData.Value.English,
+                        PolishTranslation = generatedData.Value.Polish
+                    };
+                }
+                else
+                {
+                    _currentQuestion = new SentenceQuestion
+                    {
+                        EnglishSentence = $"I am learning the word {TargetWord.Word}",
+                        PolishTranslation = $"Uczę się słowa {TargetWord.Word} (Error Mode)"
+                    };
+                }
+
+                PolishTranslation = _currentQuestion.PolishTranslation;
+
+                var cleanSentence = _currentQuestion.EnglishSentence
+                    .Replace(".", "")
+                    .Replace("?", "")
+                    .Replace("!", "")
+                    .Replace(",", ""); // Przecinki też warto usunąć, żeby nie zdradzały pozycji
+
+                var words = cleanSentence.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                words = words.OrderBy(x => random.Next()).ToList();
+
+                foreach (var w in words)
+                {
+                    AvailableWords.Add(new WordTile(w));
+                }
+
+                HasAppeared.Add(TargetWord);
             }
-
-            IsBusy = false;
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Error loading sentence quiz: {e.Message}");
+                await Shell.Current.DisplayAlert(AppResources.Error, "Failed to load question", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         // Akcja: Kliknięcie w słowo na dole (dodaj do zdania)
@@ -94,18 +167,21 @@ namespace Linguibuddy.ViewModels
             // Złóż zdanie z wybranych kafelków
             string formedSentence = string.Join(" ", SelectedWords.Select(w => w.Text));
 
-            bool isCorrect = formedSentence.Trim() == _currentQuestion.EnglishSentence.Trim();
+            string correctSentence = _currentQuestion.EnglishSentence.TrimEnd('.', '!', '?');
+            
+            bool isCorrect = string.Equals(formedSentence, correctSentence, StringComparison.OrdinalIgnoreCase);
 
             IsAnswered = true;
 
             if (isCorrect)
             {
+                Score++; // Dodajemy punkt
                 FeedbackMessage = AppResources.Perfect;
                 FeedbackColor = Colors.Green;
             }
             else
             {
-                FeedbackMessage = $"{AppResources.ErrorCorrect} {_currentQuestion.EnglishSentence}";
+                FeedbackMessage = $"{AppResources.ErrorCorrect}\n{_currentQuestion.EnglishSentence}";
                 FeedbackColor = Colors.Red;
             }
         }
@@ -114,6 +190,16 @@ namespace Linguibuddy.ViewModels
         private async Task NextQuestionAsync()
         {
             await LoadQuestionAsync();
+
+            if (IsFinished)
+            {
+                // Tutaj obsługa końca gry, np. Alert z wynikiem
+                string resultMsg = $"Twój wynik: {Score} / {SelectedCollection?.Items.Count ?? 0}";
+                await Shell.Current.DisplayAlert("Koniec Quizu", resultMsg, "OK");
+
+                // Powrót do menu
+                await Shell.Current.GoToAsync("..");
+            }
         }
     }
 }

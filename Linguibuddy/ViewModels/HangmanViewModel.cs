@@ -87,6 +87,13 @@ namespace Linguibuddy.ViewModels
 
             try
             {
+                if (SelectedCollection == null || SelectedCollection.Items == null || !SelectedCollection.Items.Any())
+                {
+                    FeedbackMessage = "Collection is empty.";
+                    IsFinished = true;
+                    return;
+                }
+
                 // Pobieramy 1 losowe słowo z kolekcji
                 var allWords = SelectedCollection.Items;
                 var validWords = allWords.Except(HasAppeared).ToList();

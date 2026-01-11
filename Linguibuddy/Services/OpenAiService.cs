@@ -1,6 +1,7 @@
 ﻿using OpenAI;
 using OpenAI.Chat;
 using System.ClientModel;
+using Newtonsoft.Json;
 
 namespace Linguibuddy.Services
 {
@@ -28,6 +29,15 @@ namespace Linguibuddy.Services
                     Endpoint = new Uri(Endpoint)
                 }
             );
+        }
+
+        private class SentenceResponse
+        {
+            [JsonProperty("english_sentence")]
+            public string EnglishSentence { get; set; } = string.Empty;
+
+            [JsonProperty("polish_translation")]
+            public string PolishTranslation { get; set; } = string.Empty;
         }
 
         public async Task<string> TestConnectionAsync()
@@ -72,6 +82,50 @@ namespace Linguibuddy.Services
             {
                 System.Diagnostics.Debug.WriteLine($"OpenAI Error: {ex.Message}");
                 return word;
+            }
+        }
+
+        public async Task<(string English, string Polish)?> GenerateSentenceAsync(string targetWord, string difficultyLevel)
+        {
+            try
+            {
+                var messages = new List<ChatMessage>
+                {
+                    new SystemChatMessage(
+                        "Jesteś nauczycielem języka angielskiego. " +
+                        "Twoim zadaniem jest ułożenie prostego zdania w języku angielskim zawierającego podane słowo. " +
+                        "Zdanie musi być dostosowane do podanego poziomu trudności (CEFR). " +
+                        "Odpowiedź musi być poprawnym obiektem JSON o strukturze: { \"english_sentence\": \"...\", \"polish_translation\": \"...\" }." +
+                        "Zwróć TYLKO czysty JSON, bez bloków markdown (```json)."),
+
+                    new UserChatMessage(
+                        $"Target word: {targetWord}\n" +
+                        $"Difficulty Level: {difficultyLevel}")
+                };
+
+                ChatCompletion completion = await _client.CompleteChatAsync(messages);
+
+                string responseText = completion.Content[0].Text.Trim();
+
+                // Czyszczenie odpowiedzi na wypadek, gdyby AI jednak dodało markdown
+                responseText = responseText
+                    .Replace("```json", "")
+                    .Replace("```", "")
+                    .Trim();
+
+                var result = JsonConvert.DeserializeObject<SentenceResponse>(responseText);
+
+                if (result != null && !string.IsNullOrEmpty(result.EnglishSentence))
+                {
+                    return (result.EnglishSentence, result.PolishTranslation);
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"OpenAI/Newtonsoft Error: {ex.Message}");
+                return null;
             }
         }
     }

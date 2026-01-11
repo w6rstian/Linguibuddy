@@ -31,7 +31,7 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private int _score;
 
-        public ObservableCollection<QuizOption> Options { get; } = new();
+        public ObservableCollection<QuizOption> Options { get; } = [];
 
         public AudioQuizViewModel(DictionaryApiService dictionaryService, IAudioManager audioManager)
         {
@@ -52,6 +52,13 @@ namespace Linguibuddy.ViewModels
 
             try
             {
+                if (SelectedCollection == null || SelectedCollection.Items == null || !SelectedCollection.Items.Any())
+                {
+                    FeedbackMessage = "Collection is empty.";
+                    IsFinished = true;
+                    return;
+                }
+
                 // We only choose allWords that have not been asked as the next word. All allWords can appear as an incorrect QuizOption.
                 var allWords = SelectedCollection.Items;
 
