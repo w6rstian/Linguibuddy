@@ -14,7 +14,15 @@ namespace Linguibuddy.Helpers
         {
             if (value is UserAchievement ua && ua.Achievement != null)
             {
-                return ua.IsUnlocked ? ua.Achievement.IconUrl : ua.Achievement.LockedIconUrl;
+                var unlockedUrl = ua.Achievement.IconUrl;
+                var lockedUrl = ua.Achievement.LockedIconUrl;
+                if (Application.Current.RequestedTheme == AppTheme.Dark)
+                {
+                    unlockedUrl = unlockedUrl.Replace("light", "dark");
+                    lockedUrl = lockedUrl.Replace("light", "dark");
+                }
+
+                return ua.IsUnlocked ? unlockedUrl : lockedUrl;
             }
             return null; // Domyślna ikona lub pusty
         }
