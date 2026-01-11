@@ -67,7 +67,7 @@ namespace Linguibuddy.Data
                         Id = 1, 
                         Name = AppResources.Achievement1Name, 
                         Description = AppResources.Achievement1Description, 
-                        IconUrl = "" }
+                        IconUrl = "trophy_100dp_light.png" }
                 );
 
             modelBuilder.Entity<UserAchievement>()
