@@ -16,7 +16,8 @@ Stroke="{StaticResource PrimaryBrush}"-->
             <ScrollView>
                 <VerticalStackLayout
                     Padding="20"
-                    Spacing="12">
+                    Spacing="12"
+                    BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource OffBlack}}">
 
                     <Label
                         Text="{loc:Translate ChooseCollection}"
