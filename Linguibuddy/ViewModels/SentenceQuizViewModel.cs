@@ -181,7 +181,8 @@ namespace Linguibuddy.ViewModels
             }
             else
             {
-                FeedbackMessage = $"{AppResources.ErrorCorrect}\n{_currentQuestion.EnglishSentence}";
+                FeedbackMessage = $"{AppResources.ErrorCorrect}\n" +
+                                  $"{_currentQuestion.EnglishSentence}";
                 FeedbackColor = Colors.Red;
             }
         }

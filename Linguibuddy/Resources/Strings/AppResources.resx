@@ -315,7 +315,7 @@
     <value>Perfect!</value>
   </data>
   <data name="ErrorCorrect" xml:space="preserve">
-    <value>Error. \nCorrect:</value>
+    <value>Error. Correct:</value>
   </data>
   <data name="NextWord" xml:space="preserve">
     <value>Next word</value>

@@ -214,7 +214,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error. \nCorrect:.
+        ///   Looks up a localized string similar to Error. Correct:.
         /// </summary>
         internal static string ErrorCorrect {
             get {
