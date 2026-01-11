@@ -39,10 +39,10 @@
                         VerticalOptions="Start">
 
                     <Grid>
-                        <Label Text="Kliknij słowa poniżej, aby ułożyć zdanie"
+                        <!--<Label Text="Kliknij słowa poniżej, aby ułożyć zdanie"
                                TextColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray600}}"
                                HorizontalOptions="Center"
-                               VerticalOptions="Center"/>
+                               VerticalOptions="Center"/>-->
 
                         <FlexLayout BindableLayout.ItemsSource="{Binding SelectedWords}"
                                     Wrap="Wrap"
