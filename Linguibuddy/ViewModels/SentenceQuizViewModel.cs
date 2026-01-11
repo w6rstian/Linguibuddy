@@ -194,7 +194,8 @@ namespace Linguibuddy.ViewModels
 
             if (IsFinished)
             {
-                // Tutaj obsługa końca gry, np. Alert z wynikiem
+                // Tutaj obsługa końca gry potem ekren końcowy to tymczasowe
+                // TODO: DisplayResultScreen()
                 string resultMsg = $"Twój wynik: {Score} / {SelectedCollection?.Items.Count ?? 0}";
                 await Shell.Current.DisplayAlert("Koniec Quizu", resultMsg, "OK");
 
