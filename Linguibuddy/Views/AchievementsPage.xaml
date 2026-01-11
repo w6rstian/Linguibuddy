@@ -12,7 +12,9 @@
     <ScrollView>
         <StackLayout Padding="20">
             <!-- Loader -->
-            <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" Color="Blue" />
+            <ActivityIndicator IsRunning="{Binding IsLoading}" 
+                               IsVisible="{Binding IsLoading}" 
+                               Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
 
             <!-- Lista osiągnięć -->
             <CollectionView ItemsSource="{Binding Achievements}"
