@@ -82,6 +82,13 @@ namespace Linguibuddy.ViewModels
 
             try
             {
+                if (SelectedCollection == null || SelectedCollection.Items == null || !SelectedCollection.Items.Any())
+                {
+                    FeedbackMessage = "Collection is empty.";
+                    IsFinished = true;
+                    return;
+                }
+
                 // TODO: This minigame crashes app without errors/exceptions???
 
                 var allWords = SelectedCollection.Items;

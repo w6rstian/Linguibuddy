@@ -313,7 +313,7 @@
     <value>Perfekcyjnie!</value>
   </data>
   <data name="ErrorCorrect" xml:space="preserve">
-    <value>Błąd.\nPoprawnie:</value>
+    <value>Błąd. Poprawnie:</value>
   </data>
   <data name="NextWord" xml:space="preserve">
     <value>Następne słowo</value>
