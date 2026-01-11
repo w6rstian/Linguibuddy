@@ -3,45 +3,47 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:Linguibuddy.Models"
              xmlns:converters="clr-namespace:Linguibuddy.Helpers"
+             xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              x:Class="Linguibuddy.Views.AchievementsPage"
-             Title="Osiągnięcia">
+             Title="{loc:Translate Achievements}">
     <ContentPage.Resources>
         <converters:AchievementIconConverter x:Key="AchievementIconConverter" />
     </ContentPage.Resources>
     
     <ScrollView>
         <StackLayout Padding="20">
-            <!-- Loader -->
             <ActivityIndicator IsRunning="{Binding IsLoading}" 
                                IsVisible="{Binding IsLoading}" 
                                Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
 
-            <!-- Lista osiągnięć -->
+            <!-- Achievements list -->
             <CollectionView ItemsSource="{Binding Achievements}"
-                        EmptyView="Brak osiągnięć do wyświetlenia.">
+                        EmptyView="{loc:Translate NoAchievements}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:UserAchievement">
-                        <!-- Zakładam namespace models dla modeli -->
-                        <Frame BorderColor="LightGray" CornerRadius="10" Padding="10" Margin="5">
+                        <Border 
+                            Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" 
+                            StrokeShape="RoundRectangle 10" 
+                            StrokeThickness="1" 
+                            Padding="10" 
+                            Margin="5">
                             <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
-                                <!-- Ikona z konwerterem -->
+                                <!-- Icon, converter chooses locked/unlocked -->
                                 <Image Source="{Binding ., Converter={StaticResource AchievementIconConverter}}" 
                                    WidthRequest="50" HeightRequest="50" 
                                    Grid.RowSpan="2" />
 
-                                <!-- Nazwa -->
                                 <Label Text="{Binding Achievement.Name}" 
                                    FontAttributes="Bold" 
                                    FontSize="Medium" 
                                    Grid.Column="1" />
-
-                                <!-- Opis -->
+                                
                                 <Label Text="{Binding Achievement.Description}" 
                                    FontSize="Small" 
                                    TextColor="Gray" 
                                    Grid.Column="1" Grid.Row="1" />
                             </Grid>
-                        </Frame>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
