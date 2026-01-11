@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Linguibuddy.Helpers;
 
 namespace Linguibuddy.Models
 {
@@ -17,5 +18,7 @@ namespace Linguibuddy.Models
         public required string Id { get; set; } // same thing as Firebase Uid
 
         public ICollection<UserAchievement> UserAchievements { get; set; } = new List<UserAchievement>();
+
+        public DifficultyLevel PrefferedDifficulty { get; set; } = DifficultyLevel.A1;
     }
 }

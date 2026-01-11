@@ -1,15 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Linguibuddy.Models;
-using LocalizationResourceManager.Maui;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Linguibuddy.Helpers;
+using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
+using LocalizationResourceManager.Maui;
+using System.Globalization;
 
 namespace Linguibuddy.ViewModels
 {
@@ -25,12 +20,38 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private string _translationApiName;
 
+        public IReadOnlyList<DifficultyLevel> AvailableDifficulties { get; }
+            = Enum.GetValues(typeof(DifficultyLevel)).Cast<DifficultyLevel>().ToList();
+
+        [ObservableProperty]
+        private DifficultyLevel _selectedDifficulty;
+
         public SettingsViewModel(ILocalizationResourceManager resourceManager)
         {
             _resourceManager = resourceManager;
 
             UpdateThemeName();
             UpdateApiName();
+            LoadDifficulty();
+        }
+
+        partial void OnSelectedDifficultyChanged(DifficultyLevel value)
+        {
+            Preferences.Default.Set(Constants.DifficultyLevelKey, (int)value);
+        }
+
+        private void LoadDifficulty()
+        {
+            int savedLevel = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
+
+            if (Enum.IsDefined(typeof(DifficultyLevel), savedLevel))
+            {
+                SelectedDifficulty = (DifficultyLevel)savedLevel;
+            }
+            else
+            {
+                SelectedDifficulty = DifficultyLevel.A1;
+            }
         }
 
         [RelayCommand]

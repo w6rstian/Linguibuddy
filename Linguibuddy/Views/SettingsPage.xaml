@@ -79,5 +79,12 @@
             </ContentView>
 
         </Grid>
+
+        <Picker Title="Preferowany poziom trudności"
+                MaximumWidthRequest="250"
+                ItemsSource="{Binding AvailableDifficulties}"
+                SelectedItem="{Binding SelectedDifficulty}">
+        </Picker>
+
     </VerticalStackLayout>
 </ContentPage>
