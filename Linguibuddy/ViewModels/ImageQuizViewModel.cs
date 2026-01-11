@@ -71,6 +71,10 @@ namespace Linguibuddy.ViewModels
             IsBusy = true;
             IsAnswered = false;
             FeedbackMessage = string.Empty;
+            FeedbackColor =
+                Application.Current.RequestedTheme == AppTheme.Light ?
+                Application.Current.Resources["PrimaryDarkText"] as Color :
+                Colors.White;
             Options.Clear();
 
             if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)

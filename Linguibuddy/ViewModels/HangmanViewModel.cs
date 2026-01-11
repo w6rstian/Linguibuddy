@@ -66,8 +66,11 @@ namespace Linguibuddy.ViewModels
             IsAnswered = false;
             Mistakes = 0;
             CurrentImage = "hangman_0.jpg"; // Upewnij się, że masz ten plik w Resources/Images
-            FeedbackMessage = "";
-            FeedbackColor = Colors.Transparent;
+            FeedbackMessage = string.Empty;
+            FeedbackColor =
+                Application.Current.RequestedTheme == AppTheme.Light ?
+                Application.Current.Resources["PrimaryDarkText"] as Color :
+                Colors.White;
 
             // Pobranie koloru Primary z zasobów aplikacji (bezpieczny sposób)
             Color primaryColor = Colors.Purple;

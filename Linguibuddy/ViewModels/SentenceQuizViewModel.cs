@@ -59,7 +59,10 @@ namespace Linguibuddy.ViewModels
             IsBusy = true;
             IsAnswered = false;
             FeedbackMessage = string.Empty;
-            FeedbackColor = Colors.Transparent;
+            FeedbackColor =
+                Application.Current.RequestedTheme == AppTheme.Light ?
+                Application.Current.Resources["PrimaryDarkText"] as Color :
+                Colors.White;
 
             AvailableWords.Clear();
             SelectedWords.Clear();
