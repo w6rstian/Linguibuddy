@@ -324,4 +324,7 @@
   <data name="Achievement1Description" xml:space="preserve">
     <value>Zdobądź swój pierwszy punkt</value>
   </data>
+  <data name="NoAchievements" xml:space="preserve">
+    <value>Brak osiągnięć do wyświetlenia.</value>
+  </data>
 </root>

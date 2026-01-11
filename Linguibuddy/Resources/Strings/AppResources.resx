@@ -326,4 +326,7 @@
   <data name="Achievement1Description" xml:space="preserve">
     <value>Get your first point</value>
   </data>
+  <data name="NoAchievements" xml:space="preserve">
+    <value>No achievements found.</value>
+  </data>
 </root>
