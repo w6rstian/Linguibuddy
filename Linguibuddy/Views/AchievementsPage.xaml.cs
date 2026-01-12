@@ -4,9 +4,15 @@ namespace Linguibuddy.Views;
 
 public partial class AchievementsPage : ContentPage
 {
-	public AchievementsPage(AchievementsViewModel viewModel)
+	private readonly AchievementsViewModel _viewModel;
+    public AchievementsPage(AchievementsViewModel viewModel)
 	{
 		InitializeComponent();
-		BindingContext = viewModel;
+		BindingContext = _viewModel = viewModel;
 	}
+	protected override async void OnAppearing()
+	{
+		base.OnAppearing();
+		await _viewModel.LoadAchievementsCommand.ExecuteAsync(null);
+    }
 }

@@ -44,7 +44,6 @@ namespace Linguibuddy.ViewModels
         {
             _dictionaryService = dictionaryService;
             _hasAppeared = [];
-            Title = "Hangman";
             // Inicjalizacja klawiatury pustymi wartościami, zostanie odświeżona przy LoadQuestion
             GenerateKeyboard();
         }

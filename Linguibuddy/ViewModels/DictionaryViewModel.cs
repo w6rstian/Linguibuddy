@@ -65,8 +65,6 @@ namespace Linguibuddy.ViewModels
             _openAiService = openAiService;
             _CollectionService = CollectionService;
             _audioManager = audioManager;
-
-            LoadCollectionsCommand.Execute(null);
         }
 
         [RelayCommand]

@@ -4,9 +4,16 @@ namespace Linguibuddy.Views;
 
 public partial class DictionaryPage : ContentPage
 {
-	public DictionaryPage(DictionaryViewModel viewModel)
+    private readonly DictionaryViewModel _viewModel;
+    public DictionaryPage(DictionaryViewModel viewModel)
 	{
 		InitializeComponent();
-		BindingContext = viewModel;
-	}
+		BindingContext = _viewModel = viewModel;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _viewModel.LoadCollectionsCommand.ExecuteAsync(null);
+    }
 }

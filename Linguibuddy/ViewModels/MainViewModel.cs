@@ -11,38 +11,19 @@ namespace Linguibuddy.ViewModels
     {
         private readonly FirebaseAuthClient _authClient;
         private readonly IServiceProvider _services;
-        private readonly MockDataSeeder _dataSeeder;
 
-        [ObservableProperty]
-        private string? apiResponseStatus;
         [ObservableProperty]
         private string _username;
 
         public MainViewModel(
             FirebaseAuthClient authClient, 
-            IServiceProvider services, 
-            MockDataSeeder dataSeeder)
+            IServiceProvider services)
         {
             _authClient = authClient;
             _services = services;
-            _dataSeeder = dataSeeder;
 
             if (_authClient.User != null)
                 Username = _authClient.User.Info.DisplayName;
-
-            Task.Run(InitializeData);
-        }
-
-        private async Task InitializeData()
-        {
-            try
-            {
-                await _dataSeeder.SeedAsync();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Seeding error: {ex.Message}");
-            }
         }
 
         [RelayCommand]
