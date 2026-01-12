@@ -332,4 +332,7 @@
   <data name="Hangman" xml:space="preserve">
     <value>Hangman</value>
   </data>
+  <data name="NoFlashcardsToLearn" xml:space="preserve">
+    <value>No flashcards to learn</value>
+  </data>
 </root>
