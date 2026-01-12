@@ -109,6 +109,8 @@
 	  <None Remove="Resources\Icons\library_add_48dp_light.svg" />
 	  <None Remove="Resources\Icons\lock_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\lock_100dp_light.svg" />
+	  <None Remove="Resources\Icons\record_voice_over_150dp_dark.svg" />
+	  <None Remove="Resources\Icons\record_voice_over_150dp_light.svg" />
 	  <None Remove="Resources\Icons\repartition_150dp_dark.svg" />
 	  <None Remove="Resources\Icons\repartition_150dp_light.svg" />
 	  <None Remove="Resources\Icons\sentiment_very_dissatisfied_150dp_dark.svg" />
@@ -125,6 +127,11 @@
 	  <None Remove="Resources\Icons\translate_100dp_light.svg" />
 	  <None Remove="Resources\Icons\trophy_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\trophy_100dp_light.svg" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <MauiImage Include="Resources\Icons\record_voice_over_150dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\record_voice_over_150dp_light.svg" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -244,6 +251,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\FlashcardsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\SpeakingQuizPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\WordCollectionPopup.xaml">

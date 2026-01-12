@@ -39,6 +39,8 @@
                         VerticalOptions="Start">
 
                     <Grid>
+                        <!--inttobool istnieje ale nie inverted-->
+                        <!--IsVisible="{Binding SelectedWords.Count, Converter={toolkit:InvertedIntToBoolConverter}}"-->
                         <!--<Label Text="Kliknij słowa poniżej, aby ułożyć zdanie"
                                TextColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray600}}"
                                HorizontalOptions="Center"
