@@ -47,7 +47,6 @@
                            VerticalOptions="Center"
                            HorizontalTextAlignment="End"/>
 
-                    <!--ocb on jest jakiś strasznie szeroki-->
                     <Switch IsToggled="{Binding IsSpacedRepetitionEnabled}" 
                             OnColor="{StaticResource Primary}"
                             ThumbColor="{AppThemeBinding Light=White, Dark={StaticResource Gray200}}"
