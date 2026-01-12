@@ -32,7 +32,7 @@
                     TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
                     WidthRequest="200"/>
         </VerticalStackLayout>
-        <Grid RowDefinitions="*, Auto">
+        <Grid RowDefinitions="*, Auto" IsVisible="{Binding IsLearning}">
 
             <ScrollView Grid.Row="0">
                 <VerticalStackLayout Spacing="20" 

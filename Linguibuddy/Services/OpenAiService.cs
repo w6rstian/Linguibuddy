@@ -1,7 +1,7 @@
-﻿using OpenAI;
+﻿using Newtonsoft.Json;
+using OpenAI;
 using OpenAI.Chat;
 using System.ClientModel;
-using Newtonsoft.Json;
 
 namespace Linguibuddy.Services
 {

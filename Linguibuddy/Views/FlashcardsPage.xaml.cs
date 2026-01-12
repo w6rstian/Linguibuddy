@@ -8,9 +8,9 @@ public partial class FlashcardsPage : ContentPage
     private bool _isFrontVisible = true;
 
     public FlashcardsPage(FlashcardsViewModel viewModel)
-	{
-		InitializeComponent();
-		BindingContext = viewModel;
+    {
+        InitializeComponent();
+        BindingContext = viewModel;
     }
 
     private async void OnCardTapped(object sender, EventArgs e)

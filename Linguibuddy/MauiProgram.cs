@@ -78,7 +78,7 @@ namespace Linguibuddy
             builder.Services.AddTransient<MiniGamesPage, MiniGamesViewModel>();
             builder.Services.AddTransient<ImageQuizPage, ImageQuizViewModel>();
             builder.Services.AddTransient<SentenceQuizPage, SentenceQuizViewModel>();
-            builder.Services.AddTransient<HangmanPage, HangmanViewModel>();            
+            builder.Services.AddTransient<HangmanPage, HangmanViewModel>();
             builder.Services.AddTransientPopup<WordCollectionPopup, WordCollectionPopupViewModel>();
 
             builder.Services.AddTransient<AchievementService>();

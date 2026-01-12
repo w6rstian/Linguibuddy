@@ -3,11 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
-using LocalizationResourceManager.Maui;
 using Plugin.Maui.Audio;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 
 namespace Linguibuddy.ViewModels
 {
@@ -31,7 +29,7 @@ namespace Linguibuddy.ViewModels
         private bool _isFinished;
         [ObservableProperty]
         private int _score;
-        
+
         public bool IsLearning => !IsFinished;
 
         public ObservableCollection<QuizOption> Options { get; } = [];

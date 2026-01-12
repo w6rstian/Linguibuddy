@@ -1,12 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Data;
+using Linguibuddy.Helpers;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using Plugin.Maui.Audio;
 using System.Collections.ObjectModel;
-using Linguibuddy.Helpers;
 
 namespace Linguibuddy.ViewModels
 {
@@ -21,10 +21,12 @@ namespace Linguibuddy.ViewModels
 
         public DictionaryWord? SourceWordObject { get; set; }
 
-        [ObservableProperty] [NotifyPropertyChangedFor(nameof(ShowTranslateButton))]
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ShowTranslateButton))]
         private string? _translation;
 
-        [ObservableProperty] [NotifyPropertyChangedFor(nameof(ShowTranslateButton))]
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ShowTranslateButton))]
         private bool _isBusy;
 
         public bool ShowTranslateButton => string.IsNullOrEmpty(Translation) && !IsBusy;

@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
-using Linguibuddy.Data;
 using Linguibuddy.Services;
 using Linguibuddy.Views;
 
@@ -19,8 +18,8 @@ namespace Linguibuddy.ViewModels
         private string _username;
 
         public MainViewModel(
-            FirebaseAuthClient authClient, 
-            IServiceProvider services, 
+            FirebaseAuthClient authClient,
+            IServiceProvider services,
             MockDataSeeder dataSeeder)
         {
             _authClient = authClient;

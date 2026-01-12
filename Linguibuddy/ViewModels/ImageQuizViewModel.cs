@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
-using LocalizationResourceManager.Maui;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 

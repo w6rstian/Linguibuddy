@@ -109,7 +109,7 @@ namespace Linguibuddy.ViewModels
             var provider = (TranslationProvider)currentApiInt;
 
             TranslationApiName = provider == TranslationProvider.OpenAi
-                ? "OpenAI (GPT)" 
+                ? "OpenAI (GPT)"
                 : "DeepL";
         }
 
