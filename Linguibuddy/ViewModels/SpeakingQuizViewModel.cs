@@ -129,6 +129,7 @@ namespace Linguibuddy.ViewModels
 
             try
             {
+                // To wywala exception IOexception file not found
                 await _speechToText.StartListenAsync(new SpeechToTextOptions
                 {
                     Culture = CultureInfo.GetCultureInfo("en-US"), // Ważne: angielski
