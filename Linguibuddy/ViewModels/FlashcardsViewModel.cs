@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 
 namespace Linguibuddy.ViewModels
@@ -99,7 +100,7 @@ namespace Linguibuddy.ViewModels
 
         private async Task StartSession()
         {
-            if (Collection == null) return;
+            if (Collection == null) await GoBack();
             List<CollectionItem> items;
 
             if (IsSrsMode)
@@ -107,8 +108,8 @@ namespace Linguibuddy.ViewModels
                 items = await _collectionService.GetItemsDueForLearning(Collection.Id);
                 if (items.Count == 0)
                 {
-                    //komunikat o braku fiszek do nauki
-                    return;
+                    await Shell.Current.DisplayAlert(AppResources.Error, AppResources.NoFlashcardsToLearn, "OK");
+                    await GoBack();
                 }
             }
             else

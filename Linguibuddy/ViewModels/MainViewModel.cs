@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
-using Linguibuddy.Data;
 using Linguibuddy.Services;
 using Linguibuddy.Views;
 

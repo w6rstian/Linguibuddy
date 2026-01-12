@@ -8,147 +8,170 @@
              x:DataType="vm:SentenceQuizViewModel"
              Title="Szyk zdań">
 
-    <Grid RowDefinitions="*, Auto">
+    <Grid>
+        <VerticalStackLayout IsVisible="{Binding IsFinished}"
+             VerticalOptions="Center" 
+             HorizontalOptions="Center" 
+             Spacing="25">
 
-        <ScrollView Grid.Row="0">
-            <VerticalStackLayout Spacing="20" 
-                                 Padding="20" 
-                                 MaximumWidthRequest="600" 
-                                 HorizontalOptions="Center">
+            <Label Text="{loc:Translate Congratulations}" 
+                   FontSize="32" 
+                   FontAttributes="Bold" 
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryDarkText}, Dark={StaticResource White}}"
+                   HorizontalOptions="Center"/>
 
-                <VerticalStackLayout Spacing="10" Margin="0,20,0,0">
-                    <Label Text="Przetłumacz to zdanie:" 
-                           FontSize="16" 
-                           HorizontalOptions="Center"
-                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+            <Label Text="{loc:Translate LearningFinished}" 
+                   FontSize="16" 
+                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
+                   HorizontalOptions="Center"/>
 
-                    <Label Text="{Binding PolishTranslation}" 
-                           FontSize="24" 
+            <Button Text="{loc:Translate BackToList}" 
+                    Command="{Binding GoBackCommand}"
+                    Margin="0,20,0,0"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                    WidthRequest="200"/>
+        </VerticalStackLayout>
+        <Grid RowDefinitions="*, Auto" IsVisible="{Binding IsLearning}">
+
+            <ScrollView Grid.Row="0">
+                <VerticalStackLayout Spacing="20" 
+                                     Padding="20" 
+                                     MaximumWidthRequest="600" 
+                                     HorizontalOptions="Center">
+
+                    <VerticalStackLayout Spacing="10" Margin="0,20,0,0">
+                        <Label Text="Przetłumacz to zdanie:" 
+                               FontSize="16" 
+                               HorizontalOptions="Center"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+
+                        <Label Text="{Binding PolishTranslation}" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"
+                               HorizontalOptions="Center"
+                               TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                    </VerticalStackLayout>
+
+                    <Border StrokeShape="RoundRectangle 15"
+                            StrokeThickness="1"
+                            Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray950}}"
+                            Padding="15"
+                            MinimumHeightRequest="150"
+                            VerticalOptions="Start">
+
+                        <Grid>
+                            <!--<Label Text="Kliknij słowa poniżej, aby ułożyć zdanie"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray600}}"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>-->
+
+                            <FlexLayout BindableLayout.ItemsSource="{Binding SelectedWords}"
+                                        Wrap="Wrap"
+                                        Direction="Row"
+                                        JustifyContent="Center"
+                                        AlignItems="Center"
+                                        AlignContent="Center">
+
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:WordTile">
+                                        <Button Text="{Binding Text}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SentenceQuizViewModel}}, Path=DeselectWordCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="{StaticResource Primary}"
+                                                TextColor="{StaticResource White}"
+                                                CornerRadius="10"
+                                                HeightRequest="44"
+                                                Padding="15,0"
+                                                Margin="4"
+                                                FontSize="16"
+                                                FontAttributes="Bold">
+                                            <Button.Shadow>
+                                                <Shadow Brush="{StaticResource PrimaryBrush}" Radius="4" Opacity="0.3" Offset="2,2"/>
+                                            </Button.Shadow>
+                                        </Button>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </Grid>
+                    </Border>
+
+                    <Label Text="{Binding FeedbackMessage}" 
+                           TextColor="{Binding FeedbackColor}"
+                           FontSize="18"
                            FontAttributes="Bold"
                            HorizontalTextAlignment="Center"
-                           HorizontalOptions="Center"
-                           TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                           MinimumHeightRequest="30"/>
+
                 </VerticalStackLayout>
+            </ScrollView>
 
-                <Border StrokeShape="RoundRectangle 15"
-                        StrokeThickness="1"
-                        Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray950}}"
-                        Padding="15"
-                        MinimumHeightRequest="150"
-                        VerticalOptions="Start">
+            <VerticalStackLayout Grid.Row="1" 
+                                 Spacing="20" 
+                                 Padding="20,10,20,30"
+                                 MaximumWidthRequest="600"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="End">
 
-                    <Grid>
-                        <!--inttobool istnieje ale nie inverted-->
-                        <!--IsVisible="{Binding SelectedWords.Count, Converter={toolkit:InvertedIntToBoolConverter}}"-->
-                        <!--<Label Text="Kliknij słowa poniżej, aby ułożyć zdanie"
-                               TextColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray600}}"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center"/>-->
+                <BoxView HeightRequest="1" 
+                         Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                         Margin="0,0,0,10"/>
 
-                        <FlexLayout BindableLayout.ItemsSource="{Binding SelectedWords}"
-                                    Wrap="Wrap"
-                                    Direction="Row"
-                                    JustifyContent="Center"
-                                    AlignItems="Center"
-                                    AlignContent="Center">
+                <FlexLayout BindableLayout.ItemsSource="{Binding AvailableWords}"
+                            Wrap="Wrap"
+                            Direction="Row"
+                            JustifyContent="Center"
+                            AlignItems="Center">
 
-                            <BindableLayout.ItemTemplate>
-                                <DataTemplate x:DataType="vm:WordTile">
-                                    <Button Text="{Binding Text}"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SentenceQuizViewModel}}, Path=DeselectWordCommand}"
-                                            CommandParameter="{Binding .}"
-                                            BackgroundColor="{StaticResource Primary}"
-                                            TextColor="{StaticResource White}"
-                                            CornerRadius="10"
-                                            HeightRequest="44"
-                                            Padding="15,0"
-                                            Margin="4"
-                                            FontSize="16"
-                                            FontAttributes="Bold">
-                                        <Button.Shadow>
-                                            <Shadow Brush="{StaticResource PrimaryBrush}" Radius="4" Opacity="0.3" Offset="2,2"/>
-                                        </Button.Shadow>
-                                    </Button>
-                                </DataTemplate>
-                            </BindableLayout.ItemTemplate>
-                        </FlexLayout>
-                    </Grid>
-                </Border>
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:WordTile">
+                            <Button Text="{Binding Text}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SentenceQuizViewModel}}, Path=SelectWordCommand}"
+                                    CommandParameter="{Binding .}"
+                                    BackgroundColor="Transparent"
+                                    BorderColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
+                                    BorderWidth="1"
+                                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
+                                    CornerRadius="10"
+                                    HeightRequest="44"
+                                    Padding="15,0"
+                                    Margin="4"
+                                    FontSize="16"/>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
 
-                <Label Text="{Binding FeedbackMessage}" 
-                       TextColor="{Binding FeedbackColor}"
-                       FontSize="18"
-                       FontAttributes="Bold"
-                       HorizontalTextAlignment="Center"
-                       MinimumHeightRequest="30"/>
+                <Grid Margin="0,10,0,0">
+                    <Button Text="Sprawdź"
+                            Command="{Binding CheckAnswerCommand}"
+                            IsVisible="{Binding IsNotAnswered}"  
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="{StaticResource White}"
+                            HeightRequest="50"
+                            CornerRadius="25"
+                            FontAttributes="Bold">
+                        <Button.Shadow>
+                            <Shadow Brush="{StaticResource PrimaryBrush}" Radius="8" Opacity="0.4" Offset="0,4"/>
+                        </Button.Shadow>
+                    </Button>
+
+                    <Button Text="Dalej"
+                            Command="{Binding NextQuestionCommand}"
+                            IsVisible="{Binding IsAnswered}"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="{StaticResource White}"
+                            HeightRequest="50"
+                            CornerRadius="25"
+                            FontAttributes="Bold">
+                        <Button.Shadow>
+                            <Shadow Brush="{StaticResource PrimaryBrush}" Radius="8" Opacity="0.4" Offset="0,4"/>
+                        </Button.Shadow>
+                    </Button>
+                </Grid>
 
             </VerticalStackLayout>
-        </ScrollView>
-
-        <VerticalStackLayout Grid.Row="1" 
-                             Spacing="20" 
-                             Padding="20,10,20,30"
-                             MaximumWidthRequest="600"
-                             HorizontalOptions="Center"
-                             VerticalOptions="End">
-
-            <BoxView HeightRequest="1" 
-                     Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
-                     Margin="0,0,0,10"/>
-
-            <FlexLayout BindableLayout.ItemsSource="{Binding AvailableWords}"
-                        Wrap="Wrap"
-                        Direction="Row"
-                        JustifyContent="Center"
-                        AlignItems="Center">
-
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="vm:WordTile">
-                        <Button Text="{Binding Text}"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SentenceQuizViewModel}}, Path=SelectWordCommand}"
-                                CommandParameter="{Binding .}"
-                                BackgroundColor="Transparent"
-                                BorderColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
-                                BorderWidth="1"
-                                TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
-                                CornerRadius="10"
-                                HeightRequest="44"
-                                Padding="15,0"
-                                Margin="4"
-                                FontSize="16"/>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </FlexLayout>
-
-            <Grid Margin="0,10,0,0">
-                <Button Text="Sprawdź"
-                        Command="{Binding CheckAnswerCommand}"
-                        IsVisible="{Binding IsNotAnswered}"  
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="{StaticResource White}"
-                        HeightRequest="50"
-                        CornerRadius="25"
-                        FontAttributes="Bold">
-                    <Button.Shadow>
-                        <Shadow Brush="{StaticResource PrimaryBrush}" Radius="8" Opacity="0.4" Offset="0,4"/>
-                    </Button.Shadow>
-                </Button>
-
-                <Button Text="Dalej"
-                        Command="{Binding NextQuestionCommand}"
-                        IsVisible="{Binding IsAnswered}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="{StaticResource White}"
-                        HeightRequest="50"
-                        CornerRadius="25"
-                        FontAttributes="Bold">
-                    <Button.Shadow>
-                        <Shadow Brush="{StaticResource PrimaryBrush}" Radius="8" Opacity="0.4" Offset="0,4"/>
-                    </Button.Shadow>
-                </Button>
-            </Grid>
-
-        </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

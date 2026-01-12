@@ -321,10 +321,16 @@
   <data name="Achievement1Name" xml:space="preserve">
     <value>Pierwsze kroki</value>
   </data>
+  <data name="NoAchievements" xml:space="preserve">
+    <value>Brak osiągnięć do wyświetlenia.</value>
+  </data>
   <data name="Achievement1Description" xml:space="preserve">
     <value>Zdobądź swój pierwszy punkt</value>
   </data>
-  <data name="NoAchievements" xml:space="preserve">
-    <value>Brak osiągnięć do wyświetlenia.</value>
+  <data name="Hangman" xml:space="preserve">
+    <value>Wisielec</value>
+  </data>
+  <data name="NoFlashcardsToLearn" xml:space="preserve">
+    <value>Brak fiszek do nauki</value>
   </data>
 </root>

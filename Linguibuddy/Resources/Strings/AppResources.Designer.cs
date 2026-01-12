@@ -259,6 +259,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hangman.
+        /// </summary>
+        internal static string Hangman {
+            get {
+                return ResourceManager.GetString("Hangman", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         internal static string Home {
@@ -399,6 +408,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string NoAchievements {
             get {
                 return ResourceManager.GetString("NoAchievements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No flashcards to learn.
+        /// </summary>
+        internal static string NoFlashcardsToLearn {
+            get {
+                return ResourceManager.GetString("NoFlashcardsToLearn", resourceCulture);
             }
         }
         

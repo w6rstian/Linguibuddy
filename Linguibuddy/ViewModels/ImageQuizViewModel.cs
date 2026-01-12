@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
-using LocalizationResourceManager.Maui;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -43,7 +42,9 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private List<CollectionItem> _hasAppeared;
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsLearning))]
         private bool _isFinished;
+        public bool IsLearning => !IsFinished;
         [ObservableProperty]
         private int _score;
 
@@ -168,7 +169,11 @@ namespace Linguibuddy.ViewModels
                 if (correct != null) correct.BackgroundColor = Colors.LightGreen;
             }
         }
-
+        [RelayCommand]
+        public async Task GoBack()
+        {
+            await Shell.Current.GoToAsync("..");
+        }
         [RelayCommand]
         private async Task NextQuestionAsync()
         {

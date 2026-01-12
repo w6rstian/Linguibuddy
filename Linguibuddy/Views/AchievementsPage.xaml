@@ -17,8 +17,12 @@
                                Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
 
             <!-- Achievements list -->
-            <CollectionView ItemsSource="{Binding Achievements}"
-                        EmptyView="{loc:Translate NoAchievements}">
+            <CollectionView ItemsSource="{Binding Achievements}">
+                <CollectionView.EmptyView>
+                    <Label Text="{loc:Translate NoAchievements}"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                           HorizontalOptions="Center"/>
+                </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:UserAchievement">
                         <Border 

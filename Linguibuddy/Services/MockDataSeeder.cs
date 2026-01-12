@@ -32,8 +32,8 @@ namespace Linguibuddy.Services
             {
                 try
                 {
-                        var existingWord = await _context.DictionaryWords
-                        .FirstOrDefaultAsync(w => w.Word.ToLower() == wordText);
+                    var existingWord = await _context.DictionaryWords
+                    .FirstOrDefaultAsync(w => w.Word.ToLower() == wordText);
 
                     if (existingWord == null)
                     {

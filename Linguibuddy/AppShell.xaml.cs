@@ -1,6 +1,4 @@
-﻿using Linguibuddy.Views;
-
-namespace Linguibuddy
+﻿namespace Linguibuddy
 {
     public partial class AppShell : Shell
     {

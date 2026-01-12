@@ -1,5 +1,3 @@
-using Linguibuddy.Views;
-
 namespace Linguibuddy;
 
 public partial class MobileShell : Shell

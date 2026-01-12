@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Maui.Graphics.Text;
 
 namespace Linguibuddy.ViewModels
 {

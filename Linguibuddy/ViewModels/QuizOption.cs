@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Linguibuddy.Models;
-using Microsoft.Maui.Graphics;
 
 namespace Linguibuddy.ViewModels
 {

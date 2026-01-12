@@ -19,7 +19,7 @@ namespace Linguibuddy.Services
         private string GetUserId()
         {
             var uid = _authClient.User?.Uid;
-            if (string.IsNullOrEmpty(uid)) 
+            if (string.IsNullOrEmpty(uid))
                 throw new UnauthorizedAccessException("Użytkownik nie jest zalogowany.");
             return uid;
         }

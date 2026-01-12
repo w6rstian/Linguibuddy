@@ -33,7 +33,9 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private List<CollectionItem> _hasAppeared;
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsLearning))]
         private bool _isFinished;
+        public bool IsLearning => !IsFinished;
         [ObservableProperty]
         private int _score;
 
@@ -72,19 +74,18 @@ namespace Linguibuddy.ViewModels
                 Colors.White;
 
             // Pobranie koloru Primary z zasobów aplikacji (bezpieczny sposób)
-            Color primaryColor = Colors.Purple;
-            if (Application.Current.Resources.TryGetValue("Primary", out var colorRes))
-            {
-                primaryColor = (Color)colorRes;
-            }
+            Color keyColor =
+                Application.Current.RequestedTheme == AppTheme.Light ?
+                Application.Current.Resources["Primary"] as Color:
+                Application.Current.Resources["PrimaryDark"] as Color;
 
             // Reset klawiatury
             foreach (var key in Keyboard)
             {
                 key.IsEnabled = true;
                 key.BackgroundColor = Colors.Transparent; // Styl Outline
-                key.BorderColor = primaryColor;
-                key.TextColor = primaryColor;
+                key.BorderColor = keyColor;
+                key.TextColor = keyColor;
             }
 
             try
@@ -219,7 +220,11 @@ namespace Linguibuddy.ViewModels
                 MaskedWord = string.Join(" ", _secretWord.ToCharArray());
             }
         }
-
+        [RelayCommand]
+        public async Task GoBack()
+        {
+            await Shell.Current.GoToAsync("..");
+        }
         [RelayCommand]
         private async Task NextGameAsync()
         {
