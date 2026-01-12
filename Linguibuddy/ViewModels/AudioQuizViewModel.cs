@@ -27,9 +27,12 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private List<CollectionItem> _hasAppeared;
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsLearning))]
         private bool _isFinished;
         [ObservableProperty]
         private int _score;
+        
+        public bool IsLearning => !IsFinished;
 
         public ObservableCollection<QuizOption> Options { get; } = [];
 
@@ -181,6 +184,11 @@ namespace Linguibuddy.ViewModels
                 await Shell.Current.DisplayAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
                 Debug.WriteLine($"Audio Error: {ex.Message}");
             }
+        }
+        [RelayCommand]
+        public async Task GoBack()
+        {
+            await Shell.Current.GoToAsync("..");
         }
 
         [RelayCommand]
