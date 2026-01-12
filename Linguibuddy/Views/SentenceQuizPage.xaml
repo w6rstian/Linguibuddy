@@ -20,12 +20,12 @@
                    TextColor="{AppThemeBinding Light={StaticResource PrimaryDarkText}, Dark={StaticResource White}}"
                    HorizontalOptions="Center"/>
 
-                            <Label Text="{loc:Translate LearningFinished}" 
+            <Label Text="{loc:Translate LearningFinished}" 
                    FontSize="16" 
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                    HorizontalOptions="Center"/>
 
-                            <Button Text="{loc:Translate BackToList}" 
+            <Button Text="{loc:Translate BackToList}" 
                     Command="{Binding GoBackCommand}"
                     Margin="0,20,0,0"
                     BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
