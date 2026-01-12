@@ -42,7 +42,7 @@
                 <Border StrokeShape="RoundRectangle 20"
                         Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                         StrokeThickness="2"
-                        HeightRequest="350" 
+                        MaximumHeightRequest="300" 
                         MaximumWidthRequest="400"
                         HorizontalOptions="Center"
                         Padding="0"
