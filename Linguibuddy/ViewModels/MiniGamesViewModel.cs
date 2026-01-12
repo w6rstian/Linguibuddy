@@ -44,6 +44,12 @@ namespace Linguibuddy.ViewModels
             return NavigateToGameWithCollectionAsync(nameof(HangmanPage));
         }
 
+        [RelayCommand]
+        private Task NavigateToSpeakingQuizAsync()
+        {
+            return NavigateToGameWithCollectionAsync(nameof(SpeakingQuizPage));
+        }
+
         private async Task<IPopupResult<WordCollection?>> DisplayPopup()
         {
             var popup = new WordCollectionPopup(

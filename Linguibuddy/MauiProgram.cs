@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Media;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Firebase.Auth.Repository;
@@ -79,9 +80,8 @@ namespace Linguibuddy
             builder.Services.AddTransient<ImageQuizPage, ImageQuizViewModel>();
             builder.Services.AddTransient<SentenceQuizPage, SentenceQuizViewModel>();
             builder.Services.AddTransient<HangmanPage, HangmanViewModel>();
+            builder.Services.AddTransient<SpeakingQuizPage, SpeakingQuizViewModel>();
             builder.Services.AddTransientPopup<WordCollectionPopup, WordCollectionPopupViewModel>();
-
-            builder.Services.AddTransient<AchievementService>();
 
             //var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");
             //var openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
@@ -90,11 +90,13 @@ namespace Linguibuddy
             var githubAiKey = githubToken;
 
             builder.Services.AddSingleton(AudioManager.Current);
+            builder.Services.AddSingleton<ISpeechToText>(SpeechToText.Default);
             builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
             builder.Services.AddSingleton(new OpenAiService(githubAiKey));
             builder.Services.AddTransient<MockDataSeeder>();
             builder.Services.AddTransient<CollectionService>();
             builder.Services.AddTransient<SpacedRepetitionService>();
+            builder.Services.AddTransient<AchievementService>();
 
             builder.Services.AddHttpClient<DictionaryApiService>(client =>
             {

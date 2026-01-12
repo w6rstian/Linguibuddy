@@ -24,7 +24,6 @@ namespace Linguibuddy.ViewModels
             _achievementService = achievementService;
             _authClient = authClient;
             _currentUserId = _authClient.User.Uid;
-            LoadAchievementsCommand.Execute(null); // Automatyczne ładowanie po stworzeniu VM
         }
 
         [RelayCommand]

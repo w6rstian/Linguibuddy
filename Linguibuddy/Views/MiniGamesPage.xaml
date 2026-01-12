@@ -151,6 +151,40 @@
                 </Grid>
             </Border>
 
+            <Border HeightRequest="100" 
+                    StrokeShape="RoundRectangle 15" 
+                    StrokeThickness="0"
+                    Padding="0"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+
+                <Border.Shadow>
+                    <Shadow Brush="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            Offset="0,5" Radius="10" Opacity="0.4"/>
+                </Border.Shadow>
+
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToSpeakingQuizCommand}"/>
+                </Border.GestureRecognizers>
+
+                <Grid ColumnDefinitions="100, *">
+                    <Image Source="{AppThemeBinding Light=record_voice_over_150dp_light.png, Dark=record_voice_over_150dp_dark.png}"
+                           Aspect="AspectFit" 
+                           Margin="25"
+                           Grid.Column="0"/>
+
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="0,0,15,0">
+                        <Label Text="Wymowa" 
+                               FontSize="20" 
+                               FontAttributes="Bold" 
+                               TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"/>
+                        <Label Text="Przetestuj swoją wymowę" 
+                               FontSize="14" 
+                               TextColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource PrimaryDarkText}}"
+                               Opacity="0.8"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

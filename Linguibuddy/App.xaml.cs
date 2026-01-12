@@ -43,6 +43,7 @@ namespace Linguibuddy
             Routing.RegisterRoute(nameof(ImageQuizPage), typeof(ImageQuizPage));
             Routing.RegisterRoute(nameof(SentenceQuizPage), typeof(SentenceQuizPage));
             Routing.RegisterRoute(nameof(HangmanPage), typeof(HangmanPage));
+            Routing.RegisterRoute(nameof(SpeakingQuizPage), typeof(SpeakingQuizPage));
         }
     }
 }
