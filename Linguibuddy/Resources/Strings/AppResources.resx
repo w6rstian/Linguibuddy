@@ -323,13 +323,13 @@
   <data name="Achievement1Name" xml:space="preserve">
     <value>First steps</value>
   </data>
-  <data name="Achievement1Description" xml:space="preserve">
-    <value>Get your first point</value>
-  </data>
   <data name="NoAchievements" xml:space="preserve">
     <value>No achievements found.</value>
   </data>
-  <data name="NoFlashcardsToLearn" xml:space="preserve">
-    <value>No flashcards to learn</value>
+  <data name="Achievement1Description" xml:space="preserve">
+    <value>Get your first point</value>
+  </data>
+  <data name="Hangman" xml:space="preserve">
+    <value>Hangman</value>
   </data>
 </root>
