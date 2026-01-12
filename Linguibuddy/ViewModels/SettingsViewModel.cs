@@ -30,6 +30,8 @@ namespace Linguibuddy.ViewModels
         {
             _resourceManager = resourceManager;
 
+            LoadLanguage();
+            LoadTheme();
             UpdateThemeName();
             UpdateApiName();
             LoadDifficulty();
@@ -54,6 +56,32 @@ namespace Linguibuddy.ViewModels
             }
         }
 
+        private void LoadLanguage()
+        {
+            string savedLanguage = Preferences.Default.Get(Constants.LanguageKey, "pl");
+            if (savedLanguage == "pl")
+            {
+                _resourceManager.CurrentCulture = Polish;
+            }
+            else
+            {
+                _resourceManager.CurrentCulture = English;
+            }
+        }
+        
+        private void LoadTheme()
+        {
+            int savedTheme = Preferences.Default.Get(Constants.AppThemeKey, (int)AppTheme.Light);
+            if (Enum.IsDefined (typeof(AppTheme), savedTheme))
+            {
+                Application.Current.UserAppTheme = (AppTheme)savedTheme;
+            }
+            else
+            {
+                Application.Current.UserAppTheme = AppTheme.Light;
+            }
+        }
+
         [RelayCommand]
         public void ChangeLanguage()
         {
@@ -62,10 +90,12 @@ namespace Linguibuddy.ViewModels
             if (currentCulture.Name == English.Name)
             {
                 _resourceManager.CurrentCulture = Polish;
+                Preferences.Default.Set(Constants.LanguageKey, "pl");
             }
             else
             {
                 _resourceManager.CurrentCulture = English;
+                Preferences.Default.Set(Constants.LanguageKey, "en");
             }
 
             UpdateThemeName();
@@ -79,10 +109,12 @@ namespace Linguibuddy.ViewModels
             if (Application.Current.RequestedTheme == AppTheme.Light)
             {
                 Application.Current.UserAppTheme = AppTheme.Dark;
+                Preferences.Default.Set(Constants.AppThemeKey, (int)AppTheme.Dark);
             }
             else
             {
                 Application.Current.UserAppTheme = AppTheme.Light;
+                Preferences.Default.Set(Constants.AppThemeKey, (int)AppTheme.Light);
             }
 
             UpdateThemeName();
