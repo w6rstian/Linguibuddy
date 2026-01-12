@@ -118,6 +118,12 @@
                                 <Label Text="{Binding Definition}" 
                                        LineBreakMode="WordWrap"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"/>
+                                
+                                <Label Text="{Binding Example, StringFormat='Np: {0}'}" 
+                                        FontSize="13" 
+                                        FontAttributes="Italic"
+                                        IsVisible="{Binding Example, Converter={toolkit:IsStringNotNullOrEmptyConverter}}"
+                                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
                             </VerticalStackLayout>
 
                             
@@ -179,11 +185,6 @@
                                                VerticalOptions="Center"/>
                                     </HorizontalStackLayout>
 
-                                    <Label Text="{Binding Example, StringFormat='Np: {0}'}" 
-                                           FontSize="13" 
-                                           FontAttributes="Italic"
-                                           IsVisible="{Binding Example, Converter={toolkit:IsStringNotNullOrEmptyConverter}}"
-                                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
 
