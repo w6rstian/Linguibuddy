@@ -13,6 +13,7 @@ namespace Linguibuddy.ViewModels
         private readonly FirebaseAuthClient _authClient;
         private readonly IServiceProvider _services;
         private readonly DataContext db;
+        private readonly SettingsViewModel _settingsViewModel;
 
         [ObservableProperty]
         private string _email;
@@ -21,10 +22,11 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private float _labelErrorOpacity;
 
-        public SignInViewModel(FirebaseAuthClient authClient, IServiceProvider services, DataContext dataContext)
+        public SignInViewModel(FirebaseAuthClient authClient, IServiceProvider services, DataContext dataContext, SettingsViewModel settingsViewModel)
         {
             _authClient = authClient;
             _services = services;
+            _settingsViewModel = settingsViewModel;
             db = dataContext;
             LabelErrorOpacity = 0;
         }

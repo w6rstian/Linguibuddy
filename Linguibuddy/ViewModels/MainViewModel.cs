@@ -10,16 +10,19 @@ namespace Linguibuddy.ViewModels
     {
         private readonly FirebaseAuthClient _authClient;
         private readonly IServiceProvider _services;
+        private readonly SettingsViewModel _settingsViewModel;
 
         [ObservableProperty]
         private string _username;
 
         public MainViewModel(
-            FirebaseAuthClient authClient, 
-            IServiceProvider services)
+            FirebaseAuthClient authClient,
+            IServiceProvider services,
+            SettingsViewModel settingsViewModel)
         {
             _authClient = authClient;
             _services = services;
+            _settingsViewModel = settingsViewModel;
 
             if (_authClient.User != null)
                 Username = _authClient.User.Info.DisplayName;
