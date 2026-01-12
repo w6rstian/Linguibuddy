@@ -403,6 +403,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No flashcards to learn.
+        /// </summary>
+        internal static string NoFlashcardsToLearn {
+            get {
+                return ResourceManager.GetString("NoFlashcardsToLearn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No results found 😞.
         /// </summary>
         internal static string NoResultsFoundText {

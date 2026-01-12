@@ -327,4 +327,7 @@
   <data name="NoAchievements" xml:space="preserve">
     <value>Brak osiągnięć do wyświetlenia.</value>
   </data>
+  <data name="NoFlashcardsToLearn" xml:space="preserve">
+    <value>Brak fiszek do nauki</value>
+  </data>
 </root>

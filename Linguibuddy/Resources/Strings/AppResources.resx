@@ -329,4 +329,7 @@
   <data name="NoAchievements" xml:space="preserve">
     <value>No achievements found.</value>
   </data>
+  <data name="NoFlashcardsToLearn" xml:space="preserve">
+    <value>No flashcards to learn</value>
+  </data>
 </root>
