@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Linguibuddy.Helpers;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using Linguibuddy.Helpers;
 
 namespace Linguibuddy.ViewModels
 {
@@ -24,7 +24,9 @@ namespace Linguibuddy.ViewModels
         private List<CollectionItem> _hasAppeared;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsLearning))]
         private bool _isFinished;
+        public bool IsLearning => !IsFinished;
 
         [ObservableProperty]
         private int _score;
@@ -171,7 +173,7 @@ namespace Linguibuddy.ViewModels
             string formedSentence = string.Join(" ", SelectedWords.Select(w => w.Text));
 
             string correctSentence = _currentQuestion.EnglishSentence.TrimEnd('.', '!', '?');
-            
+
             bool isCorrect = string.Equals(formedSentence, correctSentence, StringComparison.OrdinalIgnoreCase);
 
             IsAnswered = true;
@@ -189,6 +191,11 @@ namespace Linguibuddy.ViewModels
                 FeedbackColor = Colors.Red;
             }
         }
+        [RelayCommand]
+        public async Task GoBack()
+        {
+            await Shell.Current.GoToAsync("..");
+        }
 
         [RelayCommand]
         private async Task NextQuestionAsync()
@@ -199,11 +206,10 @@ namespace Linguibuddy.ViewModels
             {
                 // Tutaj obsługa końca gry potem ekren końcowy to tymczasowe
                 // TODO: DisplayResultScreen()
-                string resultMsg = $"Twój wynik: {Score} / {SelectedCollection?.Items.Count ?? 0}";
-                await Shell.Current.DisplayAlert("Koniec Quizu", resultMsg, "OK");
+                //string resultMsg = $"Twój wynik: {Score} / {SelectedCollection?.Items.Count ?? 0}";
+                //await Shell.Current.DisplayAlert("Koniec Quizu", resultMsg, "OK");
 
-                // Powrót do menu
-                await Shell.Current.GoToAsync("..");
+                // Wyświetla się inny grid z ekranem końcowym gdy IsFinished == True
             }
         }
     }
