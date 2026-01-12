@@ -33,7 +33,9 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private List<CollectionItem> _hasAppeared;
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsLearning))]
         private bool _isFinished;
+        public bool IsLearning => !IsFinished;
         [ObservableProperty]
         private int _score;
 
@@ -44,7 +46,6 @@ namespace Linguibuddy.ViewModels
         {
             _dictionaryService = dictionaryService;
             _hasAppeared = [];
-            Title = "Hangman";
             // Inicjalizacja klawiatury pustymi wartościami, zostanie odświeżona przy LoadQuestion
             GenerateKeyboard();
         }
@@ -220,7 +221,11 @@ namespace Linguibuddy.ViewModels
                 MaskedWord = string.Join(" ", _secretWord.ToCharArray());
             }
         }
-
+        [RelayCommand]
+        public async Task GoBack()
+        {
+            await Shell.Current.GoToAsync("..");
+        }
         [RelayCommand]
         private async Task NextGameAsync()
         {
