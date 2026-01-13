@@ -59,7 +59,7 @@ namespace Linguibuddy.ViewModels
             {
                 if (SelectedCollection == null || SelectedCollection.Items == null || !SelectedCollection.Items.Any())
                 {
-                    FeedbackMessage = "Collection is empty.";
+                    FeedbackMessage = AppResources.CollectionEmpty;
                     IsFinished = true;
                     return;
                 }

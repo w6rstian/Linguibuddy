@@ -133,6 +133,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collection is empty.
+        /// </summary>
+        internal static string CollectionEmpty {
+            get {
+                return ResourceManager.GetString("CollectionEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collections.
         /// </summary>
         internal static string Collections {
@@ -304,6 +313,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Install &apos;English (United States)&apos; in Windows settings..
+        /// </summary>
+        internal static string InstallEng {
+            get {
+                return ResourceManager.GetString("InstallEng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         internal static string Language {
@@ -336,6 +354,24 @@ namespace Linguibuddy.Resources.Strings {
         internal static string LearningFinished {
             get {
                 return ResourceManager.GetString("LearningFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Listening....
+        /// </summary>
+        internal static string Listening {
+            get {
+                return ResourceManager.GetString("Listening", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We need access to a microphone.
+        /// </summary>
+        internal static string MicrophoneNeeded {
+            get {
+                return ResourceManager.GetString("MicrophoneNeeded", resourceCulture);
             }
         }
         
@@ -421,6 +457,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permissions.
+        /// </summary>
+        internal static string NoPermissions {
+            get {
+                return ResourceManager.GetString("NoPermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No results found 😞.
         /// </summary>
         internal static string NoResultsFoundText {
@@ -453,6 +498,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string NoWordsInDatabase {
             get {
                 return ResourceManager.GetString("NoWordsInDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable &apos;Online Speech Recognition&apos; in Windows settings..
+        /// </summary>
+        internal static string OnlineSpeech {
+            get {
+                return ResourceManager.GetString("OnlineSpeech", resourceCulture);
             }
         }
         
@@ -552,6 +606,24 @@ namespace Linguibuddy.Resources.Strings {
         internal static string SelectCollectionPlaceholder {
             get {
                 return ResourceManager.GetString("SelectCollectionPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sentence is generating....
+        /// </summary>
+        internal static string SentenceGenerating {
+            get {
+                return ResourceManager.GetString("SentenceGenerating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read the sentence.
+        /// </summary>
+        internal static string SentenceRead {
+            get {
+                return ResourceManager.GetString("SentenceRead", resourceCulture);
             }
         }
         
@@ -669,15 +741,6 @@ namespace Linguibuddy.Resources.Strings {
         internal static string TranslationError {
             get {
                 return ResourceManager.GetString("TranslationError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 🌐 Translation (PL).
-        /// </summary>
-        internal static string TranslationText {
-            get {
-                return ResourceManager.GetString("TranslationText", resourceCulture);
             }
         }
         

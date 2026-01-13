@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using System.Diagnostics;
 using System.Globalization;
@@ -43,7 +44,7 @@ namespace Linguibuddy.ViewModels
             HasAppeared = [];
             IsFinished = false;
             Score = 0;
-            RecognizedText = "Naciśnij 'Słuchaj' i czytaj...";
+            RecognizedText = AppResources.SentenceRead;
         }
 
         public override async Task LoadQuestionAsync()
@@ -56,7 +57,7 @@ namespace Linguibuddy.ViewModels
 
             FeedbackMessage = string.Empty;
             FeedbackColor = Colors.Transparent;
-            PolishTranslation = "Generowanie zdania...";
+            PolishTranslation = AppResources.SentenceGenerating;
             TargetSentence = string.Empty;
             RecognizedText = string.Empty;
 
@@ -100,14 +101,14 @@ namespace Linguibuddy.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                await Shell.Current.DisplayAlert("Błąd", "Nie udało się załadować pytania.", "OK");
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
             }
             finally
             {
                 IsBusy = false;
                 if (!IsFinished)
                 {
-                    RecognizedText = "Naciśnij 'Słuchaj' i czytaj...";
+                    RecognizedText = AppResources.SentenceRead;
                 }
             }
         }
@@ -120,7 +121,7 @@ namespace Linguibuddy.ViewModels
             var isGranted = await _speechToText.RequestPermissions(CancellationToken.None);
             if (!isGranted)
             {
-                await Shell.Current.DisplayAlert("Brak uprawnień", "Potrzebujemy dostępu do mikrofonu", "OK");
+                await Shell.Current.DisplayAlert(AppResources.NoPermissions, AppResources.MicrophoneNeeded, "OK");
                 return;
             }
 
@@ -128,7 +129,7 @@ namespace Linguibuddy.ViewModels
             _speechToText.RecognitionResultCompleted += OnRecognitionTextCompleted;
 
             IsListening = true;
-            RecognizedText = "Słucham...";
+            RecognizedText = AppResources.Listening;
 
             try
             {
@@ -140,17 +141,17 @@ namespace Linguibuddy.ViewModels
             }
             catch (FileNotFoundException)
             {
-                await HandleSpeechError("Brak pakietu językowego", "Zainstaluj 'English (United States)' w ustawieniach Windows.");
+                await HandleSpeechError(AppResources.Error, AppResources.InstallEng);
             }
             catch (Exception ex)
             {
                 if (ex.Message.Contains("Privacy") || ex.Message.Contains("privacy"))
                 {
-                    await HandleSpeechError("Ustawienia Prywatności", "Włącz 'Rozpoznawanie mowy online' w ustawieniach Windows.");
+                    await HandleSpeechError(AppResources.Error, AppResources.OnlineSpeech);
                 }
                 else
                 {
-                    await HandleSpeechError("Błąd", $"Nie udało się uruchomić: {ex.Message}");
+                    await HandleSpeechError(AppResources.Error, AppResources.Error + ex.Message);
                 }
             }
         }
@@ -215,7 +216,7 @@ namespace Linguibuddy.ViewModels
 
             IsListening = false;
 
-            if (!string.IsNullOrWhiteSpace(RecognizedText) && RecognizedText != "Słucham... (Mów teraz)")
+            if (!string.IsNullOrWhiteSpace(RecognizedText) && RecognizedText != AppResources.Listening)
             {
                 CheckPronunciation(RecognizedText);
             }
@@ -229,7 +230,7 @@ namespace Linguibuddy.ViewModels
         {
             if (IsAnswered) return;
 
-            if (string.IsNullOrWhiteSpace(spokenText) || spokenText == "Słucham..." || spokenText == "Naciśnij mikrofon i czytaj...")
+            if (string.IsNullOrWhiteSpace(spokenText) || spokenText == AppResources.Listening)
                 return;
 
             IsAnswered = true;

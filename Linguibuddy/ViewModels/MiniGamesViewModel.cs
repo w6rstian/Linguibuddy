@@ -4,6 +4,7 @@ using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using Linguibuddy.Views;
 using Microsoft.Maui.Controls.Shapes;
@@ -85,7 +86,7 @@ namespace Linguibuddy.ViewModels
 
             if (!selectedCollection.Items.Any())
             {
-                await Shell.Current.DisplayAlert("Błąd", "Kolekcja jest pusta.", "OK");
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.CollectionEmpty, "OK");
                 return;
             }
 

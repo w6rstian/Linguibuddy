@@ -52,7 +52,7 @@ namespace Linguibuddy.ViewModels
         public string CurrentTranslation =>
             !string.IsNullOrEmpty(_currentItem?.SavedTranslation)
                 ? _currentItem.SavedTranslation
-                : "Brak t³umaczenia";
+                : AppResources.NoTranslation;
 
         public string CurrentDefinition
         {

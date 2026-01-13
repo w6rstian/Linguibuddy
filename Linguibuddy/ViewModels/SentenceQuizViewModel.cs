@@ -68,13 +68,13 @@ namespace Linguibuddy.ViewModels
 
             AvailableWords.Clear();
             SelectedWords.Clear();
-            PolishTranslation = "Generowanie zdania...";
+            PolishTranslation = AppResources.SentenceGenerating;
 
             try
             {
                 if (SelectedCollection == null || SelectedCollection.Items == null || !SelectedCollection.Items.Any())
                 {
-                    FeedbackMessage = "Kolekcja jest pusta.";
+                    FeedbackMessage = AppResources.CollectionEmpty;
                     IsFinished = true;
                     return;
                 }
@@ -135,7 +135,7 @@ namespace Linguibuddy.ViewModels
             catch (Exception e)
             {
                 Debug.WriteLine($"Error loading sentence quiz: {e.Message}");
-                await Shell.Current.DisplayAlert(AppResources.Error, "Failed to load question", "OK");
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
             }
             finally
             {

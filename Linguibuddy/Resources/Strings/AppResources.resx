@@ -153,9 +153,6 @@
   <data name="ThemeNameDark" xml:space="preserve">
     <value>Dark</value>
   </data>
-  <data name="TranslationText" xml:space="preserve">
-    <value>🌐 Translation (PL)</value>
-  </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
@@ -334,5 +331,29 @@
   </data>
   <data name="NoFlashcardsToLearn" xml:space="preserve">
     <value>No flashcards to learn</value>
+  </data>
+  <data name="CollectionEmpty" xml:space="preserve">
+    <value>Collection is empty</value>
+  </data>
+  <data name="SentenceGenerating" xml:space="preserve">
+    <value>Sentence is generating...</value>
+  </data>
+  <data name="SentenceRead" xml:space="preserve">
+    <value>Read the sentence</value>
+  </data>
+  <data name="NoPermissions" xml:space="preserve">
+    <value>No permissions</value>
+  </data>
+  <data name="MicrophoneNeeded" xml:space="preserve">
+    <value>We need access to a microphone</value>
+  </data>
+  <data name="Listening" xml:space="preserve">
+    <value>Listening...</value>
+  </data>
+  <data name="InstallEng" xml:space="preserve">
+    <value>Install 'English (United States)' in Windows settings.</value>
+  </data>
+  <data name="OnlineSpeech" xml:space="preserve">
+    <value>Enable 'Online Speech Recognition' in Windows settings.</value>
   </data>
 </root>

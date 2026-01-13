@@ -153,9 +153,6 @@
   <data name="ThemeNameDark" xml:space="preserve">
     <value>Ciemny</value>
   </data>
-  <data name="TranslationText" xml:space="preserve">
-    <value>🌐 Tłumaczenie (PL)</value>
-  </data>
   <data name="Error" xml:space="preserve">
     <value>Błąd</value>
   </data>
@@ -332,5 +329,29 @@
   </data>
   <data name="NoFlashcardsToLearn" xml:space="preserve">
     <value>Brak fiszek do nauki</value>
+  </data>
+  <data name="CollectionEmpty" xml:space="preserve">
+    <value>Kolekcja jest pusta</value>
+  </data>
+  <data name="SentenceGenerating" xml:space="preserve">
+    <value>Generowanie zdania...</value>
+  </data>
+  <data name="SentenceRead" xml:space="preserve">
+    <value>Przeczytaj zdanie</value>
+  </data>
+  <data name="NoPermissions" xml:space="preserve">
+    <value>Brak uprawnień</value>
+  </data>
+  <data name="MicrophoneNeeded" xml:space="preserve">
+    <value>Potrzebujemy dostępu do mikrofonu</value>
+  </data>
+  <data name="Listening" xml:space="preserve">
+    <value>Słucham...</value>
+  </data>
+  <data name="InstallEng" xml:space="preserve">
+    <value>Zainstaluj 'Angielski (Stany Zjednoczone)' w ustawieniach Windows.</value>
+  </data>
+  <data name="OnlineSpeech" xml:space="preserve">
+    <value>Włącz 'Rozpoznawanie mowy online' w ustawieniach Windows.</value>
   </data>
 </root>
