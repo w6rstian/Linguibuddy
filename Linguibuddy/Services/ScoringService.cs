@@ -12,6 +12,7 @@ namespace Linguibuddy.Services
     public class ScoringService
     {
         private readonly CollectionService _collectionService;
+        private readonly AppUserService _appUserService;
 
         private readonly Dictionary<GameType, int> _basePoints = new()
         {
@@ -22,9 +23,10 @@ namespace Linguibuddy.Services
             { GameType.Hangman, 50 }
         };
 
-        public ScoringService(CollectionService collectionService)
+        public ScoringService(CollectionService collectionService, AppUserService appUserService)
         {
             _collectionService = collectionService;
+            _appUserService = appUserService;
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace Linguibuddy.Services
         /// <summary>
         /// Zapisuje wynik do kolekcji oraz dodaje XP do użytkownika.
         /// </summary>
-        public async Task SaveResultsAsync(WordCollection collection, GameType gameType, int correctAnswers, int totalQuestions, int totalXpEarned)
+        public async Task SaveResultsAsync(WordCollection collection, GameType gameType, int correctAnswers, int totalQuestions, int totalPointsEarned)
         {
             if (totalQuestions == 0) return;
 
@@ -84,19 +86,12 @@ namespace Linguibuddy.Services
 
             try
             {
-                // update kolekcji w bazie o punkty
                 await _collectionService.UpdateCollectionAsync(collection);
 
-                // update usera w bazie o punkty
-                //var user = await _userService.GetCurrentUserAsync();
-                //if (user != null)
-                //{
-                //    user.Points += totalXpEarned;
-
-                //    // ewentualna możliwość może połączyć ilość tych punktów z jakimś achievementem
-
-                //    await _userService.UpdatePoints(user);
-                //}
+                if (totalPointsEarned > 0)
+                {
+                    await _appUserService.AddUserPointsAsync(totalPointsEarned);
+                }
             }
             catch (Exception ex)
             {
