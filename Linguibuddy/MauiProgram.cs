@@ -104,6 +104,8 @@ namespace Linguibuddy
             builder.Services.AddTransient<IAppUserRepository, AppUserRepository>();
             builder.Services.AddTransient<LearningService>();
             builder.Services.AddTransient<AppUserService>();
+            builder.Services.AddTransient<ScoringService>();
+
 
             builder.Services.AddHttpClient<DictionaryApiService>(client =>
             {

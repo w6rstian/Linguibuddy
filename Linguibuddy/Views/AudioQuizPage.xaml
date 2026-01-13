@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
+             xmlns:models="clr-namespace:Linguibuddy.Models"
              x:Class="Linguibuddy.Views.AudioQuizPage"
              x:DataType="vm:AudioQuizViewModel"
              Title="Rozpoznaj audio">
@@ -23,6 +24,16 @@
            FontSize="16" 
            TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
            HorizontalOptions="Center"/>
+
+            <Label Text="{Binding Score, StringFormat='Poprawne odpowiedzi: {0}'}"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <Label Text="{Binding PointsEarned, StringFormat='Zdobyte punkty: +{0}'}"
+                   FontSize="16" 
+                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
+                   HorizontalOptions="Center"/>
 
             <Button Text="{loc:Translate BackToList}" 
             Command="{Binding GoBackCommand}"
@@ -93,7 +104,7 @@
                   RowSpacing="15">
 
                 <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="vm:QuizOption">
+                    <DataTemplate x:DataType="models:QuizOption">
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
             </Grid>
@@ -103,7 +114,7 @@
                     <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="10" VerticalItemSpacing="10"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:QuizOption">
+                    <DataTemplate x:DataType="models:QuizOption">
                         <Button Text="{Binding Word.Word}"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AudioQuizViewModel}}, Path=SelectAnswerCommand}"
                                 CommandParameter="{Binding .}"

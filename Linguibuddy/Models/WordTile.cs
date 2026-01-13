@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Linguibuddy.ViewModels
+namespace Linguibuddy.Models
 {
     public partial class WordTile : ObservableObject
     {

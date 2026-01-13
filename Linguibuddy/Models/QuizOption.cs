@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Linguibuddy.Models;
 
-namespace Linguibuddy.ViewModels
+namespace Linguibuddy.Models
 {
     public partial class QuizOption : ObservableObject
     {

@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
-using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using LocalizationResourceManager.Maui;
 using System.Globalization;
