@@ -32,7 +32,7 @@ namespace Linguibuddy.ViewModels
 
         public bool IsLearning => !IsFinished;
 
-        public ObservableCollection<QuizOption> Options { get; } = [];
+        public ObservableCollection<Models.QuizOption> Options { get; } = [];
 
         public AudioQuizViewModel(DictionaryApiService dictionaryService, IAudioManager audioManager)
         {
@@ -101,7 +101,7 @@ namespace Linguibuddy.ViewModels
 
                 foreach (var word in optionsList)
                 {
-                    Options.Add(new QuizOption(word));
+                    Options.Add(new Models.QuizOption(word));
                 }
 
                 HasAppeared.Add(TargetWord);
@@ -118,7 +118,7 @@ namespace Linguibuddy.ViewModels
         }
 
         [RelayCommand]
-        private async Task SelectAnswerAsync(QuizOption selectedOption)
+        private async Task SelectAnswerAsync(Models.QuizOption selectedOption)
         {
             if (IsAnswered || selectedOption == null || TargetWord == null) return;
 

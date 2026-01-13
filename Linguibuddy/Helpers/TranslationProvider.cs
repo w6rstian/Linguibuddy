@@ -1,4 +1,4 @@
-﻿namespace Linguibuddy.Models
+﻿namespace Linguibuddy.Helpers
 {
     public enum TranslationProvider
     {

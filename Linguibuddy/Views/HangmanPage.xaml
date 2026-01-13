@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
+             xmlns:models="clr-namespace:Linguibuddy.Models"
              x:Class="Linguibuddy.Views.HangmanPage"
              x:DataType="vm:HangmanViewModel"
              Title="{loc:Translate Hangman}">
@@ -67,7 +68,7 @@
                             Direction="Row">
 
                     <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="vm:HangmanLetter">
+                        <DataTemplate x:DataType="models:HangmanLetter">
                             <Button Text="{Binding Character}"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HangmanViewModel}}, Path=GuessLetterCommand}"
                                     CommandParameter="{Binding .}"

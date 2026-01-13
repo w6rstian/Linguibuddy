@@ -40,7 +40,7 @@ namespace Linguibuddy.ViewModels
         private int _score;
 
         // Klawiatura A-Z
-        public ObservableCollection<HangmanLetter> Keyboard { get; } = new();
+        public ObservableCollection<Models.HangmanLetter> Keyboard { get; } = new();
 
         public HangmanViewModel(DictionaryApiService dictionaryService)
         {
@@ -56,7 +56,7 @@ namespace Linguibuddy.ViewModels
             // Kolor domyślny nie ma tu znaczenia, ustawimy go w LoadQuestionAsync
             for (char c = 'A'; c <= 'Z'; c++)
             {
-                Keyboard.Add(new HangmanLetter(c, Colors.Gray));
+                Keyboard.Add(new Models.HangmanLetter(c, Colors.Gray));
             }
         }
 
@@ -169,7 +169,7 @@ namespace Linguibuddy.ViewModels
         }
 
         [RelayCommand]
-        private void GuessLetter(HangmanLetter letterObj)
+        private void GuessLetter(Models.HangmanLetter letterObj)
         {
             if (IsAnswered || !letterObj.IsEnabled) return;
 

@@ -48,7 +48,7 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private int _score;
 
-        public ObservableCollection<QuizOption> Options { get; } = new();
+        public ObservableCollection<Models.QuizOption> Options { get; } = new();
 
         public ImageQuizViewModel(DictionaryApiService dictionaryService, CollectionService collectionService)
         {
@@ -130,7 +130,7 @@ namespace Linguibuddy.ViewModels
 
                 foreach (var word in optionsList)
                 {
-                    Options.Add(new QuizOption(word));
+                    Options.Add(new Models.QuizOption(word));
                 }
 
                 HasAppeared.Add(TargetWord);
@@ -147,7 +147,7 @@ namespace Linguibuddy.ViewModels
         }
 
         [RelayCommand]
-        private void SelectAnswer(QuizOption selectedOption)
+        private void SelectAnswer(Models.QuizOption selectedOption)
         {
             if (IsAnswered || selectedOption == null || TargetWord == null) return;
 

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
+             xmlns:models="clr-namespace:Linguibuddy.Models"
              x:Class="Linguibuddy.Views.ImageQuizPage"
              x:DataType="vm:ImageQuizViewModel"
              Title="Dopasuj do obrazka">
@@ -73,7 +74,7 @@
                                      HorizontalItemSpacing="15" VerticalItemSpacing="15"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:QuizOption">
+                    <DataTemplate x:DataType="models:QuizOption">
                         <Button Text="{Binding Word.Word}"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ImageQuizViewModel}}, Path=SelectAnswerCommand}"
                                 CommandParameter="{Binding .}"
