@@ -19,6 +19,26 @@ namespace Linguibuddy.Models
 
         public string? UserId { get; set; } = string.Empty;
 
-        public List<CollectionItem> Items { get; set; } = new();
+        public List<CollectionItem> Items { get; set; } = [];
+
+        // Audio Quiz
+        public double AudioBestScore { get; set; }
+        public double AudioLastScore { get; set; }
+
+        // Image Quiz
+        public double ImageBestScore { get; set; }
+        public double ImageLastScore { get; set; }
+
+        // Sentence Quiz
+        public double SentenceBestScore { get; set; }
+        public double SentenceLastScore { get; set; }
+
+        // Speaking Quiz
+        public double SpeakingBestScore { get; set; }
+        public double SpeakingLastScore { get; set; }
+
+        // Hangman
+        public double HangmanBestScore { get; set; }
+        public double HangmanLastScore { get; set; }
     }
 }
