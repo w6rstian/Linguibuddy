@@ -26,6 +26,11 @@ namespace Linguibuddy.ViewModels
 
             if (_authClient.User != null)
                 Username = _authClient.User.Info.DisplayName;
+            else
+            {
+                var signInPage = _services.GetRequiredService<SignInPage>();
+                Application.Current.Windows[0].Page = new NavigationPage(signInPage);
+            }
         }
 
         [RelayCommand]
