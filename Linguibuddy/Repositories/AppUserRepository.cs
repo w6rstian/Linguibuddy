@@ -22,7 +22,7 @@ namespace Linguibuddy.Repositories
         public async Task<AppUser?> GetByIdAsync(string userId)
             => await _db.AppUsers
             .Where(au => au.Id == userId)
-            .FirstAsync();
+            .FirstOrDefaultAsync();
 
         public async Task AddAsync(AppUser user)
         {
