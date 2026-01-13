@@ -48,7 +48,7 @@ namespace Linguibuddy.Services
         }
 
         /// <summary>
-        /// Zapisuje wynik do kolekcji oraz dodaje XP do użytkownika.
+        /// Zapisuje wynik do kolekcji oraz dodaje punkty do użytkownika.
         /// </summary>
         public async Task SaveResultsAsync(WordCollection collection, GameType gameType, int correctAnswers, int totalQuestions, int totalPointsEarned)
         {

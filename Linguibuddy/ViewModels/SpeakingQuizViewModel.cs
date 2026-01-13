@@ -16,6 +16,7 @@ namespace Linguibuddy.ViewModels
     {
         private readonly ISpeechToText _speechToText;
         private readonly OpenAiService _openAiService;
+        private readonly ScoringService _scoringService;
 
         [ObservableProperty] private WordCollection? _selectedCollection;
         [ObservableProperty] private CollectionItem? _targetWord;
@@ -27,6 +28,8 @@ namespace Linguibuddy.ViewModels
         public bool IsLearning => !IsFinished;
 
         [ObservableProperty] private int _score;
+        [ObservableProperty] private int _pointsEarned;
+
         [ObservableProperty] private string _recognizedText;
         [ObservableProperty] private string _targetSentence;
         [ObservableProperty] private string _polishTranslation;
@@ -36,14 +39,18 @@ namespace Linguibuddy.ViewModels
         private bool _isListening;
         public bool IsNotListening => !IsListening;
 
-        public SpeakingQuizViewModel(ISpeechToText speechToText, OpenAiService openAiService)
+        public SpeakingQuizViewModel(ISpeechToText speechToText, 
+            OpenAiService openAiService, 
+            ScoringService scoringService)
         {
             _speechToText = speechToText;
             _openAiService = openAiService;
+            _scoringService = scoringService;
 
             HasAppeared = [];
             IsFinished = false;
             Score = 0;
+            PointsEarned = 0;
             RecognizedText = AppResources.SentenceRead;
         }
 
@@ -60,6 +67,13 @@ namespace Linguibuddy.ViewModels
             PolishTranslation = AppResources.SentenceGenerating;
             TargetSentence = string.Empty;
             RecognizedText = string.Empty;
+
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+                IsBusy = false;
+                return;
+            }
 
             try
             {
@@ -167,7 +181,7 @@ namespace Linguibuddy.ViewModels
             }
             catch
             {
-                // Ignorujemy błędy przy zatrzymywaniu (np. jeśli system sam już zatrzymał)
+                // Ignorujemy błędy przy zatrzymywaniu
             }
             finally
             {
@@ -184,7 +198,7 @@ namespace Linguibuddy.ViewModels
             IsListening = false;
         }
 
-        // real time text updates
+        // real time update tekstu
         private void OnRecognitionTextUpdated(object? sender, SpeechToTextRecognitionResultUpdatedEventArgs args)
         {
             RecognizedText = args.RecognitionResult;
@@ -240,6 +254,13 @@ namespace Linguibuddy.ViewModels
             if (similarity >= 80)
             {
                 Score++;
+
+                int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
+                var difficulty = (DifficultyLevel)difficultyInt;
+
+                int points = _scoringService.CalculatePoints(GameType.SpeakingQuiz, difficulty);
+                PointsEarned += points;
+
                 FeedbackMessage = $"Świetnie! ({similarity:F0}% zgodności)";
                 FeedbackColor = Colors.Green;
             }
@@ -255,7 +276,18 @@ namespace Linguibuddy.ViewModels
         {
             await LoadQuestionAsync();
             if (IsFinished)
-            { }
+            {
+                if (SelectedCollection != null)
+                {
+                    await _scoringService.SaveResultsAsync(
+                        SelectedCollection,
+                        GameType.SpeakingQuiz,
+                        Score,
+                        SelectedCollection.Items.Count,
+                        PointsEarned
+                    );
+                }
+            }
         }
 
         [RelayCommand]
@@ -302,7 +334,7 @@ namespace Linguibuddy.ViewModels
         {
             Debug.WriteLine($"Speech Error: {message}");
             IsListening = false;
-            RecognizedText = "Błąd konfiguracji.";
+            RecognizedText = AppResources.Error;
             _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
             _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
             await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.DisplayAlert(title, message, "OK"));

@@ -5,36 +5,18 @@ using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Linguibuddy.Helpers;
 
 namespace Linguibuddy.ViewModels
 {
-    public enum QuizSourceType
-    {
-        Random,
-        Collection
-    }
-
     [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class ImageQuizViewModel : BaseQuizViewModel
     {
-        private readonly DictionaryApiService _dictionaryService;
         private readonly CollectionService _collectionService;
-
-        [ObservableProperty]
-        private bool _isSetupVisible = true;
-
-        [ObservableProperty]
-        private bool _isGameVisible = false;
-
-        [ObservableProperty]
-        private QuizSourceType _selectedSourceType = QuizSourceType.Random;
+        private readonly ScoringService _scoringService;
 
         [ObservableProperty]
         private WordCollection? _selectedCollection;
-
-        public ObservableCollection<WordCollection> AvailableCollections { get; } = new();
-
-        private List<DictionaryWord> _collectionPool = new();
 
         [ObservableProperty]
         private CollectionItem? _targetWord;
@@ -45,25 +27,24 @@ namespace Linguibuddy.ViewModels
         [NotifyPropertyChangedFor(nameof(IsLearning))]
         private bool _isFinished;
         public bool IsLearning => !IsFinished;
+
         [ObservableProperty]
         private int _score;
 
+        [ObservableProperty] 
+        private int _pointsEarned;
+
         public ObservableCollection<Models.QuizOption> Options { get; } = new();
 
-        public ImageQuizViewModel(DictionaryApiService dictionaryService, CollectionService collectionService)
+        public ImageQuizViewModel(CollectionService collectionService, ScoringService scoringService)
         {
-            _dictionaryService = dictionaryService;
             _collectionService = collectionService;
+            _scoringService = scoringService;
+
             _hasAppeared = [];
-
-            LoadCollectionsAsync();
-        }
-
-        private async void LoadCollectionsAsync()
-        {
-            var collections = await _collectionService.GetUserCollectionsAsync();
-            AvailableCollections.Clear();
-            foreach (var c in collections) AvailableCollections.Add(c);
+            IsFinished = false;
+            Score = 0;
+            PointsEarned = 0;
         }
 
         public override async Task LoadQuestionAsync()
@@ -156,6 +137,11 @@ namespace Linguibuddy.ViewModels
             if (selectedOption.Word.Id == TargetWord.Id)
             {
                 selectedOption.BackgroundColor = Colors.LightGreen;
+                Score++;
+
+                int points = _scoringService.CalculatePoints(GameType.ImageQuiz, DifficultyLevel.A1);
+                PointsEarned += points;
+
                 FeedbackMessage = AppResources.CorrectAnswer;
                 FeedbackColor = Colors.Green;
             }
@@ -181,7 +167,16 @@ namespace Linguibuddy.ViewModels
 
             if (IsFinished)
             {
-                //
+                if (SelectedCollection != null)
+                {
+                    await _scoringService.SaveResultsAsync(
+                        SelectedCollection,
+                        GameType.ImageQuiz,
+                        Score,
+                        SelectedCollection.Items.Count,
+                        PointsEarned
+                    );
+                }
             }
         }
     }

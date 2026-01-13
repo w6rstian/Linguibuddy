@@ -26,6 +26,16 @@
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                    HorizontalOptions="Center"/>
 
+            <Label Text="{Binding Score, StringFormat='Poprawne odpowiedzi: {0}'}"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <Label Text="{Binding PointsEarned, StringFormat='Zdobyte punkty: +{0}'}"
+                   FontSize="16" 
+                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
+                   HorizontalOptions="Center"/>
+
             <Button Text="{loc:Translate BackToList}" 
                     Command="{Binding GoBackCommand}"
                     Margin="0,20,0,0"
@@ -33,6 +43,7 @@
                     TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
                     WidthRequest="200"/>
         </VerticalStackLayout>
+
         <Grid RowDefinitions="*, Auto" IsVisible="{Binding IsLearning}">
 
             <ScrollView Grid.Row="0">
