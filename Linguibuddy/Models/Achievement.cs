@@ -10,7 +10,7 @@ namespace Linguibuddy.Models
         public string Description { get; set; } = string.Empty;
         public string IconUrl { get; set; } = string.Empty;
         public string LockedIconUrl { get; set; } = "lock_100dp_light.png";
-        public string Crieria { get; set; } = string.Empty; // Jakieś warunki odblokowania w Json
+        public Dictionary<string, object> Requirements { get; set; } = [];
         public ICollection<UserAchievement> UserAchievements { get; set; } = new List<UserAchievement>();
     }
 }

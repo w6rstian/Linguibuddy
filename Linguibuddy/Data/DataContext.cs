@@ -68,7 +68,11 @@ namespace Linguibuddy.Data
                         Id = 1,
                         Name = AppResources.Achievement1Name,
                         Description = AppResources.Achievement1Description,
-                        IconUrl = "trophy_100dp_light.png"
+                        IconUrl = "trophy_100dp_light.png",
+                        Requirements =
+                        {
+                            { "Points", 1 }
+                        }
                     }
                 );
 
