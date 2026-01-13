@@ -119,7 +119,7 @@ namespace Linguibuddy.ViewModels
                     .Replace(".", "")
                     .Replace("?", "")
                     .Replace("!", "")
-                    .Replace(",", ""); // Przecinki też warto usunąć, żeby nie zdradzały pozycji
+                    .Replace(",", "");
 
                 var words = cleanSentence.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
 
@@ -163,31 +163,42 @@ namespace Linguibuddy.ViewModels
             AvailableWords.Add(tile);
         }
 
-        // Akcja: Sprawdź odpowiedź (przycisk na dole)
         [RelayCommand]
         private void CheckAnswer()
         {
             if (_currentQuestion == null) return;
 
-            // Złóż zdanie z wybranych kafelków
             string formedSentence = string.Join(" ", SelectedWords.Select(w => w.Text));
 
-            string correctSentence = _currentQuestion.EnglishSentence.TrimEnd('.', '!', '?');
+            string correctSentence = _currentQuestion.EnglishSentence;
 
-            bool isCorrect = string.Equals(formedSentence, correctSentence, StringComparison.OrdinalIgnoreCase);
+            string Normalize(string input)
+            {
+                if (string.IsNullOrEmpty(input)) return string.Empty;
+
+                var lower = input.ToLowerInvariant();
+
+                var punctuation = new[] { '.', ',', '?', '!', ';', ':', '-', '"', '\'' };
+                foreach (var p in punctuation)
+                {
+                    lower = lower.Replace(p.ToString(), "");
+                }
+                return string.Join(" ", lower.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            bool isCorrect = Normalize(formedSentence) == Normalize(correctSentence);
 
             IsAnswered = true;
 
             if (isCorrect)
             {
-                Score++; // Dodajemy punkt
+                Score++;
                 FeedbackMessage = AppResources.Perfect;
                 FeedbackColor = Colors.Green;
             }
             else
             {
-                FeedbackMessage = $"{AppResources.ErrorCorrect}\n" +
-                                  $"{_currentQuestion.EnglishSentence}";
+                FeedbackMessage = $"{AppResources.ErrorCorrect}\n{_currentQuestion.EnglishSentence}";
                 FeedbackColor = Colors.Red;
             }
         }
