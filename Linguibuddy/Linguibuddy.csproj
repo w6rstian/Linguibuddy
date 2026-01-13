@@ -91,6 +91,8 @@
 	
 	<ItemGroup>
 	  <None Remove="appsettings.json" />
+	  <None Remove="Resources\Icons\account_circle_100dp_dark.svg" />
+	  <None Remove="Resources\Icons\account_circle_100dp_light.svg" />
 	  <None Remove="Resources\Icons\cards_stack_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\cards_stack_100dp_light.svg" />
 	  <None Remove="Resources\Icons\dictionary_100dp_dark.svg" />
@@ -130,6 +132,8 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <MauiImage Include="Resources\Icons\account_circle_100dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\account_circle_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\record_voice_over_150dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\record_voice_over_150dp_light.svg" />
 	</ItemGroup>
@@ -236,6 +240,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ImageQuizPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SentenceQuizPage.xaml">
