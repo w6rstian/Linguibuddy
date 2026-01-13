@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:Linguibuddy.Models"
@@ -9,11 +10,11 @@
     <ContentPage.Resources>
         <converters:AchievementIconConverter x:Key="AchievementIconConverter" />
     </ContentPage.Resources>
-    
+
     <ScrollView>
         <StackLayout Padding="20">
-            <ActivityIndicator IsRunning="{Binding IsLoading}" 
-                               IsVisible="{Binding IsLoading}" 
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
                                Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
 
             <!-- Achievements list -->
@@ -21,31 +22,31 @@
                 <CollectionView.EmptyView>
                     <Label Text="{loc:Translate NoAchievements}"
                            TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                           HorizontalOptions="Center"/>
+                           HorizontalOptions="Center" />
                 </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:UserAchievement">
-                        <Border 
-                            Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" 
-                            StrokeShape="RoundRectangle 10" 
-                            StrokeThickness="1" 
-                            Padding="10" 
+                        <Border
+                            Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            StrokeShape="RoundRectangle 10"
+                            StrokeThickness="1"
+                            Padding="10"
                             Margin="5">
                             <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
                                 <!-- Icon, converter chooses locked/unlocked -->
-                                <Image Source="{Binding ., Converter={StaticResource AchievementIconConverter}}" 
-                                   WidthRequest="50" HeightRequest="50" 
-                                   Grid.RowSpan="2" />
+                                <Image Source="{Binding ., Converter={StaticResource AchievementIconConverter}}"
+                                       WidthRequest="50" HeightRequest="50"
+                                       Grid.RowSpan="2" />
 
-                                <Label Text="{Binding Achievement.Name}" 
-                                   FontAttributes="Bold" 
-                                   FontSize="Medium" 
-                                   Grid.Column="1" />
-                                
-                                <Label Text="{Binding Achievement.Description}" 
-                                   FontSize="Small" 
-                                   TextColor="Gray" 
-                                   Grid.Column="1" Grid.Row="1" />
+                                <Label Text="{Binding Achievement.Name}"
+                                       FontAttributes="Bold"
+                                       FontSize="Medium"
+                                       Grid.Column="1" />
+
+                                <Label Text="{Binding Achievement.Description}"
+                                       FontSize="Small"
+                                       TextColor="Gray"
+                                       Grid.Column="1" Grid.Row="1" />
                             </Grid>
                         </Border>
                     </DataTemplate>

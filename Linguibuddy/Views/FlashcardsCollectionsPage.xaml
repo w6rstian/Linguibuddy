@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
@@ -10,9 +11,9 @@
 
     <Grid RowDefinitions="Auto, *">
 
-        <Grid Grid.Row="0" 
-              ColumnDefinitions="*, Auto" 
-              ColumnSpacing="10" 
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*, Auto"
+              ColumnSpacing="10"
               Margin="20,15">
 
             <Button Grid.Column="0"
@@ -25,11 +26,13 @@
                     HeightRequest="55"
                     CornerRadius="12">
                 <Button.Shadow>
-                    <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDark}}" Radius="5" Opacity="0.4" Offset="0,4"/>
+                    <Shadow
+                        Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDark}}"
+                        Radius="5" Opacity="0.4" Offset="0,4" />
                 </Button.Shadow>
             </Button>
 
-            <Border Grid.Column="1" 
+            <Border Grid.Column="1"
                     StrokeShape="RoundRectangle 12"
                     BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
                     Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray400}}"
@@ -40,59 +43,59 @@
                 <HorizontalStackLayout Spacing="8" VerticalOptions="Center"
                                        MaximumWidthRequest="110">
 
-                    <Label Text="Spaced&#10;Repetition" 
-                           FontSize="11" 
+                    <Label Text="Spaced&#10;Repetition"
+                           FontSize="11"
                            FontAttributes="Bold"
                            TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"
                            VerticalOptions="Center"
-                           HorizontalTextAlignment="End"/>
+                           HorizontalTextAlignment="End" />
 
-                    <Switch IsToggled="{Binding IsSpacedRepetitionEnabled}" 
+                    <Switch IsToggled="{Binding IsSpacedRepetitionEnabled}"
                             OnColor="{StaticResource Primary}"
                             ThumbColor="{AppThemeBinding Light=White, Dark={StaticResource Gray200}}"
                             Scale="1"
                             Margin="0,0,0,0"
-                            
-                            VerticalOptions="Center"/>
+
+                            VerticalOptions="Center" />
                 </HorizontalStackLayout>
             </Border>
         </Grid>
 
-        <CollectionView Grid.Row="1" 
-                        ItemsSource="{Binding Collections}" 
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Collections}"
                         Margin="20,0,20,20"
                         SelectionMode="None">
 
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="12"/>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
             </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:WordCollection">
-                    <Border StrokeShape="RoundRectangle 12" 
+                    <Border StrokeShape="RoundRectangle 12"
                             Padding="15"
                             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}"
                             Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray400}}"
                             StrokeThickness="1">
-                        
+
                         <Border.Shadow>
-                            <Shadow Brush="Black" Offset="0,2" Radius="5" Opacity="0.05"/>
+                            <Shadow Brush="Black" Offset="0,2" Radius="5" Opacity="0.05" />
                         </Border.Shadow>
 
                         <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
 
                             <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="2">
-                                <Label Text="{Binding Name}" 
-                                       FontAttributes="Bold" 
+                                <Label Text="{Binding Name}"
+                                       FontAttributes="Bold"
                                        FontSize="17"
                                        LineBreakMode="WordWrap"
-                                       Margin="0,0,10,0"    
-                                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                                       Margin="0,0,10,0"
+                                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
 
                                 <!--ciężko dodać napis {ilość} fiszek do tłumaczeń-->
-                                <Label Text="{Binding Items.Count, StringFormat='{0} fiszek'}" 
+                                <Label Text="{Binding Items.Count, StringFormat='{0} fiszek'}"
                                        FontSize="13"
-                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
                             </VerticalStackLayout>
 
                             <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
@@ -107,7 +110,7 @@
                                         TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Secondary}}"
                                         BorderColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Secondary}}"
                                         BorderWidth="1"
-                                        CornerRadius="8"/>
+                                        CornerRadius="8" />
 
                                 <Button Text="✕"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FlashcardsCollectionsViewModel}}, Path=DeleteCollectionCommand}"
@@ -118,7 +121,7 @@
                                         Padding="0"
                                         BackgroundColor="{AppThemeBinding Light=#FFEBEE, Dark=#3E2723}"
                                         TextColor="Red"
-                                        CornerRadius="8"/>
+                                        CornerRadius="8" />
 
                                 <Button Text="{loc:Translate Learn}"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FlashcardsCollectionsViewModel}}, Path=GoToLearningCommand}"
@@ -129,7 +132,7 @@
                                         HeightRequest="36"
                                         BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                                         TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}"
-                                        CornerRadius="8"/>
+                                        CornerRadius="8" />
                             </HorizontalStackLayout>
                         </Grid>
                     </Border>
@@ -138,12 +141,12 @@
 
             <CollectionView.EmptyView>
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
-                    <Label Text="Brak kolekcji" 
+                    <Label Text="Brak kolekcji"
                            FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"
-                           TextColor="{StaticResource Gray500}"/>
-                    <Label Text="Stwórz pierwszą kolekcję przyciskiem powyżej." 
+                           TextColor="{StaticResource Gray500}" />
+                    <Label Text="Stwórz pierwszą kolekcję przyciskiem powyżej."
                            FontSize="14" HorizontalOptions="Center"
-                           TextColor="{StaticResource Gray400}"/>
+                           TextColor="{StaticResource Gray400}" />
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
 

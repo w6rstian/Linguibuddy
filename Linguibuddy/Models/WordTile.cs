@@ -1,15 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Linguibuddy.Models
-{
-    public partial class WordTile : ObservableObject
-    {
-        public string Text { get; }
-        public Guid Id { get; } = Guid.NewGuid();
+namespace Linguibuddy.Models;
 
-        public WordTile(string text)
-        {
-            Text = text;
-        }
+public class WordTile : ObservableObject
+{
+    public WordTile(string text)
+    {
+        Text = text;
     }
+
+    public string Text { get; }
+    public Guid Id { get; } = Guid.NewGuid();
 }

@@ -1,42 +1,43 @@
-﻿using DeepL;
+﻿using System.Diagnostics;
+using DeepL;
 
-namespace Linguibuddy.Services
+namespace Linguibuddy.Services;
+
+public class DeepLTranslationService
 {
-    public class DeepLTranslationService
+    private readonly DeepLClient _client;
+
+    public DeepLTranslationService(string? apiKey)
     {
-        private readonly DeepLClient _client;
+        if (string.IsNullOrEmpty(apiKey))
+            throw new ArgumentException("API key is required", nameof(apiKey));
 
-        public DeepLTranslationService(string? apiKey)
+        _client = new DeepLClient(apiKey);
+    }
+
+    public async Task<string> TranslateWithContextAsync(string word, string definition, string partOfSpeech,
+        string targetLang = "PL")
+    {
+        if (string.IsNullOrWhiteSpace(word)) return string.Empty;
+
+        try
         {
-            if (string.IsNullOrEmpty(apiKey))
-                throw new ArgumentException("API key is required", nameof(apiKey));
+            var contextString = $"{partOfSpeech}. {definition}";
 
-            _client = new DeepLClient(apiKey);
+            var options = new TextTranslateOptions
+            {
+                Context = contextString,
+                Formality = Formality.Less,
+                SentenceSplittingMode = SentenceSplittingMode.Off
+            };
+            var result = await _client.TranslateTextAsync(word, "EN", targetLang, options);
+
+            return result.Text;
         }
-
-        public async Task<string> TranslateWithContextAsync(string word, string definition, string partOfSpeech, string targetLang = "PL")
+        catch (Exception ex)
         {
-            if (string.IsNullOrWhiteSpace(word)) return string.Empty;
-
-            try
-            {
-                var contextString = $"{partOfSpeech}. {definition}";
-
-                var options = new TextTranslateOptions
-                {
-                    Context = contextString,
-                    Formality = Formality.Less,
-                    SentenceSplittingMode = SentenceSplittingMode.Off
-                };
-                var result = await _client.TranslateTextAsync(word, sourceLanguageCode: "EN", targetLang, options);
-
-                return result.Text;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"DeepL Error: {ex.Message}");
-                return word;
-            }
+            Debug.WriteLine($"DeepL Error: {ex.Message}");
+            return word;
         }
     }
 }

@@ -1,253 +1,233 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Text;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Linguibuddy.Helpers;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
-using System.Collections.ObjectModel;
-using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Text;
-using Linguibuddy.Helpers;
 
-namespace Linguibuddy.ViewModels
+namespace Linguibuddy.ViewModels;
+
+[QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
+public partial class HangmanViewModel : BaseQuizViewModel
 {
-    [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
-    public partial class HangmanViewModel : BaseQuizViewModel
+    private const int MaxMistakes = 6;
+    private readonly ScoringService _scoringService;
+
+    [ObservableProperty] private string _currentImage;
+
+    [ObservableProperty] private List<CollectionItem> _hasAppeared;
+
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsLearning))]
+    private bool _isFinished;
+
+    [ObservableProperty] private string _maskedWord;
+
+    [ObservableProperty] private int _mistakes;
+
+    [ObservableProperty] private int _pointsEarned;
+
+    [ObservableProperty] private int _score;
+
+    private string _secretWord = string.Empty;
+
+    [ObservableProperty] private WordCollection? _selectedCollection;
+
+    public HangmanViewModel(ScoringService scoringService)
     {
-        private readonly ScoringService _scoringService;
+        _scoringService = scoringService;
 
-        private const int MaxMistakes = 6;
-        private string _secretWord = string.Empty;
+        _hasAppeared = [];
+        PointsEarned = 0;
+        Score = 0;
+        GenerateKeyboard();
+    }
 
-        [ObservableProperty]
-        private string _maskedWord;
+    public bool IsLearning => !IsFinished;
 
-        [ObservableProperty]
-        private int _mistakes;
+    // Klawiatura A-Z
+    public ObservableCollection<HangmanLetter> Keyboard { get; } = [];
 
-        [ObservableProperty]
-        private string _currentImage;
+    private void GenerateKeyboard()
+    {
+        Keyboard.Clear();
+        for (var c = 'A'; c <= 'Z'; c++) Keyboard.Add(new HangmanLetter(c, Colors.Gray));
+    }
 
-        [ObservableProperty]
-        private WordCollection? _selectedCollection;
-        [ObservableProperty]
-        private List<CollectionItem> _hasAppeared;
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsLearning))]
-        private bool _isFinished;
-        public bool IsLearning => !IsFinished;
+    public override async Task LoadQuestionAsync()
+    {
+        if (IsBusy) return;
+        IsBusy = true;
+        IsAnswered = false;
+        Mistakes = 0;
+        CurrentImage = "hangman_0.jpg";
+        FeedbackMessage = string.Empty;
+        FeedbackColor =
+            Application.Current.RequestedTheme == AppTheme.Light
+                ? Application.Current.Resources["PrimaryDarkText"] as Color
+                : Colors.White;
 
-        [ObservableProperty]
-        private int _score;
+        var keyColor =
+            Application.Current.RequestedTheme == AppTheme.Light
+                ? Application.Current.Resources["Primary"] as Color
+                : Application.Current.Resources["PrimaryDark"] as Color;
 
-        [ObservableProperty]
-        private int _pointsEarned;
-
-        // Klawiatura A-Z
-        public ObservableCollection<Models.HangmanLetter> Keyboard { get; } = [];
-
-        public HangmanViewModel(ScoringService scoringService)
+        // Reset klawiatury
+        foreach (var key in Keyboard)
         {
-            _scoringService = scoringService;
-
-            _hasAppeared = [];
-            PointsEarned = 0;
-            Score = 0;
-            GenerateKeyboard();
+            key.IsEnabled = true;
+            key.BackgroundColor = Colors.Transparent;
+            key.BorderColor = keyColor;
+            key.TextColor = keyColor;
         }
 
-        private void GenerateKeyboard()
+        try
         {
-            Keyboard.Clear();
-            for (char c = 'A'; c <= 'Z'; c++)
+            if (SelectedCollection == null || SelectedCollection.Items == null || !SelectedCollection.Items.Any())
             {
-                Keyboard.Add(new Models.HangmanLetter(c, Colors.Gray));
-            }
-        }
-
-        public override async Task LoadQuestionAsync()
-        {
-            if (IsBusy) return;
-            IsBusy = true;
-            IsAnswered = false;
-            Mistakes = 0;
-            CurrentImage = "hangman_0.jpg";
-            FeedbackMessage = string.Empty;
-            FeedbackColor =
-                Application.Current.RequestedTheme == AppTheme.Light ?
-                Application.Current.Resources["PrimaryDarkText"] as Color :
-                Colors.White;
-
-            Color keyColor =
-                Application.Current.RequestedTheme == AppTheme.Light ?
-                Application.Current.Resources["Primary"] as Color:
-                Application.Current.Resources["PrimaryDark"] as Color;
-
-            // Reset klawiatury
-            foreach (var key in Keyboard)
-            {
-                key.IsEnabled = true;
-                key.BackgroundColor = Colors.Transparent;
-                key.BorderColor = keyColor;
-                key.TextColor = keyColor;
+                FeedbackMessage = AppResources.CollectionEmpty;
+                IsFinished = true;
+                return;
             }
 
-            try
+            var allWords = SelectedCollection.Items;
+            var validWords = allWords.Except(HasAppeared).ToList();
+
+            if (!validWords.Any())
             {
-                if (SelectedCollection == null || SelectedCollection.Items == null || !SelectedCollection.Items.Any())
-                {
-                    FeedbackMessage = AppResources.CollectionEmpty;
-                    IsFinished = true;
-                    return;
-                }
-
-                var allWords = SelectedCollection.Items;
-                var validWords = allWords.Except(HasAppeared).ToList();
-
-                if (!validWords.Any())
-                {
-                    // NO WORDS REMAINING. END GAME
-                    IsFinished = true;
-                    return;
-                }
-
-                if (allWords is not null && allWords.Any())
-                {
-                    var random = Random.Shared;
-                    var wordObj = validWords[random.Next(validWords.Count)];
-
-                    _secretWord = wordObj.Word.Trim().ToUpper();
-                    HasAppeared.Add(wordObj);
-
-                    UpdateMaskedWord();
-                }
-                else
-                {
-                    FeedbackMessage = AppResources.NoWordsInDatabase;
-                    MaskedWord = AppResources.Error;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Hangman error: {ex.Message}");
-                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-        private void UpdateMaskedWord(List<char> guessedLetters = null)
-        {
-            var sb = new StringBuilder();
-            bool isWon = true;
-
-            foreach (char c in _secretWord)
-            {
-                if (!char.IsLetter(c))
-                {
-                    // Znaki specjalne (spacja, myślnik)
-                    sb.Append($"{c} ");
-                }
-                else if (guessedLetters != null && guessedLetters.Contains(c))
-                {
-                    // Jeśli odgadnięta -> pokaż
-                    sb.Append($"{c} ");
-                }
-                else
-                {
-                    // Jeśli nie -> pokaż podkreślenie
-                    sb.Append("_ ");
-                    isWon = false;
-                }
+                // NO WORDS REMAINING. END GAME
+                IsFinished = true;
+                return;
             }
 
-            MaskedWord = sb.ToString().Trim();
-
-            if (isWon && !string.IsNullOrEmpty(_secretWord))
+            if (allWords is not null && allWords.Any())
             {
-                GameOver(true);
-            }
-        }
+                var random = Random.Shared;
+                var wordObj = validWords[random.Next(validWords.Count)];
 
-        [RelayCommand]
-        private void GuessLetter(Models.HangmanLetter letterObj)
-        {
-            if (IsAnswered || !letterObj.IsEnabled) return;
+                _secretWord = wordObj.Word.Trim().ToUpper();
+                HasAppeared.Add(wordObj);
 
-            letterObj.IsEnabled = false;
-            char letter = letterObj.Character;
-
-            if (_secretWord.Contains(letter))
-            {
-                letterObj.BackgroundColor = Colors.LightGreen;
-                letterObj.BorderColor = Colors.Transparent;
-                letterObj.TextColor = Colors.White;
-
-                var guessed = Keyboard.Where(k => !k.IsEnabled).Select(k => k.Character).ToList();
-                UpdateMaskedWord(guessed);
+                UpdateMaskedWord();
             }
             else
             {
-                letterObj.BackgroundColor = Colors.Salmon;
-                letterObj.BorderColor = Colors.Transparent;
-                letterObj.TextColor = Colors.White;
-
-                Mistakes++;
-                CurrentImage = $"hangman_{Mistakes}.jpg";
-
-                if (Mistakes >= MaxMistakes)
-                {
-                    GameOver(false);
-                }
+                FeedbackMessage = AppResources.NoWordsInDatabase;
+                MaskedWord = AppResources.Error;
             }
         }
-
-        private void GameOver(bool won)
+        catch (Exception ex)
         {
-            IsAnswered = true;
-            if (won)
+            Debug.WriteLine($"Hangman error: {ex.Message}");
+            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private void UpdateMaskedWord(List<char> guessedLetters = null)
+    {
+        var sb = new StringBuilder();
+        var isWon = true;
+
+        foreach (var c in _secretWord)
+            if (!char.IsLetter(c))
             {
-                Score++;
-
-                int points = _scoringService.CalculatePoints(GameType.Hangman, DifficultyLevel.A1);
-                PointsEarned += points;
-
-                FeedbackMessage = AppResources.Victory;
-                FeedbackColor = Colors.Green;
+                // Znaki specjalne (spacja, myślnik)
+                sb.Append($"{c} ");
+            }
+            else if (guessedLetters != null && guessedLetters.Contains(c))
+            {
+                // Jeśli odgadnięta -> pokaż
+                sb.Append($"{c} ");
             }
             else
             {
-                FeedbackMessage = $"{AppResources.Defeat}. {AppResources.TheWordIs}:\n{_secretWord}";
-                FeedbackColor = Colors.Red;
-                // Odkrywamy całe hasło na koniec
-                MaskedWord = string.Join(" ", _secretWord.ToCharArray());
+                // Jeśli nie -> pokaż podkreślenie
+                sb.Append("_ ");
+                isWon = false;
             }
-        }
-        [RelayCommand]
-        public async Task GoBack()
-        {
-            await Shell.Current.GoToAsync("..");
-        }
-        [RelayCommand]
-        private async Task NextGameAsync()
-        {
-            await LoadQuestionAsync();
 
-            if (IsFinished)
-            {
-                if (SelectedCollection != null)
-                {
-                    await _scoringService.SaveResultsAsync(
-                        SelectedCollection,
-                        GameType.Hangman,
-                        Score,
-                        SelectedCollection.Items.Count,
-                        PointsEarned
-                    );
-                }
-            }
+        MaskedWord = sb.ToString().Trim();
+
+        if (isWon && !string.IsNullOrEmpty(_secretWord)) GameOver(true);
+    }
+
+    [RelayCommand]
+    private void GuessLetter(HangmanLetter letterObj)
+    {
+        if (IsAnswered || !letterObj.IsEnabled) return;
+
+        letterObj.IsEnabled = false;
+        var letter = letterObj.Character;
+
+        if (_secretWord.Contains(letter))
+        {
+            letterObj.BackgroundColor = Colors.LightGreen;
+            letterObj.BorderColor = Colors.Transparent;
+            letterObj.TextColor = Colors.White;
+
+            var guessed = Keyboard.Where(k => !k.IsEnabled).Select(k => k.Character).ToList();
+            UpdateMaskedWord(guessed);
         }
+        else
+        {
+            letterObj.BackgroundColor = Colors.Salmon;
+            letterObj.BorderColor = Colors.Transparent;
+            letterObj.TextColor = Colors.White;
+
+            Mistakes++;
+            CurrentImage = $"hangman_{Mistakes}.jpg";
+
+            if (Mistakes >= MaxMistakes) GameOver(false);
+        }
+    }
+
+    private void GameOver(bool won)
+    {
+        IsAnswered = true;
+        if (won)
+        {
+            Score++;
+
+            var points = _scoringService.CalculatePoints(GameType.Hangman, DifficultyLevel.A1);
+            PointsEarned += points;
+
+            FeedbackMessage = AppResources.Victory;
+            FeedbackColor = Colors.Green;
+        }
+        else
+        {
+            FeedbackMessage = $"{AppResources.Defeat}. {AppResources.TheWordIs}:\n{_secretWord}";
+            FeedbackColor = Colors.Red;
+            // Odkrywamy całe hasło na koniec
+            MaskedWord = string.Join(" ", _secretWord.ToCharArray());
+        }
+    }
+
+    [RelayCommand]
+    public async Task GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
+    }
+
+    [RelayCommand]
+    private async Task NextGameAsync()
+    {
+        await LoadQuestionAsync();
+
+        if (IsFinished)
+            if (SelectedCollection != null)
+                await _scoringService.SaveResultsAsync(
+                    SelectedCollection,
+                    GameType.Hangman,
+                    Score,
+                    SelectedCollection.Items.Count,
+                    PointsEarned
+                );
     }
 }

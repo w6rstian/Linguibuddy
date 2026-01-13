@@ -1,11 +1,10 @@
-﻿namespace Linguibuddy
+﻿namespace Linguibuddy;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-            App.RegisterRoutes();
-        }
+        InitializeComponent();
+        App.RegisterRoutes();
     }
 }

@@ -4,217 +4,221 @@ using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 
-namespace Linguibuddy.ViewModels
+namespace Linguibuddy.ViewModels;
+
+public enum LearningMode
 {
-    public enum LearningMode
+    Standard,
+    SpacedRepetition
+}
+
+[QueryProperty(nameof(Collection), "Collection")]
+[QueryProperty(nameof(CurrentLearningMode), "Mode")]
+public partial class FlashcardsViewModel : ObservableObject
+{
+    private readonly CollectionService _collectionService;
+    private readonly SpacedRepetitionService _srsService;
+
+    [ObservableProperty] private WordCollection? _collection;
+
+    [ObservableProperty] private CollectionItem? _currentItem;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsStandardMode))]
+    [NotifyPropertyChangedFor(nameof(IsSrsMode))]
+    private LearningMode _currentLearningMode;
+
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(CanShowButtons))]
+    private bool _isAnswerRevealed;
+
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsLearning))]
+    private bool _isFinished;
+
+    private Queue<CollectionItem> _itemsQueue = new();
+
+    public FlashcardsViewModel(CollectionService collectionService, SpacedRepetitionService srsService)
     {
-        Standard,
-        SpacedRepetition
+        _collectionService = collectionService;
+        _srsService = srsService;
     }
 
-    [QueryProperty(nameof(Collection), "Collection")]
-    [QueryProperty(nameof(CurrentLearningMode), "Mode")]
-    public partial class FlashcardsViewModel : ObservableObject
+    public bool IsStandardMode => CurrentLearningMode == LearningMode.Standard;
+    public bool IsSrsMode => CurrentLearningMode == LearningMode.SpacedRepetition;
+    public bool CanShowButtons => IsAnswerRevealed;
+    public bool IsLearning => !IsFinished;
+
+    public string CurrentWordText => _currentItem?.Word ?? "";
+    public string CurrentPhonetic => _currentItem?.Phonetic ?? "";
+    public string CurrentAudio => _currentItem?.Audio ?? "";
+    public string CurrentImageUrl => _currentItem?.ImageUrl ?? "";
+
+    public string CurrentTranslation =>
+        !string.IsNullOrEmpty(_currentItem?.SavedTranslation)
+            ? _currentItem.SavedTranslation
+            : AppResources.NoTranslation;
+
+    public string CurrentDefinition
     {
-        private readonly CollectionService _collectionService;
-        private readonly SpacedRepetitionService _srsService;
-
-        private Queue<CollectionItem> _itemsQueue = new();
-
-        [ObservableProperty]
-        private WordCollection? _collection;
-
-        [ObservableProperty]
-        private CollectionItem? _currentItem;
-
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsStandardMode))]
-        [NotifyPropertyChangedFor(nameof(IsSrsMode))]
-        private LearningMode _currentLearningMode;
-        public bool IsStandardMode => CurrentLearningMode == LearningMode.Standard;
-        public bool IsSrsMode => CurrentLearningMode == LearningMode.SpacedRepetition;
-
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(CanShowButtons))]
-        private bool _isAnswerRevealed;
-        public bool CanShowButtons => IsAnswerRevealed;
-
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsLearning))]
-        private bool _isFinished;
-        public bool IsLearning => !IsFinished;
-
-        public string CurrentWordText => _currentItem?.Word ?? "";
-        public string CurrentPhonetic => _currentItem?.Phonetic ?? "";
-        public string CurrentAudio => _currentItem?.Audio ?? "";
-        public string CurrentImageUrl => _currentItem?.ImageUrl ?? "";
-
-        public string CurrentTranslation =>
-            !string.IsNullOrEmpty(_currentItem?.SavedTranslation)
-                ? _currentItem.SavedTranslation
-                : AppResources.NoTranslation;
-
-        public string CurrentDefinition
+        get
         {
-            get
-            {
-                if (_currentItem == null) return "";
+            if (_currentItem == null) return "";
 
-                return _currentItem?.Definition ?? "";
+            return _currentItem?.Definition ?? "";
+        }
+    }
+
+    public string CurrentExample
+    {
+        get
+        {
+            if (_currentItem == null) return "";
+
+            return _currentItem?.Example ?? "";
+        }
+    }
+
+    public string CurrentPartOfSpeech
+    {
+        get
+        {
+            if (_currentItem == null) return "";
+
+            return _currentItem?.PartOfSpeech ?? "";
+        }
+    }
+
+    async partial void OnCollectionChanged(WordCollection? value)
+    {
+        if (value != null) await StartSession();
+    }
+
+    private async Task StartSession()
+    {
+        if (Collection == null) await GoBack();
+        List<CollectionItem> items;
+
+        if (IsSrsMode)
+        {
+            items = await _collectionService.GetItemsDueForLearning(Collection.Id);
+            if (items.Count == 0)
+            {
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.NoFlashcardsToLearn, "OK");
+                await GoBack();
             }
         }
-
-        public string CurrentExample
+        else
         {
-            get
-            {
-                if (_currentItem == null) return "";
-
-                return _currentItem?.Example ?? "";
-            }
+            items = await _collectionService.GetItemsForLearning(Collection.Id);
+            var rng = new Random();
+            items = items.OrderBy(x => rng.Next()).ToList();
         }
 
-        public string CurrentPartOfSpeech
+        _itemsQueue = new Queue<CollectionItem>(items);
+        IsFinished = false;
+        NextCard();
+    }
+
+    [RelayCommand]
+    public void RevealAnswer()
+    {
+        IsAnswerRevealed = true;
+        OnPropertyChanged(nameof(CanShowButtons));
+    }
+
+    [RelayCommand]
+    public void NextCard()
+    {
+        IsAnswerRevealed = false;
+        OnPropertyChanged(nameof(CanShowButtons));
+
+        if (_itemsQueue.Count > 0)
         {
-            get
-            {
-                if (_currentItem == null) return "";
-
-                return _currentItem?.PartOfSpeech ?? "";
-            }
-        }
-
-        public FlashcardsViewModel(CollectionService collectionService, SpacedRepetitionService srsService)
-        {
-            _collectionService = collectionService;
-            _srsService = srsService;
-        }
-
-        async partial void OnCollectionChanged(WordCollection? value)
-        {
-            if (value != null)
-            {
-                await StartSession();
-            }
-        }
-
-        private async Task StartSession()
-        {
-            if (Collection == null) await GoBack();
-            List<CollectionItem> items;
-
-            if (IsSrsMode)
-            {
-                items = await _collectionService.GetItemsDueForLearning(Collection.Id);
-                if (items.Count == 0)
-                {
-                    await Shell.Current.DisplayAlert(AppResources.Error, AppResources.NoFlashcardsToLearn, "OK");
-                    await GoBack();
-                }
-            }
-            else
-            {
-                items = await _collectionService.GetItemsForLearning(Collection.Id);
-                var rng = new Random();
-                items = items.OrderBy(x => rng.Next()).ToList();
-            }
-
-            _itemsQueue = new Queue<CollectionItem>(items);
+            CurrentItem = _itemsQueue.Dequeue();
             IsFinished = false;
+
+            OnPropertyChanged(nameof(CurrentWordText));
+            OnPropertyChanged(nameof(CurrentPhonetic));
+            OnPropertyChanged(nameof(CurrentTranslation));
+            OnPropertyChanged(nameof(CurrentDefinition));
+            OnPropertyChanged(nameof(CurrentExample));
+            OnPropertyChanged(nameof(CurrentPartOfSpeech));
+            OnPropertyChanged(nameof(CurrentImageUrl));
+            OnPropertyChanged(nameof(CurrentAudio));
+        }
+        else
+        {
+            CurrentItem = null;
+            IsFinished = true;
+        }
+    }
+
+    [RelayCommand]
+    public async Task GradeNull()
+    {
+        await ProcessSrsGrade(SuperMemoGrade.Null);
+        // 0 (Blackout)
+    }
+
+    [RelayCommand]
+    public async Task GradeHard()
+    {
+        await ProcessSrsGrade(SuperMemoGrade.Fail);
+        // 2 (Incorrect/Hard)
+    }
+
+    [RelayCommand]
+    public async Task GradeGood()
+    {
+        await ProcessSrsGrade(SuperMemoGrade.Good);
+        // 4 (Good)
+    }
+
+    [RelayCommand]
+    public async Task GradeEasy()
+    {
+        await ProcessSrsGrade(SuperMemoGrade.Bright);
+        // 5 (Perfect)
+    }
+
+    private async Task ProcessSrsGrade(int grade)
+    {
+        if (CurrentItem?.FlashcardProgress == null)
+        {
             NextCard();
+            return;
         }
 
-        [RelayCommand]
-        public void RevealAnswer()
+        _srsService.ProcessResult(CurrentItem.FlashcardProgress, grade);
+        await _collectionService.UpdateFlashcardProgress(CurrentItem.FlashcardProgress);
+
+        if (grade < SuperMemoGrade.PassingThreshold) _itemsQueue.Enqueue(CurrentItem);
+
+        NextCard();
+    }
+
+    [RelayCommand]
+    public void MarkAsKnown()
+    {
+        if (CurrentItem != null)
         {
-            IsAnswerRevealed = true;
-            OnPropertyChanged(nameof(CanShowButtons));
+            // postêp w bazie (¿e u¿ytkownik ju¿ umie to s³owo)
+            //CurrentItem.IsLearned = true;
+            // await _collectionService.UpdateItemAsync(CurrentItem);
         }
 
-        [RelayCommand]
-        public void NextCard()
-        {
-            IsAnswerRevealed = false;
-            OnPropertyChanged(nameof(CanShowButtons));
+        NextCard();
+    }
 
-            if (_itemsQueue.Count > 0)
-            {
-                CurrentItem = _itemsQueue.Dequeue();
-                IsFinished = false;
+    [RelayCommand]
+    public void MarkAsUnknown()
+    {
+        if (CurrentItem != null) _itemsQueue.Enqueue(CurrentItem);
+        NextCard();
+    }
 
-                OnPropertyChanged(nameof(CurrentWordText));
-                OnPropertyChanged(nameof(CurrentPhonetic));
-                OnPropertyChanged(nameof(CurrentTranslation));
-                OnPropertyChanged(nameof(CurrentDefinition));
-                OnPropertyChanged(nameof(CurrentExample));
-                OnPropertyChanged(nameof(CurrentPartOfSpeech));
-                OnPropertyChanged(nameof(CurrentImageUrl));
-                OnPropertyChanged(nameof(CurrentAudio));
-            }
-            else
-            {
-                CurrentItem = null;
-                IsFinished = true;
-            }
-        }
-
-        [RelayCommand]
-        public async Task GradeNull() => await ProcessSrsGrade(SuperMemoGrade.Null); // 0 (Blackout)
-
-        [RelayCommand]
-        public async Task GradeHard() => await ProcessSrsGrade(SuperMemoGrade.Fail); // 2 (Incorrect/Hard)
-
-        [RelayCommand]
-        public async Task GradeGood() => await ProcessSrsGrade(SuperMemoGrade.Good); // 4 (Good)
-
-        [RelayCommand]
-        public async Task GradeEasy() => await ProcessSrsGrade(SuperMemoGrade.Bright); // 5 (Perfect)
-
-        private async Task ProcessSrsGrade(int grade)
-        {
-            if (CurrentItem?.FlashcardProgress == null)
-            {
-                NextCard();
-                return;
-            }
-
-            _srsService.ProcessResult(CurrentItem.FlashcardProgress, grade);
-            await _collectionService.UpdateFlashcardProgress(CurrentItem.FlashcardProgress);
-
-            if (grade < SuperMemoGrade.PassingThreshold)
-            {
-                _itemsQueue.Enqueue(CurrentItem);
-            }
-
-            NextCard();
-        }
-
-        [RelayCommand]
-        public void MarkAsKnown()
-        {
-            if (CurrentItem != null)
-            {
-                // postêp w bazie (¿e u¿ytkownik ju¿ umie to s³owo)
-                //CurrentItem.IsLearned = true;
-                // await _collectionService.UpdateItemAsync(CurrentItem);
-            }
-            NextCard();
-        }
-
-        [RelayCommand]
-        public void MarkAsUnknown()
-        {
-            if (CurrentItem != null)
-            {
-                _itemsQueue.Enqueue(CurrentItem);
-            }
-            NextCard();
-        }
-
-        [RelayCommand]
-        public async Task GoBack()
-        {
-            await Shell.Current.GoToAsync("..");
-        }
+    [RelayCommand]
+    public async Task GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
     }
 }

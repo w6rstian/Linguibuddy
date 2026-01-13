@@ -4,7 +4,7 @@ namespace Linguibuddy.Views;
 
 public partial class FlashcardsPage : ContentPage
 {
-    private bool _isAnimating = false;
+    private bool _isAnimating;
     private bool _isFrontVisible = true;
 
     public FlashcardsPage(FlashcardsViewModel viewModel)

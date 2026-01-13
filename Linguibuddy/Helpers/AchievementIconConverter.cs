@@ -1,30 +1,30 @@
-﻿using Linguibuddy.Models;
-using System.Globalization;
+﻿using System.Globalization;
+using Linguibuddy.Models;
 
-namespace Linguibuddy.Helpers
+namespace Linguibuddy.Helpers;
+
+public class AchievementIconConverter : IValueConverter
 {
-    public class AchievementIconConverter : IValueConverter
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        if (value is UserAchievement ua && ua.Achievement != null)
         {
-            if (value is UserAchievement ua && ua.Achievement != null)
+            var unlockedUrl = ua.Achievement.IconUrl;
+            var lockedUrl = ua.Achievement.LockedIconUrl;
+            if (Application.Current.RequestedTheme == AppTheme.Dark)
             {
-                var unlockedUrl = ua.Achievement.IconUrl;
-                var lockedUrl = ua.Achievement.LockedIconUrl;
-                if (Application.Current.RequestedTheme == AppTheme.Dark)
-                {
-                    unlockedUrl = unlockedUrl.Replace("light", "dark");
-                    lockedUrl = lockedUrl.Replace("light", "dark");
-                }
-
-                return ua.IsUnlocked ? unlockedUrl : lockedUrl;
+                unlockedUrl = unlockedUrl.Replace("light", "dark");
+                lockedUrl = lockedUrl.Replace("light", "dark");
             }
-            return null; // Domyślna ikona lub pusty
+
+            return ua.IsUnlocked ? unlockedUrl : lockedUrl;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        return null; // Domyślna ikona lub pusty
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }

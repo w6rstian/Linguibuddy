@@ -5,9 +5,10 @@ namespace Linguibuddy.Views;
 public partial class SpeakingQuizPage : ContentPage
 {
     private readonly SpeakingQuizViewModel _vm;
+
     public SpeakingQuizPage(SpeakingQuizViewModel vm)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         BindingContext = _vm = vm;
     }
 

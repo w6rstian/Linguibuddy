@@ -1,350 +1,337 @@
-﻿using CommunityToolkit.Maui.Media;
+﻿using System.Diagnostics;
+using System.Globalization;
+using CommunityToolkit.Maui.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
-using System.Diagnostics;
-using System.Globalization;
 
-namespace Linguibuddy.ViewModels
+namespace Linguibuddy.ViewModels;
+
+// TODO: add translations and better view
+[QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
+public partial class SpeakingQuizViewModel : BaseQuizViewModel
 {
-    // TODO: add translations and better view
-    [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
-    public partial class SpeakingQuizViewModel : BaseQuizViewModel
+    private readonly AppUserService _appUserService;
+    private readonly OpenAiService _openAiService;
+    private readonly ScoringService _scoringService;
+    private readonly ISpeechToText _speechToText;
+
+    private DifficultyLevel _currentDifficulty;
+    [ObservableProperty] private List<CollectionItem> _hasAppeared;
+
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsLearning))]
+    private bool _isFinished;
+
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsNotListening))]
+    private bool _isListening;
+
+    [ObservableProperty] private int _pointsEarned;
+    [ObservableProperty] private string _polishTranslation;
+
+    [ObservableProperty] private string _recognizedText;
+
+    [ObservableProperty] private int _score;
+
+    [ObservableProperty] private WordCollection? _selectedCollection;
+    [ObservableProperty] private string _targetSentence;
+    [ObservableProperty] private CollectionItem? _targetWord;
+
+    public SpeakingQuizViewModel(ISpeechToText speechToText,
+        OpenAiService openAiService,
+        ScoringService scoringService,
+        AppUserService appUserService)
     {
-        private readonly ISpeechToText _speechToText;
-        private readonly OpenAiService _openAiService;
-        private readonly ScoringService _scoringService;
-        private readonly AppUserService _appUserService;
+        _speechToText = speechToText;
+        _openAiService = openAiService;
+        _scoringService = scoringService;
+        _appUserService = appUserService;
 
-        private DifficultyLevel _currentDifficulty;
+        HasAppeared = [];
+        IsFinished = false;
+        Score = 0;
+        PointsEarned = 0;
+        RecognizedText = AppResources.SentenceRead;
+    }
 
-        [ObservableProperty] private WordCollection? _selectedCollection;
-        [ObservableProperty] private CollectionItem? _targetWord;
-        [ObservableProperty] private List<CollectionItem> _hasAppeared;
+    public bool IsLearning => !IsFinished;
+    public bool IsNotListening => !IsListening;
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsLearning))]
-        private bool _isFinished;
-        public bool IsLearning => !IsFinished;
+    public override async Task LoadQuestionAsync()
+    {
+        _currentDifficulty = await _appUserService.GetUserDifficultyAsync();
 
-        [ObservableProperty] private int _score;
-        [ObservableProperty] private int _pointsEarned;
+        if (IsBusy) return;
+        IsBusy = true;
+        IsAnswered = false;
 
-        [ObservableProperty] private string _recognizedText;
-        [ObservableProperty] private string _targetSentence;
-        [ObservableProperty] private string _polishTranslation;
+        await ForceStopListening();
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsNotListening))]
-        private bool _isListening;
-        public bool IsNotListening => !IsListening;
+        FeedbackMessage = string.Empty;
+        FeedbackColor = Colors.Transparent;
+        PolishTranslation = AppResources.SentenceGenerating;
+        TargetSentence = string.Empty;
+        RecognizedText = string.Empty;
 
-        public SpeakingQuizViewModel(ISpeechToText speechToText, 
-            OpenAiService openAiService, 
-            ScoringService scoringService,
-            AppUserService appUserService)
+        if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
         {
-            _speechToText = speechToText;
-            _openAiService = openAiService;
-            _scoringService = scoringService;
-            _appUserService = appUserService;
-
-            HasAppeared = [];
-            IsFinished = false;
-            Score = 0;
-            PointsEarned = 0;
-            RecognizedText = AppResources.SentenceRead;
+            await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            IsBusy = false;
+            return;
         }
 
-        public override async Task LoadQuestionAsync()
+        try
         {
-            _currentDifficulty = await _appUserService.GetUserDifficultyAsync();
-
-            if (IsBusy) return;
-            IsBusy = true;
-            IsAnswered = false;
-
-            await ForceStopListening();
-
-            FeedbackMessage = string.Empty;
-            FeedbackColor = Colors.Transparent;
-            PolishTranslation = AppResources.SentenceGenerating;
-            TargetSentence = string.Empty;
-            RecognizedText = string.Empty;
-
-            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            if (SelectedCollection == null || SelectedCollection.Items == null || !SelectedCollection.Items.Any())
             {
-                await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
-                IsBusy = false;
+                IsFinished = true;
                 return;
             }
 
-            try
+            var validWords = SelectedCollection.Items.Except(HasAppeared).ToList();
+
+            if (validWords.Count == 0)
             {
-                if (SelectedCollection == null || SelectedCollection.Items == null || !SelectedCollection.Items.Any())
-                {
-                    IsFinished = true;
-                    return;
-                }
-
-                var validWords = SelectedCollection.Items.Except(HasAppeared).ToList();
-
-                if (validWords.Count == 0)
-                {
-                    IsFinished = true;
-                    return;
-                }
-
-                var random = Random.Shared;
-                TargetWord = validWords[random.Next(validWords.Count)];
-
-                //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
-                string difficultyString = _currentDifficulty.ToString();
-
-                var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString);
-
-                if (generatedData != null)
-                {
-                    TargetSentence = generatedData.Value.English;
-                    PolishTranslation = generatedData.Value.Polish;
-                }
-                else
-                {
-                    TargetSentence = $"I like the word {TargetWord.Word}";
-                    PolishTranslation = $"Lubię słowo {TargetWord.Word}";
-                }
-
-                HasAppeared.Add(TargetWord);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
-            }
-            finally
-            {
-                IsBusy = false;
-                if (!IsFinished)
-                {
-                    RecognizedText = AppResources.SentenceRead;
-                }
-            }
-        }
-
-        [RelayCommand]
-        private async Task StartListening()
-        {
-            if (IsListening || IsAnswered) return;
-
-            var isGranted = await _speechToText.RequestPermissions(CancellationToken.None);
-            if (!isGranted)
-            {
-                await Shell.Current.DisplayAlert(AppResources.NoPermissions, AppResources.MicrophoneNeeded, "OK");
+                IsFinished = true;
                 return;
             }
 
-            _speechToText.RecognitionResultUpdated += OnRecognitionTextUpdated;
-            _speechToText.RecognitionResultCompleted += OnRecognitionTextCompleted;
+            var random = Random.Shared;
+            TargetWord = validWords[random.Next(validWords.Count)];
 
-            IsListening = true;
-            RecognizedText = AppResources.Listening;
+            //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
+            var difficultyString = _currentDifficulty.ToString();
 
-            try
+            var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString);
+
+            if (generatedData != null)
             {
-                await _speechToText.StartListenAsync(new SpeechToTextOptions
-                {
-                    Culture = CultureInfo.GetCultureInfo("en-US"),
-                    ShouldReportPartialResults = true
-                }, CancellationToken.None);
-            }
-            catch (FileNotFoundException)
-            {
-                await HandleSpeechError(AppResources.Error, AppResources.InstallEng);
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message.Contains("Privacy") || ex.Message.Contains("privacy"))
-                {
-                    await HandleSpeechError(AppResources.Error, AppResources.OnlineSpeech);
-                }
-                else
-                {
-                    await HandleSpeechError(AppResources.Error, AppResources.Error + ex.Message);
-                }
-            }
-        }
-
-        [RelayCommand]
-        public async Task StopListening()
-        {
-            if (!IsListening) return;
-
-            try
-            {
-                await _speechToText.StopListenAsync(CancellationToken.None);
-            }
-            catch
-            {
-                // Ignorujemy błędy przy zatrzymywaniu
-            }
-            finally
-            {
-                await FinishAttempt();
-            }
-        }
-
-        private async Task ForceStopListening()
-        {
-            try { await _speechToText.StopListenAsync(CancellationToken.None); } catch { }
-
-            _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
-            _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
-            IsListening = false;
-        }
-
-        // real time update tekstu
-        private void OnRecognitionTextUpdated(object? sender, SpeechToTextRecognitionResultUpdatedEventArgs args)
-        {
-            RecognizedText = args.RecognitionResult;
-        }
-
-        private void OnRecognitionTextCompleted(object? sender, SpeechToTextRecognitionResultCompletedEventArgs args)
-        {
-            var finalResult = args.RecognitionResult.Text;
-            if (string.IsNullOrEmpty(finalResult) && args.RecognitionResult.Exception == null)
-            {
-                finalResult = args.RecognitionResult.ToString();
-            }
-
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                RecognizedText = finalResult;
-                //IsListening = false;
-                //_speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
-                //_speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
-                //CheckPronunciation(RecognizedText);
-                await FinishAttempt();
-            });
-        }
-
-        private async Task FinishAttempt()
-        {
-            _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
-            _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
-
-            IsListening = false;
-
-            if (!string.IsNullOrWhiteSpace(RecognizedText) && RecognizedText != AppResources.Listening)
-            {
-                CheckPronunciation(RecognizedText);
+                TargetSentence = generatedData.Value.English;
+                PolishTranslation = generatedData.Value.Polish;
             }
             else
             {
-                RecognizedText = "Nie usłyszałem nic. Spróbuj ponownie.";
+                TargetSentence = $"I like the word {TargetWord.Word}";
+                PolishTranslation = $"Lubię słowo {TargetWord.Word}";
             }
+
+            HasAppeared.Add(TargetWord);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
+        }
+        finally
+        {
+            IsBusy = false;
+            if (!IsFinished) RecognizedText = AppResources.SentenceRead;
+        }
+    }
+
+    [RelayCommand]
+    private async Task StartListening()
+    {
+        if (IsListening || IsAnswered) return;
+
+        var isGranted = await _speechToText.RequestPermissions(CancellationToken.None);
+        if (!isGranted)
+        {
+            await Shell.Current.DisplayAlert(AppResources.NoPermissions, AppResources.MicrophoneNeeded, "OK");
+            return;
         }
 
-        private void CheckPronunciation(string spokenText)
+        _speechToText.RecognitionResultUpdated += OnRecognitionTextUpdated;
+        _speechToText.RecognitionResultCompleted += OnRecognitionTextCompleted;
+
+        IsListening = true;
+        RecognizedText = AppResources.Listening;
+
+        try
         {
-            if (IsAnswered) return;
-
-            if (string.IsNullOrWhiteSpace(spokenText) || spokenText == AppResources.Listening)
-                return;
-
-            IsAnswered = true;
-
-            double similarity = CalculateSimilarity(TargetSentence, spokenText);
-
-            if (similarity >= 80)
+            await _speechToText.StartListenAsync(new SpeechToTextOptions
             {
-                Score++;
-
-                //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
-                //var difficulty = (DifficultyLevel)difficultyInt;
-
-                int points = _scoringService.CalculatePoints(GameType.SpeakingQuiz, _currentDifficulty);
-                PointsEarned += points;
-
-                FeedbackMessage = $"Świetnie! ({similarity:F0}% zgodności)";
-                FeedbackColor = Colors.Green;
-            }
+                Culture = CultureInfo.GetCultureInfo("en-US"),
+                ShouldReportPartialResults = true
+            }, CancellationToken.None);
+        }
+        catch (FileNotFoundException)
+        {
+            await HandleSpeechError(AppResources.Error, AppResources.InstallEng);
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message.Contains("Privacy") || ex.Message.Contains("privacy"))
+                await HandleSpeechError(AppResources.Error, AppResources.OnlineSpeech);
             else
-            {
-                FeedbackMessage = $"Niestety. Zgodność: {similarity:F0}%";
-                FeedbackColor = Colors.Red;
-            }
+                await HandleSpeechError(AppResources.Error, AppResources.Error + ex.Message);
         }
+    }
 
-        [RelayCommand]
-        private async Task NextQuestionAsync()
+    [RelayCommand]
+    public async Task StopListening()
+    {
+        if (!IsListening) return;
+
+        try
         {
-            await LoadQuestionAsync();
-            if (IsFinished)
-            {
-                if (SelectedCollection != null)
-                {
-                    await _scoringService.SaveResultsAsync(
-                        SelectedCollection,
-                        GameType.SpeakingQuiz,
-                        Score,
-                        SelectedCollection.Items.Count,
-                        PointsEarned
-                    );
-                }
-            }
+            await _speechToText.StopListenAsync(CancellationToken.None);
         }
-
-        [RelayCommand]
-        public async Task GoBack()
+        catch
         {
-            await Shell.Current.GoToAsync("..");
+            // Ignorujemy błędy przy zatrzymywaniu
+        }
+        finally
+        {
+            await FinishAttempt();
+        }
+    }
+
+    private async Task ForceStopListening()
+    {
+        try
+        {
+            await _speechToText.StopListenAsync(CancellationToken.None);
+        }
+        catch
+        {
         }
 
-        private double CalculateSimilarity(string target, string spoken)
-        {
-            if (string.IsNullOrWhiteSpace(target) || string.IsNullOrWhiteSpace(spoken))
-                return 0.0;
+        _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
+        _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
+        IsListening = false;
+    }
 
-            List<string> Tokenize(string text)
+    // real time update tekstu
+    private void OnRecognitionTextUpdated(object? sender, SpeechToTextRecognitionResultUpdatedEventArgs args)
+    {
+        RecognizedText = args.RecognitionResult;
+    }
+
+    private void OnRecognitionTextCompleted(object? sender, SpeechToTextRecognitionResultCompletedEventArgs args)
+    {
+        var finalResult = args.RecognitionResult.Text;
+        if (string.IsNullOrEmpty(finalResult) && args.RecognitionResult.Exception == null)
+            finalResult = args.RecognitionResult.ToString();
+
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            RecognizedText = finalResult;
+            //IsListening = false;
+            //_speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
+            //_speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
+            //CheckPronunciation(RecognizedText);
+            await FinishAttempt();
+        });
+    }
+
+    private async Task FinishAttempt()
+    {
+        _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
+        _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
+
+        IsListening = false;
+
+        if (!string.IsNullOrWhiteSpace(RecognizedText) && RecognizedText != AppResources.Listening)
+            CheckPronunciation(RecognizedText);
+        else
+            RecognizedText = "Nie usłyszałem nic. Spróbuj ponownie.";
+    }
+
+    private void CheckPronunciation(string spokenText)
+    {
+        if (IsAnswered) return;
+
+        if (string.IsNullOrWhiteSpace(spokenText) || spokenText == AppResources.Listening)
+            return;
+
+        IsAnswered = true;
+
+        var similarity = CalculateSimilarity(TargetSentence, spokenText);
+
+        if (similarity >= 80)
+        {
+            Score++;
+
+            //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
+            //var difficulty = (DifficultyLevel)difficultyInt;
+
+            var points = _scoringService.CalculatePoints(GameType.SpeakingQuiz, _currentDifficulty);
+            PointsEarned += points;
+
+            FeedbackMessage = $"Świetnie! ({similarity:F0}% zgodności)";
+            FeedbackColor = Colors.Green;
+        }
+        else
+        {
+            FeedbackMessage = $"Niestety. Zgodność: {similarity:F0}%";
+            FeedbackColor = Colors.Red;
+        }
+    }
+
+    [RelayCommand]
+    private async Task NextQuestionAsync()
+    {
+        await LoadQuestionAsync();
+        if (IsFinished)
+            if (SelectedCollection != null)
+                await _scoringService.SaveResultsAsync(
+                    SelectedCollection,
+                    GameType.SpeakingQuiz,
+                    Score,
+                    SelectedCollection.Items.Count,
+                    PointsEarned
+                );
+    }
+
+    [RelayCommand]
+    public async Task GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
+    }
+
+    private double CalculateSimilarity(string target, string spoken)
+    {
+        if (string.IsNullOrWhiteSpace(target) || string.IsNullOrWhiteSpace(spoken))
+            return 0.0;
+
+        List<string> Tokenize(string text)
+        {
+            return text.ToLower()
+                .Split(new[] { ' ', '.', ',', '?', '!', ';', ':', '-', '"', '\'' },
+                    StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
+        }
+
+        var targetWords = Tokenize(target);
+        var spokenWords = Tokenize(spoken);
+
+        if (targetWords.Count == 0) return 0.0;
+
+        var spokenPool = new List<string>(spokenWords);
+        var matchCount = 0;
+
+        foreach (var word in targetWords)
+            if (spokenPool.Contains(word))
             {
-                return text.ToLower()
-                    .Split(new[] { ' ', '.', ',', '?', '!', ';', ':', '-', '"', '\'' }, StringSplitOptions.RemoveEmptyEntries)
-                    .ToList();
+                matchCount++;
+                spokenPool.Remove(word);
             }
 
-            var targetWords = Tokenize(target);
-            var spokenWords = Tokenize(spoken);
+        var percentage = (double)matchCount / targetWords.Count * 100.0;
 
-            if (targetWords.Count == 0) return 0.0;
+        return percentage;
+    }
 
-            var spokenPool = new List<string>(spokenWords);
-            int matchCount = 0;
-
-            foreach (var word in targetWords)
-            {
-                if (spokenPool.Contains(word))
-                {
-                    matchCount++;
-                    spokenPool.Remove(word);
-                }
-            }
-
-            double percentage = (double)matchCount / targetWords.Count * 100.0;
-
-            return percentage;
-        }
-
-        private async Task HandleSpeechError(string title, string message)
-        {
-            Debug.WriteLine($"Speech Error: {message}");
-            IsListening = false;
-            RecognizedText = AppResources.Error;
-            _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
-            _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
-            await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.DisplayAlert(title, message, "OK"));
-        }
+    private async Task HandleSpeechError(string title, string message)
+    {
+        Debug.WriteLine($"Speech Error: {message}");
+        IsListening = false;
+        RecognizedText = AppResources.Error;
+        _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
+        _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
+        await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.DisplayAlert(title, message, "OK"));
     }
 }

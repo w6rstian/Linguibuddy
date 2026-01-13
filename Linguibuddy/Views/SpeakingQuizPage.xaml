@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
@@ -10,59 +11,58 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <Grid>
         <VerticalStackLayout IsVisible="{Binding IsFinished}"
-                             VerticalOptions="Center" 
-                             HorizontalOptions="Center" 
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
                              Spacing="25">
 
-            <Label Text="{loc:Translate Congratulations}" 
-                   FontSize="32" 
-                   FontAttributes="Bold" 
+            <Label Text="{loc:Translate Congratulations}"
+                   FontSize="32"
+                   FontAttributes="Bold"
                    TextColor="{AppThemeBinding Light={StaticResource PrimaryDarkText}, Dark={StaticResource White}}"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center" />
 
-            <Label Text="{loc:Translate LearningFinished}" 
-                   FontSize="16" 
+            <Label Text="{loc:Translate LearningFinished}"
+                   FontSize="16"
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center" />
 
             <Label Text="{Binding Score, StringFormat='Poprawne odpowiedzi: {0}'}"
                    FontSize="20"
                    FontAttributes="Bold"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center" />
 
             <Label Text="{Binding PointsEarned, StringFormat='Zdobyte punkty: +{0}'}"
-                   FontSize="16" 
+                   FontSize="16"
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center" />
 
-            <Button Text="{loc:Translate BackToList}" 
+            <Button Text="{loc:Translate BackToList}"
                     Command="{Binding GoBackCommand}"
                     Margin="0,20,0,0"
                     BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                     TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
-                    WidthRequest="200"/>
+                    WidthRequest="200" />
         </VerticalStackLayout>
 
 
         <Grid RowDefinitions="*, Auto" IsVisible="{Binding IsLearning}">
 
             <ScrollView Grid.Row="0">
-                <VerticalStackLayout Spacing="20" 
+                <VerticalStackLayout Spacing="20"
                                      Padding="20"
                                      HorizontalOptions="Center"
                                      MaximumWidthRequest="600">
 
                     <VerticalStackLayout Spacing="20">
-                        <Label Text="Przeczytaj na głos:" 
-                               FontSize="18" 
-                               TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" 
-                               HorizontalOptions="Center"/>
+                        <Label Text="Przeczytaj na głos:"
+                               FontSize="18"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
+                               HorizontalOptions="Center" />
 
                         <Border StrokeShape="RoundRectangle 20"
                                 StrokeThickness="0"
@@ -70,17 +70,17 @@
                                 Padding="20"
                                 HorizontalOptions="Fill">
                             <VerticalStackLayout Spacing="10">
-                                <Label Text="{Binding TargetSentence}" 
-                                       FontSize="24" 
-                                       FontAttributes="Bold" 
+                                <Label Text="{Binding TargetSentence}"
+                                       FontSize="24"
+                                       FontAttributes="Bold"
                                        HorizontalTextAlignment="Center"
-                                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
 
-                                <Label Text="{Binding PolishTranslation}" 
-                                       FontSize="16" 
-                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" 
+                                <Label Text="{Binding PolishTranslation}"
+                                       FontSize="16"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                                        HorizontalTextAlignment="Center"
-                                       IsVisible="{Binding PolishTranslation, Converter={toolkit:IsStringNotNullOrEmptyConverter}}"/>
+                                       IsVisible="{Binding PolishTranslation, Converter={toolkit:IsStringNotNullOrEmptyConverter}}" />
                             </VerticalStackLayout>
                         </Border>
                     </VerticalStackLayout>
@@ -99,22 +99,22 @@
                                     FontAttributes="Bold">
                                 <Button.Triggers>
                                     <DataTrigger TargetType="Button" Binding="{Binding IsNotListening}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="Opacity" Value="0.5"/>
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Opacity" Value="0.5" />
                                     </DataTrigger>
                                     <DataTrigger TargetType="Button" Binding="{Binding IsAnswered}" Value="True">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="Opacity" Value="0.3"/>
-                                        <Setter Property="Text" Value="Zakończono"/>
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Opacity" Value="0.3" />
+                                        <Setter Property="Text" Value="Zakończono" />
                                     </DataTrigger>
                                     <DataTrigger TargetType="Button" Binding="{Binding IsBusy}" Value="True">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="Opacity" Value="0.5"/>
-                                        <Setter Property="Text" Value="Czekaj..."/>
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Opacity" Value="0.5" />
+                                        <Setter Property="Text" Value="Czekaj..." />
                                     </DataTrigger>
                                 </Button.Triggers>
                                 <Button.Shadow>
-                                    <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="8" Opacity="0.4"/>
+                                    <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="8" Opacity="0.4" />
                                 </Button.Shadow>
                             </Button>
 
@@ -131,44 +131,44 @@
                                     FontAttributes="Bold">
                                 <Button.Triggers>
                                     <DataTrigger TargetType="Button" Binding="{Binding IsListening}" Value="False">
-                                        <Setter Property="Opacity" Value="0.5"/>
+                                        <Setter Property="Opacity" Value="0.5" />
                                     </DataTrigger>
                                 </Button.Triggers>
                             </Button>
 
                         </HorizontalStackLayout>
 
-                        <Label Text="{Binding RecognizedText}" 
-                               FontSize="22" 
+                        <Label Text="{Binding RecognizedText}"
+                               FontSize="22"
                                TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
                                HorizontalTextAlignment="Center"
                                FontAttributes="Italic"
-                               LineBreakMode="WordWrap"/>
+                               LineBreakMode="WordWrap" />
                     </VerticalStackLayout>
 
-                    <Label Text="{Binding FeedbackMessage}" 
+                    <Label Text="{Binding FeedbackMessage}"
                            TextColor="{Binding FeedbackColor}"
-                           FontSize="18" 
+                           FontSize="18"
                            FontAttributes="Bold"
-                           HorizontalOptions="Center" 
+                           HorizontalOptions="Center"
                            HorizontalTextAlignment="Center"
-                           Margin="0,10,0,10"/>
+                           Margin="0,10,0,10" />
 
                 </VerticalStackLayout>
             </ScrollView>
 
-            <VerticalStackLayout Grid.Row="1" 
-                                 Padding="20,10,20,30" 
+            <VerticalStackLayout Grid.Row="1"
+                                 Padding="20,10,20,30"
                                  Spacing="10"
                                  HorizontalOptions="Center"
                                  MaximumWidthRequest="600"
                                  VerticalOptions="End">
 
-                <BoxView HeightRequest="1" 
+                <BoxView HeightRequest="1"
                          Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
-                         Margin="0,0,0,10"/>
+                         Margin="0,0,0,10" />
 
-                <Button Text="Następne" 
+                <Button Text="Następne"
                         Command="{Binding NextQuestionCommand}"
                         IsEnabled="{Binding IsAnswered}"
                         BackgroundColor="{StaticResource Primary}"
@@ -178,11 +178,11 @@
                         FontAttributes="Bold">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button" Binding="{Binding IsAnswered}" Value="False">
-                            <Setter Property="Opacity" Value="0.5"/>
+                            <Setter Property="Opacity" Value="0.5" />
                         </DataTrigger>
                     </Button.Triggers>
                     <Button.Shadow>
-                        <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="8" Opacity="0.4"/>
+                        <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="8" Opacity="0.4" />
                     </Button.Shadow>
                 </Button>
             </VerticalStackLayout>

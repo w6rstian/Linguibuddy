@@ -5,6 +5,7 @@ namespace Linguibuddy.Views;
 public partial class HangmanPage : ContentPage
 {
     private readonly HangmanViewModel _vm;
+
     public HangmanPage(HangmanViewModel vm)
     {
         InitializeComponent();

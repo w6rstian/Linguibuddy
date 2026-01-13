@@ -1,100 +1,84 @@
 ﻿using Firebase.Auth;
+using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Linguibuddy.Helpers;
 
-namespace Linguibuddy.Services
+namespace Linguibuddy.Services;
+
+public class AppUserService
 {
-    public class AppUserService
+    private readonly IAppUserRepository _appUsers;
+    private readonly FirebaseAuthClient _authClient;
+
+    private readonly string _currentUserId;
+    private AppUser _appUser;
+
+    public AppUserService(IAppUserRepository appUsers, FirebaseAuthClient authClient)
     {
-        private readonly IAppUserRepository _appUsers;
-        private readonly FirebaseAuthClient _authClient;
+        _appUsers = appUsers;
+        _authClient = authClient;
+        _currentUserId = authClient.User.Uid;
+    }
 
-        private readonly string _currentUserId;
-        private AppUser _appUser;
+    public async Task AddUserPointsAsync(int points)
+    {
+        if (_appUser is null)
+            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                       ?? throw new Exception("User not found");
 
-        public AppUserService(IAppUserRepository appUsers, FirebaseAuthClient authClient)
+        _appUser.Points += points;
+
+        await _appUsers.SaveChangesAsync();
+    }
+
+    public async Task<int> GetUserPointsAsync()
+    {
+        if (_appUser is null)
+            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                       ?? throw new Exception("User not found");
+
+        return _appUser.Points;
+    }
+
+    public async Task<DifficultyLevel> GetUserDifficultyAsync()
+    {
+        if (_appUser is null)
         {
-            _appUsers = appUsers;
-            _authClient = authClient;
-            _currentUserId = authClient.User.Uid;
+            _appUser = await _appUsers.GetByIdAsync(_currentUserId);
+
+            if (_appUser is null) return DifficultyLevel.A1;
         }
 
-        public async Task AddUserPointsAsync(int points)
-        {
-            if (_appUser is null)
-            {
-                _appUser = await _appUsers.GetByIdAsync(_currentUserId)
-                    ?? throw new Exception("User not found");
-            }
+        return _appUser.DifficultyLevel;
+    }
 
-            _appUser.Points += points;
+    public async Task SetUserDifficultyAsync(DifficultyLevel level)
+    {
+        if (_appUser is null)
+            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                       ?? throw new Exception("User not found");
 
-            await _appUsers.SaveChangesAsync();
-        }
+        _appUser.DifficultyLevel = level;
+        await _appUsers.SaveChangesAsync();
+    }
 
-        public async Task<int> GetUserPointsAsync()
-        {
-            if (_appUser is null)
-            {
-                _appUser = await _appUsers.GetByIdAsync(_currentUserId)
-                    ?? throw new Exception("User not found");
-            }
+    public async Task<int> GetUserBestStreakAsync()
+    {
+        if (_appUser is null)
+            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                       ?? throw new Exception("User not found");
 
-            return _appUser.Points;
-        }
+        return _appUser.BestLearningStreak;
+    }
 
-        public async Task<DifficultyLevel> GetUserDifficultyAsync()
-        {
-            if (_appUser is null)
-            {
-                _appUser = await _appUsers.GetByIdAsync(_currentUserId);
 
-                if (_appUser is null) return DifficultyLevel.A1;
-            }
+    public async Task SetBestLearningStreakAsync(int newStreak)
+    {
+        if (_appUser is null)
+            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                       ?? throw new Exception("User not found");
 
-            return _appUser.DifficultyLevel;
-        }
-      
-        public async Task SetUserDifficultyAsync(DifficultyLevel level)
-        {
-          if (_appUser is null)
-          {
-              _appUser = await _appUsers.GetByIdAsync(_currentUserId)
-                         ?? throw new Exception("User not found");
-          }
-
-          _appUser.DifficultyLevel = level;
-          await _appUsers.SaveChangesAsync();
-        }
-      
-        public async Task<int> GetUserBestStreakAsync()
-        {
-            if (_appUser is null)
-            {
-                _appUser = await _appUsers.GetByIdAsync(_currentUserId)
-                    ?? throw new Exception("User not found");
-            }
-
-            return _appUser.BestLearningStreak;
-        }
-      
-        
-        public async Task SetBestLearningStreakAsync(int newStreak)
-        {
-            if (_appUser is null)
-            {
-                _appUser = await _appUsers.GetByIdAsync(_currentUserId)
-                           ?? throw new Exception("User not found");
-            }
-          
-            _appUser.BestLearningStreak = newStreak;
-            await _appUsers.SaveChangesAsync();
-        }
+        _appUser.BestLearningStreak = newStreak;
+        await _appUsers.SaveChangesAsync();
     }
 }

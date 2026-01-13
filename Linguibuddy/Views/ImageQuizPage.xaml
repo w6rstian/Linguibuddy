@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
@@ -9,79 +10,79 @@
              Title="Dopasuj do obrazka">
 
     <Grid>
-        <VerticalStackLayout 
+        <VerticalStackLayout
             IsVisible="{Binding IsFinished}"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" 
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
             Spacing="25">
 
-            <Label 
-                Text="{loc:Translate Congratulations}" 
-                FontSize="32" 
-                FontAttributes="Bold" 
+            <Label
+                Text="{loc:Translate Congratulations}"
+                FontSize="32"
+                FontAttributes="Bold"
                 TextColor="{AppThemeBinding Light={StaticResource PrimaryDarkText}, Dark={StaticResource White}}"
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center" />
 
-            <Label Text="{loc:Translate LearningFinished}" 
-                   FontSize="16" 
+            <Label Text="{loc:Translate LearningFinished}"
+                   FontSize="16"
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center" />
 
             <Label Text="{Binding Score, StringFormat='Poprawne odpowiedzi: {0}'}"
                    FontSize="20"
                    FontAttributes="Bold"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center" />
 
             <Label Text="{Binding PointsEarned, StringFormat='Zdobyte punkty: +{0}'}"
-                   FontSize="16" 
+                   FontSize="16"
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center" />
 
-            <Button Text="{loc:Translate BackToList}" 
+            <Button Text="{loc:Translate BackToList}"
                     Command="{Binding GoBackCommand}"
                     Margin="0,20,0,0"
                     BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                     TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
-                    WidthRequest="200"/>
+                    WidthRequest="200" />
         </VerticalStackLayout>
         <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="20" RowSpacing="20" IsVisible="{Binding IsLearning}">
 
             <VerticalStackLayout Grid.Row="0" Spacing="15">
-                <Label Text="Co widzisz na obrazku?" 
-                       FontSize="18" TextColor="Gray" HorizontalOptions="Center"/>
+                <Label Text="Co widzisz na obrazku?"
+                       FontSize="18" TextColor="Gray" HorizontalOptions="Center" />
 
                 <Border StrokeShape="RoundRectangle 20"
                         Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                         StrokeThickness="2"
-                        MaximumHeightRequest="300" 
+                        MaximumHeightRequest="300"
                         MaximumWidthRequest="400"
                         HorizontalOptions="Center"
                         Padding="0"
                         BackgroundColor="#F5F5F5">
 
                     <Border.Shadow>
-                        <Shadow Brush="Black" Offset="0,4" Radius="10" Opacity="0.2"/>
+                        <Shadow Brush="Black" Offset="0,4" Radius="10" Opacity="0.2" />
                     </Border.Shadow>
 
-                    <Image Source="{Binding TargetWord.ImageUrl}" 
+                    <Image Source="{Binding TargetWord.ImageUrl}"
                            Aspect="AspectFit"
                            VerticalOptions="Center"
-                           HorizontalOptions="Center"/>
+                           HorizontalOptions="Center" />
                 </Border>
             </VerticalStackLayout>
 
-            <Label Grid.Row="1" 
-                   Text="{Binding FeedbackMessage}" 
+            <Label Grid.Row="1"
+                   Text="{Binding FeedbackMessage}"
                    TextColor="{Binding FeedbackColor}"
                    FontSize="20"
                    FontAttributes="Bold"
                    HorizontalOptions="Center"
-                   HorizontalTextAlignment="Center"/>
+                   HorizontalTextAlignment="Center" />
 
             <CollectionView Grid.Row="2" ItemsSource="{Binding Options}" SelectionMode="None">
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="2" 
-                                     HorizontalItemSpacing="15" VerticalItemSpacing="15"/>
+                    <GridItemsLayout Orientation="Vertical" Span="2"
+                                     HorizontalItemSpacing="15" VerticalItemSpacing="15" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:QuizOption">
@@ -93,7 +94,7 @@
                                 HeightRequest="70"
                                 IsEnabled="{Binding IsEnabled}"
                                 FontSize="16"
-                                CornerRadius="12"/>
+                                CornerRadius="12" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
@@ -104,13 +105,13 @@
                     IsVisible="{Binding IsAnswered}"
                     BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                     TextColor="{AppThemeBinding Light=White, Dark={StaticResource PrimaryDarkText}}"
-                    Margin="0,0,0,10"/>
+                    Margin="0,0,0,10" />
 
-            <ActivityIndicator Grid.RowSpan="4" 
-                               IsRunning="{Binding IsBusy}" 
-                               IsVisible="{Binding IsBusy}" 
+            <ActivityIndicator Grid.RowSpan="4"
+                               IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
                                Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                               HorizontalOptions="Center" VerticalOptions="Center" />
         </Grid>
     </Grid>
 </ContentPage>

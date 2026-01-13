@@ -1,8 +1,7 @@
-﻿namespace Linguibuddy.Helpers
+﻿namespace Linguibuddy.Helpers;
+
+public enum TranslationProvider
 {
-    public enum TranslationProvider
-    {
-        DeepL,
-        OpenAi
-    }
+    DeepL,
+    OpenAi
 }

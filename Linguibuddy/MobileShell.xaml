@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <Shell
     x:Class="Linguibuddy.MobileShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -17,11 +18,12 @@
         </Tab>
 
         <Tab Title="{loc:Translate Flashcards}" Icon="cards_stack_100dp_light.png">
-            <ShellContent ContentTemplate="{DataTemplate views:FlashcardsCollectionsPage}" Route="FlashcardsCollectionsPage" />
+            <ShellContent ContentTemplate="{DataTemplate views:FlashcardsCollectionsPage}"
+                          Route="FlashcardsCollectionsPage" />
         </Tab>
 
         <Tab Title="{loc:Translate Minigames}" Icon="joystick_100dp_light.png">
-            <ShellContent ContentTemplate="{DataTemplate views:MiniGamesPage}" Route="MiniGamesPage"/>
+            <ShellContent ContentTemplate="{DataTemplate views:MiniGamesPage}" Route="MiniGamesPage" />
         </Tab>
 
         <Tab Title="Profile" Icon="account_circle_100dp_light.png">
@@ -29,11 +31,11 @@
         </Tab>
 
         <Tab Title="{loc:Translate Achievements}" Icon="trophy_100dp_light.png">
-            <ShellContent ContentTemplate="{DataTemplate views:AchievementsPage}" Route="AchievementsPage"/>
+            <ShellContent ContentTemplate="{DataTemplate views:AchievementsPage}" Route="AchievementsPage" />
         </Tab>
-        
+
         <Tab Title="{loc:Translate Settings}" Icon="settings_100dp_light.png">
-            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage"/>
+            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage" />
         </Tab>
     </TabBar>
 </Shell>

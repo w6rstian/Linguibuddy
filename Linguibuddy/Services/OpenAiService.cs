@@ -1,132 +1,129 @@
-﻿using Newtonsoft.Json;
+﻿using System.ClientModel;
+using System.Diagnostics;
+using Newtonsoft.Json;
 using OpenAI;
 using OpenAI.Chat;
-using System.ClientModel;
 
-namespace Linguibuddy.Services
+namespace Linguibuddy.Services;
+
+public class OpenAiService
 {
-    public class OpenAiService
+    // gpt-4o-mini jest jednym z najtańszych, można będzie przetestować inne
+    private const string Model = "openai/gpt-4.1-mini";
+
+    // inny URL bo korzystamy z wersji od Githuba
+    private const string Endpoint = "https://models.github.ai/inference";
+
+    // klient OpenAI do czatu (są różne lub ogólny openai, w którym można skorzystać z opcji kilku na raz)
+    // tutaj używamy ChatClient do modelu czatu do testu API (na razie)
+    private readonly ChatClient _client;
+
+    public OpenAiService(string? apiKey)
     {
-        // klient OpenAI do czatu (są różne lub ogólny openai, w którym można skorzystać z opcji kilku na raz)
-        // tutaj używamy ChatClient do modelu czatu do testu API (na razie)
-        private readonly ChatClient _client;
+        if (string.IsNullOrEmpty(apiKey))
+            throw new ArgumentException("API key is required", nameof(apiKey));
 
-        // gpt-4o-mini jest jednym z najtańszych, można będzie przetestować inne
-        private const string Model = "openai/gpt-4.1-mini";
-        // inny URL bo korzystamy z wersji od Githuba
-        private const string Endpoint = "https://models.github.ai/inference";
+        _client = new ChatClient(
+            Model,
+            new ApiKeyCredential(apiKey),
+            new OpenAIClientOptions
+            {
+                Endpoint = new Uri(Endpoint)
+            }
+        );
+    }
 
-        public OpenAiService(string? apiKey)
+    public async Task<string> TestConnectionAsync()
+    {
+        try
         {
-            if (string.IsNullOrEmpty(apiKey))
-                throw new ArgumentException("API key is required", nameof(apiKey));
+            ChatCompletion completion = await _client.CompleteChatAsync("Jesteś online? Odpowiedz tylko wyrazem 'TAK'");
 
-            _client = new ChatClient(
-                model: Model,
-                credential: new ApiKeyCredential(apiKey),
-                options: new OpenAIClientOptions()
-                {
-                    Endpoint = new Uri(Endpoint)
-                }
-            );
+            return completion.Content[0].Text ?? "Empty response";
         }
-
-        private class SentenceResponse
+        catch (Exception ex)
         {
-            [JsonProperty("english_sentence")]
-            public string EnglishSentence { get; set; } = string.Empty;
-
-            [JsonProperty("polish_translation")]
-            public string PolishTranslation { get; set; } = string.Empty;
+            return $"Error: {ex.Message}";
         }
+    }
 
-        public async Task<string> TestConnectionAsync()
+    public async Task<string> TranslateWithContextAsync(string word, string definition, string partOfSpeech)
+    {
+        if (string.IsNullOrWhiteSpace(word)) return string.Empty;
+
+        try
         {
-            try
+            var messages = new List<ChatMessage>
             {
-                ChatCompletion completion = await _client.CompleteChatAsync("Jesteś online? Odpowiedz tylko wyrazem 'TAK'");
+                new SystemChatMessage(
+                    "Jesteś precyzyjnym słownikiem angielsko-polskim. " +
+                    "Twoim zadaniem jest przetłumaczenie podanego słowa na język polski, " +
+                    "ściśle dopasowując je do podanej definicji i części mowy. " +
+                    "Zwróć TYLKO jedno przetłumaczone słowo (lub krótką frazę), bez żadnych dodatkowych opisów, kropek czy cudzysłowów."),
 
-                return completion.Content[0].Text ?? "Empty response";
-            }
-            catch (Exception ex)
-            {
-                return $"Error: {ex.Message}";
-            }
+                new UserChatMessage(
+                    $"Word to translate: {word}\n" +
+                    $"Part of Speech: {partOfSpeech}\n" +
+                    $"Context/Definition: {definition}")
+            };
+
+            ChatCompletion completion = await _client.CompleteChatAsync(messages);
+
+            return completion.Content[0].Text.Trim().TrimEnd('.');
         }
-
-        public async Task<string> TranslateWithContextAsync(string word, string definition, string partOfSpeech)
+        catch (Exception ex)
         {
-            if (string.IsNullOrWhiteSpace(word)) return string.Empty;
-
-            try
-            {
-                var messages = new List<ChatMessage>
-                {
-                    new SystemChatMessage(
-                        "Jesteś precyzyjnym słownikiem angielsko-polskim. " +
-                        "Twoim zadaniem jest przetłumaczenie podanego słowa na język polski, " +
-                        "ściśle dopasowując je do podanej definicji i części mowy. " +
-                        "Zwróć TYLKO jedno przetłumaczone słowo (lub krótką frazę), bez żadnych dodatkowych opisów, kropek czy cudzysłowów."),
-
-                    new UserChatMessage(
-                        $"Word to translate: {word}\n" +
-                        $"Part of Speech: {partOfSpeech}\n" +
-                        $"Context/Definition: {definition}")
-                };
-
-                ChatCompletion completion = await _client.CompleteChatAsync(messages);
-
-                return completion.Content[0].Text.Trim().TrimEnd('.');
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"OpenAI Error: {ex.Message}");
-                return word;
-            }
+            Debug.WriteLine($"OpenAI Error: {ex.Message}");
+            return word;
         }
+    }
 
-        public async Task<(string English, string Polish)?> GenerateSentenceAsync(string targetWord, string difficultyLevel)
+    public async Task<(string English, string Polish)?> GenerateSentenceAsync(string targetWord, string difficultyLevel)
+    {
+        try
         {
-            try
+            var messages = new List<ChatMessage>
             {
-                var messages = new List<ChatMessage>
-                {
-                    new SystemChatMessage(
-                        "Jesteś nauczycielem języka angielskiego. " +
-                        "Twoim zadaniem jest ułożenie prostego zdania w języku angielskim zawierającego podane słowo. " +
-                        "Zdanie musi być dostosowane do podanego poziomu trudności (CEFR). " +
-                        "Odpowiedź musi być poprawnym obiektem JSON o strukturze: { \"english_sentence\": \"...\", \"polish_translation\": \"...\" }." +
-                        "Zwróć TYLKO czysty JSON, bez bloków markdown (```json)."),
+                new SystemChatMessage(
+                    "Jesteś nauczycielem języka angielskiego. " +
+                    "Twoim zadaniem jest ułożenie prostego zdania w języku angielskim zawierającego podane słowo. " +
+                    "Zdanie musi być dostosowane do podanego poziomu trudności (CEFR). " +
+                    "Odpowiedź musi być poprawnym obiektem JSON o strukturze: { \"english_sentence\": \"...\", \"polish_translation\": \"...\" }." +
+                    "Zwróć TYLKO czysty JSON, bez bloków markdown (```json)."),
 
-                    new UserChatMessage(
-                        $"Target word: {targetWord}\n" +
-                        $"Difficulty Level: {difficultyLevel}")
-                };
+                new UserChatMessage(
+                    $"Target word: {targetWord}\n" +
+                    $"Difficulty Level: {difficultyLevel}")
+            };
 
-                ChatCompletion completion = await _client.CompleteChatAsync(messages);
+            ChatCompletion completion = await _client.CompleteChatAsync(messages);
 
-                string responseText = completion.Content[0].Text.Trim();
+            var responseText = completion.Content[0].Text.Trim();
 
-                // Czyszczenie odpowiedzi na wypadek, gdyby AI jednak dodało markdown
-                responseText = responseText
-                    .Replace("```json", "")
-                    .Replace("```", "")
-                    .Trim();
+            // Czyszczenie odpowiedzi na wypadek, gdyby AI jednak dodało markdown
+            responseText = responseText
+                .Replace("```json", "")
+                .Replace("```", "")
+                .Trim();
 
-                var result = JsonConvert.DeserializeObject<SentenceResponse>(responseText);
+            var result = JsonConvert.DeserializeObject<SentenceResponse>(responseText);
 
-                if (result != null && !string.IsNullOrEmpty(result.EnglishSentence))
-                {
-                    return (result.EnglishSentence, result.PolishTranslation);
-                }
+            if (result != null && !string.IsNullOrEmpty(result.EnglishSentence))
+                return (result.EnglishSentence, result.PolishTranslation);
 
-                return null;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"OpenAI/Newtonsoft Error: {ex.Message}");
-                return null;
-            }
+            return null;
         }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"OpenAI/Newtonsoft Error: {ex.Message}");
+            return null;
+        }
+    }
+
+    private class SentenceResponse
+    {
+        [JsonProperty("english_sentence")] public string EnglishSentence { get; set; } = string.Empty;
+
+        [JsonProperty("polish_translation")] public string PolishTranslation { get; set; } = string.Empty;
     }
 }

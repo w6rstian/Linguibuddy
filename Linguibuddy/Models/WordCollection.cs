@@ -1,49 +1,47 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Linguibuddy.Models
+namespace Linguibuddy.Models;
+
+public class WordCollection : ObservableObject
 {
-    public partial class WordCollection : ObservableObject
+    private string _name = string.Empty;
+
+    [Key] public int Id { get; set; }
+
+    [Required]
+    public string Name
     {
-        [Key]
-        public int Id { get; set; }
-
-        private string _name = string.Empty;
-
-        [Required]
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
-        }
-
-        public string? UserId { get; set; } = string.Empty;
-
-        public List<CollectionItem> Items { get; set; } = [];
-
-        // Audio Quiz
-        public double AudioBestScore { get; set; }
-        public double AudioLastScore { get; set; }
-        public DateTime? AudioLastPlayed { get; set; }
-
-        // Image Quiz
-        public double ImageBestScore { get; set; }
-        public double ImageLastScore { get; set; }
-        public DateTime? ImageLastPlayed { get; set; }
-
-        // Sentence Quiz
-        public double SentenceBestScore { get; set; }
-        public double SentenceLastScore { get; set; }
-        public DateTime? SentenceLastPlayed { get; set; }
-
-        // Speaking Quiz
-        public double SpeakingBestScore { get; set; }
-        public double SpeakingLastScore { get; set; }
-        public DateTime? SpeakingLastPlayed { get; set; }
-
-        // Hangman
-        public double HangmanBestScore { get; set; }
-        public double HangmanLastScore { get; set; }
-        public DateTime? HangmanLastPlayed { get; set; }
+        get => _name;
+        set => SetProperty(ref _name, value);
     }
+
+    public string? UserId { get; set; } = string.Empty;
+
+    public List<CollectionItem> Items { get; set; } = [];
+
+    // Audio Quiz
+    public double AudioBestScore { get; set; }
+    public double AudioLastScore { get; set; }
+    public DateTime? AudioLastPlayed { get; set; }
+
+    // Image Quiz
+    public double ImageBestScore { get; set; }
+    public double ImageLastScore { get; set; }
+    public DateTime? ImageLastPlayed { get; set; }
+
+    // Sentence Quiz
+    public double SentenceBestScore { get; set; }
+    public double SentenceLastScore { get; set; }
+    public DateTime? SentenceLastPlayed { get; set; }
+
+    // Speaking Quiz
+    public double SpeakingBestScore { get; set; }
+    public double SpeakingLastScore { get; set; }
+    public DateTime? SpeakingLastPlayed { get; set; }
+
+    // Hangman
+    public double HangmanBestScore { get; set; }
+    public double HangmanLastScore { get; set; }
+    public DateTime? HangmanLastPlayed { get; set; }
 }

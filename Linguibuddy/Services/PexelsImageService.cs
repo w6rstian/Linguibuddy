@@ -1,36 +1,33 @@
-﻿using PexelsDotNetSDK.Api; // Namespace z paczki NuGet
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using PexelsDotNetSDK.Api;
+// Namespace z paczki NuGet
 
-namespace Linguibuddy.Services
+namespace Linguibuddy.Services;
+
+public class PexelsImageService
 {
-    public class PexelsImageService
+    private readonly PexelsClient _pexelsClient;
+
+    public PexelsImageService(PexelsClient pexelsClient)
     {
-        private readonly PexelsClient _pexelsClient;
+        _pexelsClient = pexelsClient;
+    }
 
-        public PexelsImageService(PexelsClient pexelsClient)
+    public async Task<string?> GetImageUrlAsync(string word)
+    {
+        try
         {
-            _pexelsClient = pexelsClient;
+            var result = await _pexelsClient.SearchPhotosAsync(word, pageSize: 1);
+
+            var photo = result?.photos?.FirstOrDefault();
+
+            if (photo != null) return photo.source.medium;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[Pexels SDK Exception] {ex.Message}");
         }
 
-        public async Task<string?> GetImageUrlAsync(string word)
-        {
-            try
-            {
-                var result = await _pexelsClient.SearchPhotosAsync(query: word, pageSize: 1);
-
-                var photo = result?.photos?.FirstOrDefault();
-
-                if (photo != null)
-                {
-                    return photo.source.medium;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Pexels SDK Exception] {ex.Message}");
-            }
-
-            return null;
-        }
+        return null;
     }
 }

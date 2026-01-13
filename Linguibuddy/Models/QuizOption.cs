@@ -1,22 +1,19 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Linguibuddy.Models
+namespace Linguibuddy.Models;
+
+public partial class QuizOption : ObservableObject
 {
-    public partial class QuizOption : ObservableObject
+    [ObservableProperty] private Color _backgroundColor;
+
+    [ObservableProperty] private bool _isEnabled;
+
+    public QuizOption(CollectionItem word)
     {
-        public CollectionItem Word { get; }
-
-        [ObservableProperty]
-        private Color _backgroundColor;
-
-        [ObservableProperty]
-        private bool _isEnabled;
-
-        public QuizOption(CollectionItem word)
-        {
-            Word = word;
-            BackgroundColor = Application.Current.Resources["Primary"] as Color ?? Colors.LightGray;
-            IsEnabled = true;
-        }
+        Word = word;
+        BackgroundColor = Application.Current.Resources["Primary"] as Color ?? Colors.LightGray;
+        IsEnabled = true;
     }
+
+    public CollectionItem Word { get; }
 }
