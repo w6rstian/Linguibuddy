@@ -1,6 +1,7 @@
 ﻿using Linguibuddy.Helpers;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using static AndroidX.ConstraintLayout.Core.Motion.Utils.HyperSpline;
 
 namespace Linguibuddy.Models
 {
@@ -12,6 +13,8 @@ namespace Linguibuddy.Models
     {
         [Key]
         public required string Id { get; set; } // same thing as Firebase Uid
+
+        public DifficultyLevel DifficultyLevel { get; set; } = DifficultyLevel.A1;
 
         public int Points { get; set; } = 0;
 

@@ -14,6 +14,9 @@ namespace Linguibuddy.ViewModels
     {
         private readonly OpenAiService _openAiService;
         private readonly ScoringService _scoringService;
+        private readonly AppUserService _appUserService;
+
+        private DifficultyLevel _currentDifficulty;
 
         [ObservableProperty]
         private WordCollection? _selectedCollection;
@@ -48,10 +51,11 @@ namespace Linguibuddy.ViewModels
 
         private SentenceQuestion? _currentQuestion;
 
-        public SentenceQuizViewModel(OpenAiService openAiService, ScoringService scoringService)
+        public SentenceQuizViewModel(OpenAiService openAiService, ScoringService scoringService, AppUserService appUserService)
         {
             _openAiService = openAiService;
             _scoringService = scoringService;
+            _appUserService = appUserService;
 
             HasAppeared = [];
             IsFinished = false;
@@ -61,6 +65,8 @@ namespace Linguibuddy.ViewModels
 
         public override async Task LoadQuestionAsync()
         {
+            _currentDifficulty = await _appUserService.GetUserDifficultyAsync();
+
             if (IsBusy) return;
 
             IsBusy = true;
@@ -103,10 +109,11 @@ namespace Linguibuddy.ViewModels
                 var random = Random.Shared;
                 TargetWord = validWords[random.Next(validWords.Count)];
 
-                int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
-                string difficultyString = ((DifficultyLevel)difficultyInt).ToString();
+                //int difficulty = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
+                //var difficulty = await _appUserService.GetUserDifficultyAsync();
+                string difficultyString = _currentDifficulty.ToString();
 
-                var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString);
+                var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString); 
 
                 if (generatedData != null)
                 {
@@ -206,10 +213,10 @@ namespace Linguibuddy.ViewModels
             {
                 Score++;
 
-                int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
-                var difficulty = (DifficultyLevel)difficultyInt;
+                //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
+                //var difficulty = (DifficultyLevel)difficultyInt;
 
-                int points = _scoringService.CalculatePoints(GameType.SentenceQuiz, difficulty);
+                int points = _scoringService.CalculatePoints(GameType.SentenceQuiz, _currentDifficulty);
                 PointsEarned += points;
 
                 FeedbackMessage = AppResources.Perfect;
@@ -244,12 +251,6 @@ namespace Linguibuddy.ViewModels
                         PointsEarned
                     );
                 }
-                // Tutaj obsługa końca gry potem ekren końcowy to tymczasowe
-                // TODO: DisplayResultScreen()
-                //string resultMsg = $"Twój wynik: {Score} / {SelectedCollection?.Items.Count ?? 0}";
-                //await Shell.Current.DisplayAlert("Koniec Quizu", resultMsg, "OK");
-
-                // Wyświetla się inny grid z ekranem końcowym gdy IsFinished == True
             }
         }
     }

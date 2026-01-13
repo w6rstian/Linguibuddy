@@ -55,33 +55,41 @@ namespace Linguibuddy.Services
             if (totalQuestions == 0) return;
 
             double ratio = (double)correctAnswers / totalQuestions;
+            var now = DateTime.UtcNow;
 
             switch (gameType)
             {
                 case GameType.AudioQuiz:
                     collection.AudioLastScore = ratio;
                     if (ratio > collection.AudioBestScore) collection.AudioBestScore = ratio;
+                    collection.AudioLastPlayed = now;
                     break;
 
                 case GameType.ImageQuiz:
                     collection.ImageLastScore = ratio;
                     if (ratio > collection.ImageBestScore) collection.ImageBestScore = ratio;
+                    collection.ImageLastPlayed = now;
                     break;
 
                 case GameType.SentenceQuiz:
                     collection.SentenceLastScore = ratio;
                     if (ratio > collection.SentenceBestScore) collection.SentenceBestScore = ratio;
+                    collection.SentenceLastPlayed = now;
                     break;
 
                 case GameType.SpeakingQuiz:
                     collection.SpeakingLastScore = ratio;
                     if (ratio > collection.SpeakingBestScore) collection.SpeakingBestScore = ratio;
+                    collection.SpeakingLastPlayed = now;
                     break;
 
                 case GameType.Hangman:
                     collection.HangmanLastScore = ratio;
                     if (ratio > collection.HangmanBestScore) collection.HangmanBestScore = ratio;
+                    collection.HangmanLastPlayed = now;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(gameType), gameType, null);
             }
 
             try
