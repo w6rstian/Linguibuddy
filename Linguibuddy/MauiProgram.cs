@@ -4,6 +4,8 @@ using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Firebase.Auth.Repository;
 using Linguibuddy.Data;
+using Linguibuddy.Interfaces;
+using Linguibuddy.Repositories;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using Linguibuddy.ViewModels;
@@ -73,6 +75,7 @@ namespace Linguibuddy
             builder.Services.AddTransient<FlashcardsCollectionsPage, FlashcardsCollectionsViewModel>();
             builder.Services.AddTransient<SignInPage, SignInViewModel>();
             builder.Services.AddTransient<SignUpPage, SignUpViewModel>();
+            builder.Services.AddTransient<ProfilePage, ProfileViewModel>();
             builder.Services.AddTransient<AchievementsPage, AchievementsViewModel>();
             builder.Services.AddTransient<SettingsPage, SettingsViewModel>();
             builder.Services.AddTransient<AudioQuizPage, AudioQuizViewModel>();
@@ -97,6 +100,10 @@ namespace Linguibuddy
             builder.Services.AddTransient<CollectionService>();
             builder.Services.AddTransient<SpacedRepetitionService>();
             builder.Services.AddTransient<AchievementService>();
+            builder.Services.AddTransient<IUserLearningDayRepository, UserLearningDayRepository>();
+            builder.Services.AddTransient<IAppUserRepository, AppUserRepository>();
+            builder.Services.AddTransient<LearningService>();
+            builder.Services.AddTransient<AppUserService>();
 
             builder.Services.AddHttpClient<DictionaryApiService>(client =>
             {
