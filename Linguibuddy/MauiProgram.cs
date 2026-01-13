@@ -97,6 +97,7 @@ namespace Linguibuddy
             builder.Services.AddTransient<CollectionService>();
             builder.Services.AddTransient<SpacedRepetitionService>();
             builder.Services.AddTransient<AchievementService>();
+            builder.Services.AddTransient<ScoringService>();
 
             builder.Services.AddHttpClient<DictionaryApiService>(client =>
             {
