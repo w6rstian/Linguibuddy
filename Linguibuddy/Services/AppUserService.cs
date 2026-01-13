@@ -1,4 +1,6 @@
-﻿using Linguibuddy.Interfaces;
+﻿using Firebase.Auth;
+using Linguibuddy.Interfaces;
+using Linguibuddy.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,23 +12,41 @@ namespace Linguibuddy.Services
     public class AppUserService
     {
         private readonly IAppUserRepository _appUsers;
+        private readonly FirebaseAuthClient _authClient;
 
-        public AppUserService(IAppUserRepository appUsers)
+        private readonly string _currentUserId;
+        private AppUser _appUser;
+
+        public AppUserService(IAppUserRepository appUsers, FirebaseAuthClient authClient)
         {
             _appUsers = appUsers;
+            _authClient = authClient;
+            _currentUserId = authClient.User.Uid;
         }
 
-        public async Task AddPointsAsync(string userId, int points)
+        public async Task AddUserPointsAsync(int points)
         {
-            var user = await _appUsers.GetByIdAsync(userId)
-                ?? throw new Exception("User not found");
+            if (_appUser is null)
+            {
+                _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                    ?? throw new Exception("User not found");
+            }
 
-            user.Points += points;
+            _appUser.Points += points;
 
             await _appUsers.SaveChangesAsync();
         }
 
-        //public async Task SetBestLearningStreakAsync(string userId, int )
-        //public async Task<int> GetUserPoints(string userId);
+        //public async Task SetBestLearningStreakAsync(int )
+        public async Task<int> GetUserPointsAsync()
+        {
+            if (_appUser is null)
+            {
+                _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                    ?? throw new Exception("User not found");
+            }
+
+            return _appUser.Points;
+        }
     }
 }
