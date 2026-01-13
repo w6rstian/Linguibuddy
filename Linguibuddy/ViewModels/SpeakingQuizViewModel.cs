@@ -17,6 +17,9 @@ namespace Linguibuddy.ViewModels
         private readonly ISpeechToText _speechToText;
         private readonly OpenAiService _openAiService;
         private readonly ScoringService _scoringService;
+        private readonly AppUserService _appUserService;
+
+        private DifficultyLevel _currentDifficulty;
 
         [ObservableProperty] private WordCollection? _selectedCollection;
         [ObservableProperty] private CollectionItem? _targetWord;
@@ -41,11 +44,13 @@ namespace Linguibuddy.ViewModels
 
         public SpeakingQuizViewModel(ISpeechToText speechToText, 
             OpenAiService openAiService, 
-            ScoringService scoringService)
+            ScoringService scoringService,
+            AppUserService appUserService)
         {
             _speechToText = speechToText;
             _openAiService = openAiService;
             _scoringService = scoringService;
+            _appUserService = appUserService;
 
             HasAppeared = [];
             IsFinished = false;
@@ -56,6 +61,8 @@ namespace Linguibuddy.ViewModels
 
         public override async Task LoadQuestionAsync()
         {
+            _currentDifficulty = await _appUserService.GetUserDifficultyAsync();
+
             if (IsBusy) return;
             IsBusy = true;
             IsAnswered = false;
@@ -94,8 +101,8 @@ namespace Linguibuddy.ViewModels
                 var random = Random.Shared;
                 TargetWord = validWords[random.Next(validWords.Count)];
 
-                int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
-                string difficultyString = ((DifficultyLevel)difficultyInt).ToString();
+                //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
+                string difficultyString = _currentDifficulty.ToString();
 
                 var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString);
 
@@ -255,10 +262,10 @@ namespace Linguibuddy.ViewModels
             {
                 Score++;
 
-                int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
-                var difficulty = (DifficultyLevel)difficultyInt;
+                //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
+                //var difficulty = (DifficultyLevel)difficultyInt;
 
-                int points = _scoringService.CalculatePoints(GameType.SpeakingQuiz, difficulty);
+                int points = _scoringService.CalculatePoints(GameType.SpeakingQuiz, _currentDifficulty);
                 PointsEarned += points;
 
                 FeedbackMessage = $"Świetnie! ({similarity:F0}% zgodności)";

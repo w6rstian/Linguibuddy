@@ -4,12 +4,15 @@ using Linguibuddy.Helpers;
 using Linguibuddy.Resources.Strings;
 using LocalizationResourceManager.Maui;
 using System.Globalization;
+using Linguibuddy.Services;
 
 namespace Linguibuddy.ViewModels
 {
     public partial class SettingsViewModel : ObservableObject
     {
         private readonly ILocalizationResourceManager _resourceManager;
+        private readonly AppUserService _appUserService;
+
         private static readonly CultureInfo English = CultureInfo.GetCultureInfo("en");
         private static readonly CultureInfo Polish = CultureInfo.GetCultureInfo("pl");
 
@@ -25,15 +28,18 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private DifficultyLevel _selectedDifficulty;
 
-        public SettingsViewModel(ILocalizationResourceManager resourceManager)
+        public SettingsViewModel(ILocalizationResourceManager resourceManager, AppUserService appUserService)
         {
             _resourceManager = resourceManager;
+            _appUserService = appUserService;
 
             LoadLanguage();
             LoadTheme();
             UpdateThemeName();
             UpdateApiName();
-            LoadDifficulty();
+            //LoadDifficulty();
+
+            Task.Run(LoadDifficultyAsync);
         }
 
         partial void OnSelectedDifficultyChanged(DifficultyLevel value)
@@ -41,6 +47,17 @@ namespace Linguibuddy.ViewModels
             Preferences.Default.Set(Constants.DifficultyLevelKey, (int)value);
         }
 
+        private async Task LoadDifficultyAsync()
+        {
+            var level = await _appUserService.GetUserDifficultyAsync();
+            // Musimy to zrobić na głównym wątku, bo aktualizujemy UI
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                SelectedDifficulty = level;
+            });
+        }
+
+        /*
         private void LoadDifficulty()
         {
             int savedLevel = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
@@ -54,6 +71,7 @@ namespace Linguibuddy.ViewModels
                 SelectedDifficulty = DifficultyLevel.A1;
             }
         }
+        */
 
         private void LoadLanguage()
         {

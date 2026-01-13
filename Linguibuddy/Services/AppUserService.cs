@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Linguibuddy.Helpers;
 
 namespace Linguibuddy.Services
 {
@@ -47,6 +48,31 @@ namespace Linguibuddy.Services
             }
 
             return _appUser.Points;
+        }
+
+        public async Task<DifficultyLevel> GetUserDifficultyAsync()
+        {
+            if (_appUser is null)
+            {
+                _appUser = await _appUsers.GetByIdAsync(_currentUserId);
+
+                // Jeśli użytkownik nie istnieje (np. błąd ładowania), zwróć domyślny
+                if (_appUser is null) return DifficultyLevel.A1;
+            }
+
+            return _appUser.DifficultyLevel;
+        }
+
+        public async Task SetUserDifficultyAsync(DifficultyLevel level)
+        {
+            if (_appUser is null)
+            {
+                _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                           ?? throw new Exception("User not found");
+            }
+
+            _appUser.DifficultyLevel = level;
+            await _appUsers.SaveChangesAsync();
         }
     }
 }
