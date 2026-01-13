@@ -6,13 +6,14 @@ using Linguibuddy.Services;
 using Plugin.Maui.Audio;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Linguibuddy.Helpers;
 
 namespace Linguibuddy.ViewModels
 {
     [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class AudioQuizViewModel : BaseQuizViewModel
     {
-        private readonly DictionaryApiService _dictionaryService;
+        private readonly ScoringService _scoringService;
         private readonly IAudioManager _audioManager;
         private IAudioPlayer? _audioPlayer;
 
@@ -27,20 +28,26 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsLearning))]
         private bool _isFinished;
+
         [ObservableProperty]
         private int _score;
 
+        [ObservableProperty]
+        private int _pointsEarned;
+
         public bool IsLearning => !IsFinished;
 
-        public ObservableCollection<QuizOption> Options { get; } = [];
+        public ObservableCollection<Models.QuizOption> Options { get; } = [];
 
-        public AudioQuizViewModel(DictionaryApiService dictionaryService, IAudioManager audioManager)
+        public AudioQuizViewModel(ScoringService scoringService, IAudioManager audioManager)
         {
-            _dictionaryService = dictionaryService;
+            _scoringService = scoringService;
             _audioManager = audioManager;
+
             HasAppeared = [];
             IsFinished = false;
             Score = 0;
+            PointsEarned = 0;
         }
 
         public override async Task LoadQuestionAsync()
@@ -54,6 +61,13 @@ namespace Linguibuddy.ViewModels
                 Application.Current.Resources["PrimaryDarkText"] as Color :
                 Colors.White;
             Options.Clear();
+
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+                IsBusy = false;
+                return;
+            }
 
             try
             {
@@ -101,7 +115,7 @@ namespace Linguibuddy.ViewModels
 
                 foreach (var word in optionsList)
                 {
-                    Options.Add(new QuizOption(word));
+                    Options.Add(new Models.QuizOption(word));
                 }
 
                 HasAppeared.Add(TargetWord);
@@ -118,7 +132,7 @@ namespace Linguibuddy.ViewModels
         }
 
         [RelayCommand]
-        private async Task SelectAnswerAsync(QuizOption selectedOption)
+        private async Task SelectAnswerAsync(Models.QuizOption selectedOption)
         {
             if (IsAnswered || selectedOption == null || TargetWord == null) return;
 
@@ -127,9 +141,13 @@ namespace Linguibuddy.ViewModels
             if (selectedOption.Word.Id == TargetWord.Id)
             {
                 selectedOption.BackgroundColor = Colors.LightGreen;
+                Score++;
+
+                int points = _scoringService.CalculatePoints(GameType.AudioQuiz, DifficultyLevel.A1);
+                PointsEarned += points;
+
                 FeedbackMessage = AppResources.CorrectAnswer;
                 FeedbackColor = Colors.Green;
-                Score++;
             }
             else
             {
@@ -196,6 +214,16 @@ namespace Linguibuddy.ViewModels
 
             if (IsFinished)
             {
+                if (SelectedCollection != null)
+                {
+                    await _scoringService.SaveResultsAsync(
+                        SelectedCollection,
+                        GameType.AudioQuiz,
+                        Score,
+                        SelectedCollection.Items.Count,
+                        PointsEarned
+                    );
+                }
                 // TODO: DisplayResultScreen()
                 // Nie rozumiem do końca jak jest zrobiony ekran końcowy w fiszkach, ale tutaj powinno być podobnie.
                 // Wyżej przy prawidłowej odpowiedzi jest robiony Score++.

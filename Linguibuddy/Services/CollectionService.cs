@@ -47,6 +47,12 @@ namespace Linguibuddy.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateCollectionAsync(WordCollection collection)
+        {
+            _context.WordCollections.Update(collection);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteCollectionAsync(WordCollection collection)
         {
             _context.WordCollections.Remove(collection);
@@ -56,8 +62,7 @@ namespace Linguibuddy.Services
         public async Task RenameCollectionAsync(WordCollection collection, string newName)
         {
             collection.Name = newName;
-            _context.WordCollections.Update(collection);
-            await _context.SaveChangesAsync();
+            await UpdateCollectionAsync(collection);
         }
 
         public async Task<List<CollectionItem>> GetItemsForLearning(int collectionId)

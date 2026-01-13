@@ -4,27 +4,27 @@ using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Text;
+using Linguibuddy.Helpers;
 
 namespace Linguibuddy.ViewModels
 {
     [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class HangmanViewModel : BaseQuizViewModel
     {
-        private readonly DictionaryApiService _dictionaryService;
+        private readonly ScoringService _scoringService;
+
         private const int MaxMistakes = 6;
         private string _secretWord = string.Empty;
 
-        // Wyświetlane hasło (np. "A _ P _ E")
         [ObservableProperty]
         private string _maskedWord;
 
-        // Licznik błędów
         [ObservableProperty]
         private int _mistakes;
 
-        // Nazwa pliku obrazka (np. "hangman_0.png")
         [ObservableProperty]
         private string _currentImage;
 
@@ -36,27 +36,32 @@ namespace Linguibuddy.ViewModels
         [NotifyPropertyChangedFor(nameof(IsLearning))]
         private bool _isFinished;
         public bool IsLearning => !IsFinished;
+
         [ObservableProperty]
         private int _score;
 
-        // Klawiatura A-Z
-        public ObservableCollection<HangmanLetter> Keyboard { get; } = new();
+        [ObservableProperty]
+        private int _pointsEarned;
 
-        public HangmanViewModel(DictionaryApiService dictionaryService)
+        // Klawiatura A-Z
+        public ObservableCollection<Models.HangmanLetter> Keyboard { get; } = [];
+
+        public HangmanViewModel(ScoringService scoringService)
         {
-            _dictionaryService = dictionaryService;
+            _scoringService = scoringService;
+
             _hasAppeared = [];
-            // Inicjalizacja klawiatury pustymi wartościami, zostanie odświeżona przy LoadQuestion
+            PointsEarned = 0;
+            Score = 0;
             GenerateKeyboard();
         }
 
         private void GenerateKeyboard()
         {
             Keyboard.Clear();
-            // Kolor domyślny nie ma tu znaczenia, ustawimy go w LoadQuestionAsync
             for (char c = 'A'; c <= 'Z'; c++)
             {
-                Keyboard.Add(new HangmanLetter(c, Colors.Gray));
+                Keyboard.Add(new Models.HangmanLetter(c, Colors.Gray));
             }
         }
 
@@ -66,14 +71,13 @@ namespace Linguibuddy.ViewModels
             IsBusy = true;
             IsAnswered = false;
             Mistakes = 0;
-            CurrentImage = "hangman_0.jpg"; // Upewnij się, że masz ten plik w Resources/Images
+            CurrentImage = "hangman_0.jpg";
             FeedbackMessage = string.Empty;
             FeedbackColor =
                 Application.Current.RequestedTheme == AppTheme.Light ?
                 Application.Current.Resources["PrimaryDarkText"] as Color :
                 Colors.White;
 
-            // Pobranie koloru Primary z zasobów aplikacji (bezpieczny sposób)
             Color keyColor =
                 Application.Current.RequestedTheme == AppTheme.Light ?
                 Application.Current.Resources["Primary"] as Color:
@@ -83,7 +87,7 @@ namespace Linguibuddy.ViewModels
             foreach (var key in Keyboard)
             {
                 key.IsEnabled = true;
-                key.BackgroundColor = Colors.Transparent; // Styl Outline
+                key.BackgroundColor = Colors.Transparent;
                 key.BorderColor = keyColor;
                 key.TextColor = keyColor;
             }
@@ -97,7 +101,6 @@ namespace Linguibuddy.ViewModels
                     return;
                 }
 
-                // Pobieramy 1 losowe słowo z kolekcji
                 var allWords = SelectedCollection.Items;
                 var validWords = allWords.Except(HasAppeared).ToList();
 
@@ -112,7 +115,7 @@ namespace Linguibuddy.ViewModels
                 {
                     var random = Random.Shared;
                     var wordObj = validWords[random.Next(validWords.Count)];
-                    // Normalizujemy słowo (tylko litery, uppercase)
+
                     _secretWord = wordObj.Word.Trim().ToUpper();
                     HasAppeared.Add(wordObj);
 
@@ -144,7 +147,7 @@ namespace Linguibuddy.ViewModels
             {
                 if (!char.IsLetter(c))
                 {
-                    // Znaki specjalne (spacja, myślnik) pokazujemy od razu
+                    // Znaki specjalne (spacja, myślnik)
                     sb.Append($"{c} ");
                 }
                 else if (guessedLetters != null && guessedLetters.Contains(c))
@@ -169,17 +172,16 @@ namespace Linguibuddy.ViewModels
         }
 
         [RelayCommand]
-        private void GuessLetter(HangmanLetter letterObj)
+        private void GuessLetter(Models.HangmanLetter letterObj)
         {
             if (IsAnswered || !letterObj.IsEnabled) return;
 
-            letterObj.IsEnabled = false; // Blokujemy przycisk
+            letterObj.IsEnabled = false;
             char letter = letterObj.Character;
 
             if (_secretWord.Contains(letter))
             {
-                // TRAFIONY (Zielony)
-                letterObj.BackgroundColor = Colors.LightGreen; // Lub pobierz success color
+                letterObj.BackgroundColor = Colors.LightGreen;
                 letterObj.BorderColor = Colors.Transparent;
                 letterObj.TextColor = Colors.White;
 
@@ -188,13 +190,12 @@ namespace Linguibuddy.ViewModels
             }
             else
             {
-                // PUDŁO (Czerwony/Salmon)
                 letterObj.BackgroundColor = Colors.Salmon;
                 letterObj.BorderColor = Colors.Transparent;
                 letterObj.TextColor = Colors.White;
 
                 Mistakes++;
-                CurrentImage = $"hangman_{Mistakes}.jpg"; // Zmiana obrazka
+                CurrentImage = $"hangman_{Mistakes}.jpg";
 
                 if (Mistakes >= MaxMistakes)
                 {
@@ -208,9 +209,13 @@ namespace Linguibuddy.ViewModels
             IsAnswered = true;
             if (won)
             {
+                Score++;
+
+                int points = _scoringService.CalculatePoints(GameType.Hangman, DifficultyLevel.A1);
+                PointsEarned += points;
+
                 FeedbackMessage = AppResources.Victory;
                 FeedbackColor = Colors.Green;
-                Score++;
             }
             else
             {
@@ -232,8 +237,16 @@ namespace Linguibuddy.ViewModels
 
             if (IsFinished)
             {
-                var ScoreText = $"{Score}/{SelectedCollection!.Items.Count}";
-                // TODO: Post-game summary
+                if (SelectedCollection != null)
+                {
+                    await _scoringService.SaveResultsAsync(
+                        SelectedCollection,
+                        GameType.Hangman,
+                        Score,
+                        SelectedCollection.Items.Count,
+                        PointsEarned
+                    );
+                }
             }
         }
     }

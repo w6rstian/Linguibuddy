@@ -4,6 +4,8 @@ using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Firebase.Auth.Repository;
 using Linguibuddy.Data;
+using Linguibuddy.Interfaces;
+using Linguibuddy.Repositories;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using Linguibuddy.ViewModels;
@@ -97,6 +99,11 @@ namespace Linguibuddy
             builder.Services.AddTransient<CollectionService>();
             builder.Services.AddTransient<SpacedRepetitionService>();
             builder.Services.AddTransient<AchievementService>();
+            builder.Services.AddTransient<ScoringService>();
+
+            //chyba trzeba dodac tu serwisy, repozytoria?
+            builder.Services.AddTransient<AppUserService>();
+            builder.Services.AddTransient<IAppUserRepository, AppUserRepository>();
 
             builder.Services.AddHttpClient<DictionaryApiService>(client =>
             {

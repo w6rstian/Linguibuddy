@@ -13,6 +13,7 @@ namespace Linguibuddy.ViewModels
     public partial class SentenceQuizViewModel : BaseQuizViewModel
     {
         private readonly OpenAiService _openAiService;
+        private readonly ScoringService _scoringService;
 
         [ObservableProperty]
         private WordCollection? _selectedCollection;
@@ -31,27 +32,31 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private int _score;
 
+        [ObservableProperty]
+        private int _pointsEarned;
+
         public ObservableCollection<WordTile> AvailableWords { get; } = [];
         public ObservableCollection<WordTile> SelectedWords { get; } = [];
-
-        public bool IsNotAnswered => !IsAnswered;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsNotAnswered))]
         private bool _isAnswered;
+        public bool IsNotAnswered => !IsAnswered;
 
         [ObservableProperty]
         private string _polishTranslation;
 
         private SentenceQuestion? _currentQuestion;
 
-        public SentenceQuizViewModel(OpenAiService openAiService)
+        public SentenceQuizViewModel(OpenAiService openAiService, ScoringService scoringService)
         {
             _openAiService = openAiService;
+            _scoringService = scoringService;
 
             HasAppeared = [];
             IsFinished = false;
             Score = 0;
+            PointsEarned = 0;
         }
 
         public override async Task LoadQuestionAsync()
@@ -69,6 +74,13 @@ namespace Linguibuddy.ViewModels
             AvailableWords.Clear();
             SelectedWords.Clear();
             PolishTranslation = AppResources.SentenceGenerating;
+
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+                IsBusy = false;
+                return;
+            }
 
             try
             {
@@ -193,6 +205,13 @@ namespace Linguibuddy.ViewModels
             if (isCorrect)
             {
                 Score++;
+
+                int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
+                var difficulty = (DifficultyLevel)difficultyInt;
+
+                int points = _scoringService.CalculatePoints(GameType.SentenceQuiz, difficulty);
+                PointsEarned += points;
+
                 FeedbackMessage = AppResources.Perfect;
                 FeedbackColor = Colors.Green;
             }
@@ -215,6 +234,16 @@ namespace Linguibuddy.ViewModels
 
             if (IsFinished)
             {
+                if (SelectedCollection != null)
+                {
+                    await _scoringService.SaveResultsAsync(
+                        SelectedCollection,
+                        GameType.SentenceQuiz,
+                        Score,
+                        SelectedCollection.Items.Count,
+                        PointsEarned
+                    );
+                }
                 // Tutaj obsługa końca gry potem ekren końcowy to tymczasowe
                 // TODO: DisplayResultScreen()
                 //string resultMsg = $"Twój wynik: {Score} / {SelectedCollection?.Items.Count ?? 0}";

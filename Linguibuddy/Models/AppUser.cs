@@ -15,6 +15,8 @@ namespace Linguibuddy.Models
 
         public int Points { get; set; } = 0;
 
+        public int BestLearningStreak { get; set; } = 0;
+
         public ICollection<UserLearningDay> LearningDays { get; set; } = new List<UserLearningDay>();
         public ICollection<UserAchievement> UserAchievements { get; set; } = new List<UserAchievement>();
     }
