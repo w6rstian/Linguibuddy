@@ -19,18 +19,18 @@ namespace Linguibuddy.Repositories
             _db = db;
         }
 
-        public Task<bool> ExistsAsync(string userId, DateTime date)
-            => _db.UserLearningDays
+        public async Task<bool> ExistsAsync(string userId, DateTime date)
+            => await _db.UserLearningDays
             .AnyAsync(uld => uld.AppUserId == userId && uld.Date == date);
 
         public async Task AddAsync(UserLearningDay day)
         {
-            _db.UserLearningDays.Add(day);
+            await _db.UserLearningDays.AddAsync(day);
             await _db.SaveChangesAsync();
         }
 
-        public Task<List<DateTime>> GetLearningDatesAsync(string userId)
-            => _db.UserLearningDays
+        public async Task<List<DateTime>> GetLearningDatesAsync(string userId)
+            => await _db.UserLearningDays
             .Where(uld => uld.AppUserId == userId)
             .OrderByDescending(uld => uld.Date)
             .Select(uld => uld.Date)
