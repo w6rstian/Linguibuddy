@@ -14,6 +14,7 @@ namespace Linguibuddy.Data
         public DbSet<Achievement> Achievements { get; set; }
         public DbSet<UserAchievement> UserAchievements { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<UserLearningDay> UserLearningDays { get; set; }
         public DbSet<Flashcard> Flashcards { get; set; }
         //public DbSet<Phonetic> Phonetics { get; set; }
         //public DbSet<Meaning> Meanings { get; set; }
@@ -68,11 +69,7 @@ namespace Linguibuddy.Data
                         Id = 1,
                         Name = AppResources.Achievement1Name,
                         Description = AppResources.Achievement1Description,
-                        IconUrl = "trophy_100dp_light.png",
-                        Requirements =
-                        {
-                            { "Points", 1 }
-                        }
+                        IconUrl = "trophy_100dp_light.png"
                     }
                 );
 
@@ -89,6 +86,26 @@ namespace Linguibuddy.Data
                 .WithMany(a => a.UserAchievements)
                 .HasForeignKey(ua => ua.AchievementId);
 
+            modelBuilder.Entity<UserLearningDay>()
+                .HasKey(uld => uld.Id);
+
+            modelBuilder.Entity<UserLearningDay>()
+                .HasOne(uld => uld.AppUser)
+                .WithMany(au => au.LearningDays)
+                .HasForeignKey(uld => uld.AppUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserLearningDay>()
+                .Property(x => x.AppUserId)
+                .IsRequired();
+
+            modelBuilder.Entity<UserLearningDay>()
+                .HasIndex(x => new { x.AppUserId, x.Date })
+                .IsUnique();
+
+            modelBuilder.Entity<UserLearningDay>()
+                .Property(x => x.Date)
+                .HasColumnType("date");
         }
     }
 }

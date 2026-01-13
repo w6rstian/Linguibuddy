@@ -14,7 +14,8 @@ namespace Linguibuddy.Models
         public required string Id { get; set; } // same thing as Firebase Uid
 
         public int Points { get; set; } = 0;
-        public Dictionary<DateTime, bool> LearningLog { get; set; } = [];
+
+        public ICollection<UserLearningDay> LearningDays { get; set; } = new List<UserLearningDay>();
         public ICollection<UserAchievement> UserAchievements { get; set; } = new List<UserAchievement>();
     }
 }
