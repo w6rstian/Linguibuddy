@@ -33,7 +33,12 @@
             ContentTemplate="{DataTemplate views:MiniGamesPage}"
             Route="MiniGamesPage"/>
     </FlyoutItem>
-    
+    <FlyoutItem Title="Profile">
+        <ShellContent
+            Title="Profile"
+            ContentTemplate="{DataTemplate views:ProfilePage}"
+            Route="ProfilePage" />
+    </FlyoutItem>
     <FlyoutItem Title="{loc:Translate Achievements}">
         <ShellContent 
             Title="Achievements"

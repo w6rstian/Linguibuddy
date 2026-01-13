@@ -10,8 +10,6 @@ namespace Linguibuddy.ViewModels
     public partial class AchievementsViewModel : ObservableObject
     {
         private readonly AchievementService _achievementService;
-        private readonly string _currentUserId; // Zakładam, że masz dostęp do userId (np. z Firebase lub AppUser)
-        private readonly FirebaseAuthClient _authClient;
 
         [ObservableProperty]
         private ObservableCollection<UserAchievement> achievements = new(); // Lista do bindowania
@@ -19,11 +17,9 @@ namespace Linguibuddy.ViewModels
         [ObservableProperty]
         private bool isLoading = true; // Do pokazywania loadera
 
-        public AchievementsViewModel(AchievementService achievementService, FirebaseAuthClient authClient)
+        public AchievementsViewModel(AchievementService achievementService)
         {
             _achievementService = achievementService;
-            _authClient = authClient;
-            _currentUserId = _authClient.User.Uid;
         }
 
         [RelayCommand]
@@ -32,7 +28,7 @@ namespace Linguibuddy.ViewModels
             IsLoading = true;
             Achievements.Clear();
 
-            var userAchievements = await _achievementService.GetUserAchievementsAsync(_currentUserId);
+            var userAchievements = await _achievementService.GetUserAchievementsAsync();
 
             foreach (var ua in userAchievements)
             {

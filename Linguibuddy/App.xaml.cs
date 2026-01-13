@@ -1,4 +1,5 @@
 ﻿using Firebase.Auth;
+using Linguibuddy.Data;
 using Linguibuddy.Views;
 
 namespace Linguibuddy
@@ -14,7 +15,12 @@ namespace Linguibuddy
         {
             var authClient = IPlatformApplication.Current.Services.GetRequiredService<FirebaseAuthClient>();
             var user = authClient.User;
-            if (user is null)
+            if (
+                user is null ||
+                !IPlatformApplication.Current.Services.GetRequiredService<DataContext>()
+                .AppUsers
+                .Where(au => au.Id == user.Uid)
+                .Any())
             {
                 var signInPage = IPlatformApplication.Current.Services.GetService<SignInPage>();
 
