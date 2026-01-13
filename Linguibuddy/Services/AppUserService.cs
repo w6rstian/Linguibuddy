@@ -37,7 +37,6 @@ namespace Linguibuddy.Services
             await _appUsers.SaveChangesAsync();
         }
 
-        //public async Task SetBestLearningStreakAsync(int )
         public async Task<int> GetUserPointsAsync()
         {
             if (_appUser is null)
@@ -47,6 +46,29 @@ namespace Linguibuddy.Services
             }
 
             return _appUser.Points;
+        }
+
+        public async Task<int> GetUserBestStreakAsync()
+        {
+            if (_appUser is null)
+            {
+                _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                    ?? throw new Exception("User not found");
+            }
+
+            return _appUser.BestLearningStreak;
+        }
+
+        public async Task SetBestLearningStreakAsync(int newStreak)
+        {
+            if (_appUser is null)
+            {
+                _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                    ?? throw new Exception("User not found");
+            }
+
+            _appUser.BestLearningStreak = newStreak;
+            await _appUsers.SaveChangesAsync();
         }
     }
 }

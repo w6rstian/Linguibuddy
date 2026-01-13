@@ -75,6 +75,7 @@ namespace Linguibuddy
             builder.Services.AddTransient<FlashcardsCollectionsPage, FlashcardsCollectionsViewModel>();
             builder.Services.AddTransient<SignInPage, SignInViewModel>();
             builder.Services.AddTransient<SignUpPage, SignUpViewModel>();
+            builder.Services.AddTransient<ProfilePage, ProfileViewModel>();
             builder.Services.AddTransient<AchievementsPage, AchievementsViewModel>();
             builder.Services.AddTransient<SettingsPage, SettingsViewModel>();
             builder.Services.AddTransient<AudioQuizPage, AudioQuizViewModel>();
@@ -99,11 +100,12 @@ namespace Linguibuddy
             builder.Services.AddTransient<CollectionService>();
             builder.Services.AddTransient<SpacedRepetitionService>();
             builder.Services.AddTransient<AchievementService>();
+            builder.Services.AddTransient<IUserLearningDayRepository, UserLearningDayRepository>();
+            builder.Services.AddTransient<IAppUserRepository, AppUserRepository>();
+            builder.Services.AddTransient<LearningService>();
+            builder.Services.AddTransient<AppUserService>();
             builder.Services.AddTransient<ScoringService>();
 
-            //chyba trzeba dodac tu serwisy, repozytoria?
-            builder.Services.AddTransient<AppUserService>();
-            builder.Services.AddTransient<IAppUserRepository, AppUserRepository>();
 
             builder.Services.AddHttpClient<DictionaryApiService>(client =>
             {

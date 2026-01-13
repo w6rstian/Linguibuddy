@@ -1,4 +1,5 @@
-﻿using Linguibuddy.Data;
+﻿using Firebase.Auth;
+using Linguibuddy.Data;
 using Linguibuddy.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,18 +8,30 @@ namespace Linguibuddy.Services
     public class AchievementService
     {
         private readonly DataContext _db;
+        private readonly FirebaseAuthClient _authClient;
 
-        public AchievementService(DataContext db)
+        private readonly string _currentUserId;
+
+        public AchievementService(DataContext db, FirebaseAuthClient authClient)
         {
             _db = db;
+            _authClient = authClient;
+            _currentUserId = _authClient.User.Uid;
         }
 
-        public async Task<List<UserAchievement>> GetUserAchievementsAsync(string appUserId)
+        public async Task<List<UserAchievement>> GetUserAchievementsAsync()
         {
             return await _db.UserAchievements
                 .Include(ua => ua.Achievement) // Eager load detali osiągnięcia
-                .Where(ua => ua.AppUserId == appUserId)
+                .Where(ua => ua.AppUserId == _currentUserId)
                 .ToListAsync();
+        }
+
+        public async Task<int> GetUnlockedAchievementsCountAsync()
+        {
+            return await _db.UserAchievements
+                .Where(ua => ua.AppUserId == _currentUserId && ua.IsUnlocked)
+                .CountAsync();
         }
 
         public async Task CheckAchievementsAsync(string appUserId, int achievementId, float progressIncrement)
