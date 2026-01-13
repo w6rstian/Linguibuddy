@@ -18,7 +18,7 @@ namespace Linguibuddy.Models
         [ForeignKey(nameof(AppUserId))]
         public AppUser AppUser { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Today;
         public bool Learned { get; set; } = true;
     }
 }
