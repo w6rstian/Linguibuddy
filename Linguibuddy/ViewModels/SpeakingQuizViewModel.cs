@@ -9,7 +9,7 @@ using System.Globalization;
 
 namespace Linguibuddy.ViewModels
 {
-    // TODO: add translations
+    // TODO: add translations and better view
     [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class SpeakingQuizViewModel : BaseQuizViewModel
     {
