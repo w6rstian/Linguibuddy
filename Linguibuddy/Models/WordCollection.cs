@@ -24,21 +24,26 @@ namespace Linguibuddy.Models
         // Audio Quiz
         public double AudioBestScore { get; set; }
         public double AudioLastScore { get; set; }
+        public DateTime? AudioLastPlayed { get; set; }
 
         // Image Quiz
         public double ImageBestScore { get; set; }
         public double ImageLastScore { get; set; }
+        public DateTime? ImageLastPlayed { get; set; }
 
         // Sentence Quiz
         public double SentenceBestScore { get; set; }
         public double SentenceLastScore { get; set; }
+        public DateTime? SentenceLastPlayed { get; set; }
 
         // Speaking Quiz
         public double SpeakingBestScore { get; set; }
         public double SpeakingLastScore { get; set; }
+        public DateTime? SpeakingLastPlayed { get; set; }
 
         // Hangman
         public double HangmanBestScore { get; set; }
         public double HangmanLastScore { get; set; }
+        public DateTime? HangmanLastPlayed { get; set; }
     }
 }

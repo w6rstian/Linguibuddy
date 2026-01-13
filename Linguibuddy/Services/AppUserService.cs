@@ -56,7 +56,6 @@ namespace Linguibuddy.Services
             {
                 _appUser = await _appUsers.GetByIdAsync(_currentUserId);
 
-                // Jeśli użytkownik nie istnieje (np. błąd ładowania), zwróć domyślny
                 if (_appUser is null) return DifficultyLevel.A1;
             }
 
