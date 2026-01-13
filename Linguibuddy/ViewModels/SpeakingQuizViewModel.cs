@@ -9,6 +9,7 @@ using System.Globalization;
 
 namespace Linguibuddy.ViewModels
 {
+    // TODO: add translations
     [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
     public partial class SpeakingQuizViewModel : BaseQuizViewModel
     {
@@ -55,7 +56,9 @@ namespace Linguibuddy.ViewModels
 
             FeedbackMessage = string.Empty;
             FeedbackColor = Colors.Transparent;
-            RecognizedText = "Naciśnij 'Słuchaj' i czytaj...";
+            PolishTranslation = "Generowanie zdania...";
+            TargetSentence = string.Empty;
+            RecognizedText = string.Empty;
 
             try
             {
@@ -102,6 +105,10 @@ namespace Linguibuddy.ViewModels
             finally
             {
                 IsBusy = false;
+                if (!IsFinished)
+                {
+                    RecognizedText = "Naciśnij 'Słuchaj' i czytaj...";
+                }
             }
         }
 
