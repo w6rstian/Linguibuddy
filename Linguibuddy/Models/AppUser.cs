@@ -1,7 +1,5 @@
 ﻿using Linguibuddy.Helpers;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using static AndroidX.ConstraintLayout.Core.Motion.Utils.HyperSpline;
 
 namespace Linguibuddy.Models
 {
