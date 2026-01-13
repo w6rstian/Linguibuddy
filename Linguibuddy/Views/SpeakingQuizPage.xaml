@@ -3,114 +3,174 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              x:Class="Linguibuddy.Views.SpeakingQuizPage"
              x:DataType="vm:SpeakingQuizViewModel"
              Title="Wymowa">
-    <Grid RowDefinitions="Auto, *, Auto, Auto" Padding="20" RowSpacing="20">
 
-        <VerticalStackLayout Grid.Row="0" Spacing="20" VerticalOptions="Center">
-            <Label Text="Przeczytaj na głos:" 
-                   FontSize="18" 
-                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <VerticalStackLayout IsVisible="{Binding IsFinished}"
+                             VerticalOptions="Center" 
+                             HorizontalOptions="Center" 
+                             Spacing="25">
+
+            <Label Text="{loc:Translate Congratulations}" 
+                   FontSize="32" 
+                   FontAttributes="Bold" 
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryDarkText}, Dark={StaticResource White}}"
                    HorizontalOptions="Center"/>
 
-            <Border StrokeShape="RoundRectangle 20"
-                    StrokeThickness="0"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray950}}"
-                    Padding="20"
-                    HorizontalOptions="Fill">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="{Binding TargetSentence}" 
-                           FontSize="24" 
-                           FontAttributes="Bold" 
-                           HorizontalTextAlignment="Center"
-                           TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+            <Label Text="{loc:Translate LearningFinished}" 
+                   FontSize="16" 
+                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
+                   HorizontalOptions="Center"/>
 
-                    <Label Text="{Binding PolishTranslation}" 
-                           FontSize="16" 
-                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" 
-                           HorizontalTextAlignment="Center"
-                           IsVisible="{Binding PolishTranslation, Converter={toolkit:IsStringNotNullOrEmptyConverter}}"/>
-                </VerticalStackLayout>
-            </Border>
+            <Label Text="{Binding Score, StringFormat='Twój wynik: {0}'}"
+                   FontSize="20"
+                   TextColor="{StaticResource Primary}"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <Button Text="{loc:Translate BackToList}" 
+                    Command="{Binding GoBackCommand}"
+                    Margin="0,20,0,0"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                    WidthRequest="200"/>
         </VerticalStackLayout>
 
-        <VerticalStackLayout Grid.Row="1" VerticalOptions="Center" Spacing="30">
 
-            <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+        <Grid IsVisible="{Binding IsLearning}">
 
-                <Button Text="Słuchaj"
-                        Command="{Binding StartListeningCommand}"
-                        IsEnabled="{Binding IsNotListening}"
+            <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                               IsVisible="{Binding IsBusy}" 
+                               HorizontalOptions="Center" 
+                               VerticalOptions="Center"
+                               HeightRequest="50"
+                               WidthRequest="50"
+                               Color="{StaticResource Primary}"
+                               ZIndex="99"/>
+
+            <Grid RowDefinitions="Auto, *, Auto, Auto" 
+                  Padding="20" 
+                  RowSpacing="20"
+                  IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}">
+
+                <VerticalStackLayout Grid.Row="0" Spacing="20" VerticalOptions="Center">
+                    <Label Text="Przeczytaj na głos:" 
+                           FontSize="18" 
+                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" 
+                           HorizontalOptions="Center"/>
+
+                    <Border StrokeShape="RoundRectangle 20"
+                            StrokeThickness="0"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray950}}"
+                            Padding="20"
+                            HorizontalOptions="Fill">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="{Binding TargetSentence}" 
+                                   FontSize="24" 
+                                   FontAttributes="Bold" 
+                                   HorizontalTextAlignment="Center"
+                                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+
+                            <Label Text="{Binding PolishTranslation}" 
+                                   FontSize="16" 
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" 
+                                   HorizontalTextAlignment="Center"
+                                   IsVisible="{Binding PolishTranslation, Converter={toolkit:IsStringNotNullOrEmptyConverter}}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="1" VerticalOptions="Center" Spacing="30">
+
+                    <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+
+                        <Button Text="Słuchaj"
+                                Command="{Binding StartListeningCommand}"
+                                BackgroundColor="{StaticResource Primary}"
+                                TextColor="White"
+                                HeightRequest="50"
+                                WidthRequest="140"
+                                CornerRadius="25"
+                                FontAttributes="Bold">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding IsNotListening}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Setter Property="Opacity" Value="0.5"/>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Button" Binding="{Binding IsAnswered}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Setter Property="Opacity" Value="0.3"/>
+                                    <Setter Property="Text" Value="Zakończono"/>
+                                </DataTrigger>
+                            </Button.Triggers>
+                            <Button.Shadow>
+                                <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="8" Opacity="0.4"/>
+                            </Button.Shadow>
+                        </Button>
+
+                        <Button Text="Stop"
+                                Command="{Binding StopListeningCommand}"
+                                IsEnabled="{Binding IsListening}"
+                                BackgroundColor="{AppThemeBinding Light=#FFEBEE, Dark=#3E2723}"
+                                TextColor="#D32F2F"
+                                BorderColor="#D32F2F"
+                                BorderWidth="1"
+                                HeightRequest="50"
+                                WidthRequest="140"
+                                CornerRadius="25"
+                                FontAttributes="Bold">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding IsListening}" Value="False">
+                                    <Setter Property="Opacity" Value="0.5"/>
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+
+                    </HorizontalStackLayout>
+
+                    <Label Text="{Binding RecognizedText}" 
+                           FontSize="22" 
+                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
+                           HorizontalTextAlignment="Center"
+                           FontAttributes="Italic"
+                           LineBreakMode="WordWrap"/>
+                </VerticalStackLayout>
+
+                <Label Grid.Row="2" 
+                       Text="{Binding FeedbackMessage}" 
+                       TextColor="{Binding FeedbackColor}"
+                       FontSize="18" 
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" 
+                       HorizontalTextAlignment="Center"
+                       Margin="0,0,0,10"/>
+
+                <Button Grid.Row="3" 
+                        Text="Następne" 
+                        Command="{Binding NextQuestionCommand}"
+                        IsEnabled="{Binding IsAnswered}"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White"
                         HeightRequest="50"
-                        WidthRequest="140"
                         CornerRadius="25"
-                        FontAttributes="Bold">
-                    <Button.Shadow>
-                        <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="8" Opacity="0.4"/>
-                    </Button.Shadow>
+                        FontAttributes="Bold"
+                        Margin="0,0,0,10">
                     <Button.Triggers>
-                        <DataTrigger TargetType="Button" Binding="{Binding IsNotListening}" Value="False">
+                        <DataTrigger TargetType="Button" Binding="{Binding IsAnswered}" Value="False">
                             <Setter Property="Opacity" Value="0.5"/>
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
-
-                <Button Text="Stop"
-                        Command="{Binding StopListeningCommand}"
-                        IsEnabled="{Binding IsListening}"
-                        BackgroundColor="{AppThemeBinding Light=#FFEBEE, Dark=#3E2723}"
-                        TextColor="#D32F2F"
-                        BorderColor="#D32F2F"
-                        BorderWidth="1"
-                        HeightRequest="50"
-                        WidthRequest="140"
-                        CornerRadius="25"
-                        FontAttributes="Bold">
-                    <Button.Triggers>
-                        <DataTrigger TargetType="Button" Binding="{Binding IsListening}" Value="False">
-                            <Setter Property="Opacity" Value="0.5"/>
-                        </DataTrigger>
-                    </Button.Triggers>
-                </Button>
-
-            </HorizontalStackLayout>
-
-            <Label Text="{Binding RecognizedText}" 
-                   FontSize="22" 
-                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
-                   HorizontalTextAlignment="Center"
-                   FontAttributes="Italic"
-                   LineBreakMode="WordWrap"/>
-        </VerticalStackLayout>
-
-        <Label Grid.Row="2" 
-               Text="{Binding FeedbackMessage}" 
-               TextColor="{Binding FeedbackColor}"
-               FontSize="18" 
-               FontAttributes="Bold"
-               HorizontalOptions="Center" 
-               HorizontalTextAlignment="Center"
-               Margin="0,0,0,10"/>
-
-        <Button Grid.Row="3" 
-                Text="Następne" 
-                Command="{Binding NextQuestionCommand}"
-                IsEnabled="{Binding IsAnswered}"
-                BackgroundColor="{StaticResource Primary}"
-                TextColor="White"
-                HeightRequest="50"
-                CornerRadius="25"
-                FontAttributes="Bold"
-                Margin="0,0,0,10">
-            <Button.Triggers>
-                <DataTrigger TargetType="Button" Binding="{Binding IsAnswered}" Value="False">
-                    <Setter Property="Opacity" Value="0.5"/>
-                </DataTrigger>
-            </Button.Triggers>
-        </Button>
-
+            </Grid>
+        </Grid>
     </Grid>
 </ContentPage>

@@ -16,25 +16,22 @@ namespace Linguibuddy.ViewModels
         private readonly OpenAiService _openAiService;
 
         [ObservableProperty] private WordCollection? _selectedCollection;
-
         [ObservableProperty] private CollectionItem? _targetWord;
-
         [ObservableProperty] private List<CollectionItem> _hasAppeared;
 
-        [ObservableProperty] private bool _isFinished;
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsLearning))]
+        private bool _isFinished;
+        public bool IsLearning => !IsFinished;
 
         [ObservableProperty] private int _score;
-
         [ObservableProperty] private string _recognizedText;
-
         [ObservableProperty] private string _targetSentence;
-
         [ObservableProperty] private string _polishTranslation;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsNotListening))]
         private bool _isListening;
-
         public bool IsNotListening => !IsListening;
 
         public SpeakingQuizViewModel(ISpeechToText speechToText, OpenAiService openAiService)
@@ -54,15 +51,15 @@ namespace Linguibuddy.ViewModels
             IsBusy = true;
             IsAnswered = false;
 
-            await StopListening();
+            await ForceStopListening();
 
             FeedbackMessage = string.Empty;
             FeedbackColor = Colors.Transparent;
-            RecognizedText = "Naciśnij mikrofon i czytaj...";
+            RecognizedText = "Naciśnij 'Słuchaj' i czytaj...";
 
             try
             {
-                if (SelectedCollection == null || !SelectedCollection.Items.Any())
+                if (SelectedCollection == null || SelectedCollection.Items == null || !SelectedCollection.Items.Any())
                 {
                     IsFinished = true;
                     return;
@@ -111,37 +108,43 @@ namespace Linguibuddy.ViewModels
         [RelayCommand]
         private async Task StartListening()
         {
-            if (IsListening) return;
+            if (IsListening || IsAnswered) return;
 
             var isGranted = await _speechToText.RequestPermissions(CancellationToken.None);
             if (!isGranted)
             {
-                await Shell.Current.DisplayAlert("Brak uprawnień", "Potrzebujemy mikrofonu", "OK");
+                await Shell.Current.DisplayAlert("Brak uprawnień", "Potrzebujemy dostępu do mikrofonu", "OK");
                 return;
             }
 
-            // Subskrypcja zdarzeń
             _speechToText.RecognitionResultUpdated += OnRecognitionTextUpdated;
             _speechToText.RecognitionResultCompleted += OnRecognitionTextCompleted;
 
             IsListening = true;
-            RecognizedText = "Słucham..."; // Reset tekstu
+            RecognizedText = "Słucham...";
 
             try
             {
-                // To wywala exception IOexception file not found
                 await _speechToText.StartListenAsync(new SpeechToTextOptions
                 {
-                    Culture = CultureInfo.GetCultureInfo("en-US"), // Ważne: angielski
+                    Culture = CultureInfo.GetCultureInfo("en-US"),
                     ShouldReportPartialResults = true
                 }, CancellationToken.None);
             }
+            catch (FileNotFoundException)
+            {
+                await HandleSpeechError("Brak pakietu językowego", "Zainstaluj 'English (United States)' w ustawieniach Windows.");
+            }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Start Listen Error: {ex.Message}");
-                IsListening = false;
-                _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
-                _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
+                if (ex.Message.Contains("Privacy") || ex.Message.Contains("privacy"))
+                {
+                    await HandleSpeechError("Ustawienia Prywatności", "Włącz 'Rozpoznawanie mowy online' w ustawieniach Windows.");
+                }
+                else
+                {
+                    await HandleSpeechError("Błąd", $"Nie udało się uruchomić: {ex.Message}");
+                }
             }
         }
 
@@ -156,58 +159,77 @@ namespace Linguibuddy.ViewModels
             }
             catch
             {
-                /* Ignorujemy błędy zatrzymania */
+                // Ignorujemy błędy przy zatrzymywaniu (np. jeśli system sam już zatrzymał)
+            }
+            finally
+            {
+                await FinishAttempt();
             }
         }
 
-        // Event: Wywoływany w trakcie mówienia (częściowe wyniki)
+        private async Task ForceStopListening()
+        {
+            try { await _speechToText.StopListenAsync(CancellationToken.None); } catch { }
+
+            _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
+            _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
+            IsListening = false;
+        }
+
+        // real time text updates
         private void OnRecognitionTextUpdated(object? sender, SpeechToTextRecognitionResultUpdatedEventArgs args)
         {
-            // W nowym toolkit args.RecognitionResult to zazwyczaj cały dotychczasowy tekst, a nie tylko delta
             RecognizedText = args.RecognitionResult;
         }
 
-        // Event: Wywoływany, gdy system wykryje ciszę/koniec
         private void OnRecognitionTextCompleted(object? sender, SpeechToTextRecognitionResultCompletedEventArgs args)
         {
-            // TO NAPRAWIA BŁĄD KONWERSJI:
-            // W nowym toolkit args.RecognitionResult to obiekt SpeechToTextResult.
-            // Musimy pobrać z niego właściwość .Text
             var finalResult = args.RecognitionResult.Text;
-
-            // Fallback gdyby Text był null
             if (string.IsNullOrEmpty(finalResult) && args.RecognitionResult.Exception == null)
             {
                 finalResult = args.RecognitionResult.ToString();
             }
 
-            // Aktualizujemy UI na głównym wątku
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
                 RecognizedText = finalResult;
-                IsListening = false;
-
-                // Sprzątanie zdarzeń (Kluczowe!)
-                _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
-                _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
-
-                // Sprawdzenie wymowy
-                CheckPronunciation(RecognizedText);
+                //IsListening = false;
+                //_speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
+                //_speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
+                //CheckPronunciation(RecognizedText);
+                await FinishAttempt();
             });
+        }
+
+        private async Task FinishAttempt()
+        {
+            _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
+            _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
+
+            IsListening = false;
+
+            if (!string.IsNullOrWhiteSpace(RecognizedText) && RecognizedText != "Słucham... (Mów teraz)")
+            {
+                CheckPronunciation(RecognizedText);
+            }
+            else
+            {
+                RecognizedText = "Nie usłyszałem nic. Spróbuj ponownie.";
+            }
         }
 
         private void CheckPronunciation(string spokenText)
         {
-            if (IsAnswered) return; // Zapobiega podwójnemu sprawdzeniu
+            if (IsAnswered) return;
 
-            if (string.IsNullOrWhiteSpace(spokenText) || spokenText == "Słucham..." || spokenText == "Naciśnij 'Słuchaj' i czytaj...") return;
+            if (string.IsNullOrWhiteSpace(spokenText) || spokenText == "Słucham..." || spokenText == "Naciśnij mikrofon i czytaj...")
+                return;
 
             IsAnswered = true;
 
-            // Obliczamy podobieństwo (algorytm Levenshteina na dole)
             double similarity = CalculateSimilarity(TargetSentence, spokenText);
 
-            if (similarity >= 80) // 80% zgodności uznajemy za sukces
+            if (similarity >= 80)
             {
                 Score++;
                 FeedbackMessage = $"Świetnie! ({similarity:F0}% zgodności)";
@@ -215,7 +237,7 @@ namespace Linguibuddy.ViewModels
             }
             else
             {
-                FeedbackMessage = $"Spróbuj jeszcze raz. Zgodność: {similarity:F0}%";
+                FeedbackMessage = $"Niestety. Zgodność: {similarity:F0}%";
                 FeedbackColor = Colors.Red;
             }
         }
@@ -224,47 +246,58 @@ namespace Linguibuddy.ViewModels
         private async Task NextQuestionAsync()
         {
             await LoadQuestionAsync();
-
             if (IsFinished)
-            {
-                string resultMsg = $"Twój wynik: {Score} / {SelectedCollection?.Items.Count ?? 0}";
-                await Shell.Current.DisplayAlert("Koniec lekcji wymowy", resultMsg, "OK");
-                await Shell.Current.GoToAsync("..");
-            }
+            { }
         }
 
-        // Algorytm Levenshteina (taki sam jak wcześniej)
-        private double CalculateSimilarity(string source, string target)
+        [RelayCommand]
+        public async Task GoBack()
         {
-            if ((source == null) || (target == null)) return 0.0;
+            await Shell.Current.GoToAsync("..");
+        }
 
-            string Clean(string s) =>
-                new string(s.ToLower().Where(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c)).ToArray()).Trim();
+        private double CalculateSimilarity(string target, string spoken)
+        {
+            if (string.IsNullOrWhiteSpace(target) || string.IsNullOrWhiteSpace(spoken))
+                return 0.0;
 
-            source = Clean(source);
-            target = Clean(target);
-
-            if (source == target) return 100.0;
-            if (source.Length == 0 || target.Length == 0) return 0.0;
-
-            var distance = new int[source.Length + 1, target.Length + 1];
-
-            for (int i = 0; i <= source.Length; distance[i, 0] = i++) ;
-            for (int j = 0; j <= target.Length; distance[0, j] = j++) ;
-
-            for (int i = 1; i <= source.Length; i++)
+            List<string> Tokenize(string text)
             {
-                for (int j = 1; j <= target.Length; j++)
+                return text.ToLower()
+                    .Split(new[] { ' ', '.', ',', '?', '!', ';', ':', '-', '"', '\'' }, StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+            }
+
+            var targetWords = Tokenize(target);
+            var spokenWords = Tokenize(spoken);
+
+            if (targetWords.Count == 0) return 0.0;
+
+            var spokenPool = new List<string>(spokenWords);
+            int matchCount = 0;
+
+            foreach (var word in targetWords)
+            {
+                if (spokenPool.Contains(word))
                 {
-                    int cost = (target[j - 1] == source[i - 1]) ? 0 : 1;
-                    distance[i, j] = Math.Min(
-                        Math.Min(distance[i - 1, j] + 1, distance[i, j - 1] + 1),
-                        distance[i - 1, j - 1] + cost);
+                    matchCount++;
+                    spokenPool.Remove(word);
                 }
             }
 
-            int stepsToSame = distance[source.Length, target.Length];
-            return (1.0 - ((double)stepsToSame / (double)Math.Max(source.Length, target.Length))) * 100.0;
+            double percentage = (double)matchCount / targetWords.Count * 100.0;
+
+            return percentage;
+        }
+
+        private async Task HandleSpeechError(string title, string message)
+        {
+            Debug.WriteLine($"Speech Error: {message}");
+            IsListening = false;
+            RecognizedText = "Błąd konfiguracji.";
+            _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
+            _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
+            await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.DisplayAlert(title, message, "OK"));
         }
     }
 }
