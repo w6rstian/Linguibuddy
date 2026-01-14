@@ -26,15 +26,29 @@
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                    HorizontalOptions="Center" />
 
-            <Label Text="{Binding Score, StringFormat='{loc:Translate CorrectAnswers}'}"
-                   FontSize="20"
+            <Label FontSize="20"
                    FontAttributes="Bold"
-                   HorizontalOptions="Center" />
+                   HorizontalOptions="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{loc:Translate CorrectAnswers}" />
+                        <Span Text=" " />
+                        <Span Text="{Binding Score}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
 
-            <Label Text="{Binding PointsEarned, StringFormat='{loc:Translate PointsEarned}'}"
-                   FontSize="16"
+            <Label FontSize="16"
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
-                   HorizontalOptions="Center" />
+                   HorizontalOptions="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{loc:Translate PointsEarned}" />
+                        <Span Text=" +" />
+                        <Span Text="{Binding PointsEarned}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
 
             <Button Text="{loc:Translate BackToList}"
                     Command="{Binding GoBackCommand}"
