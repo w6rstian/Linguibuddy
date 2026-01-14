@@ -8,7 +8,7 @@ namespace Linguibuddy.ViewModels;
 
 public partial class ProfileViewModel : ObservableObject
 {
-    private readonly IAchievementService _achievementService;
+    private readonly IAchievementRepository _achievementRepository;
     private readonly IAppUserService _appUserService;
     private readonly FirebaseAuthClient _authClient;
     private readonly ILearningService _learningService;
@@ -28,12 +28,12 @@ public partial class ProfileViewModel : ObservableObject
     [ObservableProperty] private int _unlockedAchievementsCount;
 
     public ProfileViewModel(IAppUserService appUserService, ILearningService learningService,
-        FirebaseAuthClient authClient, IAchievementService achievementService)
+        FirebaseAuthClient authClient, IAchievementRepository achievementRepository)
     {
         _appUserService = appUserService;
         _learningService = learningService;
         _authClient = authClient;
-        _achievementService = achievementService;
+        _achievementRepository = achievementRepository;
     }
 
     public async Task LoadProfileInfoAsync()
@@ -47,6 +47,6 @@ public partial class ProfileViewModel : ObservableObject
         if (CurrentStreak == BestStreak)
             IsCurrentStreakBest = true;
 
-        UnlockedAchievementsCount = await _achievementService.GetUnlockedAchievementsCountAsync();
+        UnlockedAchievementsCount = await _achievementRepository.GetUnlockedAchievementsCountAsync();
     }
 }

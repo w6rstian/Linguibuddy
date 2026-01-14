@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Linguibuddy.Helpers;
+using System.ComponentModel.DataAnnotations;
 
 namespace Linguibuddy.Models;
 
@@ -12,6 +13,8 @@ public class Achievement
 
     public string LockedIconUrl { get; set; } = "lock_100dp_light.png";
 
-    //public Dictionary<string, object> Requirements { get; set; } = [];
+    public AchievementUnlockType UnlockCondition { get; set; }
+    public int UnlockTargetValue { get; set; }
+
     public ICollection<UserAchievement> UserAchievements { get; set; } = new List<UserAchievement>();
 }

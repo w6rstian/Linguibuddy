@@ -107,6 +107,7 @@ public static class MauiProgram
         builder.Services.AddTransient<IAchievementService, AchievementService>();
         builder.Services.AddTransient<IUserLearningDayRepository, UserLearningDayRepository>();
         builder.Services.AddTransient<IAppUserRepository, AppUserRepository>();
+        builder.Services.AddTransient<IAchievementRepository, AchievementRepository>();
         builder.Services.AddTransient<ILearningService, LearningService>();
         builder.Services.AddTransient<IAuthService, FirebaseAuthService>();
         builder.Services.AddTransient<IAppUserService, AppUserService>();
