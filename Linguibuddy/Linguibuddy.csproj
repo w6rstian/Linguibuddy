@@ -115,6 +115,8 @@
 	  <None Remove="Resources\Icons\record_voice_over_150dp_light.svg" />
 	  <None Remove="Resources\Icons\repartition_150dp_dark.svg" />
 	  <None Remove="Resources\Icons\repartition_150dp_light.svg" />
+	  <None Remove="Resources\Icons\search_100dp_dark.svg" />
+	  <None Remove="Resources\Icons\search_100dp_light.svg" />
 	  <None Remove="Resources\Icons\sentiment_very_dissatisfied_150dp_dark.svg" />
 	  <None Remove="Resources\Icons\sentiment_very_dissatisfied_150dp_light.svg" />
 	  <None Remove="Resources\Icons\settings_100dp_dark.svg" />
@@ -180,6 +182,8 @@
 	  <MauiImage Include="Resources\Icons\lock_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\repartition_150dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\repartition_150dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\search_100dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\search_100dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\sentiment_very_dissatisfied_150dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\sentiment_very_dissatisfied_150dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\settings_100dp_dark.svg" />
