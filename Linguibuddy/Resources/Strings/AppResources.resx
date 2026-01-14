@@ -370,10 +370,10 @@
     <value>Check</value>
   </data>
   <data name="CorrectAnswersCount" xml:space="preserve">
-    <value>Correct answers: {0}</value>
+    <value>Correct answers:</value>
   </data>
   <data name="PointsEarnedCount" xml:space="preserve">
-    <value>Points earned: +{0}</value>
+    <value>Points earned:</value>
   </data>
   <data name="ImaqeQuizName" xml:space="preserve">
     <value>Match to picture</value>

@@ -205,7 +205,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Correct answers: {0}.
+        ///   Looks up a localized string similar to Correct answers:.
         /// </summary>
         internal static string CorrectAnswersCount {
             get {
@@ -646,7 +646,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Points earned: +{0}.
+        ///   Looks up a localized string similar to Points earned:.
         /// </summary>
         internal static string PointsEarnedCount {
             get {

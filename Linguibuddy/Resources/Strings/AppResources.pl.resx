@@ -367,10 +367,10 @@
     <value>Sprawdź</value>
   </data>
   <data name="CorrectAnswersCount" xml:space="preserve">
-    <value>Poprawne odpowiedzi: {0}</value>
+    <value>Poprawne odpowiedzi:</value>
   </data>
   <data name="PointsEarnedCount" xml:space="preserve">
-    <value>Zdobyte punkty: +{0}</value>
+    <value>Zdobyte punkty:</value>
   </data>
   <data name="ImaqeQuizName" xml:space="preserve">
     <value>Dopasuj do obrazka</value>
