@@ -5,6 +5,7 @@ using Firebase.Auth;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using Linguibuddy.Views;
 using LocalizationResourceManager.Maui;
@@ -23,6 +24,8 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty] private int _selectedLessonLength;
 
     [ObservableProperty] private string _themeName;
+
+    [ObservableProperty] private string _translationApiName;
 
     public SettingsViewModel(ILocalizationResourceManager resourceManager, IAppUserService appUserService)
     {

@@ -52,14 +52,14 @@ public partial class DictionaryViewModel : ObservableObject
         IDictionaryApiService dictionaryService,
         IDeepLTranslationService translationService,
         IOpenAiService openAiService,
-        ICollectionService CollectionService,
+        ICollectionService collectionService,
         IAudioManager audioManager)
     {
         _dictionaryService = dictionaryService;
         _translationService = translationService;
         _openAiService = openAiService;
         _openAiService = openAiService;
-        _CollectionService = CollectionService;
+        _CollectionService = collectionService;
         _audioManager = audioManager;
     }
 

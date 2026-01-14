@@ -11,9 +11,9 @@ public class DictionaryApiService : IDictionaryApiService
 {
     private readonly DataContext _context;
     private readonly HttpClient _httpClient;
-    private readonly PexelsImageService _pexelsService;
+    private readonly IPexelsImageService _pexelsService;
 
-    public DictionaryApiService(HttpClient httpClient, DataContext context, PexelsImageService pexelsService)
+    public DictionaryApiService(HttpClient httpClient, DataContext context, IPexelsImageService pexelsService)
     {
         _httpClient = httpClient;
         _context = context;

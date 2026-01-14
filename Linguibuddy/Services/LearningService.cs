@@ -7,7 +7,7 @@ namespace Linguibuddy.Services;
 public class LearningService : ILearningService
 {
     private readonly IAppUserRepository _appUserRepo;
-    private readonly AppUserService _appUserService;
+    private readonly IAppUserService _appUserService;
     private readonly FirebaseAuthClient _authClient;
 
     private readonly string _currentUserId;
@@ -15,7 +15,7 @@ public class LearningService : ILearningService
     private AppUser _appUser;
 
     public LearningService(IUserLearningDayRepository repo, IAppUserRepository appUserRepo,
-        AppUserService appUserService, FirebaseAuthClient authClient)
+        IAppUserService appUserService, FirebaseAuthClient authClient)
     {
         _repo = repo;
         _appUserRepo = appUserRepo;
