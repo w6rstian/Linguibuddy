@@ -348,7 +348,7 @@
     <value>Listening...</value>
   </data>
   <data name="InstallEng" xml:space="preserve">
-    <value>Install 'English (United States)' in Windows settings.</value>
+    <value>Install english language in Windows settings.</value>
   </data>
   <data name="OnlineSpeech" xml:space="preserve">
     <value>Enable 'Online Speech Recognition' in Windows settings.</value>

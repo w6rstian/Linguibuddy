@@ -71,8 +71,6 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            // TODO: This minigame crashes app without errors/exceptions???
-
             var allWords = SelectedCollection.Items;
 
             if (allWords.Count < 4)

@@ -107,7 +107,6 @@
 
                                     <ImageButton
                                         Source="{AppThemeBinding Light=text_to_speech_24dp_light.png, Dark=text_to_speech_24dp_dark.png}"
-                                        IsVisible="{Binding HasAudio}"
                                         HeightRequest="40"
                                         WidthRequest="40"
                                         Aspect="AspectFit"
@@ -115,7 +114,7 @@
                                         VerticalOptions="Center"
                                         BackgroundColor="Transparent"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=PlayAudioCommand}"
-                                        CommandParameter="{Binding AudioUrl}">
+                                        CommandParameter="{Binding .}">
                                         <ImageButton.Shadow>
                                             <Shadow Brush="Black" Opacity="0.2" Radius="2" Offset="1,1" />
                                         </ImageButton.Shadow>

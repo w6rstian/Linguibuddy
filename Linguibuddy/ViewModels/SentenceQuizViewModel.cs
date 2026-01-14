@@ -170,6 +170,51 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
     }
 
     [RelayCommand]
+    public async Task ReadSentence()
+    {
+        if (_currentQuestion == null) return;
+
+        try
+        {
+            var locales = await TextToSpeech.Default.GetLocalesAsync();
+            string[] femaleVoices = { "Zira", "Paulina" };
+            // preferowany język US i GB na Android i Windows
+            var preferred = locales.FirstOrDefault(l =>
+                                (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
+                                femaleVoices.Any(f => l.Name.Contains(f)))
+                            ?? locales.FirstOrDefault(l =>
+                                (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
+                                femaleVoices.Any(f => l.Name.Contains(f)))
+                            ?? locales.FirstOrDefault(l =>
+                                l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
+                            // inne głosy
+                            ?? locales.FirstOrDefault(l =>
+                                l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
+                            ?? locales.FirstOrDefault(l =>
+                                l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
+                            ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
+
+            if (preferred == null)
+            {
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.InstallEng, "OK");
+                return;
+            }
+
+            await TextToSpeech.Default.SpeakAsync(_currentQuestion.EnglishSentence, new SpeechOptions
+            {
+                Locale = preferred,
+                Pitch = 1.0f,
+                Volume = 1.0f
+            });
+        }
+        catch (Exception ex)
+        {
+            //await Shell.Current.DisplayAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
+            Debug.WriteLine(ex.Message);
+        }
+    }
+
+    [RelayCommand]
     private void CheckAnswer()
     {
         if (_currentQuestion == null) return;
@@ -211,6 +256,8 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
             FeedbackMessage = $"{AppResources.ErrorCorrect}\n{_currentQuestion.EnglishSentence}";
             FeedbackColor = Colors.Red;
         }
+
+        _ = ReadSentence();
     }
 
     [RelayCommand]

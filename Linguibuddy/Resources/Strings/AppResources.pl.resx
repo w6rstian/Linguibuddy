@@ -346,7 +346,7 @@
     <value>Słucham...</value>
   </data>
   <data name="InstallEng" xml:space="preserve">
-    <value>Zainstaluj 'Angielski (Stany Zjednoczone)' w ustawieniach Windows.</value>
+    <value>Zainstaluj język angielski w ustawieniach Windows.</value>
   </data>
   <data name="OnlineSpeech" xml:space="preserve">
     <value>Włącz 'Rozpoznawanie mowy online' w ustawieniach Windows.</value>
