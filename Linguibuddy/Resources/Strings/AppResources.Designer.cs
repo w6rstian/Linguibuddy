@@ -61,20 +61,182 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Get your first point.
+        ///   Looks up a localized string similar to Get your first 100 points.
         /// </summary>
-        internal static string Achievement1Description {
+        internal static string Achievement10Description {
             get {
-                return ResourceManager.GetString("Achievement1Description", resourceCulture);
+                return ResourceManager.GetString("Achievement10Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First steps.
+        ///   Looks up a localized string similar to Rookie Point Collector.
         /// </summary>
-        internal static string Achievement1Name {
+        internal static string Achievement10Name {
             get {
-                return ResourceManager.GetString("Achievement1Name", resourceCulture);
+                return ResourceManager.GetString("Achievement10Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get 500 points.
+        /// </summary>
+        internal static string Achievement11Description {
+            get {
+                return ResourceManager.GetString("Achievement11Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apprentice of Pointology.
+        /// </summary>
+        internal static string Achievement11Name {
+            get {
+                return ResourceManager.GetString("Achievement11Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get 1000 points.
+        /// </summary>
+        internal static string Achievement12Description {
+            get {
+                return ResourceManager.GetString("Achievement12Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Journeyman of Points.
+        /// </summary>
+        internal static string Achievement12Name {
+            get {
+                return ResourceManager.GetString("Achievement12Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get 2500 points.
+        /// </summary>
+        internal static string Achievement13Description {
+            get {
+                return ResourceManager.GetString("Achievement13Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seasoned Point Hunter.
+        /// </summary>
+        internal static string Achievement13Name {
+            get {
+                return ResourceManager.GetString("Achievement13Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get 5000 points.
+        /// </summary>
+        internal static string Achievement14Description {
+            get {
+                return ResourceManager.GetString("Achievement14Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pointaholic.
+        /// </summary>
+        internal static string Achievement14Name {
+            get {
+                return ResourceManager.GetString("Achievement14Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get 10000 points.
+        /// </summary>
+        internal static string Achievement15Description {
+            get {
+                return ResourceManager.GetString("Achievement15Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grandmaster of Applied Pointology.
+        /// </summary>
+        internal static string Achievement15Name {
+            get {
+                return ResourceManager.GetString("Achievement15Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn everyday for 3 days.
+        /// </summary>
+        internal static string Achievement20Description {
+            get {
+                return ResourceManager.GetString("Achievement20Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First Steps.
+        /// </summary>
+        internal static string Achievement20Name {
+            get {
+                return ResourceManager.GetString("Achievement20Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn everyday for 7 days.
+        /// </summary>
+        internal static string Achievement21Description {
+            get {
+                return ResourceManager.GetString("Achievement21Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Week with No Excuses.
+        /// </summary>
+        internal static string Achievement21Name {
+            get {
+                return ResourceManager.GetString("Achievement21Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn everyday for 14 days.
+        /// </summary>
+        internal static string Achievement22Description {
+            get {
+                return ResourceManager.GetString("Achievement22Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Habit in the Making.
+        /// </summary>
+        internal static string Achievement22Name {
+            get {
+                return ResourceManager.GetString("Achievement22Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn everyday for 30 days.
+        /// </summary>
+        internal static string Achievement23Description {
+            get {
+                return ResourceManager.GetString("Achievement23Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You&apos;ve got the Rhythm.
+        /// </summary>
+        internal static string Achievement23Name {
+            get {
+                return ResourceManager.GetString("Achievement23Name", resourceCulture);
             }
         }
         

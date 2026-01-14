@@ -312,14 +312,14 @@
   <data name="NextWord" xml:space="preserve">
     <value>Następne słowo</value>
   </data>
-  <data name="Achievement1Name" xml:space="preserve">
-    <value>Pierwsze kroki</value>
+  <data name="Achievement10Name" xml:space="preserve">
+    <value>Początkujący Punktowicz</value>
   </data>
   <data name="NoAchievements" xml:space="preserve">
     <value>Brak osiągnięć do wyświetlenia.</value>
   </data>
-  <data name="Achievement1Description" xml:space="preserve">
-    <value>Zdobądź swój pierwszy punkt</value>
+  <data name="Achievement10Description" xml:space="preserve">
+    <value>Zdobądź pierwsze 100 punktów</value>
   </data>
   <data name="Hangman" xml:space="preserve">
     <value>Wisielec</value>
@@ -443,5 +443,59 @@
   </data>
   <data name="Points" xml:space="preserve">
     <value>Punkty</value>
+  </data>
+  <data name="Achievement11Description" xml:space="preserve">
+    <value>Zdobądź 500 punktów</value>
+  </data>
+  <data name="Achievement12Description" xml:space="preserve">
+    <value>Zdobądź 1000 punktów</value>
+  </data>
+  <data name="Achievement13Description" xml:space="preserve">
+    <value>Zdobądź 2500 punktów</value>
+  </data>
+  <data name="Achievement11Name" xml:space="preserve">
+    <value>Adept Punktologii</value>
+  </data>
+  <data name="Achievement12Name" xml:space="preserve">
+    <value>Czeladnik Punktów</value>
+  </data>
+  <data name="Achievement13Name" xml:space="preserve">
+    <value>Punktowy Wyjadacz</value>
+  </data>
+  <data name="Achievement14Name" xml:space="preserve">
+    <value>Punktoholik</value>
+  </data>
+  <data name="Achievement15Name" xml:space="preserve">
+    <value>Arcymistrz Punktologii Stosowanej</value>
+  </data>
+  <data name="Achievement14Description" xml:space="preserve">
+    <value>Zdobądź 5000 punktów</value>
+  </data>
+  <data name="Achievement15Description" xml:space="preserve">
+    <value>Zdobądź 10000 punktów</value>
+  </data>
+  <data name="Achievement20Description" xml:space="preserve">
+    <value>Ucz się codziennie przez 3 dni</value>
+  </data>
+  <data name="Achievement21Description" xml:space="preserve">
+    <value>Ucz się codziennie przez 7 dni</value>
+  </data>
+  <data name="Achievement22Description" xml:space="preserve">
+    <value>Ucz się codziennie przez 14 dni</value>
+  </data>
+  <data name="Achievement23Description" xml:space="preserve">
+    <value>Ucz się codziennie przez 30 dni</value>
+  </data>
+  <data name="Achievement20Name" xml:space="preserve">
+    <value>Pierwsze kroki</value>
+  </data>
+  <data name="Achievement21Name" xml:space="preserve">
+    <value>Tydzień Bez Wymówek</value>
+  </data>
+  <data name="Achievement22Name" xml:space="preserve">
+    <value>Nawyk w Budowie</value>
+  </data>
+  <data name="Achievement23Name" xml:space="preserve">
+    <value>Masz Już Rytm</value>
   </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using Linguibuddy.Models;
+using Linguibuddy.Helpers;
 using Linguibuddy.Resources.Strings;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -70,10 +71,93 @@ public class DataContext : DbContext
             .HasData(
                 new Achievement
                 {
-                    Id = 1,
-                    Name = AppResources.Achievement1Name,
-                    Description = AppResources.Achievement1Description,
-                    IconUrl = "trophy_100dp_light.png"
+                    Id = 10,
+                    Name = AppResources.Achievement10Name,
+                    Description = AppResources.Achievement10Description,
+                    IconUrl = "trophy_100dp_light.png",
+                    UnlockCondition = AchievementUnlockType.TotalPoints,
+                    UnlockTargetValue = 100
+                },
+                new Achievement
+                {
+                    Id = 11,
+                    Name = AppResources.Achievement11Name,
+                    Description = AppResources.Achievement11Description,
+                    IconUrl = "trophy_100dp_light.png",
+                    UnlockCondition = AchievementUnlockType.TotalPoints,
+                    UnlockTargetValue = 500
+                },
+                new Achievement
+                {
+                    Id = 12,
+                    Name = AppResources.Achievement12Name,
+                    Description = AppResources.Achievement12Description,
+                    IconUrl = "trophy_100dp_light.png",
+                    UnlockCondition = AchievementUnlockType.TotalPoints,
+                    UnlockTargetValue = 1000
+                },
+                new Achievement
+                {
+                    Id = 13,
+                    Name = AppResources.Achievement13Name,
+                    Description = AppResources.Achievement13Description,
+                    IconUrl = "trophy_100dp_light.png",
+                    UnlockCondition = AchievementUnlockType.TotalPoints,
+                    UnlockTargetValue = 2500
+                },
+                new Achievement
+                {
+                    Id = 14,
+                    Name = AppResources.Achievement14Name,
+                    Description = AppResources.Achievement14Description,
+                    IconUrl = "trophy_100dp_light.png",
+                    UnlockCondition = AchievementUnlockType.TotalPoints,
+                    UnlockTargetValue = 5000
+                },
+                new Achievement
+                {
+                    Id = 14,
+                    Name = AppResources.Achievement15Name,
+                    Description = AppResources.Achievement15Description,
+                    IconUrl = "trophy_100dp_light.png",
+                    UnlockCondition = AchievementUnlockType.TotalPoints,
+                    UnlockTargetValue = 10000
+                },
+                new Achievement
+                {
+                    Id = 20,
+                    Name = AppResources.Achievement20Name,
+                    Description = AppResources.Achievement20Description,
+                    IconUrl = "trophy_100dp_light.png",
+                    UnlockCondition = AchievementUnlockType.LearningStreak,
+                    UnlockTargetValue = 3
+                },
+                new Achievement
+                {
+                    Id = 21,
+                    Name = AppResources.Achievement21Name,
+                    Description = AppResources.Achievement21Description,
+                    IconUrl = "trophy_100dp_light.png",
+                    UnlockCondition = AchievementUnlockType.LearningStreak,
+                    UnlockTargetValue = 7
+                },
+                new Achievement
+                {
+                    Id = 22,
+                    Name = AppResources.Achievement22Name,
+                    Description = AppResources.Achievement22Description,
+                    IconUrl = "trophy_100dp_light.png",
+                    UnlockCondition = AchievementUnlockType.LearningStreak,
+                    UnlockTargetValue = 14
+                },
+                new Achievement
+                {
+                    Id = 23,
+                    Name = AppResources.Achievement23Name,
+                    Description = AppResources.Achievement23Description,
+                    IconUrl = "trophy_100dp_light.png",
+                    UnlockCondition = AchievementUnlockType.LearningStreak,
+                    UnlockTargetValue = 30
                 }
             );
 
