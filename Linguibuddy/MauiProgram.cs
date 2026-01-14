@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Media;
+using DeepL;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Firebase.Auth.Repository;
@@ -93,7 +94,11 @@ public static class MauiProgram
 
         builder.Services.AddSingleton(AudioManager.Current);
         builder.Services.AddSingleton(SpeechToText.Default);
-        builder.Services.AddSingleton<IDeepLTranslationService>(new DeepLTranslationService(deepLKey));
+
+        builder.Services.AddSingleton(new DeepLClient(deepLKey));
+        builder.Services.AddSingleton<IDeepLClientWrapper, DeepLClientWrapper>();
+        builder.Services.AddSingleton<IDeepLTranslationService, DeepLTranslationService>();
+
         builder.Services.AddSingleton<IOpenAiService>(new OpenAiService(githubAiKey));
         builder.Services.AddTransient<MockDataSeeder>();
         builder.Services.AddTransient<ICollectionService, CollectionService>();
@@ -102,6 +107,7 @@ public static class MauiProgram
         builder.Services.AddTransient<IUserLearningDayRepository, UserLearningDayRepository>();
         builder.Services.AddTransient<IAppUserRepository, AppUserRepository>();
         builder.Services.AddTransient<ILearningService, LearningService>();
+        builder.Services.AddTransient<IAuthService, FirebaseAuthService>();
         builder.Services.AddTransient<IAppUserService, AppUserService>();
         builder.Services.AddTransient<IScoringService, ScoringService>();
 
@@ -112,6 +118,7 @@ public static class MauiProgram
         });
 
         builder.Services.AddSingleton<PexelsClient>(sp => new PexelsClient(pexelsApiKey));
+        builder.Services.AddSingleton<IPexelsClientWrapper, PexelsClientWrapper>();
         builder.Services.AddSingleton<IPexelsImageService, PexelsImageService>();
 
         builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig

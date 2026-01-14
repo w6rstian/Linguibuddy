@@ -7,9 +7,9 @@ namespace Linguibuddy.Services;
 
 public class PexelsImageService : IPexelsImageService
 {
-    private readonly PexelsClient _pexelsClient;
+    private readonly IPexelsClientWrapper _pexelsClient;
 
-    public PexelsImageService(PexelsClient pexelsClient)
+    public PexelsImageService(IPexelsClientWrapper pexelsClient)
     {
         _pexelsClient = pexelsClient;
     }
