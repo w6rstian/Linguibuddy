@@ -1,12 +1,13 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Text;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
+using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Text;
 
 namespace Linguibuddy.ViewModels;
 
@@ -15,6 +16,9 @@ public partial class HangmanViewModel : BaseQuizViewModel
 {
     private const int MaxMistakes = 6;
     private readonly ScoringService _scoringService;
+    private readonly AppUserService _appUserService;
+    private List<CollectionItem> allWords;
+    private Random random = Random.Shared;
 
     [ObservableProperty] private string _currentImage;
 
@@ -35,9 +39,10 @@ public partial class HangmanViewModel : BaseQuizViewModel
 
     [ObservableProperty] private WordCollection? _selectedCollection;
 
-    public HangmanViewModel(ScoringService scoringService)
+    public HangmanViewModel(ScoringService scoringService, AppUserService appUserService)
     {
         _scoringService = scoringService;
+        _appUserService = appUserService;
 
         _hasAppeared = [];
         PointsEarned = 0;
@@ -54,6 +59,16 @@ public partial class HangmanViewModel : BaseQuizViewModel
     {
         Keyboard.Clear();
         for (var c = 'A'; c <= 'Z'; c++) Keyboard.Add(new HangmanLetter(c, Colors.Gray));
+    }
+    public async Task ImportCollectionAsync()
+    {
+        if (SelectedCollection is null || !SelectedCollection.Items.Any())
+            return;
+
+        allWords = SelectedCollection.Items
+                .OrderBy(_ => random.Next())
+                .Take(await _appUserService.GetUserLessonLengthAsync())
+                .ToList();
     }
 
     public override async Task LoadQuestionAsync()
@@ -92,7 +107,6 @@ public partial class HangmanViewModel : BaseQuizViewModel
                 return;
             }
 
-            var allWords = SelectedCollection.Items;
             var validWords = allWords.Except(HasAppeared).ToList();
 
             if (!validWords.Any())
@@ -104,7 +118,6 @@ public partial class HangmanViewModel : BaseQuizViewModel
 
             if (allWords is not null && allWords.Any())
             {
-                var random = Random.Shared;
                 var wordObj = validWords[random.Next(validWords.Count)];
 
                 _secretWord = wordObj.Word.Trim().ToUpper();
@@ -226,7 +239,7 @@ public partial class HangmanViewModel : BaseQuizViewModel
                     SelectedCollection,
                     GameType.Hangman,
                     Score,
-                    SelectedCollection.Items.Count,
+                    allWords.Count,
                     PointsEarned
                 );
     }

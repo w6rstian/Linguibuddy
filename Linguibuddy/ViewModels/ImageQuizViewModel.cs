@@ -1,11 +1,12 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
+using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Linguibuddy.ViewModels;
 
@@ -14,6 +15,9 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
 {
     private readonly CollectionService _collectionService;
     private readonly ScoringService _scoringService;
+    private readonly AppUserService _appUserService;
+    private List<CollectionItem> allWords;
+    private Random random = Random.Shared;
 
     [ObservableProperty] private List<CollectionItem> _hasAppeared;
 
@@ -28,10 +32,11 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
 
     [ObservableProperty] private CollectionItem? _targetWord;
 
-    public ImageQuizViewModel(CollectionService collectionService, ScoringService scoringService)
+    public ImageQuizViewModel(CollectionService collectionService, ScoringService scoringService, AppUserService appUserService)
     {
         _collectionService = collectionService;
         _scoringService = scoringService;
+        _appUserService = appUserService;
 
         _hasAppeared = [];
         IsFinished = false;
@@ -42,6 +47,17 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
     public bool IsLearning => !IsFinished;
 
     public ObservableCollection<QuizOption> Options { get; } = new();
+
+    public async Task ImportCollectionAsync()
+    {
+        if (SelectedCollection is null || !SelectedCollection.Items.Any())
+            return;
+
+        allWords = SelectedCollection.Items
+                .OrderBy(_ => random.Next())
+                .Take(await _appUserService.GetUserLessonLengthAsync())
+                .ToList();
+    }
 
     public override async Task LoadQuestionAsync()
     {
@@ -71,10 +87,6 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            // TODO: This minigame crashes app without errors/exceptions???
-
-            var allWords = SelectedCollection.Items;
-
             if (allWords.Count < 4)
             {
                 FeedbackMessage = AppResources.TooLittleWords;
@@ -90,7 +102,6 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            var random = Random.Shared;
             TargetWord = validWords[random.Next(validWords.Count)];
 
             var wrongOptions = allWords
@@ -166,7 +177,7 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
                     SelectedCollection,
                     GameType.ImageQuiz,
                     Score,
-                    SelectedCollection.Items.Count,
+                    allWords.Count,
                     PointsEarned
                 );
     }

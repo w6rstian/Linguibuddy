@@ -1,12 +1,13 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
 using Plugin.Maui.Audio;
+using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Linguibuddy.ViewModels;
 
@@ -15,7 +16,10 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 {
     private readonly IAudioManager _audioManager;
     private readonly ScoringService _scoringService;
+    private readonly AppUserService _appUserService;
     private IAudioPlayer? _audioPlayer;
+    private List<CollectionItem> allWords;
+    private Random random = Random.Shared;
 
     [ObservableProperty] private List<CollectionItem> _hasAppeared;
 
@@ -30,10 +34,11 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
     [ObservableProperty] private CollectionItem? _targetWord;
 
-    public AudioQuizViewModel(ScoringService scoringService, IAudioManager audioManager)
+    public AudioQuizViewModel(ScoringService scoringService, IAudioManager audioManager, AppUserService appUserService)
     {
         _scoringService = scoringService;
         _audioManager = audioManager;
+        _appUserService = appUserService;
 
         HasAppeared = [];
         IsFinished = false;
@@ -45,6 +50,16 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
     public ObservableCollection<QuizOption> Options { get; } = [];
 
+    public async Task ImportCollectionAsync()
+    {
+        if (SelectedCollection is null || !SelectedCollection.Items.Any())
+            return;
+
+        allWords = SelectedCollection.Items
+                .OrderBy(_ => random.Next())
+                .Take(await _appUserService.GetUserLessonLengthAsync())
+                .ToList();
+    }
     public override async Task LoadQuestionAsync()
     {
         if (IsBusy) return;
@@ -74,7 +89,6 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
             }
 
             // We only choose allWords that have not been asked as the next word. All allWords can appear as an incorrect QuizOption.
-            var allWords = SelectedCollection.Items;
 
             if (allWords.Count < 4)
             {
@@ -91,7 +105,6 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            var random = Random.Shared;
             TargetWord = validWords[random.Next(validWords.Count)];
 
             // TODO: CHECK IF TARGET WORD HAS AUDIO AND PHONETIC SPELLING. HANDLE IF NOT
@@ -202,7 +215,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
                     SelectedCollection,
                     GameType.AudioQuiz,
                     Score,
-                    SelectedCollection.Items.Count,
+                    allWords.Count,
                     PointsEarned
                 );
         // TODO: DisplayResultScreen()
