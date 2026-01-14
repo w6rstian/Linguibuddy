@@ -4,12 +4,12 @@ using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Services;
 
-namespace Linguibuddy.Tests;
+namespace Linguibuddy.Tests.ServiceTests;
 
 public class PexelsImageServiceTests
 {
     private readonly IPexelsClientWrapper _pexelsClientWrapper;
-    private readonly PexelsImageService _sut; // System Under Test
+    private readonly PexelsImageService _sut;
 
     public PexelsImageServiceTests()
     {
@@ -52,7 +52,7 @@ public class PexelsImageServiceTests
         var word = "test";
         var mockResponse = new PexelsPhotoResponse
         {
-            photos = new List<PexelsPhoto>() // Empty list
+            photos = new List<PexelsPhoto>()
         };
 
         A.CallTo(() => _pexelsClientWrapper.SearchPhotosAsync(word, 1))
