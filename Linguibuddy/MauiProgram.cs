@@ -112,6 +112,7 @@ public static class MauiProgram
         });
 
         builder.Services.AddSingleton<PexelsClient>(sp => new PexelsClient(pexelsApiKey));
+        builder.Services.AddSingleton<IPexelsClientWrapper, PexelsClientWrapper>();
         builder.Services.AddSingleton<IPexelsImageService, PexelsImageService>();
 
         builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig
