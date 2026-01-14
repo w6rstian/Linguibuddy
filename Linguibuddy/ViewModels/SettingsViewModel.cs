@@ -18,6 +18,8 @@ public partial class SettingsViewModel : ObservableObject
     private static readonly CultureInfo Polish = CultureInfo.GetCultureInfo("pl");
     private readonly IAppUserService _appUserService;
     private readonly ILocalizationResourceManager _resourceManager;
+    private readonly FirebaseAuthClient _authClient;
+    private readonly IServiceProvider _services;
 
     [ObservableProperty] private DifficultyLevel _selectedDifficulty;
 
@@ -27,10 +29,16 @@ public partial class SettingsViewModel : ObservableObject
 
     [ObservableProperty] private string _translationApiName;
 
-    public SettingsViewModel(ILocalizationResourceManager resourceManager, IAppUserService appUserService)
+    public SettingsViewModel(
+        ILocalizationResourceManager resourceManager, 
+        IAppUserService appUserService, 
+        FirebaseAuthClient authClient, 
+        IServiceProvider services)
     {
         _resourceManager = resourceManager;
         _appUserService = appUserService;
+        _authClient = authClient;
+        _services = services;
 
         LoadLanguage();
         LoadTheme();
@@ -38,8 +46,8 @@ public partial class SettingsViewModel : ObservableObject
         UpdateApiName();
         //LoadDifficulty();
 
-        Task.Run(LoadDifficultyAsync);
-        Task.Run(LoadLessonLengthAsync);
+        //Task.Run(LoadDifficultyAsync);
+        //Task.Run(LoadLessonLengthAsync);
     }
 
     public IReadOnlyList<DifficultyLevel> AvailableDifficulties { get; }
@@ -67,17 +75,35 @@ public partial class SettingsViewModel : ObservableObject
         });
     }
 
-    private async Task LoadDifficultyAsync()
+    partial void OnSelectedLessonLengthChanged(int value)
     {
-        var level = await _appUserService.GetUserDifficultyAsync();
-        // Musimy to zrobić na głównym wątku, bo aktualizujemy UI
-        MainThread.BeginInvokeOnMainThread(() => { SelectedDifficulty = level; });
+        //Preferences.Default.Set(Constants.DifficultyLevelKey, (int)value);
+        Task.Run(async () =>
+        {
+            try
+            {
+                await _appUserService.SetUserLessonLengthAsync(value);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Błąd zapisu długości lekcji: {ex.Message}");
+            }
+        });
     }
 
-    private async Task LoadLessonLengthAsync()
+    public async Task LoadDifficultyAsync()
+    {
+        var level = await _appUserService.GetUserDifficultyAsync();
+        SelectedDifficulty = level;
+        // Musimy to zrobić na głównym wątku, bo aktualizujemy UI
+        //MainThread.BeginInvokeOnMainThread(() => { SelectedDifficulty = level; });
+    }
+
+    public async Task LoadLessonLengthAsync()
     {
         var length = await _appUserService.GetUserLessonLengthAsync();
-        MainThread.BeginInvokeOnMainThread(() => { SelectedLessonLength = length; });
+        SelectedLessonLength = length;
+        //MainThread.BeginInvokeOnMainThread(() => { SelectedLessonLength = length; });
     }
 
     /*
@@ -180,5 +206,13 @@ public partial class SettingsViewModel : ObservableObject
         ThemeName = Application.Current.RequestedTheme == AppTheme.Light
             ? AppResources.ThemeNameLight
             : AppResources.ThemeNameDark;
+    }
+
+    [RelayCommand]
+    private async Task SignOut()
+    {
+        _authClient.SignOut();
+        var signInPage = _services.GetRequiredService<SignInPage>();
+        Application.Current.Windows[0].Page = new NavigationPage(signInPage);
     }
 }

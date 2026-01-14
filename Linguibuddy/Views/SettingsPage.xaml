@@ -7,91 +7,98 @@
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              x:DataType="vm:SettingsViewModel"
              Title="{loc:Translate Settings}">
-    <VerticalStackLayout Spacing="50" Margin="20,0">
-        <Label
-            Text="{loc:Translate Settings}"
-            FontSize="Header"
-            VerticalOptions="Center"
-            HorizontalOptions="Center" />
+    <ScrollView>
+        <VerticalStackLayout Spacing="50" Margin="20,0,20,0" Padding="0,0,0,50">
+            <Label
+                Text="{loc:Translate Settings}"
+                FontSize="Header"
+                VerticalOptions="Center"
+                HorizontalOptions="Center" />
 
-        <Grid ColumnDefinitions="*,*"
-              RowDefinitions="*,*,*"
-              MaximumWidthRequest="500"
-              RowSpacing="20">
+            <Grid ColumnDefinitions="*,*"
+                  RowDefinitions="*,*,*"
+                  MaximumWidthRequest="500"
+                  RowSpacing="20">
 
-            <ContentView Grid.ColumnSpan="2"
-                         HorizontalOptions="Fill">
-                <Border Style="{StaticResource SettingsRoundedBorder}">
-                    <Grid ColumnDefinitions="*,*">
-                        <Button Text="{loc:Translate Language}"
-                                Command="{Binding ChangeLanguageCommand}"
-                                Background="Transparent"
-                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
-                                MaximumWidthRequest="250" />
-                        <Button Grid.Column="1"
-                                Text="{loc:Translate LanguageName}"
-                                Command="{Binding ChangeLanguageCommand}"
-                                Background="Transparent"
-                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
-                                MaximumWidthRequest="250" />
-                    </Grid>
-                </Border>
-            </ContentView>
+                <ContentView Grid.ColumnSpan="2"
+                             HorizontalOptions="Fill">
+                    <Border Style="{StaticResource SettingsRoundedBorder}">
+                        <Grid ColumnDefinitions="*,*">
+                            <Button Text="{loc:Translate Language}"
+                                    Command="{Binding ChangeLanguageCommand}"
+                                    Background="Transparent"
+                                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                                    MaximumWidthRequest="250" />
+                            <Button Grid.Column="1"
+                                    Text="{loc:Translate LanguageName}"
+                                    Command="{Binding ChangeLanguageCommand}"
+                                    Background="Transparent"
+                                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                                    MaximumWidthRequest="250" />
+                        </Grid>
+                    </Border>
+                </ContentView>
 
-            <ContentView Grid.ColumnSpan="2"
-                         Grid.Row="1"
-                         HorizontalOptions="Fill">
-                <Border Style="{StaticResource SettingsRoundedBorder}">
-                    <Grid ColumnDefinitions="*,*">
-                        <Button Text="{loc:Translate Theme}"
-                                Command="{Binding ChangeThemeCommand}"
-                                Background="Transparent"
-                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
-                                MaximumWidthRequest="250" />
-                        <Button Grid.Column="1"
-                                Text="{Binding ThemeName}"
-                                Command="{Binding ChangeThemeCommand}"
-                                Background="Transparent"
-                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
-                                MaximumWidthRequest="250" />
-                    </Grid>
-                </Border>
-            </ContentView>
+                <ContentView Grid.ColumnSpan="2"
+                             Grid.Row="1"
+                             HorizontalOptions="Fill">
+                    <Border Style="{StaticResource SettingsRoundedBorder}">
+                        <Grid ColumnDefinitions="*,*">
+                            <Button Text="{loc:Translate Theme}"
+                                    Command="{Binding ChangeThemeCommand}"
+                                    Background="Transparent"
+                                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                                    MaximumWidthRequest="250" />
+                            <Button Grid.Column="1"
+                                    Text="{Binding ThemeName}"
+                                    Command="{Binding ChangeThemeCommand}"
+                                    Background="Transparent"
+                                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                                    MaximumWidthRequest="250" />
+                        </Grid>
+                    </Border>
+                </ContentView>
 
-            <ContentView Grid.ColumnSpan="2"
-                         Grid.Row="2"
-                         HorizontalOptions="Fill">
-                <Border Style="{StaticResource SettingsRoundedBorder}">
-                    <Grid ColumnDefinitions="*,*">
-                        <Button Text="{loc:Translate TranslationApi}"
-                                Command="{Binding ChangeTranslationApiCommand}"
-                                Background="Transparent"
-                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
-                                MaximumWidthRequest="250" />
+                <ContentView Grid.ColumnSpan="2"
+                             Grid.Row="2"
+                             HorizontalOptions="Fill">
+                    <Border Style="{StaticResource SettingsRoundedBorder}">
+                        <Grid ColumnDefinitions="*,*">
+                            <Button Text="{loc:Translate TranslationApi}"
+                                    Command="{Binding ChangeTranslationApiCommand}"
+                                    Background="Transparent"
+                                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                                    MaximumWidthRequest="250" />
 
-                        <Button Grid.Column="1"
-                                Text="{Binding TranslationApiName}"
-                                Command="{Binding ChangeTranslationApiCommand}"
-                                Background="Transparent"
-                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
-                                MaximumWidthRequest="250" />
-                    </Grid>
-                </Border>
-            </ContentView>
+                            <Button Grid.Column="1"
+                                    Text="{Binding TranslationApiName}"
+                                    Command="{Binding ChangeTranslationApiCommand}"
+                                    Background="Transparent"
+                                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
+                                    MaximumWidthRequest="250" />
+                        </Grid>
+                    </Border>
+                </ContentView>
 
-        </Grid>
+            </Grid>
 
-        <Picker Title="{loc:Translate PreferredDifficulty}"
-                TitleColor="{AppThemeBinding Light=Black, Dark=White}"
+            <Picker Title="{loc:Translate PreferredDifficulty}"
+                    TitleColor="{AppThemeBinding Light=Black, Dark=White}"
+                    MaximumWidthRequest="250"
+                    ItemsSource="{Binding AvailableDifficulties}"
+                    SelectedItem="{Binding SelectedDifficulty}"/>
+
+            <Picker Title="{loc:Translate PreferredMaxLessonLength}"
+                    TitleColor="{AppThemeBinding Light=Black, Dark=White}"
+                    MaximumWidthRequest="250"
+                    ItemsSource="{Binding AvailableLessonLengths}"
+                    SelectedItem="{Binding SelectedLessonLength}" />
+
+            <Button 
+                Text="{loc:Translate SignOut}"
+                Command="{Binding SignOutCommand}"
                 MaximumWidthRequest="250"
-                ItemsSource="{Binding AvailableDifficulties}"
-                SelectedItem="{Binding SelectedDifficulty}"/>
-
-        <Picker Title="{loc:Translate PreferredMaxLessonLength}"
-                TitleColor="{AppThemeBinding Light=Black, Dark=White}"
-                MaximumWidthRequest="250"
-                ItemsSource="{Binding AvailableLessonLengths}"
-                SelectedItem="{Binding SelectedLessonLength}" />
-
-    </VerticalStackLayout>
+                CornerRadius="20" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
