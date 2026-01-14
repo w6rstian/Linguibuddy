@@ -8,92 +8,174 @@
              x:Class="Linguibuddy.Views.MainPage">
 
     <ScrollView>
-        <Grid
-            HorizontalOptions="Fill"
-            MaximumWidthRequest="500">
-
-            <VerticalStackLayout
-                Padding="30,0"
-                Spacing="25"
-                HorizontalOptions="Fill">
-
-                <Grid ColumnDefinitions="*,Auto"
-                      Margin="{OnPlatform Android='0,10,0,0', WinUI='0'}">
-                    <FlexLayout
-                        Direction="Row"
-                        Wrap="Wrap"
-                        JustifyContent="Center"
-                        AlignItems="Center"
-                        AlignContent="Center"
-                        HorizontalOptions="Fill">
-
-                        <Label
-                            Text="{loc:Translate Welcome}"
-                            Style="{StaticResource SubHeadline}"
-                            Margin="0,0,5,0" />
-
-                        <Label
-                            Text="{Binding Username}"
-                            Style="{StaticResource SubHeadline}" />
-
-                    </FlexLayout>
-                    <Button
-                        Text="{loc:Translate SignOut}"
-                        Command="{Binding SignOutCommand}"
-                        Padding="5,0"
-                        CornerRadius="20"
-                        Grid.Column="1"
-                        MaximumHeightRequest="50"
-                        MinimumHeightRequest="40" />
-                </Grid>
-
+        <Grid ColumnDefinitions="*, *"
+          RowDefinitions="Auto, Auto"
+          RowSpacing="30">
+            <Border
+            Grid.ColumnSpan="2"
+            StrokeShape="RoundRectangle 12"
+            BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
+            Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+            Padding="50,20"
+            MaximumHeightRequest="250"
+            MaximumWidthRequest="600"
+            VerticalOptions="Center"
+            HorizontalOptions="Fill">
+                <Border.Shadow>
+                    <Shadow
+                    Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
+                    Radius="5"
+                    Opacity="0.4"
+                    Offset="0,4"/>
+                </Border.Shadow>
 
                 <VerticalStackLayout
-                    Spacing="15"
-                    HorizontalOptions="Fill">
+                Spacing="0"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                MaximumWidthRequest="300">
 
-                    <Button
-                        Text="{loc:Translate Dictionary}"
+                    <Label
+                    FontSize="Caption"
+                    TextColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray500}}"
+                    Text="{loc:Translate Profile}"
+                    HorizontalTextAlignment="Center" />
+                    <Label
+                    FontSize="Large"
+                    TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                    Text="{Binding DisplayName}"
+                    HorizontalTextAlignment="Center" />
+                    <Label
+                    FontSize="Micro"
+                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}"
+                    Text="{Binding Email}"
+                    HorizontalTextAlignment="Center" />
+                    <HorizontalStackLayout
+                    Spacing="10"
+                    Margin="0,10,0,0">
+                        <Label
                         FontSize="Medium"
-                        Command="{Binding NavigateToDictionaryCommand}"
-                        Padding="40,10"
-                        CornerRadius="25"
-                        HorizontalOptions="Fill" />
-
-                    <Button
-                        Text="{loc:Translate Collections}"
+                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                        Text="{loc:Translate Points, StringFormat='{}{0}:'}"
+                        HorizontalTextAlignment="Center" />
+                        <Label
                         FontSize="Medium"
-                        Command="{Binding NavigateToFlashcardsCommand}"
-                        Padding="40,10"
-                        CornerRadius="25"
-                        HorizontalOptions="Fill" />
-
-                    <Button
-                        Text="{loc:Translate Minigames}"
-                        FontSize="Medium"
-                        Command="{Binding NavigateToMinigamesCommand}"
-                        Padding="40,10"
-                        CornerRadius="25"
-                        HorizontalOptions="Fill" />
-
-                    <Button
-                        Text="{loc:Translate Achievements}"
-                        FontSize="Medium"
-                        Command="{Binding NavigateToAchievementsCommand}"
-                        Padding="40,10"
-                        CornerRadius="25"
-                        HorizontalOptions="Fill" />
-
-                    <Button
-                        Text="{loc:Translate Settings}"
-                        FontSize="Medium"
-                        Command="{Binding NavigateToSettingsCommand}"
-                        Padding="40,10"
-                        CornerRadius="25"
-                        HorizontalOptions="Fill" />
+                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                        Text="{Binding Points}"
+                        HorizontalTextAlignment="Center" />
+                    </HorizontalStackLayout>
                 </VerticalStackLayout>
-            </VerticalStackLayout>
+            </Border>
+            <Border
+            Grid.Row="1"
+            StrokeShape="RoundRectangle 12"
+            BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
+            Stroke="{AppThemeBinding Light=OrangeRed, Dark=OrangeRed}"
+            Padding="25,10"
+            MaximumHeightRequest="300"
+            MaximumWidthRequest="300"
+            VerticalOptions="Center"
+            HorizontalOptions="Fill">
+                <Border.Shadow>
+                    <Shadow
+                    Brush="{AppThemeBinding Light=OrangeRed, Dark=OrangeRed}"
+                    Radius="5"
+                    Opacity="0.4"
+                    Offset="0,4"/>
+                </Border.Shadow>
+                <VerticalStackLayout>
+                    <Label
+                    Text="{loc:Translate LearningStreak}"
+                    FontSize="Title"
+                    HorizontalTextAlignment="Center" />
+                    <Grid HorizontalOptions="Center"
+                      ColumnDefinitions="Auto,Auto,Auto">
+                        <Label
+                        Grid.Column="0"
+                        Text="🔥"
+                        FontSize="Large"
+                        VerticalTextAlignment="Center"
+                        Margin="0,0,6,0"/>
+                        <Label
+                        Grid.Column="1"
+                        FontSize="Large"
+                        Text="{Binding CurrentStreak}"
+                        HorizontalTextAlignment="Center" />
+                        <BoxView
+                        Grid.Column="2"
+                        WidthRequest="42"
+                        Opacity="0"/>
+                    </Grid>
+                    <FlexLayout
+                    Direction="Row"
+                    Wrap="Wrap"
+                    JustifyContent="End">
+                        <Label
+                        Margin="0,0,5,0"
+                        FontSize="Subtitle"
+                        Text="{loc:Translate Best, StringFormat='{}{0}:'}" />
+                        <Label
+                        FontSize="Subtitle"
+                        Text="{Binding BestStreak}" />
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </Border>
+            <Border
+            Grid.Row="1"
+            Grid.Column="1"
+            StrokeShape="RoundRectangle 12"
+            BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
+            Stroke="{AppThemeBinding Light=Goldenrod, Dark=Gold}"
+            Padding="25,10"
+            MaximumHeightRequest="300"
+            MaximumWidthRequest="300"
+            VerticalOptions="Center"
+            HorizontalOptions="Fill">
+                <Border.Shadow>
+                    <Shadow
+                    Brush="{AppThemeBinding Light=Goldenrod, Dark=Gold}"
+                    Radius="5"
+                    Opacity="0.4"
+                    Offset="0,4"/>
+                </Border.Shadow>
+
+                <VerticalStackLayout>
+                    <Label
+                    Text="{loc:Translate Achievements}"
+                    FontSize="Title"
+                    HorizontalTextAlignment="Center" />
+                    <Grid HorizontalOptions="Center"
+                      ColumnDefinitions="Auto,Auto,Auto">
+                        <BoxView
+                        Grid.Column="0"
+                        WidthRequest="42"
+                        Opacity="0"/>
+                        <Label
+                        Grid.Column="1"
+                        Text="{Binding UnlockedAchievementsCount}"
+                        HorizontalTextAlignment="Center"
+                        FontSize="Large"/>
+                        <Label
+                        Grid.Column="2"
+                        Text="🏆"
+                        FontSize="Large"
+                        VerticalTextAlignment="Center"
+                        Margin="0,0,6,0"/>
+                    </Grid>
+                    <HorizontalStackLayout
+                    Spacing="10"
+                    HorizontalOptions="End">
+                        <Label
+                        FontSize="Subtitle"
+                        Text=""
+                        HorizontalTextAlignment="End" />
+                        <Label
+                        FontSize="Subtitle"
+                        Text=""
+                        HorizontalTextAlignment="End" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
         </Grid>
     </ScrollView>
-
 </ContentPage>

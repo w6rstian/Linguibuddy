@@ -1,73 +1,66 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Views;
 
 namespace Linguibuddy.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
+    private readonly IAchievementRepository _achievementRepository;
+    private readonly IAppUserService _appUserService;
     private readonly FirebaseAuthClient _authClient;
+    private readonly ILearningService _learningService;
     private readonly IServiceProvider _services;
-    private readonly SettingsViewModel _settingsViewModel;
 
-    [ObservableProperty] private string _username;
+    [ObservableProperty] private int _bestStreak;
+
+    [ObservableProperty] private int _currentStreak;
+
+    [ObservableProperty] private string _displayName;
+
+    [ObservableProperty] private string _email;
+
+    [ObservableProperty] private bool _isCurrentStreakBest;
+
+    [ObservableProperty] private int _points;
+
+    [ObservableProperty] private int _unlockedAchievementsCount;
 
     public MainViewModel(
-        FirebaseAuthClient authClient,
         IServiceProvider services,
-        SettingsViewModel settingsViewModel)
+        IAppUserService appUserService,
+        ILearningService learningService,
+        FirebaseAuthClient authClient, 
+        IAchievementRepository achievementRepository)
     {
+        _appUserService = appUserService;
+        _learningService = learningService;
         _authClient = authClient;
-        _services = services;
-        _settingsViewModel = settingsViewModel;
+        _achievementRepository = achievementRepository;
+    }
 
+    public async Task LoadProfileInfoAsync()
+    {
         if (_authClient.User != null)
         {
-            Username = _authClient.User.Info.DisplayName;
+            DisplayName = _authClient.User.Info.DisplayName;
         }
         else
         {
             var signInPage = _services.GetRequiredService<SignInPage>();
             Application.Current.Windows[0].Page = new NavigationPage(signInPage);
         }
-    }
 
-    [RelayCommand]
-    private async Task NavigateToDictionary()
-    {
-        await Shell.Current.GoToAsync("//DictionaryPage");
-    }
+        Email = _authClient.User.Info.Email;
+        Points = await _appUserService.GetUserPointsAsync();
+        CurrentStreak = await _learningService.GetCurrentStreakAsync();
+        BestStreak = await _appUserService.GetUserBestStreakAsync();
 
-    [RelayCommand]
-    private async Task NavigateToFlashcards()
-    {
-        await Shell.Current.GoToAsync("//CollectionsPage");
-    }
+        if (CurrentStreak == BestStreak)
+            IsCurrentStreakBest = true;
 
-    [RelayCommand]
-    private async Task NavigateToMinigames()
-    {
-        await Shell.Current.GoToAsync("//MiniGamesPage");
-    }
-
-    [RelayCommand]
-    private async Task NavigateToAchievements()
-    {
-        await Shell.Current.GoToAsync("//AchievementsPage");
-    }
-
-    [RelayCommand]
-    private async Task NavigateToSettings()
-    {
-        await Shell.Current.GoToAsync("//SettingsPage");
-    }
-
-    [RelayCommand]
-    private async Task SignOut()
-    {
-        _authClient.SignOut();
-        var signInPage = _services.GetRequiredService<SignInPage>();
-        Application.Current.Windows[0].Page = new NavigationPage(signInPage);
+        UnlockedAchievementsCount = await _achievementRepository.GetUnlockedAchievementsCountAsync();
     }
 }

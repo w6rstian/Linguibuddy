@@ -26,10 +26,6 @@
             <ShellContent ContentTemplate="{DataTemplate views:MiniGamesPage}" Route="MiniGamesPage" />
         </Tab>
 
-        <Tab Title="Profile" Icon="account_circle_100dp_light.png">
-            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage" />
-        </Tab>
-
         <Tab Title="{loc:Translate Achievements}" Icon="trophy_100dp_light.png">
             <ShellContent ContentTemplate="{DataTemplate views:AchievementsPage}" Route="AchievementsPage" />
         </Tab>
