@@ -137,12 +137,18 @@ public class CollectionService : ICollectionService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<string>> GetWordsWithImagesFromCollectionAsync(int collectionId)
+    public async Task DeleteCollectionItemAsync(CollectionItem item)
     {
-        return await _context.CollectionItems
-            .Where(i => i.CollectionId == collectionId
-                        && !string.IsNullOrEmpty(i.ImageUrl))
-            .Select(i => i.ImageUrl!)
-            .ToListAsync();
+        _context.CollectionItems.Remove(item);
+        await _context.SaveChangesAsync();
     }
+
+    //public async Task<List<string>> GetWordsWithImagesFromCollectionAsync(int collectionId)
+    //{
+    //    return await _context.CollectionItems
+    //        .Where(i => i.CollectionId == collectionId
+    //                    && !string.IsNullOrEmpty(i.ImageUrl))
+    //        .Select(i => i.ImageUrl!)
+    //        .ToListAsync();
+    //}
 }

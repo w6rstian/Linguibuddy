@@ -42,7 +42,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task NavigateToFlashcards()
     {
-        await Shell.Current.GoToAsync("//FlashcardsCollectionsPage");
+        await Shell.Current.GoToAsync("//CollectionsPage");
     }
 
     [RelayCommand]

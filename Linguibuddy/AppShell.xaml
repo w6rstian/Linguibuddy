@@ -20,11 +20,11 @@
             ContentTemplate="{DataTemplate views:DictionaryPage}"
             Route="DictionaryPage" />
     </FlyoutItem>
-    <FlyoutItem Title="{loc:Translate Flashcards}">
+    <FlyoutItem Title="{loc:Translate Collections}">
         <ShellContent
-            Title="{loc:Translate Flashcards}"
-            ContentTemplate="{DataTemplate views:FlashcardsCollectionsPage}"
-            Route="FlashcardsCollectionsPage" />
+            Title="{loc:Translate Collections}"
+            ContentTemplate="{DataTemplate views:CollectionsPage}"
+            Route="CollectionsPage" />
     </FlyoutItem>
 
     <FlyoutItem Title="{loc:Translate Minigames}">

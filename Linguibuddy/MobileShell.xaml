@@ -17,9 +17,9 @@
             <ShellContent ContentTemplate="{DataTemplate views:DictionaryPage}" Route="DictionaryPage" />
         </Tab>
 
-        <Tab Title="{loc:Translate Flashcards}" Icon="cards_stack_100dp_light.png">
-            <ShellContent ContentTemplate="{DataTemplate views:FlashcardsCollectionsPage}"
-                          Route="FlashcardsCollectionsPage" />
+        <Tab Title="{loc:Translate Collections}" Icon="cards_stack_100dp_light.png">
+            <ShellContent ContentTemplate="{DataTemplate views:CollectionsPage}"
+                          Route="CollectionsPage" />
         </Tab>
 
         <Tab Title="{loc:Translate Minigames}" Icon="joystick_100dp_light.png">

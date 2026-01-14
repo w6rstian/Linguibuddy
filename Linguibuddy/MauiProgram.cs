@@ -72,7 +72,8 @@ public static class MauiProgram
         builder.Services.AddTransient<MainPage, MainViewModel>();
         builder.Services.AddTransient<DictionaryPage, DictionaryViewModel>();
         builder.Services.AddTransient<FlashcardsPage, FlashcardsViewModel>();
-        builder.Services.AddTransient<FlashcardsCollectionsPage, FlashcardsCollectionsViewModel>();
+        builder.Services.AddTransient<CollectionsPage, CollectionsViewModel>();
+        builder.Services.AddTransient<CollectionDetailsPage, CollectionDetailsViewModel>();
         builder.Services.AddTransient<SignInPage, SignInViewModel>();
         builder.Services.AddTransient<SignUpPage, SignUpViewModel>();
         builder.Services.AddTransient<ProfilePage, ProfileViewModel>();

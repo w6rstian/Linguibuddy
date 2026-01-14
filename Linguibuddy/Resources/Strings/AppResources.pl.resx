@@ -444,6 +444,9 @@
   <data name="Points" xml:space="preserve">
     <value>Punkty</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
   <data name="Achievement11Description" xml:space="preserve">
     <value>Zdobądź 500 punktów</value>
   </data>

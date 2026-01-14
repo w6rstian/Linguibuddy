@@ -40,6 +40,7 @@ public partial class App : Application
     public static void RegisterRoutes()
     {
         Routing.RegisterRoute(nameof(FlashcardsPage), typeof(FlashcardsPage));
+        Routing.RegisterRoute(nameof(CollectionDetailsPage), typeof(CollectionDetailsPage));
         Routing.RegisterRoute(nameof(AudioQuizPage), typeof(AudioQuizPage));
         Routing.RegisterRoute(nameof(ImageQuizPage), typeof(ImageQuizPage));
         Routing.RegisterRoute(nameof(SentenceQuizPage), typeof(SentenceQuizPage));
