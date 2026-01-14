@@ -101,6 +101,7 @@ public partial class DictionaryViewModel : ObservableObject
             var entry = await _dictionaryService.GetEnglishWordAsync(word);
 
             if (entry != null)
+            {
                 foreach (var meaning in entry.Meanings)
                 foreach (var def in meaning.Definitions)
                     SearchResults.Add(new SearchResultItem
@@ -116,9 +117,31 @@ public partial class DictionaryViewModel : ObservableObject
 
                         SourceWordObject = entry
                     });
+            }
+            else
+            {
+                if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+                {
+                    await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert(AppResources.Dictionary, AppResources.NoResultsFoundText, "OK");
+                }
+            }
+                
         }
         catch (Exception ex)
         {
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
+            }
+
             Debug.WriteLine($"Error: {ex.Message}");
         }
         finally

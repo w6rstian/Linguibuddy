@@ -556,7 +556,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No results found 😞.
+        ///   Looks up a localized string similar to No results found.
         /// </summary>
         internal static string NoResultsFoundText {
             get {
