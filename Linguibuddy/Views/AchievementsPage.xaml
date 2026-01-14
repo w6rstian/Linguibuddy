@@ -9,6 +9,7 @@
              Title="{loc:Translate Achievements}">
     <ContentPage.Resources>
         <converters:AchievementIconConverter x:Key="AchievementIconConverter" />
+        <converters:ResourceKeyToStringConverter x:Key="ResourceKeyConverter" />
     </ContentPage.Resources>
 
     <ScrollView>
@@ -37,12 +38,12 @@
                                        WidthRequest="50" HeightRequest="50"
                                        Grid.RowSpan="2" />
 
-                                <Label Text="{Binding Achievement.Name}"
+                                <Label Text="{Binding Achievement.Name, Converter={StaticResource ResourceKeyConverter}}"
                                        FontAttributes="Bold"
                                        FontSize="Medium"
                                        Grid.Column="1" />
 
-                                <Label Text="{Binding Achievement.Description}"
+                                <Label Text="{Binding Achievement.Description, Converter={StaticResource ResourceKeyConverter}}"
                                        FontSize="Small"
                                        TextColor="Gray"
                                        Grid.Column="1" Grid.Row="1" />
