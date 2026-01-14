@@ -14,20 +14,6 @@
                              HorizontalOptions="Center"
                              Spacing="25">
 
-            <!--<Border Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                    StrokeThickness="2"
-                    StrokeShape="RoundRectangle 50"
-                    HeightRequest="100"
-                    WidthRequest="100"
-                    BackgroundColor="Transparent"
-                    HorizontalOptions="Center">
-                <Label Text="✔" 
-                       FontSize="50" 
-                       HorizontalOptions="Center" 
-                       VerticalOptions="Center" 
-                       TextColor="{StaticResource Primary}"/>
-            </Border>-->
-
             <Label Text="{loc:Translate Congratulations}"
                    FontSize="32"
                    FontAttributes="Bold"

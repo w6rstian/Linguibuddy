@@ -7,7 +7,7 @@
              xmlns:models="clr-namespace:Linguibuddy.Models"
              x:Class="Linguibuddy.Views.AudioQuizPage"
              x:DataType="vm:AudioQuizViewModel"
-             Title="Rozpoznaj audio">
+             Title="{loc:Translate AudioRecognize}">
     <Grid>
 
         <VerticalStackLayout IsVisible="{Binding IsFinished}"
@@ -26,12 +26,12 @@
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                    HorizontalOptions="Center" />
 
-            <Label Text="{Binding Score, StringFormat='Poprawne odpowiedzi: {0}'}"
+            <Label Text="{Binding Score, StringFormat={loc:Translate CorrectAnswers}}"
                    FontSize="20"
                    FontAttributes="Bold"
                    HorizontalOptions="Center" />
 
-            <Label Text="{Binding PointsEarned, StringFormat='Zdobyte punkty: +{0}'}"
+            <Label Text="{Binding PointsEarned, StringFormat={loc:Translate PointsEarned}}"
                    FontSize="16"
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                    HorizontalOptions="Center" />
@@ -48,7 +48,7 @@
               IsVisible="{Binding IsLearning}">
 
             <VerticalStackLayout Grid.Row="0" Spacing="15" HorizontalOptions="Center">
-                <Label Text="Posłuchaj i wybierz słowo"
+                <Label Text="{loc:Translate AudioQuizDesc}"
                        FontSize="18"
                        TextColor="Gray"
                        HorizontalOptions="Center" />
@@ -63,14 +63,6 @@
                         <TapGestureRecognizer Command="{Binding PlayAudioCommand}" />
                     </Frame.GestureRecognizers>
 
-                    <!--<ImageButton Source="speaker_icon.png" 
-                                 Command="{Binding PlayAudioCommand}"
-                                 HeightRequest="40" 
-                                 WidthRequest="40"
-                                 VerticalOptions="Center" 
-                                 HorizontalOptions="Center"
-                                 BackgroundColor="Transparent"/>-->
-
                     <ImageButton
                         Source="{AppThemeBinding Light=text_to_speech_100dp_dark.png, Dark=text_to_speech_100dp_light.png}"
                         Command="{Binding PlayAudioCommand}"
@@ -80,7 +72,7 @@
                         WidthRequest="30" />
                 </Frame>
 
-                <Label Text="Kliknij, aby odsłuchać" FontSize="12" HorizontalOptions="Center" TextColor="Gray" />
+                <Label Text="{loc:Translate AudioClick}" FontSize="12" HorizontalOptions="Center" TextColor="Gray" />
 
                 <Label Text="{Binding TargetWord.Phonetic, StringFormat='/{0}/'}"
                        FontSize="24"
@@ -130,7 +122,7 @@
             </CollectionView>
 
             <Button Grid.Row="3"
-                    Text="Następne pytanie"
+                    Text="{loc:Translate Next}"
                     Command="{Binding NextQuestionCommand}"
                     IsVisible="{Binding IsAnswered}"
                     BackgroundColor="{StaticResource Primary}"

@@ -4,8 +4,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Linguibuddy.Views.SignUpPage"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              x:DataType="vm:SignUpViewModel"
-             Title="Sign Up">
+             Title="{loc:Translate SignUp}">
     <VerticalStackLayout>
         <Label Text="Linguibuddy"
                HorizontalTextAlignment="Center"
@@ -33,7 +34,7 @@
                 </VerticalStackLayout>
                 <VerticalStackLayout>
                     <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Password" />
-                    <Label Text="Password must use 6 characters or more"
+                    <Label Text="{loc:Translate PasswordLength}"
                            FontSize="10"
                            TextColor="LightSlateGray" />
                     <Label Text="Password insufficient"
@@ -42,8 +43,8 @@
                            Opacity="{Binding LabelPasswordErrorOpacity}" />
                 </VerticalStackLayout>
                 <!-- TODO: Add confirm password -->
-                <Button Command="{Binding SignUpCommand}" Text="Sign Up" />
-                <Button Command="{Binding NavigateSignInCommand}" Text="Already have an account? Sign in" />
+                <Button Command="{Binding SignUpCommand}" Text="{loc:Translate SignUp}" />
+                <Button Command="{Binding NavigateSignInCommand}" Text="{loc:Translate SignInPls}" />
             </VerticalStackLayout>
         </FlexLayout>
     </VerticalStackLayout>

@@ -7,7 +7,7 @@
              xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              x:Class="Linguibuddy.Views.SpeakingQuizPage"
              x:DataType="vm:SpeakingQuizViewModel"
-             Title="Wymowa">
+             Title="{loc:Translate SpeakingQuizName}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -31,12 +31,12 @@
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                    HorizontalOptions="Center" />
 
-            <Label Text="{Binding Score, StringFormat='Poprawne odpowiedzi: {0}'}"
+            <Label Text="{Binding Score, StringFormat={loc:Translate CorrectAnswers}}"
                    FontSize="20"
                    FontAttributes="Bold"
                    HorizontalOptions="Center" />
 
-            <Label Text="{Binding PointsEarned, StringFormat='Zdobyte punkty: +{0}'}"
+            <Label Text="{Binding PointsEarned, StringFormat={loc:Translate PointsEarned}}"
                    FontSize="16"
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                    HorizontalOptions="Center" />
@@ -89,7 +89,7 @@
 
                         <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
 
-                            <Button Text="Słuchaj"
+                            <Button Text="{loc:Translate Listen}"
                                     Command="{Binding StartListeningCommand}"
                                     BackgroundColor="{StaticResource Primary}"
                                     TextColor="White"
@@ -168,7 +168,7 @@
                          Color="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
                          Margin="0,0,0,10" />
 
-                <Button Text="Następne"
+                <Button Text="{loc:Translate Next}"
                         Command="{Binding NextQuestionCommand}"
                         IsEnabled="{Binding IsAnswered}"
                         BackgroundColor="{StaticResource Primary}"

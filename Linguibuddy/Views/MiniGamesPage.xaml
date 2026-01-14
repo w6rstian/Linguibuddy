@@ -3,6 +3,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              x:DataType="vm:MiniGamesViewModel"
              x:Class="Linguibuddy.Views.MiniGamesPage"
              Title="Mini gry">
@@ -40,11 +41,11 @@
                         Grid.Column="0" />
 
                     <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="0,0,15,0">
-                        <Label Text="Rozpoznaj audio"
+                        <Label Text="{loc:Translate AudioRecognize}"
                                FontSize="20"
                                FontAttributes="Bold"
                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
-                        <Label Text="Dopasuj słowo do dźwięku"
+                        <Label Text="{loc:Translate AudioQuizDesc}"
                                FontSize="14"
                                TextColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource PrimaryDarkText}}"
                                Opacity="0.8" />
@@ -76,11 +77,11 @@
                         Grid.Column="0" />
 
                     <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="0,0,15,0">
-                        <Label Text="Dopasuj do obrazka"
+                        <Label Text="{loc:Translate ImaqeQuizName}"
                                FontSize="20"
                                FontAttributes="Bold"
                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
-                        <Label Text="Co widzisz na obrazku?"
+                        <Label Text="{loc:Translate ImageQuizDesc}"
                                FontSize="14"
                                TextColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource PrimaryDarkText}}"
                                Opacity="0.8" />
@@ -112,11 +113,11 @@
                         Grid.Column="0" />
 
                     <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="0,0,15,0">
-                        <Label Text="Szyk zdań"
+                        <Label Text="{loc:Translate SentenceQuizName}"
                                FontSize="20"
                                FontAttributes="Bold"
                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
-                        <Label Text="Ułóż szyk zdania"
+                        <Label Text="{loc:Translate SentenceQuizDesc}"
                                FontSize="14"
                                TextColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource PrimaryDarkText}}"
                                Opacity="0.8" />
@@ -148,11 +149,11 @@
                         Grid.Column="0" />
 
                     <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="0,0,15,0">
-                        <Label Text="Wymowa"
+                        <Label Text="{loc:Translate SpeakingQuizName}"
                                FontSize="20"
                                FontAttributes="Bold"
                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
-                        <Label Text="Przetestuj swoją wymowę"
+                        <Label Text="Przeczytaj zdanie"
                                FontSize="14"
                                TextColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource PrimaryDarkText}}"
                                Opacity="0.8" />
@@ -184,11 +185,11 @@
                         Grid.Column="0" />
 
                     <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Padding="0,0,15,0">
-                        <Label Text="Wisielec"
+                        <Label Text="{loc:Translate Hangman}"
                                FontSize="20"
                                FontAttributes="Bold"
                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
-                        <Label Text="Gra w wisielca"
+                        <Label Text="{loc:Translate HangmanDesc}"
                                FontSize="14"
                                TextColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource PrimaryDarkText}}"
                                Opacity="0.8" />

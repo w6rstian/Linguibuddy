@@ -6,7 +6,7 @@
              x:Class="Linguibuddy.Views.SettingsPage"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              x:DataType="vm:SettingsViewModel"
-             Title="Ustawienia">
+             Title="{loc:Translate Settings}">
     <VerticalStackLayout Spacing="50" Margin="20,0">
         <Label
             Text="{loc:Translate Settings}"
@@ -81,7 +81,7 @@
 
         </Grid>
 
-        <Picker Title="Preferowany poziom trudności"
+        <Picker Title="{loc:Translate PreferredDifficulty}"
                 MaximumWidthRequest="250"
                 ItemsSource="{Binding AvailableDifficulties}"
                 SelectedItem="{Binding SelectedDifficulty}" />

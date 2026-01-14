@@ -97,11 +97,38 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click to listen.
+        /// </summary>
+        internal static string AudioClick {
+            get {
+                return ResourceManager.GetString("AudioClick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Audio error.
         /// </summary>
         internal static string AudioError {
             get {
                 return ResourceManager.GetString("AudioError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Match the word to the sound.
+        /// </summary>
+        internal static string AudioQuizDesc {
+            get {
+                return ResourceManager.GetString("AudioQuizDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recognize audio.
+        /// </summary>
+        internal static string AudioRecognize {
+            get {
+                return ResourceManager.GetString("AudioRecognize", resourceCulture);
             }
         }
         
@@ -120,6 +147,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check.
+        /// </summary>
+        internal static string Check {
+            get {
+                return ResourceManager.GetString("Check", resourceCulture);
             }
         }
         
@@ -165,6 +201,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string CorrectAnswer {
             get {
                 return ResourceManager.GetString("CorrectAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Correct answers: {0}.
+        /// </summary>
+        internal static string CorrectAnswersCount {
+            get {
+                return ResourceManager.GetString("CorrectAnswersCount", resourceCulture);
             }
         }
         
@@ -277,6 +322,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hangman game.
+        /// </summary>
+        internal static string HangmanDesc {
+            get {
+                return ResourceManager.GetString("HangmanDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         internal static string Home {
@@ -300,6 +354,24 @@ namespace Linguibuddy.Resources.Strings {
         internal static string IKnow {
             get {
                 return ResourceManager.GetString("IKnow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What do you see in the picture?.
+        /// </summary>
+        internal static string ImageQuizDesc {
+            get {
+                return ResourceManager.GetString("ImageQuizDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Match to picture.
+        /// </summary>
+        internal static string ImaqeQuizName {
+            get {
+                return ResourceManager.GetString("ImaqeQuizName", resourceCulture);
             }
         }
         
@@ -354,6 +426,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string LearningFinished {
             get {
                 return ResourceManager.GetString("LearningFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Listen.
+        /// </summary>
+        internal static string Listen {
+            get {
+                return ResourceManager.GetString("Listen", resourceCulture);
             }
         }
         
@@ -417,6 +498,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string NewCollection {
             get {
                 return ResourceManager.GetString("NewCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        internal static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
             }
         }
         
@@ -511,6 +601,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password must use 6 characters or more.
+        /// </summary>
+        internal static string PasswordLength {
+            get {
+                return ResourceManager.GetString("PasswordLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Perfect!.
         /// </summary>
         internal static string Perfect {
@@ -525,6 +624,33 @@ namespace Linguibuddy.Resources.Strings {
         internal static string PlaybackError {
             get {
                 return ResourceManager.GetString("PlaybackError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points earned: +{0}.
+        /// </summary>
+        internal static string PointsEarnedCount {
+            get {
+                return ResourceManager.GetString("PointsEarnedCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preferred difficulty level.
+        /// </summary>
+        internal static string PreferredDifficulty {
+            get {
+                return ResourceManager.GetString("PreferredDifficulty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profile.
+        /// </summary>
+        internal static string Profile {
+            get {
+                return ResourceManager.GetString("Profile", resourceCulture);
             }
         }
         
@@ -619,6 +745,24 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Arrange the words in the correct order.
+        /// </summary>
+        internal static string SentenceQuizDesc {
+            get {
+                return ResourceManager.GetString("SentenceQuizDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word order.
+        /// </summary>
+        internal static string SentenceQuizName {
+            get {
+                return ResourceManager.GetString("SentenceQuizName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Read the sentence.
         /// </summary>
         internal static string SentenceRead {
@@ -637,11 +781,74 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sign in.
+        /// </summary>
+        internal static string SignIn {
+            get {
+                return ResourceManager.GetString("SignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email or password incorrect.
+        /// </summary>
+        internal static string SignInError {
+            get {
+                return ResourceManager.GetString("SignInError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Already have an account? Sign in.
+        /// </summary>
+        internal static string SignInPls {
+            get {
+                return ResourceManager.GetString("SignInPls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome! Sign in to continue.
+        /// </summary>
+        internal static string SignInWelcome {
+            get {
+                return ResourceManager.GetString("SignInWelcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sign out.
         /// </summary>
         internal static string SignOut {
             get {
                 return ResourceManager.GetString("SignOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign up.
+        /// </summary>
+        internal static string SignUp {
+            get {
+                return ResourceManager.GetString("SignUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need an account? Sign up.
+        /// </summary>
+        internal static string SignUpPls {
+            get {
+                return ResourceManager.GetString("SignUpPls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speaking.
+        /// </summary>
+        internal static string SpeakingQuizName {
+            get {
+                return ResourceManager.GetString("SpeakingQuizName", resourceCulture);
             }
         }
         
@@ -723,6 +930,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string TranslateBeforeAdding {
             get {
                 return ResourceManager.GetString("TranslateBeforeAdding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translate sentence:.
+        /// </summary>
+        internal static string TranslateSentence {
+            get {
+                return ResourceManager.GetString("TranslateSentence", resourceCulture);
             }
         }
         

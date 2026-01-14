@@ -7,7 +7,7 @@
              xmlns:models="clr-namespace:Linguibuddy.Models"
              x:Class="Linguibuddy.Views.ImageQuizPage"
              x:DataType="vm:ImageQuizViewModel"
-             Title="Dopasuj do obrazka">
+             Title="{loc:Translate ImaqeQuizName}">
 
     <Grid>
         <VerticalStackLayout
@@ -28,12 +28,12 @@
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                    HorizontalOptions="Center" />
 
-            <Label Text="{Binding Score, StringFormat='Poprawne odpowiedzi: {0}'}"
+            <Label Text="{Binding Score, StringFormat={loc:Translate CorrectAnswers}}"
                    FontSize="20"
                    FontAttributes="Bold"
                    HorizontalOptions="Center" />
 
-            <Label Text="{Binding PointsEarned, StringFormat='Zdobyte punkty: +{0}'}"
+            <Label Text="{Binding PointsEarned, StringFormat={loc:Translate PointsEarned}}"
                    FontSize="16"
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                    HorizontalOptions="Center" />
@@ -48,7 +48,7 @@
         <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="20" RowSpacing="20" IsVisible="{Binding IsLearning}">
 
             <VerticalStackLayout Grid.Row="0" Spacing="15">
-                <Label Text="Co widzisz na obrazku?"
+                <Label Text="{loc:Translate ImageQuizDesc}"
                        FontSize="18" TextColor="Gray" HorizontalOptions="Center" />
 
                 <Border StrokeShape="RoundRectangle 20"
@@ -100,7 +100,7 @@
             </CollectionView>
 
             <Button Grid.Row="3"
-                    Text="Następne pytanie"
+                    Text="{loc:Translate Next}"
                     Command="{Binding NextQuestionCommand}"
                     IsVisible="{Binding IsAnswered}"
                     BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"

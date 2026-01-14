@@ -222,9 +222,6 @@
   <data name="AudioError" xml:space="preserve">
     <value>Błąd audio</value>
   </data>
-  <data name="PlaybackError" xml:space="preserve">
-    <value>Nie udało się odtworzyć nagrania.</value>
-  </data>
   <data name="TranslationApi" xml:space="preserve">
     <value>API tłumaczące</value>
   </data>
@@ -353,5 +350,80 @@
   </data>
   <data name="OnlineSpeech" xml:space="preserve">
     <value>Włącz 'Rozpoznawanie mowy online' w ustawieniach Windows.</value>
+  </data>
+  <data name="AudioRecognize" xml:space="preserve">
+    <value>Rozpoznaj audio</value>
+  </data>
+  <data name="AudioQuizDesc" xml:space="preserve">
+    <value>Dopasuj słowo do dźwięku</value>
+  </data>
+  <data name="AudioClick" xml:space="preserve">
+    <value>Kliknij, aby odsłuchać</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Dalej</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>Sprawdź</value>
+  </data>
+  <data name="CorrectAnswersCount" xml:space="preserve">
+    <value>Poprawne odpowiedzi: {0}</value>
+  </data>
+  <data name="PointsEarnedCount" xml:space="preserve">
+    <value>Zdobyte punkty: +{0}</value>
+  </data>
+  <data name="ImaqeQuizName" xml:space="preserve">
+    <value>Dopasuj do obrazka</value>
+  </data>
+  <data name="ImageQuizDesc" xml:space="preserve">
+    <value>Co widzisz na obrazku?</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="SentenceQuizName" xml:space="preserve">
+    <value>Szyk zdań</value>
+  </data>
+  <data name="SentenceQuizDesc" xml:space="preserve">
+    <value>Ułóż szyk zdania</value>
+  </data>
+  <data name="TranslateSentence" xml:space="preserve">
+    <value>Przetłumacz zdanie:</value>
+  </data>
+  <data name="PreferredDifficulty" xml:space="preserve">
+    <value>Preferred difficulty level</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Zaloguj</value>
+  </data>
+  <data name="SignInWelcome" xml:space="preserve">
+    <value>Witaj! Zaloguj się, aby kontynuować</value>
+  </data>
+  <data name="SignInError" xml:space="preserve">
+    <value>Nieprawidłowy adres e-mail lub hasło</value>
+  </data>
+  <data name="PlaybackError" xml:space="preserve">
+    <value>Nie udało się odtworzyć nagrania.</value>
+  </data>
+  <data name="SignUp" xml:space="preserve">
+    <value>Zarejestruj się</value>
+  </data>
+  <data name="SignUpPls" xml:space="preserve">
+    <value>Potrzebujesz konta? Zarejestruj się</value>
+  </data>
+  <data name="PasswordLength" xml:space="preserve">
+    <value>Hasło musi zawierać co najmniej 6 znaków</value>
+  </data>
+  <data name="SignInPls" xml:space="preserve">
+    <value>Masz już konto? Zaloguj się</value>
+  </data>
+  <data name="SpeakingQuizName" xml:space="preserve">
+    <value>Wymowa</value>
+  </data>
+  <data name="HangmanDesc" xml:space="preserve">
+    <value>Gra w wisielca</value>
+  </data>
+  <data name="Listen" xml:space="preserve">
+    <value>Słuchaj</value>
   </data>
 </root>

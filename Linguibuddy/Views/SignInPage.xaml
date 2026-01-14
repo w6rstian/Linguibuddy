@@ -3,15 +3,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              x:DataType="vm:SignInViewModel"
              x:Class="Linguibuddy.Views.SignInPage"
-             Title="Sign In">
+             Title="{loc:Translate SignIn}">
     <VerticalStackLayout
         Margin="0,30,0,0">
         <Label Text="Linguibuddy"
                HorizontalTextAlignment="Center"
                FontSize="Header" />
-        <Label Text="Welcome! Sign in to continue"
+        <Label Text="{loc:Translate SignInWelcome}"
                HorizontalTextAlignment="Center"
                FontSize="Subtitle"
                Margin="0,0,0,20" />
@@ -21,13 +22,13 @@
                 <Entry Text="{Binding Email}" Placeholder="Email address" />
                 <VerticalStackLayout>
                     <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Password" />
-                    <Label Text="Email or password incorrect"
+                    <Label Text="{loc:Translate SignInError}"
                            FontSize="12"
                            TextColor="Red"
                            Opacity="{Binding LabelErrorOpacity}" />
                 </VerticalStackLayout>
-                <Button Command="{Binding SignInCommand}" Text="Sign In" />
-                <Button Command="{Binding NavigateSignUpCommand}" Text="Need an account? Sign up" />
+                <Button Command="{Binding SignInCommand}" Text="{loc:Translate SignIn}" />
+                <Button Command="{Binding NavigateSignUpCommand}" Text="{loc:Translate SignUpPls}" />
             </VerticalStackLayout>
         </FlexLayout>
     </VerticalStackLayout>
