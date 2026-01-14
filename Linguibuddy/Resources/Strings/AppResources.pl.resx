@@ -444,4 +444,7 @@
   <data name="Points" xml:space="preserve">
     <value>Punkty</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
 </root>

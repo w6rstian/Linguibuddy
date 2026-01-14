@@ -2,11 +2,11 @@ using Linguibuddy.ViewModels;
 
 namespace Linguibuddy.Views;
 
-public partial class FlashcardsCollectionsPage : ContentPage
+public partial class CollectionsPage : ContentPage
 {
-    private readonly FlashcardsCollectionsViewModel _viewModel;
+    private readonly CollectionsViewModel _viewModel;
 
-    public FlashcardsCollectionsPage(FlashcardsCollectionsViewModel viewModel)
+    public CollectionsPage(CollectionsViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = _viewModel = viewModel;

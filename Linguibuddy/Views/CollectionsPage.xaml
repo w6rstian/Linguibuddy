@@ -5,8 +5,8 @@
              xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              xmlns:models="clr-namespace:Linguibuddy.Models"
-             x:Class="Linguibuddy.Views.FlashcardsCollectionsPage"
-             x:DataType="vm:FlashcardsCollectionsViewModel"
+             x:Class="Linguibuddy.Views.CollectionsPage"
+             x:DataType="vm:CollectionsViewModel"
              Title="{loc:Translate Collections}">
 
     <Grid RowDefinitions="Auto, *">
@@ -101,7 +101,7 @@
                             <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
 
                                 <Button Text="{loc:Translate Edit}"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FlashcardsCollectionsViewModel}}, Path=EditCollectionCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CollectionsViewModel}}, Path=EditCollectionCommand}"
                                         CommandParameter="{Binding .}"
                                         FontSize="12"
                                         Padding="12,0"
@@ -113,7 +113,7 @@
                                         CornerRadius="8" />
 
                                 <Button Text="✕"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FlashcardsCollectionsViewModel}}, Path=DeleteCollectionCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CollectionsViewModel}}, Path=DeleteCollectionCommand}"
                                         CommandParameter="{Binding .}"
                                         FontSize="14"
                                         WidthRequest="36"
@@ -124,7 +124,7 @@
                                         CornerRadius="8" />
 
                                 <Button Text="{loc:Translate Learn}"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FlashcardsCollectionsViewModel}}, Path=GoToLearningCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CollectionsViewModel}}, Path=GoToLearningCommand}"
                                         CommandParameter="{Binding .}"
                                         FontSize="12"
                                         FontAttributes="Bold"

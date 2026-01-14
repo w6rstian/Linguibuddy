@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
+             xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             xmlns:models="clr-namespace:Linguibuddy.Models"
+             x:Class="Linguibuddy.Views.CollectionDetailsPage"
+             x:DataType="vm:CollectionDetailsViewModel"
+             Title="{loc:Translate EditCollection}">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <Border Grid.Row="0"
+                Margin="20,15"
+                StrokeShape="RoundRectangle 12"
+                Padding="15"
+                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}"
+                Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray400}}"
+                StrokeThickness="1">
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,2" Radius="5" Opacity="0.05" />
+            </Border.Shadow>
+
+            <Grid ColumnDefinitions="*, Auto">
+                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                    <Label Text="{Binding Collection.Name}"
+                           FontAttributes="Bold"
+                           FontSize="22"
+                           LineBreakMode="TailTruncation"
+                           TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                    <Label Text="{Binding Items.Count, StringFormat='{0} items'}"
+                           FontSize="13"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
+                </VerticalStackLayout>
+
+                <Button Grid.Column="1"
+                        Text="{loc:Translate Edit}"
+                        Command="{Binding RenameCollectionCommand}"
+                        FontSize="14"
+                        HeightRequest="40"
+                        CornerRadius="8"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Items}"
+                        Margin="20,0,20,20"
+                        SelectionMode="None">
+            
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:CollectionItem">
+                    <Border StrokeShape="RoundRectangle 10"
+                            Padding="12"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                            Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                            StrokeThickness="1">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding Word}"
+                                       FontAttributes="Bold"
+                                       FontSize="16"
+                                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                                <Label Text="{Binding SavedTranslation}"
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="✕"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CollectionDetailsViewModel}}, Path=DeleteItemCommand}"
+                                    CommandParameter="{Binding .}"
+                                    WidthRequest="36"
+                                    HeightRequest="36"
+                                    Padding="0"
+                                    BackgroundColor="{AppThemeBinding Light=#FFEBEE, Dark=#3E2723}"
+                                    TextColor="Red"
+                                    CornerRadius="18"
+                                    VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+            <CollectionView.EmptyView>
+                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10" Margin="0, 50, 0, 0">
+                    <Label Text="Brak słówek w kolekcji"
+                           FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"
+                           TextColor="{StaticResource Gray500}" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
+
+</ContentPage>

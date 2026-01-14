@@ -137,6 +137,12 @@ public class CollectionService : ICollectionService
         await _context.SaveChangesAsync();
     }
 
+    public async Task DeleteCollectionItemAsync(CollectionItem item)
+    {
+        _context.CollectionItems.Remove(item);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<List<string>> GetWordsWithImagesFromCollectionAsync(int collectionId)
     {
         return await _context.CollectionItems

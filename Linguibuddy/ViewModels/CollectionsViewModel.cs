@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,13 +10,13 @@ using Linguibuddy.Views;
 
 namespace Linguibuddy.ViewModels;
 
-public partial class FlashcardsCollectionsViewModel : ObservableObject
+public partial class CollectionsViewModel : ObservableObject
 {
     private readonly ICollectionService _collectionService;
 
     [ObservableProperty] private bool _isSpacedRepetitionEnabled;
 
-    public FlashcardsCollectionsViewModel(ICollectionService collectionService)
+    public CollectionsViewModel(ICollectionService collectionService)
     {
         _collectionService = collectionService;
     }
@@ -59,22 +59,12 @@ public partial class FlashcardsCollectionsViewModel : ObservableObject
     {
         if (collection == null) return;
 
-        var result = await Shell.Current.DisplayPromptAsync(
-            AppResources.EditCollection,
-            $"{AppResources.Rename} :",
-            AppResources.Save, AppResources.Cancel,
-            initialValue: collection.Name);
-
-        if (!string.IsNullOrWhiteSpace(result) && result != collection.Name)
+        var navigationParameter = new Dictionary<string, object>
         {
-            await _collectionService.RenameCollectionAsync(collection, result);
+            { "Collection", collection }
+        };
 
-            // jesli wordcollection nie jest observable, to trzeba odświeżyć listę (i tk się nie zmienia dziadostwo)
-            //await LoadCollections();
-
-            // jesli jest observable, to wystarczy zmienić nazwę (nie wiem czy tak się robi ale działa)
-            collection.Name = result;
-        }
+        await Shell.Current.GoToAsync(nameof(CollectionDetailsPage), navigationParameter);
     }
 
     [RelayCommand]

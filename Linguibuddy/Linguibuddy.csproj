@@ -234,7 +234,7 @@
 	  <MauiXaml Update="Views\DictionaryPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\FlashcardsCollectionsPage.xaml">
+	  <MauiXaml Update="Views\CollectionsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HangmanPage.xaml">

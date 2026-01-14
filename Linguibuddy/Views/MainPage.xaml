@@ -61,7 +61,7 @@
                         HorizontalOptions="Fill" />
 
                     <Button
-                        Text="{loc:Translate Flashcards}"
+                        Text="{loc:Translate Collections}"
                         FontSize="Medium"
                         Command="{Binding NavigateToFlashcardsCommand}"
                         Padding="40,10"
