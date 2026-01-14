@@ -42,6 +42,8 @@ public partial class AchievementsViewModel : ObservableObject
             else
                 isNewType = false;
 
+            lastType = achievement.Achievement.UnlockCondition;
+
             if (achievement.IsUnlocked)
             {
                 wasLastUnlocked = true;
