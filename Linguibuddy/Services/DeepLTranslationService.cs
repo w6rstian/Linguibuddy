@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
 using DeepL;
+using Linguibuddy.Interfaces;
 
 namespace Linguibuddy.Services;
 
-public class DeepLTranslationService
+public class DeepLTranslationService : IDeepLTranslationService
 {
     private readonly DeepLClient _client;
 

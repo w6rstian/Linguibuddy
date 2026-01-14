@@ -7,15 +7,16 @@ using Linguibuddy.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Linguibuddy.Interfaces;
 
 namespace Linguibuddy.ViewModels;
 
 [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
 public partial class SentenceQuizViewModel : BaseQuizViewModel
 {
-    private readonly AppUserService _appUserService;
-    private readonly OpenAiService _openAiService;
-    private readonly ScoringService _scoringService;
+    private readonly IAppUserService _appUserService;
+    private readonly IOpenAiService _openAiService;
+    private readonly IScoringService _scoringService;
     private List<CollectionItem> allWords;
     private Random random = Random.Shared;
 
@@ -41,8 +42,8 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
     [ObservableProperty] private CollectionItem? _targetWord;
 
-    public SentenceQuizViewModel(OpenAiService openAiService, ScoringService scoringService,
-        AppUserService appUserService)
+    public SentenceQuizViewModel(IOpenAiService openAiService, IScoringService scoringService,
+        IAppUserService appUserService)
     {
         _openAiService = openAiService;
         _scoringService = scoringService;

@@ -1,11 +1,12 @@
 ﻿using Firebase.Auth;
 using Linguibuddy.Data;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Linguibuddy.Services;
 
-public class CollectionService
+public class CollectionService : ICollectionService
 {
     private readonly FirebaseAuthClient _authClient;
     private readonly DataContext _context;

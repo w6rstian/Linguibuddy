@@ -1,8 +1,9 @@
-﻿using Linguibuddy.Models;
+﻿using Linguibuddy.Interfaces;
+using Linguibuddy.Models;
 
 namespace Linguibuddy.Services;
 
-public class SpacedRepetitionService
+public class SpacedRepetitionService : ISpacedRepetitionService
 {
     // grade: 0-5 (jakość odpowiedzi)
     public void ProcessResult(Flashcard card, int grade)

@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
@@ -16,8 +17,8 @@ public enum LearningMode
 [QueryProperty(nameof(CurrentLearningMode), "Mode")]
 public partial class FlashcardsViewModel : ObservableObject
 {
-    private readonly CollectionService _collectionService;
-    private readonly SpacedRepetitionService _srsService;
+    private readonly ICollectionService _collectionService;
+    private readonly ISpacedRepetitionService _srsService;
 
     [ObservableProperty] private WordCollection? _collection;
 
@@ -36,7 +37,7 @@ public partial class FlashcardsViewModel : ObservableObject
 
     private Queue<CollectionItem> _itemsQueue = new();
 
-    public FlashcardsViewModel(CollectionService collectionService, SpacedRepetitionService srsService)
+    public FlashcardsViewModel(ICollectionService collectionService, ISpacedRepetitionService srsService)
     {
         _collectionService = collectionService;
         _srsService = srsService;
@@ -201,7 +202,7 @@ public partial class FlashcardsViewModel : ObservableObject
     {
         if (CurrentItem != null)
         {
-            // postÍp w bazie (øe uøytkownik juø umie to s≥owo)
+            // postƒôp w bazie (≈ºe u≈ºytkownik ju≈º umie to s≈Çowo)
             //CurrentItem.IsLearned = true;
             // await _collectionService.UpdateItemAsync(CurrentItem);
         }

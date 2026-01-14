@@ -4,7 +4,7 @@ using Linguibuddy.Models;
 
 namespace Linguibuddy.Services;
 
-public class LearningService
+public class LearningService : ILearningService
 {
     private readonly IAppUserRepository _appUserRepo;
     private readonly AppUserService _appUserService;

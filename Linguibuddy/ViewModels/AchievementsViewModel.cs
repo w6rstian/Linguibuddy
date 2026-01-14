@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Services;
 
@@ -8,13 +9,13 @@ namespace Linguibuddy.ViewModels;
 
 public partial class AchievementsViewModel : ObservableObject
 {
-    private readonly AchievementService _achievementService;
+    private readonly IAchievementService _achievementService;
 
     [ObservableProperty] private ObservableCollection<UserAchievement> achievements = new(); // Lista do bindowania
 
     [ObservableProperty] private bool isLoading = true; // Do pokazywania loadera
 
-    public AchievementsViewModel(AchievementService achievementService)
+    public AchievementsViewModel(IAchievementService achievementService)
     {
         _achievementService = achievementService;
     }

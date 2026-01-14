@@ -93,26 +93,26 @@ public static class MauiProgram
 
         builder.Services.AddSingleton(AudioManager.Current);
         builder.Services.AddSingleton(SpeechToText.Default);
-        builder.Services.AddSingleton(new DeepLTranslationService(deepLKey));
-        builder.Services.AddSingleton(new OpenAiService(githubAiKey));
+        builder.Services.AddSingleton<IDeepLTranslationService>(new DeepLTranslationService(deepLKey));
+        builder.Services.AddSingleton<IOpenAiService>(new OpenAiService(githubAiKey));
         builder.Services.AddTransient<MockDataSeeder>();
-        builder.Services.AddTransient<CollectionService>();
-        builder.Services.AddTransient<SpacedRepetitionService>();
-        builder.Services.AddTransient<AchievementService>();
+        builder.Services.AddTransient<ICollectionService, CollectionService>();
+        builder.Services.AddTransient<ISpacedRepetitionService, SpacedRepetitionService>();
+        builder.Services.AddTransient<IAchievementService, AchievementService>();
         builder.Services.AddTransient<IUserLearningDayRepository, UserLearningDayRepository>();
         builder.Services.AddTransient<IAppUserRepository, AppUserRepository>();
-        builder.Services.AddTransient<LearningService>();
-        builder.Services.AddTransient<AppUserService>();
-        builder.Services.AddTransient<ScoringService>();
+        builder.Services.AddTransient<ILearningService, LearningService>();
+        builder.Services.AddTransient<IAppUserService, AppUserService>();
+        builder.Services.AddTransient<IScoringService, ScoringService>();
 
 
-        builder.Services.AddHttpClient<DictionaryApiService>(client =>
+        builder.Services.AddHttpClient<IDictionaryApiService, DictionaryApiService>(client =>
         {
             client.BaseAddress = new Uri("https://api.dictionaryapi.dev/api/v2/entries/en/");
         });
 
         builder.Services.AddSingleton<PexelsClient>(sp => new PexelsClient(pexelsApiKey));
-        builder.Services.AddSingleton<PexelsImageService>();
+        builder.Services.AddSingleton<IPexelsImageService, PexelsImageService>();
 
         builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig
         {

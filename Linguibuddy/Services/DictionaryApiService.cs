@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics;
 using Linguibuddy.Data;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Linguibuddy.Services;
 
-public class DictionaryApiService
+public class DictionaryApiService : IDictionaryApiService
 {
     private readonly DataContext _context;
     private readonly HttpClient _httpClient;

@@ -3,6 +3,7 @@ using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
@@ -13,10 +14,10 @@ namespace Linguibuddy.ViewModels;
 
 public partial class MiniGamesViewModel : ObservableObject
 {
-    private readonly CollectionService _collectionService;
+    private readonly ICollectionService _collectionService;
     private readonly IPopupService _popupService;
 
-    public MiniGamesViewModel(CollectionService collectionService, IPopupService popupService)
+    public MiniGamesViewModel(ICollectionService collectionService, IPopupService popupService)
     {
         _collectionService = collectionService;
         _popupService = popupService;

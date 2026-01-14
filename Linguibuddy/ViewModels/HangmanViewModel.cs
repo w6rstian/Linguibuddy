@@ -1,6 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Text;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
@@ -15,8 +19,8 @@ namespace Linguibuddy.ViewModels;
 public partial class HangmanViewModel : BaseQuizViewModel
 {
     private const int MaxMistakes = 6;
-    private readonly ScoringService _scoringService;
-    private readonly AppUserService _appUserService;
+    private readonly IScoringService _scoringService;
+    private readonly IAppUserService _appUserService;
     private List<CollectionItem> allWords;
     private Random random = Random.Shared;
 
@@ -39,7 +43,7 @@ public partial class HangmanViewModel : BaseQuizViewModel
 
     [ObservableProperty] private WordCollection? _selectedCollection;
 
-    public HangmanViewModel(ScoringService scoringService, AppUserService appUserService)
+    public HangmanViewModel(IScoringService scoringService, IAppUserService appUserService)
     {
         _scoringService = scoringService;
         _appUserService = appUserService;

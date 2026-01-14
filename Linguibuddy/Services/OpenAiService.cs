@@ -1,12 +1,13 @@
 ﻿using System.ClientModel;
 using System.Diagnostics;
+using Linguibuddy.Interfaces;
 using Newtonsoft.Json;
 using OpenAI;
 using OpenAI.Chat;
 
 namespace Linguibuddy.Services;
 
-public class OpenAiService
+public class OpenAiService : IOpenAiService
 {
     // gpt-4o-mini jest jednym z najtańszych, można będzie przetestować inne
     private const string Model = "openai/gpt-4.1-mini";

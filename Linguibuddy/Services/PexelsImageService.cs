@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
+using Linguibuddy.Interfaces;
 using PexelsDotNetSDK.Api;
 // Namespace z paczki NuGet
 
 namespace Linguibuddy.Services;
 
-public class PexelsImageService
+public class PexelsImageService : IPexelsImageService
 {
     private readonly PexelsClient _pexelsClient;
 

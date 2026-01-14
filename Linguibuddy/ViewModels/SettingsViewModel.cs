@@ -1,9 +1,12 @@
 ﻿using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Firebase.Auth;
 using Linguibuddy.Helpers;
-using Linguibuddy.Resources.Strings;
+using Linguibuddy.Interfaces;
+using Linguibuddy.Models;
 using Linguibuddy.Services;
+using Linguibuddy.Views;
 using LocalizationResourceManager.Maui;
 
 namespace Linguibuddy.ViewModels;
@@ -12,7 +15,7 @@ public partial class SettingsViewModel : ObservableObject
 {
     private static readonly CultureInfo English = CultureInfo.GetCultureInfo("en");
     private static readonly CultureInfo Polish = CultureInfo.GetCultureInfo("pl");
-    private readonly AppUserService _appUserService;
+    private readonly IAppUserService _appUserService;
     private readonly ILocalizationResourceManager _resourceManager;
 
     [ObservableProperty] private DifficultyLevel _selectedDifficulty;
@@ -21,9 +24,7 @@ public partial class SettingsViewModel : ObservableObject
 
     [ObservableProperty] private string _themeName;
 
-    [ObservableProperty] private string _translationApiName;
-
-    public SettingsViewModel(ILocalizationResourceManager resourceManager, AppUserService appUserService)
+    public SettingsViewModel(ILocalizationResourceManager resourceManager, IAppUserService appUserService)
     {
         _resourceManager = resourceManager;
         _appUserService = appUserService;

@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
 using Linguibuddy.Helpers;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 
 namespace Linguibuddy.Services;
 
-public class ScoringService
+public class ScoringService : IScoringService
 {
     private readonly AppUserService _appUserService;
 

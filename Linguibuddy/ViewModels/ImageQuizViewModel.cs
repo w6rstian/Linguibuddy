@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
@@ -13,9 +14,9 @@ namespace Linguibuddy.ViewModels;
 [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
 public partial class ImageQuizViewModel : BaseQuizViewModel
 {
-    private readonly CollectionService _collectionService;
-    private readonly ScoringService _scoringService;
-    private readonly AppUserService _appUserService;
+    private readonly ICollectionService _collectionService;
+    private readonly IScoringService _scoringService;
+    private readonly IAppUserService _appUserService;
     private List<CollectionItem> allWords;
     private Random random = Random.Shared;
 
@@ -32,7 +33,7 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
 
     [ObservableProperty] private CollectionItem? _targetWord;
 
-    public ImageQuizViewModel(CollectionService collectionService, ScoringService scoringService, AppUserService appUserService)
+    public ImageQuizViewModel(ICollectionService collectionService, IScoringService scoringService, IAppUserService appUserService)
     {
         _collectionService = collectionService;
         _scoringService = scoringService;

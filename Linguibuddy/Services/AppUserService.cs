@@ -5,7 +5,7 @@ using Linguibuddy.Models;
 
 namespace Linguibuddy.Services;
 
-public class AppUserService
+public class AppUserService : IAppUserService
 {
     private readonly IAppUserRepository _appUsers;
     private readonly FirebaseAuthClient _authClient;

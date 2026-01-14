@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Services;
 
@@ -8,16 +9,14 @@ namespace Linguibuddy.ViewModels;
 
 public partial class WordCollectionPopupViewModel : ObservableObject
 {
-    private readonly CollectionService _collectionService;
-
-
+    private readonly ICollectionService _collectionService;
     private readonly IPopupService _popupService;
 
     [ObservableProperty] private IEnumerable<WordCollection> _collections;
 
     [ObservableProperty] private WordCollection _selectedCollection;
 
-    public WordCollectionPopupViewModel(CollectionService collectionService, IPopupService popupService)
+    public WordCollectionPopupViewModel(ICollectionService collectionService, IPopupService popupService)
     {
         _collectionService = collectionService;
         _popupService = popupService;
