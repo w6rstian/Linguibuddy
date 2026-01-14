@@ -394,7 +394,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Install &apos;English (United States)&apos; in Windows settings..
+        ///   Looks up a localized string similar to Install english language in Windows settings..
         /// </summary>
         internal static string InstallEng {
             get {
@@ -565,7 +565,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No results found 😞.
+        ///   Looks up a localized string similar to No results found.
         /// </summary>
         internal static string NoResultsFoundText {
             get {

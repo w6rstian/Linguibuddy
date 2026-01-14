@@ -9,7 +9,7 @@
              x:DataType="vm:DictionaryViewModel"
              Title="{loc:Translate Dictionary}">
 
-    <Grid RowDefinitions="Auto, Auto, *" RowSpacing="15" Padding="0,10,0,0">
+    <Grid RowDefinitions="Auto, Auto, Auto, *" RowSpacing="15" Padding="0,10,0,0">
 
         <Grid ColumnDefinitions="*, Auto" Margin="20,5">
             <Entry Text="{Binding InputText}"
@@ -19,13 +19,28 @@
                    ClearButtonVisibility="WhileEditing"
                    BackgroundColor="Transparent" />
 
-            <ActivityIndicator IsRunning="{Binding IsLoading}"
-                               IsVisible="{Binding IsLoading}"
-                               Grid.Column="1"
-                               HeightRequest="20"
-                               WidthRequest="20"
-                               VerticalOptions="Center"
-                               Margin="5,0,0,0" />
+            <ImageButton Grid.Column="1"
+                         Command="{Binding LookupWordCommand}"
+                         IsEnabled="{Binding IsLoading, Converter={toolkit:InvertedBoolConverter}}"
+                         BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                         Source="{AppThemeBinding Light=search_100dp_light.png, Dark=search_100dp_dark.png}"
+                         HeightRequest="44"
+                         WidthRequest="44"
+                         CornerRadius="15"
+                         Padding="10"
+                         VerticalOptions="Center"
+                         Margin="10,0,0,0">
+                <ImageButton.Shadow>
+                    <Shadow Brush="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            Offset="0,4" Radius="8" Opacity="0.4" />
+                </ImageButton.Shadow>
+
+                <ImageButton.Triggers>
+                    <DataTrigger TargetType="ImageButton" Binding="{Binding IsLoading}" Value="True">
+                        <Setter Property="Opacity" Value="0.5" />
+                    </DataTrigger>
+                </ImageButton.Triggers>
+            </ImageButton>
         </Grid>
 
         <Grid Grid.Row="1" ColumnDefinitions="Auto, *" Margin="20,0" ColumnSpacing="15">
@@ -49,10 +64,20 @@
             </Border>
         </Grid>
 
-        <CollectionView Grid.Row="2"
+        <ActivityIndicator Grid.Row="2"
+                           IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           HeightRequest="40"
+                           WidthRequest="40"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Margin="0,20,0,0" />
+
+        <CollectionView Grid.Row="3"
                         ItemsSource="{Binding SearchResults}"
                         Margin="20,10,20,0"
-                        SelectionMode="None">
+                        SelectionMode="None"
+                        IsVisible="{Binding IsLoading, Converter={toolkit:InvertedBoolConverter}}">
 
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Vertical" ItemSpacing="15" />
@@ -82,7 +107,6 @@
 
                                     <ImageButton
                                         Source="{AppThemeBinding Light=text_to_speech_24dp_light.png, Dark=text_to_speech_24dp_dark.png}"
-                                        IsVisible="{Binding HasAudio}"
                                         HeightRequest="40"
                                         WidthRequest="40"
                                         Aspect="AspectFit"
@@ -90,7 +114,7 @@
                                         VerticalOptions="Center"
                                         BackgroundColor="Transparent"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=PlayAudioCommand}"
-                                        CommandParameter="{Binding AudioUrl}">
+                                        CommandParameter="{Binding .}">
                                         <ImageButton.Shadow>
                                             <Shadow Brush="Black" Opacity="0.2" Radius="2" Offset="1,1" />
                                         </ImageButton.Shadow>

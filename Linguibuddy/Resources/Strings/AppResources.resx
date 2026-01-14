@@ -136,7 +136,7 @@
     <value>English</value>
   </data>
   <data name="NoResultsFoundText" xml:space="preserve">
-    <value>No results found 😞</value>
+    <value>No results found</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>Collections</value>
@@ -348,7 +348,7 @@
     <value>Listening...</value>
   </data>
   <data name="InstallEng" xml:space="preserve">
-    <value>Install 'English (United States)' in Windows settings.</value>
+    <value>Install english language in Windows settings.</value>
   </data>
   <data name="OnlineSpeech" xml:space="preserve">
     <value>Enable 'Online Speech Recognition' in Windows settings.</value>

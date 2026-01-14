@@ -49,7 +49,18 @@ public partial class SettingsViewModel : ObservableObject
 
     partial void OnSelectedDifficultyChanged(DifficultyLevel value)
     {
-        Preferences.Default.Set(Constants.DifficultyLevelKey, (int)value);
+        //Preferences.Default.Set(Constants.DifficultyLevelKey, (int)value);
+        Task.Run(async () =>
+        {
+            try
+            {
+                await _appUserService.SetUserDifficultyAsync(value);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Błąd zapisu poziomu trudności: {ex.Message}");
+            }
+        });
     }
 
     private async Task LoadDifficultyAsync()

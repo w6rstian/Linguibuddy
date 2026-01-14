@@ -132,8 +132,7 @@
                                IsRunning="{Binding IsBusy}"
                                IsVisible="{Binding IsBusy}"
                                HorizontalOptions="Center"
-                               VerticalOptions="Center"
-                               Color="{StaticResource Primary}" />
+                               VerticalOptions="Center"/>
         </Grid>
     </Grid>
 </ContentPage>

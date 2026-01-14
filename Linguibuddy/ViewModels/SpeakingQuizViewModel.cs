@@ -19,6 +19,8 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     private readonly ScoringService _scoringService;
     private readonly ISpeechToText _speechToText;
 
+    private CancellationTokenSource? _ttsCts;
+
     private DifficultyLevel _currentDifficulty;
     [ObservableProperty] private List<CollectionItem> _hasAppeared;
 
@@ -61,13 +63,14 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
 
     public override async Task LoadQuestionAsync()
     {
+        StopTTS();
+        await ForceStopListening();
+
         _currentDifficulty = await _appUserService.GetUserDifficultyAsync();
 
         if (IsBusy) return;
         IsBusy = true;
         IsAnswered = false;
-
-        await ForceStopListening();
 
         FeedbackMessage = string.Empty;
         FeedbackColor = Colors.Transparent;
@@ -127,7 +130,11 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         finally
         {
             IsBusy = false;
-            if (!IsFinished) RecognizedText = AppResources.SentenceRead;
+            if (!IsFinished)
+            {
+                RecognizedText = AppResources.SentenceRead;
+                _ = ReadTargetSentence(TargetSentence);
+            }
         }
     }
 
@@ -135,6 +142,8 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     private async Task StartListening()
     {
         if (IsListening || IsAnswered) return;
+
+        StopTTS();
 
         var isGranted = await _speechToText.RequestPermissions(CancellationToken.None);
         if (!isGranted)
@@ -189,6 +198,90 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         }
     }
 
+    // do odtworzenia TTS na razie niepotrzebne
+    [RelayCommand]
+    public async Task PlayAudio()
+    {
+        if (!string.IsNullOrEmpty(TargetSentence))
+        {
+            await ReadTargetSentence(TargetSentence);
+        }
+    }
+
+    [RelayCommand]
+    public async Task ReadTargetSentence(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return;
+
+        // zatrzymanie mikrofonu
+        if (IsListening)
+        {
+            await StopListening();
+        }
+
+        StopTTS();
+
+        _ttsCts = new CancellationTokenSource();
+
+        try
+        {
+            var locales = await TextToSpeech.Default.GetLocalesAsync();
+            string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
+            // preferowany język US i GB na Android i Windows
+            var preferred = locales.FirstOrDefault(l =>
+                                (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
+                                femaleVoices.Any(f => l.Name.Contains(f)))
+                            ?? locales.FirstOrDefault(l =>
+                                (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
+                                femaleVoices.Any(f => l.Name.Contains(f)))
+                            ?? locales.FirstOrDefault(l =>
+                                l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
+                            // inne głosy
+                            ?? locales.FirstOrDefault(l =>
+                                l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
+                            ?? locales.FirstOrDefault(l =>
+                                l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
+                            ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
+
+            if (preferred == null)
+            {
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.InstallEng, "OK");
+                return;
+            }
+
+            await TextToSpeech.Default.SpeakAsync(text, new SpeechOptions
+            {
+                Locale = preferred,
+                Pitch = 1.0f,
+                Volume = 1.0f
+            }, cancelToken: _ttsCts.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.WriteLine("Mowa została przerwana.");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"TTS Error: {ex.Message}");
+        }
+        finally
+        {
+            if (_ttsCts != null)
+            {
+                _ttsCts.Dispose();
+                _ttsCts = null;
+            }
+        }
+    }
+
+    public void StopTTS()
+    {
+        if (_ttsCts != null && !_ttsCts.IsCancellationRequested)
+        {
+            _ttsCts.Cancel();
+        }
+    }
+
     private async Task ForceStopListening()
     {
         try
@@ -197,6 +290,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         }
         catch
         {
+            // ignored
         }
 
         _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;

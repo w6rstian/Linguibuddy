@@ -29,8 +29,6 @@ public partial class SearchResultItem : ObservableObject
     public DictionaryWord? SourceWordObject { get; set; }
 
     public bool ShowTranslateButton => string.IsNullOrEmpty(Translation) && !IsBusy;
-
-    public bool HasAudio => !string.IsNullOrWhiteSpace(AudioUrl);
 }
 
 public partial class DictionaryViewModel : ObservableObject
@@ -101,6 +99,7 @@ public partial class DictionaryViewModel : ObservableObject
             var entry = await _dictionaryService.GetEnglishWordAsync(word);
 
             if (entry != null)
+            {
                 foreach (var meaning in entry.Meanings)
                 foreach (var def in meaning.Definitions)
                     SearchResults.Add(new SearchResultItem
@@ -116,9 +115,31 @@ public partial class DictionaryViewModel : ObservableObject
 
                         SourceWordObject = entry
                     });
+            }
+            else
+            {
+                if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+                {
+                    await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert(AppResources.Dictionary, AppResources.NoResultsFoundText, "OK");
+                }
+            }
+                
         }
         catch (Exception ex)
         {
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
+            }
+
             Debug.WriteLine($"Error: {ex.Message}");
         }
         finally
@@ -128,33 +149,61 @@ public partial class DictionaryViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task PlayAudio(string url)
+    public async Task PlayAudio(SearchResultItem item)
     {
-        if (string.IsNullOrWhiteSpace(url)) return;
+        if (item == null) return;
 
-        if (_audioPlayer != null && _audioPlayer.IsPlaying) _audioPlayer.Dispose();
+        if (!string.IsNullOrWhiteSpace(item.AudioUrl))
+        {
+            if (_audioPlayer != null && _audioPlayer.IsPlaying) _audioPlayer.Dispose();
+
+            try
+            {
+                using var client = new HttpClient();
+                var audioBytes = await client.GetByteArrayAsync(item.AudioUrl);
+                var fileName = "temp_pronunciation.mp3";
+                var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+                await File.WriteAllBytesAsync(filePath, audioBytes);
+                var fileStream = File.OpenRead(filePath);
+
+                _audioPlayer = _audioManager.CreatePlayer(fileStream);
+                _audioPlayer.Play();
+                _audioPlayer.PlaybackEnded += (s, e) => { fileStream.Dispose(); };
+                return;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Audio file failed, falling back to TTS. Error: {ex.Message}");
+            }
+        }
 
         try
         {
-            using var client = new HttpClient();
-            var audioBytes = await client.GetByteArrayAsync(url);
+            var locales = await TextToSpeech.Default.GetLocalesAsync();
 
-            var fileName = "temp_pronunciation.mp3";
-            var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+            // preferowany język US i GB na Android i Windows
+            var preferred = locales.FirstOrDefault(l =>
+                                l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
+                                ?? locales.FirstOrDefault(l =>
+                                    l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
+                                ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
 
-            await File.WriteAllBytesAsync(filePath, audioBytes);
+            if (preferred == null)
+            {
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.InstallEng, "OK");
+                return;
+            }
 
-            var fileStream = File.OpenRead(filePath);
-
-            _audioPlayer = _audioManager.CreatePlayer(fileStream);
-            _audioPlayer.Play();
-
-            _audioPlayer.PlaybackEnded += (s, e) => { fileStream.Dispose(); };
+            await TextToSpeech.Default.SpeakAsync(item.Word, new SpeechOptions
+            {
+                Locale = preferred,
+                Pitch = 1.0f,
+                Volume = 1.0f
+            });
         }
         catch (Exception ex)
         {
             await Shell.Current.DisplayAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
-            Debug.WriteLine($"Audio Error: {ex.Message}");
         }
     }
 
