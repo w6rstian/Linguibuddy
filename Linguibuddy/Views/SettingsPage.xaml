@@ -82,9 +82,16 @@
         </Grid>
 
         <Picker Title="{loc:Translate PreferredDifficulty}"
+                TitleColor="{AppThemeBinding Light=Black, Dark=White}"
                 MaximumWidthRequest="250"
                 ItemsSource="{Binding AvailableDifficulties}"
-                SelectedItem="{Binding SelectedDifficulty}" />
+                SelectedItem="{Binding SelectedDifficulty}"/>
+
+        <Picker Title="{loc:Translate PreferredMaxLessonLength}"
+                TitleColor="{AppThemeBinding Light=Black, Dark=White}"
+                MaximumWidthRequest="250"
+                ItemsSource="{Binding AvailableLessonLengths}"
+                SelectedItem="{Binding SelectedLessonLength}" />
 
     </VerticalStackLayout>
 </ContentPage>

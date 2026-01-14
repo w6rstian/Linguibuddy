@@ -17,6 +17,8 @@ public partial class SettingsViewModel : ObservableObject
 
     [ObservableProperty] private DifficultyLevel _selectedDifficulty;
 
+    [ObservableProperty] private int _selectedLessonLength;
+
     [ObservableProperty] private string _themeName;
 
     [ObservableProperty] private string _translationApiName;
@@ -33,10 +35,17 @@ public partial class SettingsViewModel : ObservableObject
         //LoadDifficulty();
 
         Task.Run(LoadDifficultyAsync);
+        Task.Run(LoadLessonLengthAsync);
     }
 
     public IReadOnlyList<DifficultyLevel> AvailableDifficulties { get; }
         = Enum.GetValues(typeof(DifficultyLevel)).Cast<DifficultyLevel>().ToList();
+
+    public IReadOnlyList<int> AvailableLessonLengths { get; }
+        = new List<int>
+        {
+            10, 20, 50, 100
+        };
 
     partial void OnSelectedDifficultyChanged(DifficultyLevel value)
     {
@@ -48,6 +57,12 @@ public partial class SettingsViewModel : ObservableObject
         var level = await _appUserService.GetUserDifficultyAsync();
         // Musimy to zrobić na głównym wątku, bo aktualizujemy UI
         MainThread.BeginInvokeOnMainThread(() => { SelectedDifficulty = level; });
+    }
+
+    private async Task LoadLessonLengthAsync()
+    {
+        var length = await _appUserService.GetUserLessonLengthAsync();
+        MainThread.BeginInvokeOnMainThread(() => { SelectedLessonLength = length; });
     }
 
     /*
@@ -123,7 +138,7 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     public void ChangeTranslationApi()
     {
-        var currentApiInt = Preferences.Default.Get(Constants.TranslationApiKey, (int)TranslationProvider.DeepL);
+        var currentApiInt = Preferences.Default.Get(Constants.TranslationApiKey, (int)TranslationProvider.OpenAi);
         var currentProvider = (TranslationProvider)currentApiInt;
 
         var newProvider = currentProvider == TranslationProvider.DeepL
@@ -137,7 +152,7 @@ public partial class SettingsViewModel : ObservableObject
 
     private void UpdateApiName()
     {
-        var currentApiInt = Preferences.Default.Get(Constants.TranslationApiKey, (int)TranslationProvider.DeepL);
+        var currentApiInt = Preferences.Default.Get(Constants.TranslationApiKey, (int)TranslationProvider.OpenAi);
         var provider = (TranslationProvider)currentApiInt;
 
         TranslationApiName = provider == TranslationProvider.OpenAi
