@@ -432,4 +432,7 @@
   <data name="DatabaseError" xml:space="preserve">
     <value>Błąd bazy danych</value>
   </data>
+  <data name="NoCollections" xml:space="preserve">
+    <value>Brak kolekcji do wyświetlenia.</value>
+  </data>
 </root>

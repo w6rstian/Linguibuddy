@@ -547,6 +547,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No collections found..
+        /// </summary>
+        internal static string NoCollections {
+            get {
+                return ResourceManager.GetString("NoCollections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No flashcards to learn.
         /// </summary>
         internal static string NoFlashcardsToLearn {

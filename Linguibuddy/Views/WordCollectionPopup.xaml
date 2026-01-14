@@ -27,6 +27,11 @@ Stroke="{StaticResource PrimaryBrush}"-->
 
                     <CollectionView
                         ItemsSource="{Binding Collections}">
+                        <CollectionView.EmptyView>
+                            <Label
+                                Text="{loc:Translate NoCollections}"
+                                TextColor="{AppThemeBinding Light=Black, Dark=White}" />
+                        </CollectionView.EmptyView>
 
                         <CollectionView.ItemTemplate>
                             <DataTemplate>

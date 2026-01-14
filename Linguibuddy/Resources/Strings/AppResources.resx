@@ -435,4 +435,7 @@
   <data name="DatabaseError" xml:space="preserve">
     <value>Database error</value>
   </data>
+  <data name="NoCollections" xml:space="preserve">
+    <value>No collections found.</value>
+  </data>
 </root>
