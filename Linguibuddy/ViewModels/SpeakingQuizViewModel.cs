@@ -1,12 +1,13 @@
-﻿using System.Diagnostics;
-using System.Globalization;
-using CommunityToolkit.Maui.Media;
+﻿using CommunityToolkit.Maui.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
+using System;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace Linguibuddy.ViewModels;
 
@@ -18,6 +19,8 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     private readonly OpenAiService _openAiService;
     private readonly ScoringService _scoringService;
     private readonly ISpeechToText _speechToText;
+    private List<CollectionItem> allWords;
+    private Random random = Random.Shared;
 
     private CancellationTokenSource? _ttsCts;
 
@@ -61,6 +64,17 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     public bool IsLearning => !IsFinished;
     public bool IsNotListening => !IsListening;
 
+    public async Task ImportCollectionAsync()
+    {
+        if (SelectedCollection is null || !SelectedCollection.Items.Any())
+            return;
+
+        allWords = SelectedCollection.Items
+                .OrderBy(_ => random.Next())
+                .Take(await _appUserService.GetUserLessonLengthAsync())
+                .ToList();
+    }
+
     public override async Task LoadQuestionAsync()
     {
         StopTTS();
@@ -93,7 +107,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            var validWords = SelectedCollection.Items.Except(HasAppeared).ToList();
+            var validWords = allWords.Except(HasAppeared).ToList();
 
             if (validWords.Count == 0)
             {
@@ -101,7 +115,6 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            var random = Random.Shared;
             TargetWord = validWords[random.Next(validWords.Count)];
 
             //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
@@ -375,7 +388,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
                     SelectedCollection,
                     GameType.SpeakingQuiz,
                     Score,
-                    SelectedCollection.Items.Count,
+                    allWords.Count,
                     PointsEarned
                 );
     }
