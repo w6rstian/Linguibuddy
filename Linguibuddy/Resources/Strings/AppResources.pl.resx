@@ -391,7 +391,7 @@
     <value>Przetłumacz zdanie:</value>
   </data>
   <data name="PreferredDifficulty" xml:space="preserve">
-    <value>Preferred difficulty level</value>
+    <value>Preferowany poziom trudności</value>
   </data>
   <data name="SignIn" xml:space="preserve">
     <value>Zaloguj</value>
@@ -425,5 +425,11 @@
   </data>
   <data name="Listen" xml:space="preserve">
     <value>Słuchaj</value>
+  </data>
+  <data name="PreferredMaxLessonLength" xml:space="preserve">
+    <value>Preferowana długość lekcji</value>
+  </data>
+  <data name="DatabaseError" xml:space="preserve">
+    <value>Błąd bazy danych</value>
   </data>
 </root>

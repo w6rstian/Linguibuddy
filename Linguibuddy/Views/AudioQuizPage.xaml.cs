@@ -15,6 +15,7 @@ public partial class AudioQuizPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        await _viewModel.ImportCollectionAsync();
         await _viewModel.LoadQuestionAsync();
     }
 }

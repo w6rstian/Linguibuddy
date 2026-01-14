@@ -17,6 +17,8 @@ public class AppUser
 
     public int BestLearningStreak { get; set; } = 0;
 
+    public int LessonLength { get; set; } = 10;
+
     public ICollection<UserLearningDay> LearningDays { get; set; } = new List<UserLearningDay>();
     public ICollection<UserAchievement> UserAchievements { get; set; } = new List<UserAchievement>();
 }

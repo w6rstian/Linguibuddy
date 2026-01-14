@@ -62,6 +62,28 @@ public class AppUserService
         await _appUsers.SaveChangesAsync();
     }
 
+    public async Task<int> GetUserLessonLengthAsync()
+    {
+        if (_appUser is null)
+        {
+            _appUser = await _appUsers.GetByIdAsync(_currentUserId);
+
+            if (_appUser is null) return 10;
+        }
+
+        return _appUser.LessonLength;
+    }
+
+    public async Task SetUserLessonLengthAsync(int length)
+    {
+        if (_appUser is null)
+            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                       ?? throw new Exception("User not found");
+
+        _appUser.LessonLength = length;
+        await _appUsers.SaveChangesAsync();
+    }
+
     public async Task<int> GetUserBestStreakAsync()
     {
         if (_appUser is null)

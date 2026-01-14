@@ -429,4 +429,10 @@
   <data name="Listen" xml:space="preserve">
     <value>Listen</value>
   </data>
+  <data name="PreferredMaxLessonLength" xml:space="preserve">
+    <value>Preferred lesson length</value>
+  </data>
+  <data name="DatabaseError" xml:space="preserve">
+    <value>Database error</value>
+  </data>
 </root>

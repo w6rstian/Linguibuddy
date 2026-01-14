@@ -15,6 +15,7 @@ public partial class ImageQuizPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        await _vm.ImportCollectionAsync();
         await _vm.LoadQuestionAsync();
     }
 }

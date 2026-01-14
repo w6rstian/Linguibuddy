@@ -1,11 +1,12 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
+using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Linguibuddy.ViewModels;
 
@@ -15,6 +16,8 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
     private readonly AppUserService _appUserService;
     private readonly OpenAiService _openAiService;
     private readonly ScoringService _scoringService;
+    private List<CollectionItem> allWords;
+    private Random random = Random.Shared;
 
     private DifficultyLevel _currentDifficulty;
 
@@ -56,6 +59,17 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
     public ObservableCollection<WordTile> AvailableWords { get; } = [];
     public ObservableCollection<WordTile> SelectedWords { get; } = [];
     public bool IsNotAnswered => !IsAnswered;
+
+    public async Task ImportCollectionAsync()
+    {
+        if (SelectedCollection is null || !SelectedCollection.Items.Any())
+            return;
+
+        allWords = SelectedCollection.Items
+                .OrderBy(_ => random.Next())
+                .Take(await _appUserService.GetUserLessonLengthAsync())
+                .ToList();
+    }
 
     public override async Task LoadQuestionAsync()
     {
@@ -100,7 +114,6 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            var random = Random.Shared;
             TargetWord = validWords[random.Next(validWords.Count)];
 
             //int difficulty = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
@@ -277,7 +290,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
                     SelectedCollection,
                     GameType.SentenceQuiz,
                     Score,
-                    SelectedCollection.Items.Count,
+                    allWords.Count,
                     PointsEarned
                 );
     }

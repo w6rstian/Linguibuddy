@@ -1,9 +1,12 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Extensions;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
 using Linguibuddy.Data;
 using Linguibuddy.Models;
+using Linguibuddy.Resources.Strings;
 using Linguibuddy.Views;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace Linguibuddy.ViewModels;
@@ -45,7 +48,17 @@ public partial class SignInViewModel : ObservableObject
             return;
         }
 
-        var appUser = await db.AppUsers.FindAsync(_authClient.User.Uid);
+        AppUser appUser = null;
+        try
+        {
+            appUser = await db.AppUsers.FindAsync(_authClient.User.Uid);
+        }
+        catch (SqliteException ex)
+        {
+            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.DatabaseError, "OK");
+            return;
+        }
+
         if (appUser == null)
         {
             appUser = new AppUser

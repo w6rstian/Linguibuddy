@@ -214,6 +214,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Database error.
+        /// </summary>
+        internal static string DatabaseError {
+            get {
+                return ResourceManager.GetString("DatabaseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DEFEAT.
         /// </summary>
         internal static string Defeat {
@@ -642,6 +651,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string PreferredDifficulty {
             get {
                 return ResourceManager.GetString("PreferredDifficulty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preferred lesson length.
+        /// </summary>
+        internal static string PreferredMaxLessonLength {
+            get {
+                return ResourceManager.GetString("PreferredMaxLessonLength", resourceCulture);
             }
         }
         
