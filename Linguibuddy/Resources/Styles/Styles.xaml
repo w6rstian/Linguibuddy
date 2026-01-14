@@ -33,6 +33,15 @@
         <Setter Property="Border.StrokeShape">
             <RoundRectangle CornerRadius="20" />
         </Setter>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow
+                    Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
+                    Radius="5"
+                    Opacity="0.4"
+                    Offset="0,4" />
+        </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="BoxView">
@@ -71,7 +80,7 @@
         <Setter Property="Shadow">
             <Setter.Value>
                 <Shadow
-                    Brush="{StaticResource PrimaryBrush}"
+                    Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
                     Radius="5"
                     Opacity="0.4"
                     Offset="0,4" />
