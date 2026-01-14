@@ -17,6 +17,7 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
     private readonly ICollectionService _collectionService;
     private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
+    private readonly ILearningService _learningService;
     private List<CollectionItem> allWords;
     private Random random = Random.Shared;
 
@@ -33,11 +34,12 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
 
     [ObservableProperty] private CollectionItem? _targetWord;
 
-    public ImageQuizViewModel(ICollectionService collectionService, IScoringService scoringService, IAppUserService appUserService)
+    public ImageQuizViewModel(ICollectionService collectionService, IScoringService scoringService, IAppUserService appUserService, ILearningService learningService)
     {
         _collectionService = collectionService;
         _scoringService = scoringService;
         _appUserService = appUserService;
+        _learningService = learningService;
 
         _hasAppeared = [];
         IsFinished = false;
@@ -174,6 +176,8 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
 
         if (IsFinished)
             if (SelectedCollection != null)
+            {
+                await _learningService.MarkLearnedTodayAsync();
                 await _scoringService.SaveResultsAsync(
                     SelectedCollection,
                     GameType.ImageQuiz,
@@ -181,5 +185,6 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
                     allWords.Count,
                     PointsEarned
                 );
+            }
     }
 }

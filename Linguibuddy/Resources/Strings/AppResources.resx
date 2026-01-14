@@ -438,4 +438,13 @@
   <data name="NoCollections" xml:space="preserve">
     <value>No collections found.</value>
   </data>
+  <data name="LearningStreak" xml:space="preserve">
+    <value>Learning streak</value>
+  </data>
+  <data name="Best" xml:space="preserve">
+    <value>Best</value>
+  </data>
+  <data name="Points" xml:space="preserve">
+    <value>Points</value>
+  </data>
 </root>

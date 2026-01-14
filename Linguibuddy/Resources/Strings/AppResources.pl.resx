@@ -435,4 +435,13 @@
   <data name="NoCollections" xml:space="preserve">
     <value>Brak kolekcji do wyświetlenia.</value>
   </data>
+  <data name="LearningStreak" xml:space="preserve">
+    <value>Seria nauki</value>
+  </data>
+  <data name="Best" xml:space="preserve">
+    <value>Rekord</value>
+  </data>
+  <data name="Points" xml:space="preserve">
+    <value>Punkty</value>
+  </data>
 </root>

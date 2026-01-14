@@ -18,6 +18,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
     private readonly IAudioManager _audioManager;
     private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
+    private readonly ILearningService _learningService;
     private IAudioPlayer? _audioPlayer;
     private List<CollectionItem> allWords;
     private Random random = Random.Shared;
@@ -35,11 +36,12 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
     [ObservableProperty] private CollectionItem? _targetWord;
 
-    public AudioQuizViewModel(IScoringService scoringService, IAudioManager audioManager, IAppUserService appUserService)
+    public AudioQuizViewModel(IScoringService scoringService, IAudioManager audioManager, IAppUserService appUserService, ILearningService learningService)
     {
         _scoringService = scoringService;
         _audioManager = audioManager;
         _appUserService = appUserService;
+        _learningService = learningService;
 
         HasAppeared = [];
         IsFinished = false;
@@ -212,6 +214,8 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
         if (IsFinished)
             if (SelectedCollection != null)
+            {
+                await _learningService.MarkLearnedTodayAsync();
                 await _scoringService.SaveResultsAsync(
                     SelectedCollection,
                     GameType.AudioQuiz,
@@ -219,6 +223,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
                     allWords.Count,
                     PointsEarned
                 );
+            }
         // TODO: DisplayResultScreen()
         // Nie rozumiem do końca jak jest zrobiony ekran końcowy w fiszkach, ale tutaj powinno być podobnie.
         // Wyżej przy prawidłowej odpowiedzi jest robiony Score++.

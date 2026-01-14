@@ -142,6 +142,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Best.
+        /// </summary>
+        internal static string Best {
+            get {
+                return ResourceManager.GetString("Best", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         internal static string Cancel {
@@ -439,6 +448,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Learning streak.
+        /// </summary>
+        internal static string LearningStreak {
+            get {
+                return ResourceManager.GetString("LearningStreak", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Listen.
         /// </summary>
         internal static string Listen {
@@ -642,6 +660,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string PlaybackError {
             get {
                 return ResourceManager.GetString("PlaybackError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points.
+        /// </summary>
+        internal static string Points {
+            get {
+                return ResourceManager.GetString("Points", resourceCulture);
             }
         }
         

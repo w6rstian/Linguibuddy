@@ -136,7 +136,7 @@
             </ScrollView>
 
             <VerticalStackLayout Grid.Row="1"
-                                 Spacing="20"
+                                 Spacing="80"
                                  Padding="20,10,20,30"
                                  MaximumWidthRequest="600"
                                  HorizontalOptions="Center"
@@ -170,7 +170,7 @@
                     </BindableLayout.ItemTemplate>
                 </FlexLayout>
 
-                <Grid Margin="0,10,0,0">
+                <Grid Margin="0,0,0,0">
                     <Button Text="{loc:Translate Check}"
                             Command="{Binding CheckAnswerCommand}"
                             IsVisible="{Binding IsNotAnswered}"

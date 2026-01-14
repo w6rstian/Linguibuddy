@@ -25,12 +25,12 @@
                     Spacing="0"
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
-                    MaximumWidthRequest="110">
+                    MaximumWidthRequest="300">
 
                     <Label
                         FontSize="Caption"
                         TextColor="{AppThemeBinding Light={StaticResource Gray300}}"
-                        Text="Profile"
+                        Text="{loc:Translate Profile}"
                         HorizontalTextAlignment="Center" />
                     <Label
                         FontSize="Large"
@@ -48,7 +48,7 @@
                         <Label
                             FontSize="Medium"
                             TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                            Text="Points:"
+                            Text="{loc:Translate Points, StringFormat='{}{0}:'}"
                             HorizontalTextAlignment="Center" />
                         <Label
                             FontSize="Medium"
@@ -70,7 +70,7 @@
                 HorizontalOptions="Fill">
                 <VerticalStackLayout>
                     <Label
-                        Text="Learning streak"
+                        Text="{loc:Translate LearningStreak}"
                         FontSize="Title"
                         HorizontalTextAlignment="Start" />
                     <HorizontalStackLayout
@@ -88,7 +88,7 @@
                         <Label
                             Margin="0,0,5,0"
                             FontSize="Subtitle"
-                            Text="Best:" />
+                            Text="{loc:Translate Best, StringFormat='{}{0}:'}" />
                         <Label
                             FontSize="Subtitle"
                             Text="{Binding BestStreak}" />

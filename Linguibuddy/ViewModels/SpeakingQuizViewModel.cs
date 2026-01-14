@@ -20,6 +20,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     private readonly IOpenAiService _openAiService;
     private readonly IScoringService _scoringService;
     private readonly ISpeechToText _speechToText;
+    private readonly ILearningService _learningService;
     private List<CollectionItem> allWords;
     private Random random = Random.Shared;
 
@@ -48,12 +49,14 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     public SpeakingQuizViewModel(ISpeechToText speechToText,
         IOpenAiService openAiService,
         IScoringService scoringService,
-        IAppUserService appUserService)
+        IAppUserService appUserService,
+        ILearningService learningService)
     {
         _speechToText = speechToText;
         _openAiService = openAiService;
         _scoringService = scoringService;
         _appUserService = appUserService;
+        _learningService = learningService;
 
         HasAppeared = [];
         IsFinished = false;
@@ -385,6 +388,8 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         await LoadQuestionAsync();
         if (IsFinished)
             if (SelectedCollection != null)
+            {
+                await _learningService.MarkLearnedTodayAsync();
                 await _scoringService.SaveResultsAsync(
                     SelectedCollection,
                     GameType.SpeakingQuiz,
@@ -392,6 +397,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
                     allWords.Count,
                     PointsEarned
                 );
+            }    
     }
 
     [RelayCommand]

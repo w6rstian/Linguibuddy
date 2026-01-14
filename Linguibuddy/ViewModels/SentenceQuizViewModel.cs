@@ -17,6 +17,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
     private readonly IAppUserService _appUserService;
     private readonly IOpenAiService _openAiService;
     private readonly IScoringService _scoringService;
+    private readonly ILearningService _learningService;
     private List<CollectionItem> allWords;
     private Random random = Random.Shared;
 
@@ -43,11 +44,12 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
     [ObservableProperty] private CollectionItem? _targetWord;
 
     public SentenceQuizViewModel(IOpenAiService openAiService, IScoringService scoringService,
-        IAppUserService appUserService)
+        IAppUserService appUserService, ILearningService learningService)
     {
         _openAiService = openAiService;
         _scoringService = scoringService;
         _appUserService = appUserService;
+        _learningService = learningService;
 
         HasAppeared = [];
         IsFinished = false;
@@ -287,6 +289,8 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
         if (IsFinished)
             if (SelectedCollection != null)
+            {
+                await _learningService.MarkLearnedTodayAsync();
                 await _scoringService.SaveResultsAsync(
                     SelectedCollection,
                     GameType.SentenceQuiz,
@@ -294,5 +298,6 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
                     allWords.Count,
                     PointsEarned
                 );
+            }
     }
 }
