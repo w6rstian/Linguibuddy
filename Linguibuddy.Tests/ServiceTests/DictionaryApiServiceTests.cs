@@ -102,4 +102,48 @@ public class DictionaryApiServiceTests
         // Assert
         result.Should().BeNull();
     }
+
+    [Fact]
+    public async Task GetRandomWordsForGameAsync_ShouldReturnOnlyValidWords_AndLimitCount()
+    {
+        // Arrange
+        var validWords = new List<DictionaryWord>
+        {
+            new() { Word = "w1", Audio = "a1", Phonetic = "p1" },
+            new() { Word = "w2", Audio = "a2", Phonetic = "p2" },
+            new() { Word = "w3", Audio = "a3", Phonetic = "p3" }
+        };
+        var invalidWord = new DictionaryWord { Word = "invalid", Audio = "", Phonetic = "" };
+
+        _context.DictionaryWords.AddRange(validWords);
+        _context.DictionaryWords.Add(invalidWord);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _sut.GetRandomWordsForGameAsync(2);
+
+        // Assert
+        result.Should().HaveCount(2);
+        result.Should().OnlyContain(w => !string.IsNullOrEmpty(w.Audio) && !string.IsNullOrEmpty(w.Phonetic));
+        result.Should().NotContain(w => w.Word == "invalid");
+    }
+
+    [Fact]
+    public async Task GetRandomWordsWithImagesAsync_ShouldReturnOnlyWordsWithImages()
+    {
+        // Arrange
+        var wordWithImage = new DictionaryWord { Word = "image", Audio = "a", Phonetic = "p", ImageUrl = "url" };
+        var wordWithoutImage = new DictionaryWord { Word = "noimage", Audio = "a", Phonetic = "p", ImageUrl = "" };
+
+        _context.DictionaryWords.Add(wordWithImage);
+        _context.DictionaryWords.Add(wordWithoutImage);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _sut.GetRandomWordsWithImagesAsync(5);
+
+        // Assert
+        result.Should().HaveCount(1);
+        result.First().Word.Should().Be("image");
+    }
 }

@@ -6,14 +6,11 @@ namespace Linguibuddy.Services;
 
 public class DeepLTranslationService : IDeepLTranslationService
 {
-    private readonly DeepLClient _client;
+    private readonly IDeepLClientWrapper _client;
 
-    public DeepLTranslationService(string? apiKey)
+    public DeepLTranslationService(IDeepLClientWrapper client)
     {
-        if (string.IsNullOrEmpty(apiKey))
-            throw new ArgumentException("API key is required", nameof(apiKey));
-
-        _client = new DeepLClient(apiKey);
+        _client = client;
     }
 
     public async Task<string> TranslateWithContextAsync(string word, string definition, string partOfSpeech,
@@ -33,7 +30,7 @@ public class DeepLTranslationService : IDeepLTranslationService
             };
             var result = await _client.TranslateTextAsync(word, "EN", targetLang, options);
 
-            return result.Text;
+            return result;
         }
         catch (Exception ex)
         {

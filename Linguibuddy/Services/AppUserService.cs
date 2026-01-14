@@ -8,16 +8,16 @@ namespace Linguibuddy.Services;
 public class AppUserService : IAppUserService
 {
     private readonly IAppUserRepository _appUsers;
-    private readonly FirebaseAuthClient _authClient;
+    private readonly IAuthService _authService;
 
     private readonly string _currentUserId;
     private AppUser _appUser;
 
-    public AppUserService(IAppUserRepository appUsers, FirebaseAuthClient authClient)
+    public AppUserService(IAppUserRepository appUsers, IAuthService authService)
     {
         _appUsers = appUsers;
-        _authClient = authClient;
-        _currentUserId = authClient.User.Uid;
+        _authService = authService;
+        _currentUserId = authService.CurrentUserId;
     }
 
     public async Task AddUserPointsAsync(int points)
