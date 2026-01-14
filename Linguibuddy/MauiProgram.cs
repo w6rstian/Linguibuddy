@@ -136,7 +136,7 @@ public static class MauiProgram
             var context = scope.ServiceProvider.GetRequiredService<DataContext>();
 
             // ODKOMENTUJ TĘ LINIJKĘ, ABY ZRESETOWAĆ BAZĘ:
-            //context.Database.EnsureDeleted();
+            context.Database.EnsureDeleted();
 
             context.Database.EnsureCreated();
         }

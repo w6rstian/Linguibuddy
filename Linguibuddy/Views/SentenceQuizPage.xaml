@@ -31,7 +31,7 @@
                    HorizontalOptions="Center">
                 <Label.FormattedText>
                     <FormattedString>
-                        <Span Text="{loc:Translate CorrectAnswers}" />
+                        <Span Text="{loc:Translate CorrectAnswersCount}" />
                         <Span Text=" " />
                         <Span Text="{Binding Score}" />
                     </FormattedString>
@@ -43,7 +43,7 @@
                    HorizontalOptions="Center">
                 <Label.FormattedText>
                     <FormattedString>
-                        <Span Text="{loc:Translate PointsEarned}" />
+                        <Span Text="{loc:Translate PointsEarnedCount}" />
                         <Span Text=" +" />
                         <Span Text="{Binding PointsEarned}" />
                     </FormattedString>
