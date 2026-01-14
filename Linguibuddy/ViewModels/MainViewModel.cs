@@ -6,6 +6,7 @@ using Linguibuddy.Views;
 
 namespace Linguibuddy.ViewModels;
 
+//TODO: AI profile analysis like in CollectionDetailsViewModel
 public partial class MainViewModel : ObservableObject
 {
     private readonly IAchievementRepository _achievementRepository;
