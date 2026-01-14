@@ -15,5 +15,4 @@ public interface ICollectionService
     Task UpdateFlashcardProgress(Flashcard flashcard);
     Task AddCollectionItemFromDtoAsync(int collectionId, FlashcardCreationDto dto);
     Task DeleteCollectionItemAsync(CollectionItem item);
-    Task<List<string>> GetWordsWithImagesFromCollectionAsync(int collectionId);
 }

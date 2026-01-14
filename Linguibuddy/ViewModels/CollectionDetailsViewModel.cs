@@ -53,9 +53,6 @@ public partial class CollectionDetailsViewModel : ObservableObject
         if (!string.IsNullOrWhiteSpace(result) && result != Collection.Name)
         {
             await _collectionService.RenameCollectionAsync(Collection, result);
-            // Collection name updates automatically via ObservableObject if bound correctly, 
-            // but we might need to notify change if it's not. 
-            // WordCollection implements ObservableObject so it should update UI.
         }
     }
 
@@ -65,15 +62,15 @@ public partial class CollectionDetailsViewModel : ObservableObject
         if (item == null || Collection == null) return;
 
         var confirm = await Shell.Current.DisplayAlert(
-            AppResources.Delete, // Using generic Delete if specific string not available
-            $"Czy na pewno chcesz usunąć słowo '{item.Word}'?", // Hardcoded Polish as fallback or check resources later
+            AppResources.Delete,
+            $"Czy na pewno chcesz usunąć słowo '{item.Word}'?",
             AppResources.Yes, AppResources.No);
 
         if (confirm)
         {
             await _collectionService.DeleteCollectionItemAsync(item);
-            Collection.Items.Remove(item); // Update the source list
-            Items.Remove(item); // Update the UI list
+            Collection.Items.Remove(item);
+            Items.Remove(item);
         }
     }
 }
