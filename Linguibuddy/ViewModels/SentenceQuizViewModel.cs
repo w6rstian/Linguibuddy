@@ -190,7 +190,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         try
         {
             var locales = await TextToSpeech.Default.GetLocalesAsync();
-            string[] femaleVoices = { "Zira", "Paulina" };
+            string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
             // preferowany język US i GB na Android i Windows
             var preferred = locales.FirstOrDefault(l =>
                                 (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&

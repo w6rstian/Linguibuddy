@@ -180,13 +180,22 @@ public partial class DictionaryViewModel : ObservableObject
         try
         {
             var locales = await TextToSpeech.Default.GetLocalesAsync();
-
+            string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
             // preferowany język US i GB na Android i Windows
             var preferred = locales.FirstOrDefault(l =>
+                                (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
+                                femaleVoices.Any(f => l.Name.Contains(f)))
+                            ?? locales.FirstOrDefault(l =>
+                                (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
+                                femaleVoices.Any(f => l.Name.Contains(f)))
+                            ?? locales.FirstOrDefault(l =>
+                                l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
+                            // inne głosy
+                            ?? locales.FirstOrDefault(l =>
                                 l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
-                                ?? locales.FirstOrDefault(l =>
-                                    l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
-                                ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
+                            ?? locales.FirstOrDefault(l =>
+                                l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
+                            ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
 
             if (preferred == null)
             {
