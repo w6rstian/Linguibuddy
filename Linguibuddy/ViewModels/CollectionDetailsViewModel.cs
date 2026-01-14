@@ -11,20 +11,49 @@ namespace Linguibuddy.ViewModels;
 public partial class CollectionDetailsViewModel : ObservableObject
 {
     private readonly ICollectionService _collectionService;
+    private readonly IOpenAiService _openAiService;
+    private readonly IAppUserService _appUserService;
 
     [ObservableProperty]
     private WordCollection? _collection;
 
+    [ObservableProperty]
+    private string _aiFeedback = "Analizuję Twoje postępy...";
+
     public ObservableCollection<CollectionItem> Items { get; } = [];
 
-    public CollectionDetailsViewModel(ICollectionService collectionService)
+    public CollectionDetailsViewModel(
+        ICollectionService collectionService,
+        IOpenAiService openAiService,
+        IAppUserService appUserService)
     {
         _collectionService = collectionService;
+        _openAiService = openAiService;
+        _appUserService = appUserService;
     }
 
     partial void OnCollectionChanged(WordCollection? value)
     {
         LoadItems();
+        Task.Run(LoadAiFeedback);
+    }
+
+    private async Task LoadAiFeedback()
+    {
+        if (Collection == null) return;
+
+        AiFeedback = "Analizuję Twoje postępy...";
+        
+        try
+        {
+            var difficulty = await _appUserService.GetUserDifficultyAsync();
+            var feedback = await _openAiService.AnalyzeCollectionProgressAsync(Collection, difficulty);
+            AiFeedback = feedback;
+        }
+        catch (Exception)
+        {
+            AiFeedback = "Nie udało się pobrać analizy AI.";
+        }
     }
 
     private void LoadItems()
