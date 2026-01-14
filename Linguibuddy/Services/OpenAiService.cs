@@ -202,6 +202,123 @@ public class OpenAiService : IOpenAiService
         }
     }
 
+    /// <summary>
+    /// Analizuje ogólny profil ucznia.
+    /// </summary>
+    /// <summary>
+    /// Przeprowadza kompleksową analizę profilu użytkownika, uwzględniając postępy w kolekcjach oraz ogólne statystyki (streak, punkty).
+    /// </summary>
+    public async Task<string> AnalyzeComprehensiveProfileAsync(AppUser user, int currentStreak, int unlockedAchievements, IEnumerable<WordCollection> collections)
+    {
+        if (user == null) return "Brak danych użytkownika.";
+
+        var wordCollections = collections.ToList();
+        
+        string collectionStatsReport;
+        if (wordCollections.Count == 0)
+        {
+            collectionStatsReport = "Brak kolekcji. Użytkownik jeszcze nie dodał żadnych słówek.";
+        }
+        else
+        {
+            int totalWords = wordCollections.Sum(c => c.Items.Count);
+            int activeCollectionsCount = wordCollections.Count(c => c.Items.Count > 0);
+            var activeCollections = wordCollections.Where(c => c.Items.Count > 0).ToList();
+            
+            if (activeCollections.Count > 0)
+            {
+                string FormatScore(double score) => $"{score:P0}";
+                
+                double avgAudio = activeCollections.Average(c => c.AudioBestScore);
+                double avgSpeaking = activeCollections.Average(c => c.SpeakingBestScore);
+                double avgSentence = activeCollections.Average(c => c.SentenceBestScore);
+                double avgImage = activeCollections.Average(c => c.ImageBestScore);
+                double avgHangman = activeCollections.Average(c => c.HangmanBestScore);
+
+                var bestCollection = activeCollections
+                    .OrderByDescending(c => (c.AudioBestScore + c.SpeakingBestScore + c.SentenceBestScore + c.ImageBestScore) / 4)
+                    .FirstOrDefault();
+
+                var neglectedCollection = activeCollections
+                    .OrderBy(c => (c.AudioBestScore + c.SpeakingBestScore + c.SentenceBestScore + c.ImageBestScore) / 4)
+                    .FirstOrDefault();
+
+                collectionStatsReport = $"""
+                                         Liczba kolekcji: {wordCollections.Count} (Aktywne: {activeCollectionsCount})
+                                         Łączna liczba słów: {totalWords}
+                                         
+                                         ŚREDNIE WYNIKI GIER (Skill Breakdown):
+                                         🎧 Słuchanie (Audio): {FormatScore(avgAudio)}
+                                         🗣️ Mówienie (Speaking): {FormatScore(avgSpeaking)}
+                                         📝 Gramatyka (Sentence): {FormatScore(avgSentence)}
+                                         🖼️ Skojarzenia (Image): {FormatScore(avgImage)}
+                                         🔤 Słownictwo (Hangman): {FormatScore(avgHangman)}
+
+                                         Najlepsza kolekcja: "{(bestCollection?.Name ?? "Brak")}"
+                                         Najsłabsza kolekcja: "{(neglectedCollection?.Name ?? "Brak")}"
+                                         """;
+            }
+            else
+            {
+                collectionStatsReport = "Użytkownik ma kolekcje, ale są one puste (brak słówek).";
+            }
+        }
+
+        // --- Raport całościowy ---
+        var comprehensiveReport = $"""
+                           RAPORT KOMPLEKSOWY UŻYTKOWNIKA:
+                           
+                           DANE PROFILOWE:
+                           - Punkty: {user.Points}
+                           - Aktualny streak (dni z rzędu): {currentStreak}
+                           - Najdłuższy streak: {user.BestLearningStreak}
+                           - Poziom trudności (ustawienia): {user.DifficultyLevel}
+                           - Zdobyte osiągnięcia: {unlockedAchievements}
+                           
+                           STATYSTYKI KOLEKCJI I UMIEJĘTNOŚCI:
+                           {collectionStatsReport}
+                           """;
+
+        try
+        {
+            var messages = new List<ChatMessage>
+            {
+                new SystemChatMessage(
+                    "Jesteś głównym trenerem językowym w aplikacji 'Linguibuddy'. Twoim celem jest analiza postępów ucznia.\n" +
+                    "Otrzymasz pełny raport zawierający dane o regularności (streak), punktach oraz wynikach z gier językowych.\n\n" +
+                    "TWOJE ZADANIE:\n" +
+                    "1. Przeanalizuj regularność (streak). Jeśli jest wysoki - pochwal. Jeśli niski lub 0 - zmotywuj do codziennej nauki.\n" +
+                    "2. Spójrz na wyniki gier (Słuchanie, Mówienie, Gramatyka, itp.). Zidentyfikuj mocne i słabe strony. Powiedz konkretnie nad czym pracować.\n" +
+                    "3. Jeśli wyniki są bardzo wysokie (>90%), a poziom trudności niski (A1/A2), zasugeruj jego zmianę.\n" +
+                    "4. Zwróć uwagę na balans - czy uczeń nie unika np. Mówienia na rzecz prostego Hangmana?\n\n" +
+                    "FORMAT ODPOWIEDZI (Struktura markdown, używaj emoji):\n" +
+                    "### 📊 Diagnoza Profilu\n" +
+                    "[Krótki opis stylu nauki użytkownika na podstawie danych]\n\n" +
+                    "### ✅ Co idzie świetnie?\n" +
+                    "- [Punkt 1]\n" +
+                    "- [Punkt 2]\n\n" +
+                    "### 🚧 Nad czym popracować?\n" +
+                    "- [Konkretna porada 1]\n" +
+                    "- [Konkretna porada 2]\n\n" +
+                    "### 💡 Plan Treningowy\n" +
+                    "[Jedno zdanie podsumowujące co robić dalej]"),
+
+                new UserChatMessage($"Oto moje pełne statystyki:\n{comprehensiveReport}")
+            };
+
+            ChatCompletion completion = await _client.CompleteChatAsync(messages);
+
+            return completion.Content[0].Text.Trim();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"AI Analysis Error: {ex.Message}");
+            return "Nie udało się wygenerować kompleksowego raportu. Spróbuj ponownie później.";
+        }
+    }
+
+
+
     private class SentenceResponse
     {
         [JsonProperty("english_sentence")] public string EnglishSentence { get; set; } = string.Empty;

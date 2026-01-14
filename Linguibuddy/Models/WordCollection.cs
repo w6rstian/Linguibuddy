@@ -44,4 +44,8 @@ public class WordCollection : ObservableObject
     public double HangmanBestScore { get; set; }
     public double HangmanLastScore { get; set; }
     public DateTime? HangmanLastPlayed { get; set; }
+
+    // Analiza AI
+    public bool RequiresAiAnalysis { get; set; } = true;
+    public string? LastAiAnalysis { get; set; }
 }

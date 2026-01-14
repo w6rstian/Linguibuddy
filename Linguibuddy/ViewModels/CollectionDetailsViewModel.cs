@@ -42,13 +42,24 @@ public partial class CollectionDetailsViewModel : ObservableObject
     {
         if (Collection == null) return;
 
+        if (!Collection.RequiresAiAnalysis && !string.IsNullOrEmpty(Collection.LastAiAnalysis))
+        {
+            AiFeedback = Collection.LastAiAnalysis;
+            return;
+        }
+
         AiFeedback = "Analizuję Twoje postępy...";
         
         try
         {
             var difficulty = await _appUserService.GetUserDifficultyAsync();
             var feedback = await _openAiService.AnalyzeCollectionProgressAsync(Collection, difficulty);
+            
             AiFeedback = feedback;
+
+            Collection.LastAiAnalysis = feedback;
+            Collection.RequiresAiAnalysis = false;
+            await _collectionService.UpdateCollectionAsync(Collection);
         }
         catch (Exception)
         {

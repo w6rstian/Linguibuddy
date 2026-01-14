@@ -21,4 +21,8 @@ public class AppUser
 
     public ICollection<UserLearningDay> LearningDays { get; set; } = new List<UserLearningDay>();
     public ICollection<UserAchievement> UserAchievements { get; set; } = new List<UserAchievement>();
+
+    // AI Analysis Caching
+    public bool RequiresAiAnalysis { get; set; } = true;
+    public string? LastAiAnalysis { get; set; }
 }

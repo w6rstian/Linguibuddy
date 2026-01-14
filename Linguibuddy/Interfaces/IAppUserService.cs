@@ -13,4 +13,7 @@ public interface IAppUserService
     Task SetUserLessonLengthAsync(int length);
     Task<int> GetUserBestStreakAsync();
     Task SetBestLearningStreakAsync(int newStreak);
+    Task MarkAiAnalysisRequiredAsync();
+    Task UpdateAppUserAsync(AppUser user);
+    Task<AppUser> GetCurrentUserAsync();
 }

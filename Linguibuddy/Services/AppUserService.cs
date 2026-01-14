@@ -1,4 +1,4 @@
-﻿using Firebase.Auth;
+using Firebase.Auth;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
@@ -20,11 +20,18 @@ public class AppUserService : IAppUserService
         _currentUserId = authService.CurrentUserId;
     }
 
-    public async Task AddUserPointsAsync(int points)
+    private async Task EnsureUserLoadedAsync()
     {
         if (_appUser is null)
+        {
             _appUser = await _appUsers.GetByIdAsync(_currentUserId)
                        ?? throw new Exception("User not found");
+        }
+    }
+
+    public async Task AddUserPointsAsync(int points)
+    {
+        await EnsureUserLoadedAsync();
 
         _appUser.Points += points;
 
@@ -33,30 +40,19 @@ public class AppUserService : IAppUserService
 
     public async Task<int> GetUserPointsAsync()
     {
-        if (_appUser is null)
-            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
-                       ?? throw new Exception("User not found");
-
+        await EnsureUserLoadedAsync();
         return _appUser.Points;
     }
 
     public async Task<DifficultyLevel> GetUserDifficultyAsync()
     {
-        if (_appUser is null)
-        {
-            _appUser = await _appUsers.GetByIdAsync(_currentUserId);
-
-            if (_appUser is null) return DifficultyLevel.A1;
-        }
-
+        await EnsureUserLoadedAsync();
         return _appUser.DifficultyLevel;
     }
 
     public async Task SetUserDifficultyAsync(DifficultyLevel level)
     {
-        if (_appUser is null)
-            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
-                       ?? throw new Exception("User not found");
+        await EnsureUserLoadedAsync();
 
         _appUser.DifficultyLevel = level;
         await _appUsers.SaveChangesAsync();
@@ -64,21 +60,13 @@ public class AppUserService : IAppUserService
 
     public async Task<int> GetUserLessonLengthAsync()
     {
-        if (_appUser is null)
-        {
-            _appUser = await _appUsers.GetByIdAsync(_currentUserId);
-
-            if (_appUser is null) return 10;
-        }
-
+        await EnsureUserLoadedAsync();
         return _appUser.LessonLength;
     }
 
     public async Task SetUserLessonLengthAsync(int length)
     {
-        if (_appUser is null)
-            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
-                       ?? throw new Exception("User not found");
+        await EnsureUserLoadedAsync();
 
         _appUser.LessonLength = length;
         await _appUsers.SaveChangesAsync();
@@ -86,21 +74,36 @@ public class AppUserService : IAppUserService
 
     public async Task<int> GetUserBestStreakAsync()
     {
-        if (_appUser is null)
-            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
-                       ?? throw new Exception("User not found");
-
+        await EnsureUserLoadedAsync();
         return _appUser.BestLearningStreak;
     }
 
-
     public async Task SetBestLearningStreakAsync(int newStreak)
     {
-        if (_appUser is null)
-            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
-                       ?? throw new Exception("User not found");
+        await EnsureUserLoadedAsync();
 
         _appUser.BestLearningStreak = newStreak;
         await _appUsers.SaveChangesAsync();
+    }
+
+    public async Task MarkAiAnalysisRequiredAsync()
+    {
+        await EnsureUserLoadedAsync();
+
+        _appUser.RequiresAiAnalysis = true;
+        await _appUsers.SaveChangesAsync();
+    }
+
+    public async Task UpdateAppUserAsync(AppUser user)
+    {
+        _appUsers.Update(user);
+        await _appUsers.SaveChangesAsync();
+        _appUser = user;
+    }
+
+    public async Task<AppUser> GetCurrentUserAsync()
+    {
+        await EnsureUserLoadedAsync();
+        return _appUser;
     }
 }

@@ -1,4 +1,4 @@
-﻿using Linguibuddy.Data;
+using Linguibuddy.Data;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +27,10 @@ public class AppUserRepository : IAppUserRepository
         await _db.SaveChangesAsync();
     }
 
+    public void Update(AppUser user)
+    {
+        _db.AppUsers.Update(user);
+    }
 
     public async Task SaveChangesAsync()
     {
