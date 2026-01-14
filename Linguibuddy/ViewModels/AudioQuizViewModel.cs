@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
@@ -15,8 +16,8 @@ namespace Linguibuddy.ViewModels;
 public partial class AudioQuizViewModel : BaseQuizViewModel
 {
     private readonly IAudioManager _audioManager;
-    private readonly ScoringService _scoringService;
-    private readonly AppUserService _appUserService;
+    private readonly IScoringService _scoringService;
+    private readonly IAppUserService _appUserService;
     private IAudioPlayer? _audioPlayer;
     private List<CollectionItem> allWords;
     private Random random = Random.Shared;
@@ -34,7 +35,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
     [ObservableProperty] private CollectionItem? _targetWord;
 
-    public AudioQuizViewModel(ScoringService scoringService, IAudioManager audioManager, AppUserService appUserService)
+    public AudioQuizViewModel(IScoringService scoringService, IAudioManager audioManager, IAppUserService appUserService)
     {
         _scoringService = scoringService;
         _audioManager = audioManager;

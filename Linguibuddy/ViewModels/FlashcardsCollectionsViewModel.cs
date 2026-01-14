@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
@@ -11,11 +12,11 @@ namespace Linguibuddy.ViewModels;
 
 public partial class FlashcardsCollectionsViewModel : ObservableObject
 {
-    private readonly CollectionService _collectionService;
+    private readonly ICollectionService _collectionService;
 
     [ObservableProperty] private bool _isSpacedRepetitionEnabled;
 
-    public FlashcardsCollectionsViewModel(CollectionService collectionService)
+    public FlashcardsCollectionsViewModel(ICollectionService collectionService)
     {
         _collectionService = collectionService;
     }

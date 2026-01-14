@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics;
 using Linguibuddy.Helpers;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 
 namespace Linguibuddy.Services;
 
-public class ScoringService
+public class ScoringService : IScoringService
 {
-    private readonly AppUserService _appUserService;
+    private readonly IAppUserService _appUserService;
 
     private readonly Dictionary<GameType, int> _basePoints = new()
     {
@@ -17,9 +18,9 @@ public class ScoringService
         { GameType.Hangman, 50 }
     };
 
-    private readonly CollectionService _collectionService;
+    private readonly ICollectionService _collectionService;
 
-    public ScoringService(CollectionService collectionService, AppUserService appUserService)
+    public ScoringService(ICollectionService collectionService, IAppUserService appUserService)
     {
         _collectionService = collectionService;
         _appUserService = appUserService;

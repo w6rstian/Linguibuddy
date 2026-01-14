@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Data;
 using Linguibuddy.Helpers;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
@@ -34,10 +35,10 @@ public partial class SearchResultItem : ObservableObject
 public partial class DictionaryViewModel : ObservableObject
 {
     private readonly IAudioManager _audioManager;
-    private readonly CollectionService _CollectionService;
-    private readonly DictionaryApiService _dictionaryService;
-    private readonly OpenAiService _openAiService;
-    private readonly DeepLTranslationService _translationService;
+    private readonly ICollectionService _CollectionService;
+    private readonly IDictionaryApiService _dictionaryService;
+    private readonly IOpenAiService _openAiService;
+    private readonly IDeepLTranslationService _translationService;
 
     private IAudioPlayer? _audioPlayer;
 
@@ -48,17 +49,17 @@ public partial class DictionaryViewModel : ObservableObject
     [ObservableProperty] private WordCollection? _selectedCollection;
 
     public DictionaryViewModel(DataContext dataContext,
-        DictionaryApiService dictionaryService,
-        DeepLTranslationService translationService,
-        OpenAiService openAiService,
-        CollectionService CollectionService,
+        IDictionaryApiService dictionaryService,
+        IDeepLTranslationService translationService,
+        IOpenAiService openAiService,
+        ICollectionService collectionService,
         IAudioManager audioManager)
     {
         _dictionaryService = dictionaryService;
         _translationService = translationService;
         _openAiService = openAiService;
         _openAiService = openAiService;
-        _CollectionService = CollectionService;
+        _CollectionService = collectionService;
         _audioManager = audioManager;
     }
 

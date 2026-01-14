@@ -1,15 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Firebase.Auth;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Services;
+using Linguibuddy.Views;
 
 namespace Linguibuddy.ViewModels;
 
 public partial class ProfileViewModel : ObservableObject
 {
-    private readonly AchievementService _achievementService;
-    private readonly AppUserService _appUserService;
+    private readonly IAchievementService _achievementService;
+    private readonly IAppUserService _appUserService;
     private readonly FirebaseAuthClient _authClient;
-    private readonly LearningService _learningService;
+    private readonly ILearningService _learningService;
 
     [ObservableProperty] private int _bestStreak;
 
@@ -25,8 +27,8 @@ public partial class ProfileViewModel : ObservableObject
 
     [ObservableProperty] private int _unlockedAchievementsCount;
 
-    public ProfileViewModel(AppUserService appUserService, LearningService learningService,
-        FirebaseAuthClient authClient, AchievementService achievementService)
+    public ProfileViewModel(IAppUserService appUserService, ILearningService learningService,
+        FirebaseAuthClient authClient, IAchievementService achievementService)
     {
         _appUserService = appUserService;
         _learningService = learningService;

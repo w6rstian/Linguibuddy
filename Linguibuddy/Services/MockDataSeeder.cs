@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Linguibuddy.Data;
+using Linguibuddy.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Linguibuddy.Services;
@@ -7,8 +8,8 @@ namespace Linguibuddy.Services;
 public class MockDataSeeder
 {
     private readonly DataContext _context;
-    private readonly DictionaryApiService _dictionaryApi;
-    private readonly PexelsImageService _imageApi;
+    private readonly IDictionaryApiService _dictionaryApi;
+    private readonly IPexelsImageService _imageApi;
 
     private readonly List<string> _wordsToSeed = new()
     {
@@ -17,7 +18,7 @@ public class MockDataSeeder
         "bicycle"
     };
 
-    public MockDataSeeder(DictionaryApiService dictionaryApi, PexelsImageService imageApi, DataContext context)
+    public MockDataSeeder(IDictionaryApiService dictionaryApi, IPexelsImageService imageApi, DataContext context)
     {
         _dictionaryApi = dictionaryApi;
         _imageApi = imageApi;
