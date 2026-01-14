@@ -2,6 +2,7 @@
 using Linguibuddy.Data;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
+using Linguibuddy.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Linguibuddy.Services;
@@ -9,56 +10,64 @@ namespace Linguibuddy.Services;
 public class AchievementService : IAchievementService
 {
     private readonly FirebaseAuthClient _authClient;
+    private readonly IAppUserService _appUserService;
+    private readonly IAchievementRepository _achievementRepository;
 
     private readonly string _currentUserId;
     private readonly DataContext _db;
 
-    public AchievementService(DataContext db, FirebaseAuthClient authClient)
+    public AchievementService(
+        DataContext db, 
+        FirebaseAuthClient authClient, 
+        IAppUserService appUserService, 
+        IAchievementRepository achievementRepository
+        )
     {
         _db = db;
         _authClient = authClient;
         _currentUserId = _authClient.User.Uid;
+        _appUserService = appUserService;
+        _achievementRepository = achievementRepository;
     }
 
-    public async Task<List<UserAchievement>> GetUserAchievementsAsync()
+    public async Task CheckAchievementsAsync()
     {
-        return await _db.UserAchievements
-            .Include(ua => ua.Achievement) // Eager load detali osiągnięcia
-            .Where(ua => ua.AppUserId == _currentUserId)
-            .ToListAsync();
-    }
+        var userAchievements = await _achievementRepository.GetUserAchievementsAsync();
 
-    public async Task<int> GetUnlockedAchievementsCountAsync()
-    {
-        return await _db.UserAchievements
-            .Where(ua => ua.AppUserId == _currentUserId && ua.IsUnlocked)
-            .CountAsync();
-    }
-
-    public async Task CheckAchievementsAsync(string appUserId, int achievementId, float progressIncrement)
-    {
-        // TODO: Jakiś syf trzeba zmienić
-        var userAchievement = await _db.UserAchievements
-            .FirstOrDefaultAsync(ua => ua.AppUserId == appUserId && ua.AchievementId == achievementId);
-
-        if (userAchievement == null)
+        if (userAchievements == null || !userAchievements.Any())
         {
-            userAchievement = new UserAchievement
-                { AppUserId = appUserId, AchievementId = achievementId, Progress = 0 };
-            _db.UserAchievements.Add(userAchievement);
+            return;
         }
 
-        if (userAchievement.IsUnlocked) return;
+        var userPoints = await _appUserService.GetUserPointsAsync();
+        var userStreak = await _appUserService.GetUserBestStreakAsync();
 
-        userAchievement.Progress += progressIncrement;
-
-        if (userAchievement.Progress >= 100) // Example condition
+        foreach (var userAchievement in userAchievements)
         {
-            userAchievement.IsUnlocked = true;
-            userAchievement.UnlockDate = DateTime.UtcNow;
+            var correspondingAchievement = userAchievement.Achievement;
+            switch (correspondingAchievement.UnlockCondition)
+            {
+                case AchievementUnlockType.TotalPoints:
+                    if (correspondingAchievement.UnlockTargetValue <= userPoints)
+                    {
+                        userAchievement.IsUnlocked = true;
+                        userAchievement.UnlockDate = DateTime.Today;
+                    }
+                    break;
+
+                case AchievementUnlockType.LearningStreak:
+                    if (correspondingAchievement.UnlockTargetValue <= userStreak)
+                    {
+                        userAchievement.IsUnlocked = true;
+                        userAchievement.UnlockDate = DateTime.Today;
+                    }    
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         await _db.SaveChangesAsync();
-        // Popup logic here...
     }
 }

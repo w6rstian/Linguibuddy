@@ -17,6 +17,4 @@ public class UserAchievement
 
     public bool IsUnlocked { get; set; }
     public DateTime UnlockDate { get; set; }
-
-    public float Progress { get; set; }
 }
