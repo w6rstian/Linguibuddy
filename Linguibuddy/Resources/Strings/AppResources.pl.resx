@@ -516,4 +516,16 @@
   <data name="Details" xml:space="preserve">
     <value>Szczegóły</value>
   </data>
+  <data name="TopUsers" xml:space="preserve">
+    <value>Top Użytkownicy</value>
+  </data>
+  <data name="PointsAbbreviation" xml:space="preserve">
+    <value>pkt.</value>
+  </data>
+  <data name="Leaderboard" xml:space="preserve">
+    <value>Ranking</value>
+  </data>
+  <data name="NoData" xml:space="preserve">
+    <value>Brak danych do wyświetlenia</value>
+  </data>
 </root>

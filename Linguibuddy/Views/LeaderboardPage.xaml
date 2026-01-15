@@ -2,15 +2,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Linguibuddy.Views.LeaderboardPage"
-             Title="Ranking">
+             Title="{loc:Translate Leaderboard}">
 
     <Grid RowDefinitions="Auto, *" Padding="20">
-        <Label Text="Top Użytkownicy" 
+        <Label Text="{loc:Translate TopUsers}" 
                Style="{StaticResource Headline}" 
                HorizontalOptions="Center" 
-               Margin="0,0,0,20"/>
+               Margin="0,20,0,20"/>
 
         <ActivityIndicator IsRunning="{Binding IsLoading}" 
                            IsVisible="{Binding IsLoading}"
@@ -22,7 +23,7 @@
                         ItemsSource="{Binding LeaderboardItems}"
                         IsVisible="{Binding IsLoading, Converter={toolkit:InvertedBoolConverter}}">
             <CollectionView.EmptyView>
-                <Label Text="Brak danych do wyświetlenia." 
+                <Label Text="{loc:Translate NoData}" 
                        HorizontalOptions="Center" 
                        VerticalOptions="Center" />
             </CollectionView.EmptyView>
@@ -63,8 +64,8 @@
                                 <Label Text="{Binding Points}" 
                                        FontSize="18" 
                                        FontAttributes="Bold"
-                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}"/>
-                                <Label Text="pkt" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+                                <Label Text="{StaticResource PointsAbbreviation}" 
                                        FontSize="14" 
                                        VerticalOptions="End" 
                                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>

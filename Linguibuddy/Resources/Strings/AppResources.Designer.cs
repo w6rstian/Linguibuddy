@@ -637,6 +637,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Leaderboard.
+        /// </summary>
+        internal static string Leaderboard {
+            get {
+                return ResourceManager.GetString("Leaderboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Learn.
         /// </summary>
         internal static string Learn {
@@ -790,6 +799,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No data to show.
+        /// </summary>
+        internal static string NoData {
+            get {
+                return ResourceManager.GetString("NoData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No flashcards to learn.
         /// </summary>
         internal static string NoFlashcardsToLearn {
@@ -885,6 +903,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Points {
             get {
                 return ResourceManager.GetString("Points", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to pts..
+        /// </summary>
+        internal static string PointsAbbreviation {
+            get {
+                return ResourceManager.GetString("PointsAbbreviation", resourceCulture);
             }
         }
         
@@ -1182,6 +1209,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string TooLittleWords {
             get {
                 return ResourceManager.GetString("TooLittleWords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top Users.
+        /// </summary>
+        internal static string TopUsers {
+            get {
+                return ResourceManager.GetString("TopUsers", resourceCulture);
             }
         }
         
