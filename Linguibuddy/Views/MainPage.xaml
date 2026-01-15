@@ -11,7 +11,8 @@
         <Grid ColumnDefinitions="*, *"
               RowDefinitions="Auto, Auto, Auto"
               RowSpacing="30"
-              Margin="50,0,50,50">
+              ColumnSpacing="20"
+              Margin="50,50,50,50">
             <Border
                 Grid.ColumnSpan="2"
                 StrokeShape="RoundRectangle 12"
@@ -72,7 +73,7 @@
                 StrokeShape="RoundRectangle 12"
                 BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
                 Stroke="{AppThemeBinding Light=OrangeRed, Dark=OrangeRed}"
-                Padding="25,10"
+                Padding="15,10"
                 MaximumHeightRequest="300"
                 MaximumWidthRequest="300"
                 VerticalOptions="Center"
@@ -87,7 +88,7 @@
                 <VerticalStackLayout>
                     <Label
                         Text="{loc:Translate LearningStreak}"
-                        FontSize="Title"
+                        FontSize="18"
                         HorizontalTextAlignment="Center" />
                     <Grid HorizontalOptions="Center"
                           ColumnDefinitions="Auto,Auto,Auto">
@@ -127,7 +128,7 @@
                 StrokeShape="RoundRectangle 12"
                 BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
                 Stroke="{AppThemeBinding Light=Goldenrod, Dark=Gold}"
-                Padding="25,10"
+                Padding="10,10"
                 MaximumHeightRequest="300"
                 MaximumWidthRequest="300"
                 VerticalOptions="Center"
@@ -143,13 +144,14 @@
                 <VerticalStackLayout>
                     <Label
                         Text="{loc:Translate Achievements}"
-                        FontSize="Title"
-                        HorizontalTextAlignment="Center" />
+                        FontSize="18"
+                        HorizontalTextAlignment="Center"
+                        />
                     <Grid HorizontalOptions="Center"
                           ColumnDefinitions="Auto,Auto,Auto">
                         <BoxView
                             Grid.Column="0"
-                            WidthRequest="42"
+                            WidthRequest="38"
                             Opacity="0"/>
                         <Label
                             Grid.Column="1"
