@@ -175,18 +175,18 @@ public class OpenAiService : IOpenAiService
             var messages = new List<ChatMessage>
             {
                 new SystemChatMessage(
-                    "Jesteś osobistym, motywującym trenerem językowym w aplikacji 'Linguibuddy'. " +
+                    "Jesteś osobistym, motywującym trenerem językowym w aplikacji 'Linguibuddy'.\n" +
                     "Twoim zadaniem jest analiza statystyk ucznia i udzielenie konkretnych wskazówek.\n\n" +
                     "ZASADY ANALIZY:\n" +
                     "1. Zaniedbania: Zwróć uwagę na gry, w które użytkownik dawno nie grał (data 'Nigdy' lub stara) lub ma w nich 0%.\n" +
                     "2. Progres: Jeśli 'Ostatni wynik' jest dużo gorszy od 'Najlepszego', zasugeruj powtórkę.\n" +
                     "3. Poziom trudności: Jeśli użytkownik ma wszędzie wyniki >90%, zasugeruj, że kolekcja jest opanowana i warto podnieść poziom trudności (CEFR) w ustawieniach.\n\n" +
                     "FORMAT ODPOWIEDZI (Bądź zwięzły, używaj emoji):\n" +
-                    "📊 **Ocena ogólna:** [Krótkie podsumowanie]\n" +
-                    "💡 **Sugerowane działania:**\n" +
+                    "Ocena ogólna: [Krótkie podsumowanie]\n" +
+                    "Sugerowane działania:\n" +
                     "- [Porada 1]\n" +
                     "- [Porada 2]\n" +
-                    "🎯 **Werdykt:** [Np. 'Kolekcja opanowana!' lub 'Wymaga ćwiczeń']"),
+                    "Werdykt: Np. 'Kolekcja opanowana!' lub 'Wymaga ćwiczeń']"),
 
                 new UserChatMessage($"Oto moje statystyki:\n{statsReport}")
             };

@@ -18,9 +18,15 @@ public partial class CollectionDetailsViewModel : ObservableObject
     private WordCollection? _collection;
 
     [ObservableProperty]
-    private string _aiFeedback = "Analizuję Twoje postępy...";
+    private string _aiFeedback;
 
     public ObservableCollection<CollectionItem> Items { get; } = [];
+
+    [ObservableProperty]
+    private bool _isBusy;
+
+    [ObservableProperty]
+    private bool _isAiThinking;
 
     public CollectionDetailsViewModel(
         ICollectionService collectionService,
@@ -30,12 +36,37 @@ public partial class CollectionDetailsViewModel : ObservableObject
         _collectionService = collectionService;
         _openAiService = openAiService;
         _appUserService = appUserService;
+        _isAiThinking = true;
     }
 
-    partial void OnCollectionChanged(WordCollection? value)
+    [RelayCommand]
+    public async Task LoadDataAsync()
     {
-        LoadItems();
-        Task.Run(LoadAiFeedback);
+        if (IsBusy || Collection == null) return;
+
+        IsBusy = true;
+        try
+        {
+            var updatedCollection = await _collectionService.GetCollection(Collection.Id);
+            if (updatedCollection != null)
+            {
+                Collection = updatedCollection; 
+            }
+
+            Items.Clear();
+            if (Collection?.Items != null)
+            {
+                foreach (var item in Collection.Items)
+                {
+                    Items.Add(item);
+                }
+            }
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+        await LoadAiFeedback();
     }
 
     private async Task LoadAiFeedback()
@@ -45,14 +76,17 @@ public partial class CollectionDetailsViewModel : ObservableObject
         if (!Collection.RequiresAiAnalysis && !string.IsNullOrEmpty(Collection.LastAiAnalysis))
         {
             AiFeedback = Collection.LastAiAnalysis;
+            IsAiThinking = false;
             return;
         }
 
-        AiFeedback = "Analizuję Twoje postępy...";
+        IsAiThinking = true;
+        AiFeedback = "Trener analizuje Twoją kolekcję...";
         
         try
         {
             var difficulty = await _appUserService.GetUserDifficultyAsync();
+            
             var feedback = await _openAiService.AnalyzeCollectionProgressAsync(Collection, difficulty);
             
             AiFeedback = feedback;
@@ -65,17 +99,9 @@ public partial class CollectionDetailsViewModel : ObservableObject
         {
             AiFeedback = "Nie udało się pobrać analizy AI.";
         }
-    }
-
-    private void LoadItems()
-    {
-        Items.Clear();
-        if (Collection?.Items != null)
+        finally
         {
-            foreach (var item in Collection.Items)
-            {
-                Items.Add(item);
-            }
+            IsAiThinking = false;
         }
     }
 

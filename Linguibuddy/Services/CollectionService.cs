@@ -37,6 +37,7 @@ public class CollectionService : ICollectionService
     public async Task<WordCollection?> GetCollection(int id)
     {
         return await _context.WordCollections
+            .Include(c => c.Items)
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 
@@ -134,6 +135,14 @@ public class CollectionService : ICollectionService
         };
 
         _context.CollectionItems.Add(newItem);
+
+        var collection = await _context.WordCollections.FindAsync(collectionId);
+        if (collection != null)
+        {
+            collection.RequiresAiAnalysis = true;
+            _context.WordCollections.Update(collection);
+        }
+
         await _context.SaveChangesAsync();
     }
 

@@ -4,9 +4,17 @@ namespace Linguibuddy.Views;
 
 public partial class CollectionDetailsPage : ContentPage
 {
+    private readonly CollectionDetailsViewModel _viewModel;
+
     public CollectionDetailsPage(CollectionDetailsViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        BindingContext = _viewModel = viewModel;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _viewModel.LoadDataCommand.ExecuteAsync(null);
     }
 }
