@@ -96,7 +96,7 @@ public class CollectionService : ICollectionService
         await _context.SaveChangesAsync();
     }
 
-    public async Task AddCollectionItemFromDtoAsync(int collectionId, FlashcardCreationDto dto)
+    public async Task<bool> AddCollectionItemFromDtoAsync(int collectionId, FlashcardCreationDto dto)
     {
         var exists = await _context.CollectionItems.AnyAsync(i =>
             i.CollectionId == collectionId &&
@@ -106,7 +106,7 @@ public class CollectionService : ICollectionService
         );
 
         if (exists)
-            return;
+            return false;
 
         var newItem = new CollectionItem
         {
@@ -144,6 +144,7 @@ public class CollectionService : ICollectionService
         }
 
         await _context.SaveChangesAsync();
+        return true;
     }
 
     public async Task DeleteCollectionItemAsync(CollectionItem item)

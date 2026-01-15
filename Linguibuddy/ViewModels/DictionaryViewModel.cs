@@ -263,10 +263,21 @@ public partial class DictionaryViewModel : ObservableObject
 
         try
         {
-            await _collectionService.AddCollectionItemFromDtoAsync(SelectedCollection.Id, dto);
+            bool isAdded = await _collectionService.AddCollectionItemFromDtoAsync(SelectedCollection.Id, dto);
 
-            var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
-            await Shell.Current.DisplayAlert(AppResources.Success, message, "OK");
+            if (isAdded)
+            {
+                var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
+                await Shell.Current.DisplayAlert(AppResources.Success, message, "OK");
+            }
+
+            else
+            {
+                await Shell.Current.DisplayAlert(
+                    AppResources.Success,
+                    AppResources.ItemExists,
+                    "OK");
+            }
         }
         catch (Exception ex)
         {

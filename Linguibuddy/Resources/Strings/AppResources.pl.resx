@@ -504,4 +504,7 @@
   <data name="AITeacherBoxTitle" xml:space="preserve">
     <value>Wnioski AI</value>
   </data>
+  <data name="ItemExists" xml:space="preserve">
+    <value>Słowo już znajduje się w kolekcji.</value>
+  </data>
 </root>

@@ -592,6 +592,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The word is already in the collection..
+        /// </summary>
+        internal static string ItemExists {
+            get {
+                return ResourceManager.GetString("ItemExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         internal static string Language {
