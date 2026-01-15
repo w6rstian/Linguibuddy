@@ -2,28 +2,25 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Linguibuddy.Views.LeaderboardPage"
-             Title="Ranking"
-             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDark}}">
+             Title="Ranking">
 
     <Grid RowDefinitions="Auto, *" Padding="20">
-        <!-- Header -->
         <Label Text="Top Użytkownicy" 
                Style="{StaticResource Headline}" 
                HorizontalOptions="Center" 
                Margin="0,0,0,20"/>
 
-        <!-- Loading Indicator -->
         <ActivityIndicator IsRunning="{Binding IsLoading}" 
                            IsVisible="{Binding IsLoading}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
                            Grid.Row="1" />
 
-        <!-- Leaderboard List -->
         <CollectionView Grid.Row="1" 
                         ItemsSource="{Binding LeaderboardItems}"
-                        IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}">
+                        IsVisible="{Binding IsLoading, Converter={toolkit:InvertedBoolConverter}}">
             <CollectionView.EmptyView>
                 <Label Text="Brak danych do wyświetlenia." 
                        HorizontalOptions="Center" 
