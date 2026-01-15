@@ -537,4 +537,16 @@
   <data name="TryHarder" xml:space="preserve">
     <value>You have to try harder.</value>
   </data>
+  <data name="Srs0" xml:space="preserve">
+    <value>Total blackout</value>
+  </data>
+  <data name="Srs2" xml:space="preserve">
+    <value>Feels familiar</value>
+  </data>
+  <data name="Srs4" xml:space="preserve">
+    <value>Good</value>
+  </data>
+  <data name="Srs5" xml:space="preserve">
+    <value>Perfect</value>
+  </data>
 </root>

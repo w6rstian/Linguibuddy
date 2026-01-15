@@ -1150,6 +1150,42 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total blackout.
+        /// </summary>
+        internal static string Srs0 {
+            get {
+                return ResourceManager.GetString("Srs0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feels familiar.
+        /// </summary>
+        internal static string Srs2 {
+            get {
+                return ResourceManager.GetString("Srs2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        internal static string Srs4 {
+            get {
+                return ResourceManager.GetString("Srs4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Perfect.
+        /// </summary>
+        internal static string Srs5 {
+            get {
+                return ResourceManager.GetString("Srs5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Success.
         /// </summary>
         internal static string Success {

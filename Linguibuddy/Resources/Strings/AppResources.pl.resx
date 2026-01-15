@@ -534,4 +534,16 @@
   <data name="TryHarder" xml:space="preserve">
     <value>Musisz się bardziej postarać.</value>
   </data>
+  <data name="Srs0" xml:space="preserve">
+    <value>Pustka</value>
+  </data>
+  <data name="Srs2" xml:space="preserve">
+    <value>Kojarzę</value>
+  </data>
+  <data name="Srs4" xml:space="preserve">
+    <value>Dobrze</value>
+  </data>
+  <data name="Srs5" xml:space="preserve">
+    <value>Idealnie</value>
+  </data>
 </root>
