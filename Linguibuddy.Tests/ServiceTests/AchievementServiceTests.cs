@@ -190,6 +190,6 @@ public class AchievementServiceTests : IDisposable
         // Assert
         var result = await _db.UserAchievements.FirstAsync(ua => ua.Id == 101);
         result.IsUnlocked.Should().BeTrue();
-        result.UnlockDate.Should().Be(unlockDate); // Should not be updated to Today
+        result.UnlockDate.Should().Be(unlockDate);
     }
 }
