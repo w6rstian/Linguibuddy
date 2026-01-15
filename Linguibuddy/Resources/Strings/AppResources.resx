@@ -549,4 +549,10 @@
   <data name="Srs5" xml:space="preserve">
     <value>Perfect</value>
   </data>
+  <data name="SpeakingQuizDesc" xml:space="preserve">
+    <value>Say a sentence</value>
+  </data>
+  <data name="LearningMode" xml:space="preserve">
+    <value>Select learning mode</value>
+  </data>
 </root>

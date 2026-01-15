@@ -546,4 +546,10 @@
   <data name="Srs5" xml:space="preserve">
     <value>Idealnie</value>
   </data>
+  <data name="SpeakingQuizDesc" xml:space="preserve">
+    <value>Wypowiedz zdanie</value>
+  </data>
+  <data name="LearningMode" xml:space="preserve">
+    <value>Wybierz tryb nauki</value>
+  </data>
 </root>

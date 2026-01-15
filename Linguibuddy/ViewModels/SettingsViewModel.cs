@@ -20,6 +20,7 @@ public partial class SettingsViewModel : ObservableObject
     private readonly ILocalizationResourceManager _resourceManager;
     private readonly FirebaseAuthClient _authClient;
     private readonly IServiceProvider _services;
+    private readonly ICollectionService _collectionService;
 
     [ObservableProperty] private DifficultyLevel _selectedDifficulty;
 
@@ -33,12 +34,14 @@ public partial class SettingsViewModel : ObservableObject
         ILocalizationResourceManager resourceManager, 
         IAppUserService appUserService, 
         FirebaseAuthClient authClient, 
-        IServiceProvider services)
+        IServiceProvider services,
+        ICollectionService collectionService)
     {
         _resourceManager = resourceManager;
         _appUserService = appUserService;
         _authClient = authClient;
         _services = services;
+        _collectionService = collectionService;
 
         LoadLanguage();
         LoadTheme();
@@ -141,7 +144,7 @@ public partial class SettingsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public void ChangeLanguage()
+    public async Task ChangeLanguage()
     {
         var currentCulture = _resourceManager.CurrentCulture;
 
@@ -157,6 +160,14 @@ public partial class SettingsViewModel : ObservableObject
         }
 
         UpdateThemeName();
+
+        await _appUserService.MarkAiAnalysisRequiredAsync();
+        var collections = await _collectionService.GetUserCollectionsAsync();
+        foreach (var collection in collections)
+        {
+            collection.RequiresAiAnalysis = true;
+            await _collectionService.UpdateCollectionAsync(collection);
+        }
     }
 
     [RelayCommand]

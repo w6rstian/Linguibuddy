@@ -664,6 +664,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select learning mode.
+        /// </summary>
+        internal static string LearningMode {
+            get {
+                return ResourceManager.GetString("LearningMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Learning streak.
         /// </summary>
         internal static string LearningStreak {
@@ -1137,6 +1146,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string SignUpPls {
             get {
                 return ResourceManager.GetString("SignUpPls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Say a sentence.
+        /// </summary>
+        internal static string SpeakingQuizDesc {
+            get {
+                return ResourceManager.GetString("SpeakingQuizDesc", resourceCulture);
             }
         }
         
