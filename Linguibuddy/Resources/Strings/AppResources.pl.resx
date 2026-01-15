@@ -166,7 +166,7 @@
     <value>Wpisz słowo, aby wyszukać</value>
   </data>
   <data name="SelectCollectionError" xml:space="preserve">
-    <value>Wybierz lub stwórz kolekcję (w zakładce Fiszki), aby zapisać słowo.</value>
+    <value>Wybierz lub stwórz kolekcję (w zakładce Kolekcje), aby zapisać słowo.</value>
   </data>
   <data name="SelectCollectionPlaceholder" xml:space="preserve">
     <value>Wybierz kolekcję</value>

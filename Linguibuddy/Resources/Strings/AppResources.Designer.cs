@@ -961,7 +961,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select or create a collection first..
+        ///   Looks up a localized string similar to Please select or create a collection (in collections tab) first..
         /// </summary>
         internal static string SelectCollectionError {
             get {
