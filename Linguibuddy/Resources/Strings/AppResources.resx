@@ -556,7 +556,8 @@
     <value>Select learning mode</value>
   </data>
   <data name="SpacedRepetition" xml:space="preserve">
-    <value>Spaced&#10;Repetition</value>
+    <value>Spaced
+Repetition</value>
   </data>
   <data name="CreateFirstCollection" xml:space="preserve">
     <value>Create your first collection using the button above.</value>
@@ -614,5 +615,14 @@
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="ChangeUserName" xml:space="preserve">
+    <value>Change user name</value>
+  </data>
+  <data name="ChangeUserNameSuccess" xml:space="preserve">
+    <value>User name changed successfully</value>
+  </data>
+  <data name="ChangeUserNameDescription" xml:space="preserve">
+    <value>Enter your new user name</value>
   </data>
 </root>

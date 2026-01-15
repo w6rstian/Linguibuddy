@@ -223,8 +223,8 @@ public partial class SettingsViewModel : ObservableObject
     private async Task ChangeDisplayName()
     {
         var result = await Shell.Current.DisplayPromptAsync(
-            "Zmień nazwę użytkownika",
-            $" :",
+            AppResources.ChangeUserName,
+            $"{AppResources.ChangeUserNameDescription}:",
             AppResources.Save, AppResources.Cancel,
             initialValue: _authClient.User.Info.DisplayName);
 
@@ -236,8 +236,8 @@ public partial class SettingsViewModel : ObservableObject
             await _appUserService.UpdateAppUserAsync(appUser);
 
             await Shell.Current.DisplayAlert(
-                "Sukces",
-                "Pomyślnie zmieniono nazwę użytkownika",
+                AppResources.Success,
+                $"{AppResources.ChangeUserNameSuccess}!",
                 "OK");
         }
     }

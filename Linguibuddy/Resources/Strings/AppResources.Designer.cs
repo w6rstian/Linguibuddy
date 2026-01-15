@@ -268,11 +268,47 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to retrieve AI analysis..
+        /// </summary>
+        internal static string AiAnalysisError {
+            get {
+                return ResourceManager.GetString("AiAnalysisError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coach is analyzing your profile and collections....
+        /// </summary>
+        internal static string AiAnalysisThinking {
+            get {
+                return ResourceManager.GetString("AiAnalysisThinking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coach is analyzing your collection....
+        /// </summary>
+        internal static string AiAnalysisThinkingCollection {
+            get {
+                return ResourceManager.GetString("AiAnalysisThinkingCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AI Insight.
         /// </summary>
         internal static string AITeacherBoxTitle {
             get {
                 return ResourceManager.GetString("AITeacherBoxTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linguibuddy.
+        /// </summary>
+        internal static string AppName {
+            get {
+                return ResourceManager.GetString("AppName", resourceCulture);
             }
         }
         
@@ -340,6 +376,42 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} cards.
+        /// </summary>
+        internal static string CardsCount {
+            get {
+                return ResourceManager.GetString("CardsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change user name.
+        /// </summary>
+        internal static string ChangeUserName {
+            get {
+                return ResourceManager.GetString("ChangeUserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your new user name.
+        /// </summary>
+        internal static string ChangeUserNameDescription {
+            get {
+                return ResourceManager.GetString("ChangeUserNameDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name changed successfully.
+        /// </summary>
+        internal static string ChangeUserNameSuccess {
+            get {
+                return ResourceManager.GetString("ChangeUserNameSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check.
         /// </summary>
         internal static string Check {
@@ -399,6 +471,24 @@ namespace Linguibuddy.Resources.Strings {
         internal static string CorrectAnswersCount {
             get {
                 return ResourceManager.GetString("CorrectAnswersCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create your first collection using the button above..
+        /// </summary>
+        internal static string CreateFirstCollection {
+            get {
+                return ResourceManager.GetString("CreateFirstCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a free account.
+        /// </summary>
+        internal static string CreateFreeAccount {
+            get {
+                return ResourceManager.GetString("CreateFreeAccount", resourceCulture);
             }
         }
         
@@ -471,6 +561,33 @@ namespace Linguibuddy.Resources.Strings {
         internal static string EditCollection {
             get {
                 return ResourceManager.GetString("EditCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E.g.: {0}.
+        /// </summary>
+        internal static string Eg {
+            get {
+                return ResourceManager.GetString("Eg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email incorrect.
+        /// </summary>
+        internal static string EmailIncorrect {
+            get {
+                return ResourceManager.GetString("EmailIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email address.
+        /// </summary>
+        internal static string EmailPlaceholder {
+            get {
+                return ResourceManager.GetString("EmailPlaceholder", resourceCulture);
             }
         }
         
@@ -619,6 +736,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} items.
+        /// </summary>
+        internal static string ItemsCount {
+            get {
+                return ResourceManager.GetString("ItemsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         internal static string Language {
@@ -642,6 +768,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Leaderboard {
             get {
                 return ResourceManager.GetString("Leaderboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to retrieve leaderboard..
+        /// </summary>
+        internal static string LeaderboardErrorMessage {
+            get {
+                return ResourceManager.GetString("LeaderboardErrorMessage", resourceCulture);
             }
         }
         
@@ -862,11 +997,29 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No words in the collection.
+        /// </summary>
+        internal static string NoWordsInCollection {
+            get {
+                return ResourceManager.GetString("NoWordsInCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No words in the database..
         /// </summary>
         internal static string NoWordsInDatabase {
             get {
                 return ResourceManager.GetString("NoWordsInDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string OK {
+            get {
+                return ResourceManager.GetString("OK", resourceCulture);
             }
         }
         
@@ -880,11 +1033,29 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password insufficient.
+        /// </summary>
+        internal static string PasswordInsufficient {
+            get {
+                return ResourceManager.GetString("PasswordInsufficient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password must use 6 characters or more.
         /// </summary>
         internal static string PasswordLength {
             get {
                 return ResourceManager.GetString("PasswordLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        internal static string PasswordPlaceholder {
+            get {
+                return ResourceManager.GetString("PasswordPlaceholder", resourceCulture);
             }
         }
         
@@ -1150,6 +1321,16 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Spaced
+        ///Repetition.
+        /// </summary>
+        internal static string SpacedRepetition {
+            get {
+                return ResourceManager.GetString("SpacedRepetition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Say a sentence.
         /// </summary>
         internal static string SpeakingQuizDesc {
@@ -1200,6 +1381,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Srs5 {
             get {
                 return ResourceManager.GetString("Srs5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        internal static string Stop {
+            get {
+                return ResourceManager.GetString("Stop", resourceCulture);
             }
         }
         
@@ -1326,6 +1516,24 @@ namespace Linguibuddy.Resources.Strings {
         internal static string TryHarder {
             get {
                 return ResourceManager.GetString("TryHarder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username is empty.
+        /// </summary>
+        internal static string UsernameEmpty {
+            get {
+                return ResourceManager.GetString("UsernameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        internal static string UsernamePlaceholder {
+            get {
+                return ResourceManager.GetString("UsernamePlaceholder", resourceCulture);
             }
         }
         

@@ -553,7 +553,8 @@
     <value>Wybierz tryb nauki</value>
   </data>
   <data name="SpacedRepetition" xml:space="preserve">
-    <value>Powtórki&#10;w czasie</value>
+    <value>Powtórki
+w czasie</value>
   </data>
   <data name="CreateFirstCollection" xml:space="preserve">
     <value>Stwórz pierwszą kolekcję przyciskiem powyżej.</value>
@@ -611,5 +612,14 @@
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="ChangeUserName" xml:space="preserve">
+    <value>Zmień nazwę użytkownika</value>
+  </data>
+  <data name="ChangeUserNameSuccess" xml:space="preserve">
+    <value>Pomyślnie zmieniono nazwę użytkownika</value>
+  </data>
+  <data name="ChangeUserNameDescription" xml:space="preserve">
+    <value>Wpisz nową nazwę użytkownika</value>
   </data>
 </root>

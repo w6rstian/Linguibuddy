@@ -100,7 +100,7 @@
 
             <VerticalStackLayout Spacing="20">
                 <Button 
-                    Text="Zmień nazwę użytkownika"
+                    Text="{loc:Translate ChangeUserName}"
                     Command="{Binding ChangeDisplayNameCommand}"
                     MaximumWidthRequest="250"
                     CornerRadius="20" />
