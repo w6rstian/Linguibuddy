@@ -231,6 +231,9 @@ public partial class SettingsViewModel : ObservableObject
         if (!string.IsNullOrWhiteSpace(result) && result != _authClient.User.Info.DisplayName)
         {
             await _authClient.User.ChangeDisplayNameAsync(result);
+            var appUser = await _appUserService.GetCurrentUserAsync();
+            appUser.UserName = _authClient.User.Info.DisplayName;
+            await _appUserService.UpdateAppUserAsync(appUser);
 
             await Shell.Current.DisplayAlert(
                 "Sukces",
