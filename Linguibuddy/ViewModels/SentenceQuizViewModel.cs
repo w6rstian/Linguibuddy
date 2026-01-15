@@ -92,9 +92,9 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         SelectedWords.Clear();
         PolishTranslation = AppResources.SentenceGenerating;
 
-        if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+        if (!IsNetworkConnected())
         {
-            await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
             IsBusy = false;
             return;
         }
@@ -157,7 +157,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         catch (Exception e)
         {
             Debug.WriteLine($"Error loading sentence quiz: {e.Message}");
-            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
         }
         finally
         {
@@ -192,36 +192,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
         try
         {
-            var locales = await TextToSpeech.Default.GetLocalesAsync();
-            string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
-            // preferowany język US i GB na Android i Windows
-            var preferred = locales.FirstOrDefault(l =>
-                                (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
-                                femaleVoices.Any(f => l.Name.Contains(f)))
-                            ?? locales.FirstOrDefault(l =>
-                                (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
-                                femaleVoices.Any(f => l.Name.Contains(f)))
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
-                            // inne głosy
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
-                            ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
-
-            if (preferred == null)
-            {
-                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.InstallEng, "OK");
-                return;
-            }
-
-            await TextToSpeech.Default.SpeakAsync(_currentQuestion.EnglishSentence, new SpeechOptions
-            {
-                Locale = preferred,
-                Pitch = 1.0f,
-                Volume = 1.0f
-            });
+            await SpeakAsync(_currentQuestion.EnglishSentence);
         }
         catch (Exception ex)
         {
@@ -279,7 +250,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
     [RelayCommand]
     public async Task GoBack()
     {
-        await Shell.Current.GoToAsync("..");
+        await GoToAsync("..");
     }
 
     [RelayCommand]
@@ -299,5 +270,53 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
                     PointsEarned
                 );
             }
+    }
+
+    protected virtual bool IsNetworkConnected()
+    {
+        return Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+    }
+
+    protected virtual Task ShowAlertAsync(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual Task GoToAsync(string route)
+    {
+        return Shell.Current.GoToAsync(route);
+    }
+
+    protected virtual async Task SpeakAsync(string text)
+    {
+        var locales = await TextToSpeech.Default.GetLocalesAsync();
+        string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
+        
+        var preferred = locales.FirstOrDefault(l =>
+                            (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
+                            femaleVoices.Any(f => l.Name.Contains(f)))
+                        ?? locales.FirstOrDefault(l =>
+                            (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
+                            femaleVoices.Any(f => l.Name.Contains(f)))
+                        ?? locales.FirstOrDefault(l =>
+                            l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
+                        ?? locales.FirstOrDefault(l =>
+                            l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
+                        ?? locales.FirstOrDefault(l =>
+                            l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
+                        ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
+
+        if (preferred == null)
+        {
+            await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, "OK");
+            return;
+        }
+
+        await TextToSpeech.Default.SpeakAsync(text, new SpeechOptions
+        {
+            Locale = preferred,
+            Pitch = 1.0f,
+            Volume = 1.0f
+        });
     }
 }

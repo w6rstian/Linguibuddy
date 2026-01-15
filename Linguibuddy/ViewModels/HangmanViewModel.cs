@@ -8,10 +8,6 @@ using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
 using Linguibuddy.Services;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Text;
 
 namespace Linguibuddy.ViewModels;
 
@@ -85,15 +81,17 @@ public partial class HangmanViewModel : BaseQuizViewModel
         Mistakes = 0;
         CurrentImage = "hangman_0.jpg";
         FeedbackMessage = string.Empty;
+        
+        var theme = GetApplicationTheme();
         FeedbackColor =
-            Application.Current.RequestedTheme == AppTheme.Light
-                ? Application.Current.Resources["PrimaryDarkText"] as Color
+            theme == AppTheme.Light
+                ? GetColorResource("PrimaryDarkText") ?? Colors.Black
                 : Colors.White;
 
         var keyColor =
-            Application.Current.RequestedTheme == AppTheme.Light
-                ? Application.Current.Resources["Primary"] as Color
-                : Application.Current.Resources["PrimaryDark"] as Color;
+            theme == AppTheme.Light
+                ? GetColorResource("Primary") ?? Colors.Gray
+                : GetColorResource("PrimaryDark") ?? Colors.Gray;
 
         // Reset klawiatury
         foreach (var key in Keyboard)
@@ -140,7 +138,7 @@ public partial class HangmanViewModel : BaseQuizViewModel
         catch (Exception ex)
         {
             Debug.WriteLine($"Hangman error: {ex.Message}");
-            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
         }
         finally
         {
@@ -231,7 +229,7 @@ public partial class HangmanViewModel : BaseQuizViewModel
     [RelayCommand]
     public async Task GoBack()
     {
-        await Shell.Current.GoToAsync("..");
+        await GoToAsync("..");
     }
 
     [RelayCommand]
@@ -251,5 +249,25 @@ public partial class HangmanViewModel : BaseQuizViewModel
                     PointsEarned
                 );
             }
+    }
+
+    protected virtual AppTheme GetApplicationTheme()
+    {
+        return Application.Current.RequestedTheme;
+    }
+
+    protected virtual Color? GetColorResource(string key)
+    {
+        return Application.Current.Resources[key] as Color;
+    }
+
+    protected virtual Task ShowAlertAsync(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual Task GoToAsync(string route)
+    {
+        return Shell.Current.GoToAsync(route);
     }
 }
