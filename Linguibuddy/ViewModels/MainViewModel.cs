@@ -61,17 +61,17 @@ public partial class MainViewModel : ObservableObject
 
     public async Task LoadProfileInfoAsync()
     {
-        if (_authClient.User != null)
+        if (IsUserAuthenticated())
         {
-            DisplayName = _authClient.User.Info.DisplayName;
+            DisplayName = GetUserDisplayName();
         }
         else
         {
-            var signInPage = _services.GetRequiredService<SignInPage>();
-            Application.Current.Windows[0].Page = new NavigationPage(signInPage);
+            NavigateToSignIn();
+            return;
         }
 
-        Email = _authClient.User.Info.Email;
+        Email = GetUserEmail();
         Points = await _appUserService.GetUserPointsAsync();
         CurrentStreak = await _learningService.GetCurrentStreakAsync();
         BestStreak = await _appUserService.GetUserBestStreakAsync();
@@ -97,7 +97,7 @@ public partial class MainViewModel : ObservableObject
 
         var collections = await _collectionService.GetUserCollectionsAsync();
 
-        var language = Preferences.Default.Get(Constants.LanguageKey, "pl");
+        var language = GetPreference(Constants.LanguageKey, "pl");
         var feedback = await _openAiService.AnalyzeComprehensiveProfileAsync(user, CurrentStreak, UnlockedAchievementsCount, collections, language);
 
         AiFeedback = feedback;
@@ -106,5 +106,34 @@ public partial class MainViewModel : ObservableObject
         user.RequiresAiAnalysis = false;
         IsAiThinking = false;
         await _appUserService.UpdateAppUserAsync(user);
+    }
+
+    protected virtual bool IsUserAuthenticated()
+    {
+        return _authClient.User != null;
+    }
+
+    protected virtual string GetUserDisplayName()
+    {
+        return _authClient.User?.Info?.DisplayName ?? string.Empty;
+    }
+
+    protected virtual string GetUserEmail()
+    {
+        return _authClient.User?.Info?.Email ?? string.Empty;
+    }
+
+    protected virtual void NavigateToSignIn()
+    {
+        var signInPage = _services.GetRequiredService<SignInPage>();
+        if (Application.Current?.Windows.Count > 0)
+        {
+            Application.Current.Windows[0].Page = new NavigationPage(signInPage);
+        }
+    }
+
+    protected virtual string GetPreference(string key, string defaultValue)
+    {
+        return Preferences.Default.Get(key, defaultValue);
     }
 }
