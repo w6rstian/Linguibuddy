@@ -10,23 +10,29 @@ namespace Linguibuddy.Tests.ServiceTests;
 
 public class CollectionServiceTests : IDisposable
 {
-    private readonly DataContext _db;
     private readonly IAuthService _auth;
+    private readonly DataContext _db;
     private readonly CollectionService _sut;
     private readonly string _userId = "user123";
 
     public CollectionServiceTests()
     {
         var options = new DbContextOptionsBuilder<DataContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-        
+
         _db = new DataContext(options);
         _auth = A.Fake<IAuthService>();
 
         A.CallTo(() => _auth.CurrentUserId).Returns(_userId);
 
         _sut = new CollectionService(_db, _auth);
+    }
+
+    public void Dispose()
+    {
+        _db.Database.EnsureDeleted();
+        _db.Dispose();
     }
 
     [Fact]
@@ -147,7 +153,8 @@ public class CollectionServiceTests : IDisposable
     {
         // Arrange
         var collection = new WordCollection { Id = 1, Name = "Col", UserId = _userId };
-        var item1 = new CollectionItem { Id = 1, Word = "Word1", CollectionId = 1, AddedDate = DateTime.UtcNow.AddDays(-1) };
+        var item1 = new CollectionItem
+            { Id = 1, Word = "Word1", CollectionId = 1, AddedDate = DateTime.UtcNow.AddDays(-1) };
         var item2 = new CollectionItem { Id = 2, Word = "Word2", CollectionId = 1, AddedDate = DateTime.UtcNow };
         var otherItem = new CollectionItem { Id = 3, Word = "Word3", CollectionId = 2 };
 
@@ -169,15 +176,15 @@ public class CollectionServiceTests : IDisposable
     {
         // Arrange
         var collection = new WordCollection { Id = 1, Name = "Col", UserId = _userId };
-        var dueItem = new CollectionItem 
-        { 
-            Id = 1, 
+        var dueItem = new CollectionItem
+        {
+            Id = 1,
             CollectionId = 1,
             FlashcardProgress = new Flashcard { NextReviewDate = DateTime.UtcNow.AddDays(-1) }
         };
-        var notDueItem = new CollectionItem 
-        { 
-            Id = 2, 
+        var notDueItem = new CollectionItem
+        {
+            Id = 2,
             CollectionId = 1,
             FlashcardProgress = new Flashcard { NextReviewDate = DateTime.UtcNow.AddDays(1) }
         };
@@ -225,12 +232,12 @@ public class CollectionServiceTests : IDisposable
     {
         // Arrange
         var collection = new WordCollection { Id = 1, Name = "Col", UserId = _userId };
-        var existingItem = new CollectionItem 
-        { 
-            CollectionId = 1, 
-            Word = "ExistingWord", 
-            PartOfSpeech = "noun", 
-            Definition = "def" 
+        var existingItem = new CollectionItem
+        {
+            CollectionId = 1,
+            Word = "ExistingWord",
+            PartOfSpeech = "noun",
+            Definition = "def"
         };
         _db.WordCollections.Add(collection);
         _db.CollectionItems.Add(existingItem);
@@ -282,11 +289,5 @@ public class CollectionServiceTests : IDisposable
         // Assert
         var updatedFlashcard = await _db.Flashcards.FindAsync(1);
         updatedFlashcard!.EaseFactor.Should().Be(3.0);
-    }
-
-    public void Dispose()
-    {
-        _db.Database.EnsureDeleted();
-        _db.Dispose();
     }
 }

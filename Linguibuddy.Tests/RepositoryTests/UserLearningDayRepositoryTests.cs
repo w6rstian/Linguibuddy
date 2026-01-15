@@ -14,11 +14,17 @@ public class UserLearningDayRepositoryTests : IDisposable
     public UserLearningDayRepositoryTests()
     {
         var options = new DbContextOptionsBuilder<DataContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
         _context = new DataContext(options);
         _sut = new UserLearningDayRepository(_context);
+    }
+
+    public void Dispose()
+    {
+        _context.Database.EnsureDeleted();
+        _context.Dispose();
     }
 
     [Fact]
@@ -74,7 +80,7 @@ public class UserLearningDayRepositoryTests : IDisposable
         var userId2 = "user2";
         var date1 = DateTime.Today;
         var date2 = DateTime.Today.AddDays(-1);
-        
+
         _context.UserLearningDays.AddRange(
             new UserLearningDay { AppUserId = userId1, Date = date1 },
             new UserLearningDay { AppUserId = userId1, Date = date2 },
@@ -89,7 +95,7 @@ public class UserLearningDayRepositoryTests : IDisposable
         result.Should().HaveCount(2);
         result.Should().Contain(date1);
         result.Should().Contain(date2);
-        result.Should().NotContain(d => d == DateTime.Today.AddDays(1)); // Random date not in db
+        result.Should().NotContain(d => d == DateTime.Today.AddDays(1));
     }
 
     [Fact]
@@ -115,11 +121,5 @@ public class UserLearningDayRepositoryTests : IDisposable
         result.Should().BeInDescendingOrder();
         result.First().Should().Be(date2);
         result.Last().Should().Be(date1);
-    }
-
-    public void Dispose()
-    {
-        _context.Database.EnsureDeleted();
-        _context.Dispose();
     }
 }

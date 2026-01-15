@@ -9,8 +9,8 @@ namespace Linguibuddy.Tests.ServiceTests;
 
 public class AppUserServiceTests
 {
-    private readonly IAppUserRepository _repo;
     private readonly IAuthService _auth;
+    private readonly IAppUserRepository _repo;
     private readonly AppUserService _sut;
     private readonly string _userId = "user123";
 
@@ -18,7 +18,7 @@ public class AppUserServiceTests
     {
         _repo = A.Fake<IAppUserRepository>();
         _auth = A.Fake<IAuthService>();
-        
+
         A.CallTo(() => _auth.CurrentUserId).Returns(_userId);
 
         _sut = new AppUserService(_repo, _auth);
@@ -298,12 +298,12 @@ public class AppUserServiceTests
         // Assert
         A.CallTo(() => _repo.Update(user)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _repo.SaveChangesAsync()).MustHaveHappenedOnceExactly();
-        
+
         // Verify internal state update by calling a getter without repo setup
         // The service should use the cached user we just updated
         // Clearing previous repo calls to ensure we don't rely on repo anymore
-        A.CallTo(() => _repo.GetByIdAsync(A<string>._)).Returns(Task.FromResult<AppUser?>(null)); 
-        
+        A.CallTo(() => _repo.GetByIdAsync(A<string>._)).Returns(Task.FromResult<AppUser?>(null));
+
         var points = await _sut.GetUserPointsAsync();
         points.Should().Be(10);
     }
@@ -347,7 +347,6 @@ public class AppUserServiceTests
         await _sut.GetUserDifficultyAsync();
 
         // Assert
-        // Should only be called once because the second call uses the cached _appUser
         A.CallTo(() => _repo.GetByIdAsync(_userId)).MustHaveHappenedOnceExactly();
     }
 }

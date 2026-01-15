@@ -1,21 +1,21 @@
+using System.Net;
 using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Data;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Services;
-using Microsoft.EntityFrameworkCore;
-using System.Net;
 using Linguibuddy.Tests.FakeHelpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Linguibuddy.Tests.ServiceTests;
 
 public class DictionaryApiServiceTests
 {
     private readonly DataContext _context;
-    private readonly IPexelsImageService _pexelsService;
-    private readonly FakeHttpMessageHandler _httpHandler;
     private readonly HttpClient _httpClient;
+    private readonly FakeHttpMessageHandler _httpHandler;
+    private readonly IPexelsImageService _pexelsService;
     private readonly DictionaryApiService _sut;
 
     public DictionaryApiServiceTests()
@@ -62,8 +62,9 @@ public class DictionaryApiServiceTests
     {
         // Arrange
         var word = "hello";
-        var jsonResponse = "[{\"word\":\"hello\",\"phonetic\":\"həˈləʊ\",\"phonetics\":[{\"text\":\"həˈləʊ\",\"audio\":\"\"}],\"meanings\":[{\"partOfSpeech\":\"noun\",\"definitions\":[{\"definition\":\"greeting\"}]}]}]";
-        
+        var jsonResponse =
+            "[{\"word\":\"hello\",\"phonetic\":\"həˈləʊ\",\"phonetics\":[{\"text\":\"həˈləʊ\",\"audio\":\"\"}],\"meanings\":[{\"partOfSpeech\":\"noun\",\"definitions\":[{\"definition\":\"greeting\"}]}]}]";
+
         _httpHandler.Response = new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,

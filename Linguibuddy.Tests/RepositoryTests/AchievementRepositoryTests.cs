@@ -10,15 +10,15 @@ namespace Linguibuddy.Tests.RepositoryTests;
 
 public class AchievementRepositoryTests : IDisposable
 {
-    private readonly DataContext _context;
     private readonly IAuthService _authService;
+    private readonly DataContext _context;
     private readonly AchievementRepository _sut;
     private readonly string _userId = "user123";
 
     public AchievementRepositoryTests()
     {
         var options = new DbContextOptionsBuilder<DataContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
         _context = new DataContext(options);
@@ -26,6 +26,12 @@ public class AchievementRepositoryTests : IDisposable
         A.CallTo(() => _authService.CurrentUserId).Returns(_userId);
 
         _sut = new AchievementRepository(_context, _authService);
+    }
+
+    public void Dispose()
+    {
+        _context.Database.EnsureDeleted();
+        _context.Dispose();
     }
 
     [Fact]
@@ -36,10 +42,12 @@ public class AchievementRepositoryTests : IDisposable
         var achievement2 = new Achievement { Id = 2, Name = "A2" };
         _context.Achievements.AddRange(achievement1, achievement2);
 
-        var userAchievement1 = new UserAchievement { Id = 1, AppUserId = _userId, AchievementId = 1, Achievement = achievement1 };
-        var userAchievement2 = new UserAchievement { Id = 2, AppUserId = "otherUser", AchievementId = 2, Achievement = achievement2 };
+        var userAchievement1 = new UserAchievement
+            { Id = 1, AppUserId = _userId, AchievementId = 1, Achievement = achievement1 };
+        var userAchievement2 = new UserAchievement
+            { Id = 2, AppUserId = "otherUser", AchievementId = 2, Achievement = achievement2 };
         _context.UserAchievements.AddRange(userAchievement1, userAchievement2);
-        
+
         await _context.SaveChangesAsync();
 
         // Act
@@ -59,11 +67,12 @@ public class AchievementRepositoryTests : IDisposable
         var achievement1 = new Achievement { Id = 1, Name = "A1" };
         _context.Achievements.Add(achievement1);
 
-        var userAchievement1 = new UserAchievement { Id = 1, AppUserId = _userId, AchievementId = 1, Achievement = achievement1 };
+        var userAchievement1 = new UserAchievement
+            { Id = 1, AppUserId = _userId, AchievementId = 1, Achievement = achievement1 };
         _context.UserAchievements.Add(userAchievement1);
-        
+
         await _context.SaveChangesAsync();
-        _context.ChangeTracker.Clear(); // Clear tracker to ensure we are not getting cached entities if we were to modify them
+        _context.ChangeTracker.Clear();
 
         // Act
         var result = await _sut.GetUserAchievementsAsNoTrackingAsync();
@@ -71,14 +80,10 @@ public class AchievementRepositoryTests : IDisposable
         // Assert
         result.Should().HaveCount(1);
         result.First().AppUserId.Should().Be(_userId);
-        
-        // Verifying AsNoTracking is a bit tricky directly on result, but we can check if modifying result affects context
-        // or relies on the fact that standard queries track entities.
-        // A common way to check if it worked is if the entity is attached.
-        
+
         var entry = _context.ChangeTracker.Entries<UserAchievement>()
             .FirstOrDefault(e => e.Entity.Id == result.First().Id);
-            
+
         entry.Should().BeNull("because the query was executed with AsNoTracking");
     }
 
@@ -99,11 +104,5 @@ public class AchievementRepositoryTests : IDisposable
 
         // Assert
         result.Should().Be(2); // ua1 and ua4
-    }
-
-    public void Dispose()
-    {
-        _context.Database.EnsureDeleted();
-        _context.Dispose();
     }
 }

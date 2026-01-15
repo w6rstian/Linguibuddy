@@ -1,8 +1,8 @@
+using DeepL;
 using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Services;
-using DeepL;
 
 namespace Linguibuddy.Tests.ServiceTests;
 
@@ -41,7 +41,7 @@ public class DeepLTranslationServiceTests
     {
         // Arrange
         var word = "error";
-        
+
         A.CallTo(() => _client.TranslateTextAsync(word, "EN", "PL", A<TextTranslateOptions>.Ignored))
             .Throws(new Exception("API Error"));
 

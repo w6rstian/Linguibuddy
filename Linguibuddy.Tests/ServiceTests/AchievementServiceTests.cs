@@ -11,9 +11,9 @@ namespace Linguibuddy.Tests.ServiceTests;
 
 public class AchievementServiceTests : IDisposable
 {
-    private readonly DataContext _db;
-    private readonly IAuthService _auth;
     private readonly IAppUserService _appUserService;
+    private readonly IAuthService _auth;
+    private readonly DataContext _db;
     private readonly IAchievementRepository _repo;
     private readonly AchievementService _sut;
     private readonly string _userId = "user123";
@@ -21,9 +21,9 @@ public class AchievementServiceTests : IDisposable
     public AchievementServiceTests()
     {
         var options = new DbContextOptionsBuilder<DataContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-        
+
         _db = new DataContext(options);
         _auth = A.Fake<IAuthService>();
         _appUserService = A.Fake<IAppUserService>();
@@ -34,23 +34,29 @@ public class AchievementServiceTests : IDisposable
         _sut = new AchievementService(_db, _auth, _appUserService, _repo);
     }
 
+    public void Dispose()
+    {
+        _db.Database.EnsureDeleted();
+        _db.Dispose();
+    }
+
     [Fact]
     public async Task CheckAchievementsAsync_ShouldUnlockPointsAchievement_WhenThresholdReached()
     {
         // Arrange
-        var achievement = new Achievement 
-        { 
-            Id = 1, 
-            UnlockCondition = AchievementUnlockType.TotalPoints, 
-            UnlockTargetValue = 100 
+        var achievement = new Achievement
+        {
+            Id = 1,
+            UnlockCondition = AchievementUnlockType.TotalPoints,
+            UnlockTargetValue = 100
         };
-        var userAchievement = new UserAchievement 
-        { 
-            Id = 101, 
-            AppUserId = _userId, 
-            AchievementId = 1, 
-            Achievement = achievement, 
-            IsUnlocked = false 
+        var userAchievement = new UserAchievement
+        {
+            Id = 101,
+            AppUserId = _userId,
+            AchievementId = 1,
+            Achievement = achievement,
+            IsUnlocked = false
         };
 
         _db.UserAchievements.Add(userAchievement);
@@ -73,19 +79,19 @@ public class AchievementServiceTests : IDisposable
     public async Task CheckAchievementsAsync_ShouldNotUnlockPointsAchievement_WhenThresholdNotReached()
     {
         // Arrange
-        var achievement = new Achievement 
-        { 
-            Id = 1, 
-            UnlockCondition = AchievementUnlockType.TotalPoints, 
-            UnlockTargetValue = 100 
+        var achievement = new Achievement
+        {
+            Id = 1,
+            UnlockCondition = AchievementUnlockType.TotalPoints,
+            UnlockTargetValue = 100
         };
-        var userAchievement = new UserAchievement 
-        { 
-            Id = 101, 
-            AppUserId = _userId, 
-            AchievementId = 1, 
-            Achievement = achievement, 
-            IsUnlocked = false 
+        var userAchievement = new UserAchievement
+        {
+            Id = 101,
+            AppUserId = _userId,
+            AchievementId = 1,
+            Achievement = achievement,
+            IsUnlocked = false
         };
 
         _db.UserAchievements.Add(userAchievement);
@@ -107,19 +113,19 @@ public class AchievementServiceTests : IDisposable
     public async Task CheckAchievementsAsync_ShouldUnlockStreakAchievement_WhenThresholdReached()
     {
         // Arrange
-        var achievement = new Achievement 
-        { 
-            Id = 2, 
-            UnlockCondition = AchievementUnlockType.LearningStreak, 
-            UnlockTargetValue = 7 
+        var achievement = new Achievement
+        {
+            Id = 2,
+            UnlockCondition = AchievementUnlockType.LearningStreak,
+            UnlockTargetValue = 7
         };
-        var userAchievement = new UserAchievement 
-        { 
-            Id = 102, 
-            AppUserId = _userId, 
-            AchievementId = 2, 
-            Achievement = achievement, 
-            IsUnlocked = false 
+        var userAchievement = new UserAchievement
+        {
+            Id = 102,
+            AppUserId = _userId,
+            AchievementId = 2,
+            Achievement = achievement,
+            IsUnlocked = false
         };
 
         _db.UserAchievements.Add(userAchievement);
@@ -156,18 +162,18 @@ public class AchievementServiceTests : IDisposable
     {
         // Arrange
         var unlockDate = DateTime.Today.AddDays(-5);
-        var achievement = new Achievement 
-        { 
-            Id = 1, 
-            UnlockCondition = AchievementUnlockType.TotalPoints, 
-            UnlockTargetValue = 100 
+        var achievement = new Achievement
+        {
+            Id = 1,
+            UnlockCondition = AchievementUnlockType.TotalPoints,
+            UnlockTargetValue = 100
         };
-        var userAchievement = new UserAchievement 
-        { 
-            Id = 101, 
-            AppUserId = _userId, 
-            AchievementId = 1, 
-            Achievement = achievement, 
+        var userAchievement = new UserAchievement
+        {
+            Id = 101,
+            AppUserId = _userId,
+            AchievementId = 1,
+            Achievement = achievement,
             IsUnlocked = true,
             UnlockDate = unlockDate
         };
@@ -185,11 +191,5 @@ public class AchievementServiceTests : IDisposable
         var result = await _db.UserAchievements.FirstAsync(ua => ua.Id == 101);
         result.IsUnlocked.Should().BeTrue();
         result.UnlockDate.Should().Be(unlockDate); // Should not be updated to Today
-    }
-
-    public void Dispose()
-    {
-        _db.Database.EnsureDeleted();
-        _db.Dispose();
     }
 }

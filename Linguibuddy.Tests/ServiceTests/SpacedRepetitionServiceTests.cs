@@ -65,13 +65,13 @@ public class SpacedRepetitionServiceTests
             Interval = 1,
             EaseFactor = 1.3
         };
-        var grade = 0; // Worst grade
+        var grade = 0;
 
         // Act
         _sut.ProcessResult(card, grade);
 
         // Assert
-        card.EaseFactor.Should().Be(1.3); // Minimum cap
+        card.EaseFactor.Should().Be(1.3);
     }
 
     [Fact]

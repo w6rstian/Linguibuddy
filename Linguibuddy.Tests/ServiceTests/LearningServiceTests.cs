@@ -8,10 +8,10 @@ namespace Linguibuddy.Tests.ServiceTests;
 
 public class LearningServiceTests
 {
-    private readonly IUserLearningDayRepository _repo;
     private readonly IAppUserRepository _appUserRepo;
     private readonly IAppUserService _appUserService;
     private readonly IAuthService _authService;
+    private readonly IUserLearningDayRepository _repo;
     private readonly LearningService _sut;
     private readonly string _userId = "user123";
 
@@ -39,10 +39,10 @@ public class LearningServiceTests
         await _sut.MarkLearnedTodayAsync();
 
         // Assert
-        A.CallTo(() => _repo.AddAsync(A<UserLearningDay>.That.Matches(d => 
-            d.AppUserId == _userId && 
-            d.Date == DateTime.Today && 
-            d.Learned == true)))
+        A.CallTo(() => _repo.AddAsync(A<UserLearningDay>.That.Matches(d =>
+                d.AppUserId == _userId &&
+                d.Date == DateTime.Today &&
+                d.Learned == true)))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -111,13 +111,12 @@ public class LearningServiceTests
     {
         // Arrange
         var user = new AppUser { Id = _userId };
-        // Dates should be returned in descending order as per service assumption (it checks sequentially backwards from today)
-        // Service logic: expected = Today, if match streak++, expected = expected - 1 day.
-        var dates = new List<DateTime> 
-        { 
-            DateTime.Today, 
-            DateTime.Today.AddDays(-1), 
-            DateTime.Today.AddDays(-2) 
+
+        var dates = new List<DateTime>
+        {
+            DateTime.Today,
+            DateTime.Today.AddDays(-1),
+            DateTime.Today.AddDays(-2)
         };
         A.CallTo(() => _appUserRepo.GetByIdAsync(_userId)).Returns(user);
         A.CallTo(() => _repo.GetLearningDatesAsync(_userId)).Returns(dates);
@@ -134,9 +133,9 @@ public class LearningServiceTests
     {
         // Arrange
         var user = new AppUser { Id = _userId };
-        var dates = new List<DateTime> 
-        { 
-            DateTime.Today, 
+        var dates = new List<DateTime>
+        {
+            DateTime.Today,
             DateTime.Today.AddDays(-2) // Skipped yesterday
         };
         A.CallTo(() => _appUserRepo.GetByIdAsync(_userId)).Returns(user);
@@ -154,10 +153,10 @@ public class LearningServiceTests
     {
         // Arrange
         var user = new AppUser { Id = _userId };
-        var dates = new List<DateTime> 
-        { 
-            DateTime.Today, 
-            DateTime.Today.AddDays(-1) 
+        var dates = new List<DateTime>
+        {
+            DateTime.Today,
+            DateTime.Today.AddDays(-1)
         };
         A.CallTo(() => _appUserRepo.GetByIdAsync(_userId)).Returns(user);
         A.CallTo(() => _repo.GetLearningDatesAsync(_userId)).Returns(dates);

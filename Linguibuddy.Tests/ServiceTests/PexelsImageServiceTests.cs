@@ -23,12 +23,12 @@ public class PexelsImageServiceTests
         // Arrange
         var word = "test";
         var expectedUrl = "https://example.com/medium.jpg";
-        
+
         var mockResponse = new PexelsPhotoResponse
         {
             photos = new List<PexelsPhoto>
             {
-                new PexelsPhoto
+                new()
                 {
                     source = new PexelsSource { medium = expectedUrl }
                 }

@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 
-namespace Linguibuddy.Tests.FakeHelpers
+namespace Linguibuddy.Tests.FakeHelpers;
+
+public class FakeHttpMessageHandler : HttpMessageHandler
 {
-    public class FakeHttpMessageHandler : HttpMessageHandler
-    {
-        public HttpResponseMessage? Response { get; set; }
-        public List<HttpRequestMessage> Requests { get; } = new();
+    public HttpResponseMessage? Response { get; set; }
+    public List<HttpRequestMessage> Requests { get; } = new();
 
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            Requests.Add(request);
-            return Task.FromResult(Response ?? new HttpResponseMessage(HttpStatusCode.NotFound));
-        }
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+        CancellationToken cancellationToken)
+    {
+        Requests.Add(request);
+        return Task.FromResult(Response ?? new HttpResponseMessage(HttpStatusCode.NotFound));
     }
 }

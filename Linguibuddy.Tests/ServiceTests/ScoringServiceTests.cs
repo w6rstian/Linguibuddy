@@ -9,8 +9,8 @@ namespace Linguibuddy.Tests.ServiceTests;
 
 public class ScoringServiceTests
 {
-    private readonly ICollectionService _collectionService;
     private readonly IAppUserService _appUserService;
+    private readonly ICollectionService _collectionService;
     private readonly ScoringService _sut;
 
     public ScoringServiceTests()
@@ -24,7 +24,8 @@ public class ScoringServiceTests
     [InlineData(GameType.AudioQuiz, DifficultyLevel.A1, 10)]
     [InlineData(GameType.ImageQuiz, DifficultyLevel.A1, 10)]
     [InlineData(GameType.Hangman, DifficultyLevel.A1, 50)]
-    public void CalculatePoints_ShouldReturnBasePoints_ForStandardGames(GameType gameType, DifficultyLevel difficulty, int expectedPoints)
+    public void CalculatePoints_ShouldReturnBasePoints_ForStandardGames(GameType gameType, DifficultyLevel difficulty,
+        int expectedPoints)
     {
         // Act
         var result = _sut.CalculatePoints(gameType, difficulty);
@@ -40,7 +41,8 @@ public class ScoringServiceTests
     [InlineData(GameType.SentenceQuiz, DifficultyLevel.B2, 30)] // 20 + 50% = 30
     [InlineData(GameType.SentenceQuiz, DifficultyLevel.C1, 36)] // 20 + 80% = 36
     [InlineData(GameType.SentenceQuiz, DifficultyLevel.C2, 40)] // 20 + 100% = 40
-    public void CalculatePoints_ShouldApplyDifficultyBonus_ForSentenceQuiz(GameType gameType, DifficultyLevel difficulty, int expectedPoints)
+    public void CalculatePoints_ShouldApplyDifficultyBonus_ForSentenceQuiz(GameType gameType,
+        DifficultyLevel difficulty, int expectedPoints)
     {
         // Act
         var result = _sut.CalculatePoints(gameType, difficulty);
@@ -52,7 +54,8 @@ public class ScoringServiceTests
     [Theory]
     [InlineData(GameType.SpeakingQuiz, DifficultyLevel.A1, 20)] // No bonus
     [InlineData(GameType.SpeakingQuiz, DifficultyLevel.B2, 30)] // 20 + 50% = 30
-    public void CalculatePoints_ShouldApplyDifficultyBonus_ForSpeakingQuiz(GameType gameType, DifficultyLevel difficulty, int expectedPoints)
+    public void CalculatePoints_ShouldApplyDifficultyBonus_ForSpeakingQuiz(GameType gameType,
+        DifficultyLevel difficulty, int expectedPoints)
     {
         // Act
         var result = _sut.CalculatePoints(gameType, difficulty);
@@ -75,13 +78,11 @@ public class ScoringServiceTests
         await _sut.SaveResultsAsync(collection, gameType, correctAnswers, totalQuestions, totalPoints);
 
         // Assert
-        // Check collection stats
         collection.AudioLastScore.Should().Be(0.8);
         collection.AudioBestScore.Should().Be(0.8);
         collection.AudioLastPlayed.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
         collection.RequiresAiAnalysis.Should().BeTrue();
 
-        // Check calls
         A.CallTo(() => _collectionService.UpdateCollectionAsync(collection)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _appUserService.AddUserPointsAsync(totalPoints)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _appUserService.MarkAiAnalysisRequiredAsync()).MustHaveHappenedOnceExactly();
@@ -102,7 +103,7 @@ public class ScoringServiceTests
 
         // Assert
         collection.ImageLastScore.Should().Be(0.0);
-        
+
         A.CallTo(() => _collectionService.UpdateCollectionAsync(collection)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _appUserService.AddUserPointsAsync(A<int>._)).MustNotHaveHappened();
         A.CallTo(() => _appUserService.MarkAiAnalysisRequiredAsync()).MustNotHaveHappened();
@@ -112,10 +113,10 @@ public class ScoringServiceTests
     public async Task SaveResultsAsync_ShouldNotOverwriteBestScore_WhenCurrentScoreIsLower()
     {
         // Arrange
-        var collection = new WordCollection 
-        { 
+        var collection = new WordCollection
+        {
             Id = 1,
-            HangmanBestScore = 0.9 
+            HangmanBestScore = 0.9
         };
         var gameType = GameType.Hangman;
         var correctAnswers = 5;
@@ -127,8 +128,8 @@ public class ScoringServiceTests
 
         // Assert
         collection.HangmanLastScore.Should().Be(0.5);
-        collection.HangmanBestScore.Should().Be(0.9); // Should remain 0.9
-        
+        collection.HangmanBestScore.Should().Be(0.9);
+
         A.CallTo(() => _collectionService.UpdateCollectionAsync(collection)).MustHaveHappenedOnceExactly();
     }
 
@@ -137,7 +138,7 @@ public class ScoringServiceTests
     {
         // Arrange
         var collection = new WordCollection { Id = 1 };
-        
+
         // Act
         await _sut.SaveResultsAsync(collection, GameType.AudioQuiz, 0, 0, 10);
 
@@ -151,7 +152,7 @@ public class ScoringServiceTests
     {
         // Arrange
         var collection = new WordCollection { Id = 1 };
-        
+
         // Act
         await _sut.SaveResultsAsync(collection, GameType.SentenceQuiz, 10, 10, 100);
 
@@ -166,7 +167,7 @@ public class ScoringServiceTests
     {
         // Arrange
         var collection = new WordCollection { Id = 1 };
-        
+
         // Act
         await _sut.SaveResultsAsync(collection, GameType.SpeakingQuiz, 5, 10, 50);
 

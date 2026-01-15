@@ -14,11 +14,17 @@ public class AppUserRepositoryTests : IDisposable
     public AppUserRepositoryTests()
     {
         var options = new DbContextOptionsBuilder<DataContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
         _context = new DataContext(options);
         _sut = new AppUserRepository(_context);
+    }
+
+    public void Dispose()
+    {
+        _context.Database.EnsureDeleted();
+        _context.Dispose();
     }
 
     [Fact]
@@ -99,11 +105,5 @@ public class AppUserRepositoryTests : IDisposable
         _context.ChangeTracker.Clear();
         var savedUser = await _context.AppUsers.FindAsync("user1");
         savedUser!.Points.Should().Be(20);
-    }
-
-    public void Dispose()
-    {
-        _context.Database.EnsureDeleted();
-        _context.Dispose();
     }
 }
