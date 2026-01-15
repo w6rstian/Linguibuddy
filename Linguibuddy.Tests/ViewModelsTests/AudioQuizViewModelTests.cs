@@ -9,6 +9,7 @@ using Microsoft.Maui.Graphics;
 using Plugin.Maui.Audio;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -20,7 +21,39 @@ public class AudioQuizViewModelTests : IDisposable
     private readonly IAudioManager _audioManager;
     private readonly IAppUserService _appUserService;
     private readonly ILearningService _learningService;
-    private readonly AudioQuizViewModel _viewModel;
+    private TestableAudioQuizViewModel _viewModel;
+
+    // Testable subclass to bypass static MAUI dependencies
+    private class TestableAudioQuizViewModel : AudioQuizViewModel
+    {
+        public string LastNavigatedRoute { get; private set; } = string.Empty;
+
+        public TestableAudioQuizViewModel(IScoringService scoringService, IAudioManager audioManager, IAppUserService appUserService, ILearningService learningService) 
+            : base(scoringService, audioManager, appUserService, learningService)
+        {
+        }
+
+        protected override bool IsNetworkConnected()
+        {
+            return true; // Simulate network available
+        }
+
+        protected override Task ShowAlert(string title, string message, string cancel)
+        {
+            return Task.CompletedTask; // Bypass UI alert
+        }
+        
+        protected override Task GoToAsync(string route)
+        {
+            LastNavigatedRoute = route;
+            return Task.CompletedTask;
+        }
+
+        protected override string GetCacheDirectory()
+        {
+             return System.IO.Path.GetTempPath();
+        }
+    }
 
     public AudioQuizViewModelTests()
     {
@@ -40,7 +73,7 @@ public class AudioQuizViewModelTests : IDisposable
         _appUserService = A.Fake<IAppUserService>();
         _learningService = A.Fake<ILearningService>();
 
-        _viewModel = new AudioQuizViewModel(_scoringService, _audioManager, _appUserService, _learningService);
+        _viewModel = new TestableAudioQuizViewModel(_scoringService, _audioManager, _appUserService, _learningService);
     }
 
     public void Dispose()
@@ -93,6 +126,35 @@ public class AudioQuizViewModelTests : IDisposable
 
         // Assert
         A.CallTo(() => _appUserService.GetUserLessonLengthAsync()).MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task LoadQuestionAsync_ShouldPrepareOptions_WhenNetworkIsAvailable()
+    {
+        // Arrange
+        var items = new List<CollectionItem>();
+        // We need at least 4 items for the quiz to proceed
+        for (int i = 1; i <= 5; i++)
+        {
+            items.Add(new CollectionItem { Id = i, Word = $"Word{i}" });
+        }
+
+        var collection = new WordCollection { Items = items };
+        _viewModel.SelectedCollection = collection;
+
+        A.CallTo(() => _appUserService.GetUserLessonLengthAsync()).Returns(5);
+        
+        // Populate the internal 'allWords' list
+        await _viewModel.ImportCollectionAsync();
+
+        // Act
+        await _viewModel.LoadQuestionAsync();
+
+        // Assert
+        _viewModel.TargetWord.Should().NotBeNull();
+        _viewModel.Options.Should().HaveCount(4);
+        _viewModel.Options.Select(o => o.Word).Should().Contain(_viewModel.TargetWord);
+        _viewModel.HasAppeared.Should().Contain(_viewModel.TargetWord);
     }
 
     [Fact]
@@ -154,5 +216,15 @@ public class AudioQuizViewModelTests : IDisposable
 
         // Assert
         _viewModel.Score.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task GoBack_ShouldNavigateBack()
+    {
+        // Act
+        await _viewModel.GoBackCommand.ExecuteAsync(null);
+
+        // Assert
+        _viewModel.LastNavigatedRoute.Should().Be("..");
     }
 }

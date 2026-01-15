@@ -75,9 +75,9 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
                 : Colors.White;
         Options.Clear();
 
-        if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+        if (!IsNetworkConnected())
         {
-            await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            await ShowAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
             IsBusy = false;
             return;
         }
@@ -131,7 +131,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
         catch (Exception ex)
         {
             Debug.WriteLine($"Error loading quiz: {ex.Message}");
-            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
+            await ShowAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
         }
         finally
         {
@@ -183,7 +183,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
             var audioBytes = await client.GetByteArrayAsync(url);
 
             var fileName = "quiz_temp_audio.mp3";
-            var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+            var filePath = Path.Combine(GetCacheDirectory(), fileName);
 
             await File.WriteAllBytesAsync(filePath, audioBytes);
 
@@ -196,7 +196,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
+            await ShowAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
             Debug.WriteLine($"Audio Error: {ex.Message}");
         }
     }
@@ -204,7 +204,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
     [RelayCommand]
     public async Task GoBack()
     {
-        await Shell.Current.GoToAsync("..");
+        await GoToAsync("..");
     }
 
     [RelayCommand]
@@ -236,5 +236,25 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
     private async Task DisplayResultScreen()
     {
+    }
+
+    protected virtual bool IsNetworkConnected()
+    {
+        return Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+    }
+
+    protected virtual Task ShowAlert(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual string GetCacheDirectory()
+    {
+        return FileSystem.CacheDirectory;
+    }
+
+    protected virtual Task GoToAsync(string route)
+    {
+        return Shell.Current.GoToAsync(route);
     }
 }

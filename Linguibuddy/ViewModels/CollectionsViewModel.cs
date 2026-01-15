@@ -42,7 +42,7 @@ public partial class CollectionsViewModel : ObservableObject
     [RelayCommand]
     public async Task CreateCollection()
     {
-        var result = await Shell.Current.DisplayPromptAsync(
+        var result = await ShowPromptAsync(
             AppResources.NewCollection,
             AppResources.NameEntry,
             "OK", AppResources.Cancel);
@@ -64,7 +64,7 @@ public partial class CollectionsViewModel : ObservableObject
             { "Collection", collection }
         };
 
-        await Shell.Current.GoToAsync(nameof(CollectionDetailsPage), navigationParameter);
+        await GoToAsync(nameof(CollectionDetailsPage), navigationParameter);
     }
 
     [RelayCommand]
@@ -72,7 +72,7 @@ public partial class CollectionsViewModel : ObservableObject
     {
         if (collection == null) return;
 
-        var confirm = await Shell.Current.DisplayAlert(
+        var confirm = await ShowAlertAsync(
             AppResources.RemoveCollection,
             $"{AppResources.RemoveCollectionDesc1} '{collection.Name}' {AppResources.RemoveCollectionDesc2}",
             AppResources.Yes, AppResources.No);
@@ -89,7 +89,7 @@ public partial class CollectionsViewModel : ObservableObject
     {
         if (collection == null || collection.Items == null || collection.Items.Count == 0)
         {
-            await Shell.Current.DisplayAlert(
+            await ShowAlertAsync(
                 AppResources.Error,
                 AppResources.CollectionEmpty,
                 "OK");
@@ -106,6 +106,26 @@ public partial class CollectionsViewModel : ObservableObject
             { "Mode", mode }
         };
 
-        await Shell.Current.GoToAsync(nameof(FlashcardsPage), navigationParameter);
+        await GoToAsync(nameof(FlashcardsPage), navigationParameter);
+    }
+
+    protected virtual Task<string> ShowPromptAsync(string title, string message, string accept = "OK", string cancel = "Cancel")
+    {
+        return Shell.Current.DisplayPromptAsync(title, message, accept, cancel);
+    }
+
+    protected virtual Task<bool> ShowAlertAsync(string title, string message, string accept, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, accept, cancel);
+    }
+
+    protected virtual Task ShowAlertAsync(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual Task GoToAsync(string route, IDictionary<string, object> parameters)
+    {
+        return Shell.Current.GoToAsync(route, parameters);
     }
 }
