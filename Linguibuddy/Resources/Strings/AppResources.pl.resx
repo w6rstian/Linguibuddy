@@ -552,4 +552,64 @@
   <data name="LearningMode" xml:space="preserve">
     <value>Wybierz tryb nauki</value>
   </data>
+  <data name="SpacedRepetition" xml:space="preserve">
+    <value>Powtórki&#10;w czasie</value>
+  </data>
+  <data name="CreateFirstCollection" xml:space="preserve">
+    <value>Stwórz pierwszą kolekcję przyciskiem powyżej.</value>
+  </data>
+  <data name="CardsCount" xml:space="preserve">
+    <value>{0} fiszek</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Linguibuddy</value>
+  </data>
+  <data name="CreateFreeAccount" xml:space="preserve">
+    <value>Stwórz darmowe konto</value>
+  </data>
+  <data name="UsernamePlaceholder" xml:space="preserve">
+    <value>Nazwa użytkownika</value>
+  </data>
+  <data name="UsernameEmpty" xml:space="preserve">
+    <value>Nazwa użytkownika jest pusta</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Adres email</value>
+  </data>
+  <data name="EmailIncorrect" xml:space="preserve">
+    <value>Email nieprawidłowy</value>
+  </data>
+  <data name="PasswordPlaceholder" xml:space="preserve">
+    <value>Hasło</value>
+  </data>
+  <data name="PasswordInsufficient" xml:space="preserve">
+    <value>Hasło niewystarczające</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Eg" xml:space="preserve">
+    <value>Np: {0}</value>
+  </data>
+  <data name="ItemsCount" xml:space="preserve">
+    <value>{0} elementów</value>
+  </data>
+  <data name="NoWordsInCollection" xml:space="preserve">
+    <value>Brak słówek w kolekcji</value>
+  </data>
+  <data name="AiAnalysisThinking" xml:space="preserve">
+    <value>Trener analizuje Twój profil i kolekcje...</value>
+  </data>
+  <data name="AiAnalysisThinkingCollection" xml:space="preserve">
+    <value>Trener analizuje Twoją kolekcję...</value>
+  </data>
+  <data name="AiAnalysisError" xml:space="preserve">
+    <value>Nie udało się pobrać analizy AI.</value>
+  </data>
+  <data name="LeaderboardErrorMessage" xml:space="preserve">
+    <value>Nie udało się pobrać rankingu.</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>

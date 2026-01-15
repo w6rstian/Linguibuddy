@@ -555,4 +555,64 @@
   <data name="LearningMode" xml:space="preserve">
     <value>Select learning mode</value>
   </data>
+  <data name="SpacedRepetition" xml:space="preserve">
+    <value>Spaced&#10;Repetition</value>
+  </data>
+  <data name="CreateFirstCollection" xml:space="preserve">
+    <value>Create your first collection using the button above.</value>
+  </data>
+  <data name="CardsCount" xml:space="preserve">
+    <value>{0} cards</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Linguibuddy</value>
+  </data>
+  <data name="CreateFreeAccount" xml:space="preserve">
+    <value>Create a free account</value>
+  </data>
+  <data name="UsernamePlaceholder" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="UsernameEmpty" xml:space="preserve">
+    <value>Username is empty</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="EmailIncorrect" xml:space="preserve">
+    <value>Email incorrect</value>
+  </data>
+  <data name="PasswordPlaceholder" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PasswordInsufficient" xml:space="preserve">
+    <value>Password insufficient</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Eg" xml:space="preserve">
+    <value>E.g.: {0}</value>
+  </data>
+  <data name="ItemsCount" xml:space="preserve">
+    <value>{0} items</value>
+  </data>
+  <data name="NoWordsInCollection" xml:space="preserve">
+    <value>No words in the collection</value>
+  </data>
+  <data name="AiAnalysisThinking" xml:space="preserve">
+    <value>Coach is analyzing your profile and collections...</value>
+  </data>
+  <data name="AiAnalysisThinkingCollection" xml:space="preserve">
+    <value>Coach is analyzing your collection...</value>
+  </data>
+  <data name="AiAnalysisError" xml:space="preserve">
+    <value>Failed to retrieve AI analysis.</value>
+  </data>
+  <data name="LeaderboardErrorMessage" xml:space="preserve">
+    <value>Failed to retrieve leaderboard.</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>
