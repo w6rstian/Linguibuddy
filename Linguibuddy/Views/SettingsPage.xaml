@@ -7,14 +7,8 @@
              xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              x:DataType="vm:SettingsViewModel"
              Title="{loc:Translate Settings}">
-    <ScrollView>
-        <VerticalStackLayout Spacing="50" Margin="20,0,20,0" Padding="0,0,0,50">
-            <Label
-                Text="{loc:Translate Settings}"
-                FontSize="Header"
-                VerticalOptions="Center"
-                HorizontalOptions="Center" />
-
+    <ScrollView Margin="0,50">
+        <VerticalStackLayout Spacing="50" Margin="20,0,20,0" Padding="0,0,0,0">
             <Grid ColumnDefinitions="*,*"
                   RowDefinitions="*,*,*"
                   MaximumWidthRequest="500"
@@ -82,23 +76,41 @@
 
             </Grid>
 
-            <Picker Title="{loc:Translate PreferredDifficulty}"
-                    TitleColor="{AppThemeBinding Light=Black, Dark=White}"
-                    MaximumWidthRequest="250"
-                    ItemsSource="{Binding AvailableDifficulties}"
-                    SelectedItem="{Binding SelectedDifficulty}"/>
+            <VerticalStackLayout>
+                <Label 
+                    Text="{loc:Translate PreferredDifficulty}"
+                    TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                    HorizontalTextAlignment="Center" />
+                <Picker 
+                        MaximumWidthRequest="250"
+                        ItemsSource="{Binding AvailableDifficulties}"
+                        SelectedItem="{Binding SelectedDifficulty}"/>
+            </VerticalStackLayout>
 
-            <Picker Title="{loc:Translate PreferredMaxLessonLength}"
-                    TitleColor="{AppThemeBinding Light=Black, Dark=White}"
-                    MaximumWidthRequest="250"
-                    ItemsSource="{Binding AvailableLessonLengths}"
-                    SelectedItem="{Binding SelectedLessonLength}" />
+            <VerticalStackLayout>
+                <Label 
+                    Text="{loc:Translate PreferredMaxLessonLength}"
+                    TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                    HorizontalTextAlignment="Center" />
+                <Picker 
+                        MaximumWidthRequest="250"
+                        ItemsSource="{Binding AvailableLessonLengths}"
+                        SelectedItem="{Binding SelectedLessonLength}" />
+            </VerticalStackLayout>
 
-            <Button 
-                Text="{loc:Translate SignOut}"
-                Command="{Binding SignOutCommand}"
-                MaximumWidthRequest="250"
-                CornerRadius="20" />
+            <VerticalStackLayout Spacing="20">
+                <Button 
+                    Text="Zmień nazwę użytkownika"
+                    Command="{Binding ChangeDisplayNameCommand}"
+                    MaximumWidthRequest="250"
+                    CornerRadius="20" />
+            
+                <Button 
+                    Text="{loc:Translate SignOut}"
+                    Command="{Binding SignOutCommand}"
+                    MaximumWidthRequest="250"
+                    CornerRadius="20" />
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

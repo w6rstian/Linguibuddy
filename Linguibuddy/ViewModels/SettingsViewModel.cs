@@ -220,6 +220,27 @@ public partial class SettingsViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task ChangeDisplayName()
+    {
+        var result = await Shell.Current.DisplayPromptAsync(
+            "Zmień nazwę użytkownika",
+            $" :",
+            AppResources.Save, AppResources.Cancel,
+            initialValue: _authClient.User.Info.DisplayName);
+
+        if (!string.IsNullOrWhiteSpace(result) && result != _authClient.User.Info.DisplayName)
+        {
+            await _authClient.User.ChangeDisplayNameAsync(result);
+
+            await Shell.Current.DisplayAlert(
+                "Sukces",
+                "Pomyślnie zmieniono nazwę użytkownika",
+                "OK");
+        }
+    }
+
+
+    [RelayCommand]
     private async Task SignOut()
     {
         _authClient.SignOut();
