@@ -135,26 +135,26 @@ public partial class DictionaryViewModel : ObservableObject
             }
             else
             {
-                if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+                if (!IsNetworkConnected())
                 {
-                    await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+                    await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
                 }
                 else
                 {
-                    await Shell.Current.DisplayAlert(AppResources.Dictionary, AppResources.NoResultsFoundText, "OK");
+                    await ShowAlertAsync(AppResources.Dictionary, AppResources.NoResultsFoundText, "OK");
                 }
             }
                 
         }
         catch (Exception ex)
         {
-            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            if (!IsNetworkConnected())
             {
-                await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+                await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
             }
             else
             {
-                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
+                await ShowAlertAsync(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
             }
 
             Debug.WriteLine($"Error: {ex.Message}");
@@ -179,7 +179,7 @@ public partial class DictionaryViewModel : ObservableObject
                 using var client = new HttpClient();
                 var audioBytes = await client.GetByteArrayAsync(item.AudioUrl);
                 var fileName = "temp_pronunciation.mp3";
-                var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+                var filePath = Path.Combine(GetCacheDirectory(), fileName);
                 await File.WriteAllBytesAsync(filePath, audioBytes);
                 var fileStream = File.OpenRead(filePath);
 
@@ -216,7 +216,7 @@ public partial class DictionaryViewModel : ObservableObject
 
             if (preferred == null)
             {
-                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.InstallEng, "OK");
+                await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, "OK");
                 return;
             }
 
@@ -229,7 +229,7 @@ public partial class DictionaryViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
+            await ShowAlertAsync(AppResources.AudioError, AppResources.PlaybackError, "OK");
         }
     }
 
@@ -238,7 +238,7 @@ public partial class DictionaryViewModel : ObservableObject
     {
         if (SelectedCollection == null)
         {
-            await Shell.Current.DisplayAlert(
+            await ShowAlertAsync(
                 AppResources.Error,
                 AppResources.SelectCollectionError,
                 "OK");
@@ -247,7 +247,7 @@ public partial class DictionaryViewModel : ObservableObject
 
         if (item.SourceWordObject == null)
         {
-            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.NoSourceData, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.NoSourceData, "OK");
             return;
         }
 
@@ -259,7 +259,7 @@ public partial class DictionaryViewModel : ObservableObject
 
             if (string.IsNullOrEmpty(item.Translation) || item.Translation == AppResources.TranslationError)
             {
-                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.TranslationError, "OK");
+                await ShowAlertAsync(AppResources.Error, AppResources.TranslationError, "OK");
                 return;
             }
         }
@@ -285,12 +285,12 @@ public partial class DictionaryViewModel : ObservableObject
             if (isAdded)
             {
                 var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
-                await Shell.Current.DisplayAlert(AppResources.Success, message, "OK");
+                await ShowAlertAsync(AppResources.Success, message, "OK");
             }
 
             else
             {
-                await Shell.Current.DisplayAlert(
+                await ShowAlertAsync(
                     AppResources.Success,
                     AppResources.ItemExists,
                     "OK");
@@ -298,7 +298,7 @@ public partial class DictionaryViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert(AppResources.Error, ex.Message, "OK");
+            await ShowAlertAsync(AppResources.Error, ex.Message, "OK");
         }
     }
 
@@ -311,7 +311,7 @@ public partial class DictionaryViewModel : ObservableObject
 
         try
         {
-            var apiInt = Preferences.Default.Get(Constants.TranslationApiKey, (int)TranslationProvider.DeepL);
+            var apiInt = GetTranslationApiPreference();
             var provider = (TranslationProvider)apiInt;
 
             string? translation = null;
@@ -339,5 +339,25 @@ public partial class DictionaryViewModel : ObservableObject
         {
             item.IsBusy = false;
         }
+    }
+
+    protected virtual bool IsNetworkConnected()
+    {
+        return Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+    }
+
+    protected virtual Task ShowAlertAsync(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual string GetCacheDirectory()
+    {
+        return FileSystem.CacheDirectory;
+    }
+
+    protected virtual int GetTranslationApiPreference()
+    {
+        return Preferences.Default.Get(Constants.TranslationApiKey, (int)TranslationProvider.DeepL);
     }
 }
