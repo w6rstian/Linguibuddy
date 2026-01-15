@@ -43,15 +43,23 @@
                            TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
                 </VerticalStackLayout>
 
-                <Button Grid.Column="1"
-                        Text="{loc:Translate Edit}"
-                        Command="{Binding RenameCollectionCommand}"
-                        FontSize="14"
-                        HeightRequest="40"
-                        CornerRadius="8"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                        TextColor="White"
-                        VerticalOptions="Center" />
+                <HorizontalStackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
+                    <Button Text="{loc:Translate AddToCollection}"
+                            Command="{Binding AddToCollectionCommand}"
+                            FontSize="14"
+                            HeightRequest="40"
+                            CornerRadius="8"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            BorderWidth="1" />
+
+                    <Button Text="{loc:Translate NameEdit}"
+                            Command="{Binding RenameCollectionCommand}"
+                            FontSize="14"
+                            HeightRequest="40"
+                            CornerRadius="8"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            BorderWidth="1" />
+                </HorizontalStackLayout>
             </Grid>
         </Border>
 

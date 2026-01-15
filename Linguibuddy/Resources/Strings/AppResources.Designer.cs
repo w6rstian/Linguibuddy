@@ -259,6 +259,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to collection.
+        /// </summary>
+        internal static string AddToCollection {
+            get {
+                return ResourceManager.GetString("AddToCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AI Insight.
         /// </summary>
         internal static string AITeacherBoxTitle {
@@ -417,6 +426,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        internal static string Details {
+            get {
+                return ResourceManager.GetString("Details", resourceCulture);
             }
         }
         
@@ -678,6 +696,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Minigames {
             get {
                 return ResourceManager.GetString("Minigames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edytuj nazwę.
+        /// </summary>
+        internal static string NameEdit {
+            get {
+                return ResourceManager.GetString("NameEdit", resourceCulture);
             }
         }
         
@@ -961,7 +988,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select or create a collection first..
+        ///   Looks up a localized string similar to Please select or create a collection (in collections tab) first..
         /// </summary>
         internal static string SelectCollectionError {
             get {

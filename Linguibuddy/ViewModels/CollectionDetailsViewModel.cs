@@ -106,6 +106,19 @@ public partial class CollectionDetailsViewModel : ObservableObject
     }
 
     [RelayCommand]
+    public async Task AddToCollection()
+    {
+        if (Collection == null) return;
+
+        var parameters = new Dictionary<string, object>
+        {
+            { "TargetCollection", Collection }
+        };
+
+        await Shell.Current.GoToAsync("///DictionaryPage", parameters);
+    }
+
+    [RelayCommand]
     public async Task RenameCollection()
     {
         if (Collection == null) return;

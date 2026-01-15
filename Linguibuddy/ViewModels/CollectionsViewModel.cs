@@ -87,7 +87,14 @@ public partial class CollectionsViewModel : ObservableObject
     [RelayCommand]
     public async Task GoToLearning(WordCollection collection)
     {
-        if (collection == null) return;
+        if (collection == null || collection.Items == null || collection.Items.Count == 0)
+        {
+            await Shell.Current.DisplayAlert(
+                AppResources.Error,
+                AppResources.CollectionEmpty,
+                "OK");
+            return;
+        }
 
         var mode = IsSpacedRepetitionEnabled
             ? LearningMode.SpacedRepetition
