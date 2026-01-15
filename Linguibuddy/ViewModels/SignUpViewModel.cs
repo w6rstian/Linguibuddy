@@ -65,7 +65,8 @@ public partial class SignUpViewModel : ObservableObject
         {
             appUser = new AppUser
             {
-                Id = _authClient.User.Uid
+                Id = _authClient.User.Uid,
+                UserName = _authClient.User.Info.DisplayName
             };
             db.AppUsers.Add(appUser);
 
