@@ -16,5 +16,5 @@ public class UserAchievement
     [ForeignKey(nameof(AchievementId))] public Achievement Achievement { get; set; }
 
     public bool IsUnlocked { get; set; }
-    public DateTime UnlockDate { get; set; }
+    public DateTime? UnlockDate { get; set; }
 }

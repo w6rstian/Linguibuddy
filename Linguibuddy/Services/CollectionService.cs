@@ -8,18 +8,18 @@ namespace Linguibuddy.Services;
 
 public class CollectionService : ICollectionService
 {
-    private readonly FirebaseAuthClient _authClient;
+    private readonly IAuthService _authService;
     private readonly DataContext _context;
 
-    public CollectionService(DataContext context, FirebaseAuthClient authClient)
+    public CollectionService(DataContext context, IAuthService authService)
     {
         _context = context;
-        _authClient = authClient;
+        _authService = authService;
     }
 
     private string GetUserId()
     {
-        var uid = _authClient.User?.Uid;
+        var uid = _authService.CurrentUserId;
         if (string.IsNullOrEmpty(uid))
             throw new UnauthorizedAccessException("Użytkownik nie jest zalogowany.");
         return uid;

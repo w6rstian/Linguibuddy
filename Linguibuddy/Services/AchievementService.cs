@@ -9,7 +9,7 @@ namespace Linguibuddy.Services;
 
 public class AchievementService : IAchievementService
 {
-    private readonly FirebaseAuthClient _authClient;
+    private readonly IAuthService _authService;
     private readonly IAppUserService _appUserService;
     private readonly IAchievementRepository _achievementRepository;
 
@@ -18,14 +18,14 @@ public class AchievementService : IAchievementService
 
     public AchievementService(
         DataContext db, 
-        FirebaseAuthClient authClient, 
+        IAuthService authService, 
         IAppUserService appUserService, 
         IAchievementRepository achievementRepository
         )
     {
         _db = db;
-        _authClient = authClient;
-        _currentUserId = _authClient.User.Uid;
+        _authService = authService;
+        _currentUserId = _authService.CurrentUserId;
         _appUserService = appUserService;
         _achievementRepository = achievementRepository;
     }
@@ -44,6 +44,8 @@ public class AchievementService : IAchievementService
 
         foreach (var userAchievement in userAchievements)
         {
+            if (userAchievement.IsUnlocked) continue;
+
             var correspondingAchievement = userAchievement.Achievement;
             switch (correspondingAchievement.UnlockCondition)
             {

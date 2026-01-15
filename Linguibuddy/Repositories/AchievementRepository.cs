@@ -14,14 +14,14 @@ namespace Linguibuddy.Repositories
     public class AchievementRepository : IAchievementRepository
     {
         private readonly DataContext _db;
-        private readonly FirebaseAuthClient _authClient;
+        private readonly IAuthService _authService;
         private string _currentUserId;
 
-        public AchievementRepository(DataContext db, FirebaseAuthClient authClient)
+        public AchievementRepository(DataContext db, IAuthService authService)
         {
             _db = db;
-            _authClient = authClient;
-            _currentUserId = authClient.User.Uid;
+            _authService = authService;
+            _currentUserId = authService.CurrentUserId;
         }
 
         public async Task<List<UserAchievement>> GetUserAchievementsAsync()
