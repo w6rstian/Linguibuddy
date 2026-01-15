@@ -11,7 +11,7 @@ public class AppUser
 {
     [Key] public required string Id { get; set; } // same thing as Firebase Uid
 
-    //public string? UserName { get; set; }
+    public string? UserName { get; set; }
 
     public DifficultyLevel DifficultyLevel { get; set; } = DifficultyLevel.A1;
 

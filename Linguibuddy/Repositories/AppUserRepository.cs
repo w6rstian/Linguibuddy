@@ -36,4 +36,13 @@ public class AppUserRepository : IAppUserRepository
     {
         await _db.SaveChangesAsync();
     }
+
+    public async Task<List<AppUser>> GetTopUsersAsync(int count)
+    {
+        return await _db.AppUsers
+            .OrderByDescending(u => u.Points)
+            .Take(count)
+            .AsNoTracking()
+            .ToListAsync();
+    }
 }
