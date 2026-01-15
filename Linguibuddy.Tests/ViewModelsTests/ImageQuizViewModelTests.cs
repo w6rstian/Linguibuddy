@@ -6,7 +6,6 @@ using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
-using Plugin.Maui.Audio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,67 +15,49 @@ using Xunit;
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 [Collection("QuizTests")]
-public class AudioQuizViewModelTests
+public class ImageQuizViewModelTests
 {
+    private readonly ICollectionService _collectionService;
     private readonly IScoringService _scoringService;
-    private readonly IAudioManager _audioManager;
     private readonly IAppUserService _appUserService;
     private readonly ILearningService _learningService;
-    private TestableAudioQuizViewModel _viewModel;
+    private TestableImageQuizViewModel _viewModel;
 
-    // Testable subclass to bypass static MAUI dependencies
-    private class TestableAudioQuizViewModel : AudioQuizViewModel
+    public ImageQuizViewModelTests()
     {
-        public string LastNavigatedRoute { get; private set; } = string.Empty;
+        // Dependencies
+        _collectionService = A.Fake<ICollectionService>();
+        _scoringService = A.Fake<IScoringService>();
+        _appUserService = A.Fake<IAppUserService>();
+        _learningService = A.Fake<ILearningService>();
 
-        public TestableAudioQuizViewModel(IScoringService scoringService, IAudioManager audioManager, IAppUserService appUserService, ILearningService learningService) 
-            : base(scoringService, audioManager, appUserService, learningService)
+        _viewModel = new TestableImageQuizViewModel(_collectionService, _scoringService, _appUserService, _learningService);
+    }
+
+    private class TestableImageQuizViewModel : ImageQuizViewModel
+    {
+        public bool MockNetworkStatus { get; set; } = true;
+        public string? LastAlertMessage { get; private set; }
+        public string? LastNavigatedRoute { get; private set; }
+
+        public TestableImageQuizViewModel(ICollectionService collectionService, IScoringService scoringService, IAppUserService appUserService, ILearningService learningService) 
+            : base(collectionService, scoringService, appUserService, learningService)
         {
         }
 
-        protected override bool IsNetworkConnected()
-        {
-            return true; // Simulate network available
-        }
+        protected override bool IsNetworkConnected() => MockNetworkStatus;
 
         protected override Task ShowAlert(string title, string message, string cancel)
         {
-            return Task.CompletedTask; // Bypass UI alert
+            LastAlertMessage = message;
+            return Task.CompletedTask;
         }
-        
+
         protected override Task GoToAsync(string route)
         {
             LastNavigatedRoute = route;
             return Task.CompletedTask;
         }
-
-        protected override string GetCacheDirectory()
-        {
-             return System.IO.Path.GetTempPath();
-        }
-    }
-
-    public AudioQuizViewModelTests()
-    {
-        // Dependencies
-        _scoringService = A.Fake<IScoringService>();
-        _audioManager = A.Fake<IAudioManager>();
-        _appUserService = A.Fake<IAppUserService>();
-        _learningService = A.Fake<ILearningService>();
-
-        _viewModel = new TestableAudioQuizViewModel(_scoringService, _audioManager, _appUserService, _learningService);
-    }
-
-    [Fact]
-    public void Constructor_ShouldInitializePropertiesCorrectly()
-    {
-        // Assert
-        _viewModel.HasAppeared.Should().BeEmpty();
-        _viewModel.IsFinished.Should().BeFalse();
-        _viewModel.Score.Should().Be(0);
-        _viewModel.PointsEarned.Should().Be(0);
-        _viewModel.IsLearning.Should().BeTrue();
-        _viewModel.Options.Should().BeEmpty();
     }
 
     [Fact]
@@ -102,24 +83,10 @@ public class AudioQuizViewModelTests
     }
 
     [Fact]
-    public async Task ImportCollectionAsync_ShouldNotCallService_WhenCollectionIsNull()
-    {
-        // Arrange
-        _viewModel.SelectedCollection = null;
-
-        // Act
-        await _viewModel.ImportCollectionAsync();
-
-        // Assert
-        A.CallTo(() => _appUserService.GetUserLessonLengthAsync()).MustNotHaveHappened();
-    }
-
-    [Fact]
     public async Task LoadQuestionAsync_ShouldPrepareOptions_WhenNetworkIsAvailable()
     {
         // Arrange
         var items = new List<CollectionItem>();
-        // We need at least 4 items for the quiz to proceed
         for (int i = 1; i <= 5; i++)
         {
             items.Add(new CollectionItem { Id = i, Word = $"Word{i}" });
@@ -129,8 +96,6 @@ public class AudioQuizViewModelTests
         _viewModel.SelectedCollection = collection;
 
         A.CallTo(() => _appUserService.GetUserLessonLengthAsync()).Returns(5);
-        
-        // Populate the internal 'allWords' list
         await _viewModel.ImportCollectionAsync();
 
         // Act
@@ -140,11 +105,23 @@ public class AudioQuizViewModelTests
         _viewModel.TargetWord.Should().NotBeNull();
         _viewModel.Options.Should().HaveCount(4);
         _viewModel.Options.Select(o => o.Word).Should().Contain(_viewModel.TargetWord);
-        _viewModel.HasAppeared.Should().Contain(_viewModel.TargetWord);
     }
 
     [Fact]
-    public async Task SelectAnswerCommand_ShouldIncrementScoreAndPoints_WhenAnswerIsCorrect()
+    public async Task LoadQuestionAsync_ShouldShowAlert_WhenNetworkIsUnavailable()
+    {
+        // Arrange
+        _viewModel.MockNetworkStatus = false;
+
+        // Act
+        await _viewModel.LoadQuestionAsync();
+
+        // Assert
+        _viewModel.LastAlertMessage.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task SelectAnswerCommand_ShouldIncrementScore_WhenAnswerIsCorrect()
     {
         // Arrange
         var targetWord = new CollectionItem { Id = 1, Word = "Target" };
@@ -153,10 +130,10 @@ public class AudioQuizViewModelTests
         _viewModel.TargetWord = targetWord;
         _viewModel.Options.Add(option);
 
-        A.CallTo(() => _scoringService.CalculatePoints(GameType.AudioQuiz, DifficultyLevel.A1)).Returns(10);
+        A.CallTo(() => _scoringService.CalculatePoints(GameType.ImageQuiz, DifficultyLevel.A1)).Returns(10);
 
         // Act
-        await _viewModel.SelectAnswerCommand.ExecuteAsync(option);
+        _viewModel.SelectAnswerCommand.Execute(option);
 
         // Assert
         _viewModel.Score.Should().Be(1);
@@ -165,7 +142,7 @@ public class AudioQuizViewModelTests
     }
 
     [Fact]
-    public async Task SelectAnswerCommand_ShouldMarkIncorrectAndFindCorrect_WhenAnswerIsIncorrect()
+    public void SelectAnswerCommand_ShouldMarkIncorrect_WhenAnswerIsWrong()
     {
         // Arrange
         var targetWord = new CollectionItem { Id = 1, Word = "Target" };
@@ -179,29 +156,12 @@ public class AudioQuizViewModelTests
         _viewModel.Options.Add(wrongOption);
 
         // Act
-        await _viewModel.SelectAnswerCommand.ExecuteAsync(wrongOption);
+        _viewModel.SelectAnswerCommand.Execute(wrongOption);
 
         // Assert
         _viewModel.Score.Should().Be(0);
         wrongOption.BackgroundColor.Should().Be(Colors.Salmon);
         correctOption.BackgroundColor.Should().Be(Colors.LightGreen);
-    }
-    
-    [Fact]
-    public async Task SelectAnswerCommand_ShouldDoNothing_WhenAlreadyAnswered()
-    {
-        // Arrange
-        var targetWord = new CollectionItem { Id = 1, Word = "Target" };
-        var option = new QuizOption(targetWord);
-        
-        _viewModel.TargetWord = targetWord;
-        _viewModel.IsAnswered = true;
-
-        // Act
-        await _viewModel.SelectAnswerCommand.ExecuteAsync(option);
-
-        // Assert
-        _viewModel.Score.Should().Be(0);
     }
 
     [Fact]
