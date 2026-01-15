@@ -16,4 +16,5 @@ public interface IAppUserService
     Task MarkAiAnalysisRequiredAsync();
     Task UpdateAppUserAsync(AppUser user);
     Task<AppUser> GetCurrentUserAsync();
+    Task<List<AppUser>> GetLeaderboardAsync(int count = 50);
 }

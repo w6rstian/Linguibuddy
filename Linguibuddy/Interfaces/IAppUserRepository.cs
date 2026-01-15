@@ -8,4 +8,5 @@ public interface IAppUserRepository
     Task AddAsync(AppUser user);
     void Update(AppUser user);
     Task SaveChangesAsync();
+    Task<List<AppUser>> GetTopUsersAsync(int count);
 }

@@ -30,19 +30,19 @@ public partial class LeaderboardViewModel : ObservableObject
         IsLoading = true;
         try
         {
-            //var topUsers = await _appUserService.GetLeaderboardAsync();
-            //var items = topUsers.Select((u, index) => new LeaderboardItem
-            //{
-            //    Rank = index + 1,
-            //    UserName = string.IsNullOrEmpty(u.UserName) ? "Anonim" : u.UserName,
-            //    Points = u.Points
-            //}).ToList();
+            var topUsers = await _appUserService.GetLeaderboardAsync();
+            var items = topUsers.Select((u, index) => new LeaderboardItem
+            {
+                Rank = index + 1,
+                UserName = string.IsNullOrEmpty(u.UserName) ? "Anonim" : u.UserName,
+                Points = u.Points
+            }).ToList();
 
-            //LeaderboardItems.Clear();
-            //foreach (var item in items)
-            //{
-            //    LeaderboardItems.Add(item);
-            //}
+            LeaderboardItems.Clear();
+            foreach (var item in items)
+            {
+                LeaderboardItems.Add(item);
+            }
         }
         catch (Exception ex)
         {
