@@ -8,21 +8,21 @@ public class LearningService : ILearningService
 {
     private readonly IAppUserRepository _appUserRepo;
     private readonly IAppUserService _appUserService;
-    private readonly FirebaseAuthClient _authClient;
+    private readonly IAuthService _authService;
 
     private readonly string _currentUserId;
     private readonly IUserLearningDayRepository _repo;
     private AppUser _appUser;
 
     public LearningService(IUserLearningDayRepository repo, IAppUserRepository appUserRepo,
-        IAppUserService appUserService, FirebaseAuthClient authClient)
+        IAppUserService appUserService, IAuthService authService)
     {
         _repo = repo;
         _appUserRepo = appUserRepo;
         _appUserService = appUserService;
-        _authClient = authClient;
+        _authService = authService;
 
-        _currentUserId = _authClient.User.Uid;
+        _currentUserId = _authService.CurrentUserId;
     }
 
     public async Task MarkLearnedTodayAsync()
