@@ -32,6 +32,7 @@ public partial class SearchResultItem : ObservableObject
     public bool ShowTranslateButton => string.IsNullOrEmpty(Translation) && !IsBusy;
 }
 
+[QueryProperty(nameof(TargetCollection), "TargetCollection")]
 public partial class DictionaryViewModel : ObservableObject
 {
     private readonly IAudioManager _audioManager;
@@ -47,6 +48,16 @@ public partial class DictionaryViewModel : ObservableObject
     [ObservableProperty] private bool _isLoading;
 
     [ObservableProperty] private WordCollection? _selectedCollection;
+
+    [ObservableProperty] private WordCollection? _targetCollection;
+
+    partial void OnTargetCollectionChanged(WordCollection? value)
+    {
+        if (value != null)
+        {
+            SelectedCollection = value;
+        }
+    }
 
     public DictionaryViewModel(
         IDictionaryApiService dictionaryService,
@@ -75,8 +86,14 @@ public partial class DictionaryViewModel : ObservableObject
             UserCollections.Clear();
             foreach (var col in collections) UserCollections.Add(col);
 
-            if (UserCollections.Any())
+            if (TargetCollection != null)
+            {
+                SelectedCollection = UserCollections.FirstOrDefault(c => c.Id == TargetCollection.Id);
+            }
+            else if (UserCollections.Any())
+            {
                 SelectedCollection = UserCollections.First();
+            }
         }
         catch (Exception ex)
         {

@@ -510,4 +510,13 @@
   <data name="ItemExists" xml:space="preserve">
     <value>The word is already in the collection.</value>
   </data>
+  <data name="AddToCollection" xml:space="preserve">
+    <value>Add to collection</value>
+  </data>
+  <data name="NameEdit" xml:space="preserve">
+    <value>Edytuj nazwę</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
 </root>
