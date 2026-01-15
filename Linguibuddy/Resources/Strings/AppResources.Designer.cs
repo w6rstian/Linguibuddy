@@ -259,6 +259,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AI Insight.
+        /// </summary>
+        internal static string AITeacherBoxTitle {
+            get {
+                return ResourceManager.GetString("AITeacherBoxTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click to listen.
         /// </summary>
         internal static string AudioClick {

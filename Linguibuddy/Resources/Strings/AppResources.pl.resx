@@ -444,9 +444,6 @@
   <data name="Points" xml:space="preserve">
     <value>Punkty</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Usuń</value>
-  </data>
   <data name="Achievement11Description" xml:space="preserve">
     <value>Zdobądź 500 punktów</value>
   </data>
@@ -500,5 +497,11 @@
   </data>
   <data name="Achievement23Name" xml:space="preserve">
     <value>Masz Już Rytm</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="AITeacherBoxTitle" xml:space="preserve">
+    <value>Wnioski AI</value>
   </data>
 </root>

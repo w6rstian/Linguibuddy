@@ -2,7 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
 using Linguibuddy.Interfaces;
+using Linguibuddy.Models;
 using Linguibuddy.Views;
+using PexelsDotNetSDK.Models;
 
 namespace Linguibuddy.ViewModels;
 
@@ -14,6 +16,10 @@ public partial class MainViewModel : ObservableObject
     private readonly FirebaseAuthClient _authClient;
     private readonly ILearningService _learningService;
     private readonly IServiceProvider _services;
+    private readonly ICollectionService _collectionService;
+    private readonly IOpenAiService _openAiService;
+
+    private AppUser user;
 
     [ObservableProperty] private int _bestStreak;
 
@@ -29,17 +35,27 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty] private int _unlockedAchievementsCount;
 
+    [ObservableProperty] private string _aiFeedback;
+
+    [ObservableProperty] private bool _isAiThinking;
+
     public MainViewModel(
         IServiceProvider services,
         IAppUserService appUserService,
         ILearningService learningService,
         FirebaseAuthClient authClient, 
-        IAchievementRepository achievementRepository)
+        IAchievementRepository achievementRepository,
+        ICollectionService collectionService,
+        IOpenAiService openAiService)
     {
         _appUserService = appUserService;
         _learningService = learningService;
         _authClient = authClient;
         _achievementRepository = achievementRepository;
+        _collectionService = collectionService;
+        _openAiService = openAiService;
+        _services = services;
+        _isAiThinking = true;
     }
 
     public async Task LoadProfileInfoAsync()
@@ -58,10 +74,35 @@ public partial class MainViewModel : ObservableObject
         Points = await _appUserService.GetUserPointsAsync();
         CurrentStreak = await _learningService.GetCurrentStreakAsync();
         BestStreak = await _appUserService.GetUserBestStreakAsync();
+        user = await _appUserService.GetCurrentUserAsync();
 
         if (CurrentStreak == BestStreak)
             IsCurrentStreakBest = true;
 
         UnlockedAchievementsCount = await _achievementRepository.GetUnlockedAchievementsCountAsync();
+
+        await GetAiFeedback();
+    }
+
+    public async Task GetAiFeedback()
+    {
+        if (!user.RequiresAiAnalysis && !string.IsNullOrEmpty(user.LastAiAnalysis))
+        {
+            AiFeedback = user.LastAiAnalysis;
+            IsAiThinking = false;
+            return;
+        }
+        AiFeedback = "Trener analizuje Twój profil i kolekcje...";
+
+        var collections = await _collectionService.GetUserCollectionsAsync();
+
+        var feedback = await _openAiService.AnalyzeComprehensiveProfileAsync(user, CurrentStreak, UnlockedAchievementsCount, collections);
+
+        AiFeedback = feedback;
+
+        user.LastAiAnalysis = feedback;
+        user.RequiresAiAnalysis = false;
+        IsAiThinking = false;
+        await _appUserService.UpdateAppUserAsync(user);
     }
 }

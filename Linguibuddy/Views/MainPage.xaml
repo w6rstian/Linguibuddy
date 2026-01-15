@@ -9,171 +9,209 @@
 
     <ScrollView>
         <Grid ColumnDefinitions="*, *"
-          RowDefinitions="Auto, Auto"
-          RowSpacing="30">
+              RowDefinitions="Auto, Auto, Auto"
+              RowSpacing="30"
+              Margin="50,0,50,50">
             <Border
-            Grid.ColumnSpan="2"
-            StrokeShape="RoundRectangle 12"
-            BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
-            Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-            Padding="50,20"
-            MaximumHeightRequest="250"
-            MaximumWidthRequest="600"
-            VerticalOptions="Center"
-            HorizontalOptions="Fill">
+                Grid.ColumnSpan="2"
+                StrokeShape="RoundRectangle 12"
+                BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
+                Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                Padding="50,20"
+                MaximumHeightRequest="250"
+                MaximumWidthRequest="600"
+                VerticalOptions="Center"
+                HorizontalOptions="Fill">
                 <Border.Shadow>
                     <Shadow
-                    Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
-                    Radius="5"
-                    Opacity="0.4"
-                    Offset="0,4"/>
+                        Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
+                        Radius="5"
+                        Opacity="0.4"
+                        Offset="0,4"/>
                 </Border.Shadow>
 
                 <VerticalStackLayout
-                Spacing="0"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                MaximumWidthRequest="300">
+                    Spacing="0"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    MaximumWidthRequest="300">
 
                     <Label
-                    FontSize="Caption"
-                    TextColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray500}}"
-                    Text="{loc:Translate Profile}"
-                    HorizontalTextAlignment="Center" />
+                        FontSize="Caption"
+                        TextColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray500}}"
+                        Text="{loc:Translate Profile}"
+                        HorizontalTextAlignment="Center" />
                     <Label
-                    FontSize="Large"
-                    TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                    Text="{Binding DisplayName}"
-                    HorizontalTextAlignment="Center" />
+                        FontSize="Large"
+                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                        Text="{Binding DisplayName}"
+                        HorizontalTextAlignment="Center" />
                     <Label
-                    FontSize="Micro"
-                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}"
-                    Text="{Binding Email}"
-                    HorizontalTextAlignment="Center" />
+                        FontSize="Micro"
+                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}"
+                        Text="{Binding Email}"
+                        HorizontalTextAlignment="Center" />
                     <HorizontalStackLayout
-                    Spacing="10"
-                    Margin="0,10,0,0">
+                        Spacing="10"
+                        Margin="0,10,0,0">
                         <Label
-                        FontSize="Medium"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        Text="{loc:Translate Points, StringFormat='{}{0}:'}"
-                        HorizontalTextAlignment="Center" />
+                            FontSize="Medium"
+                            TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                            Text="{loc:Translate Points, StringFormat='{}{0}:'}"
+                            HorizontalTextAlignment="Center" />
                         <Label
-                        FontSize="Medium"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        Text="{Binding Points}"
-                        HorizontalTextAlignment="Center" />
+                            FontSize="Medium"
+                            TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                            Text="{Binding Points}"
+                            HorizontalTextAlignment="Center" />
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Border>
             <Border
-            Grid.Row="1"
-            StrokeShape="RoundRectangle 12"
-            BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
-            Stroke="{AppThemeBinding Light=OrangeRed, Dark=OrangeRed}"
-            Padding="25,10"
-            MaximumHeightRequest="300"
-            MaximumWidthRequest="300"
-            VerticalOptions="Center"
-            HorizontalOptions="Fill">
+                Grid.Row="1"
+                StrokeShape="RoundRectangle 12"
+                BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
+                Stroke="{AppThemeBinding Light=OrangeRed, Dark=OrangeRed}"
+                Padding="25,10"
+                MaximumHeightRequest="300"
+                MaximumWidthRequest="300"
+                VerticalOptions="Center"
+                HorizontalOptions="Fill">
                 <Border.Shadow>
                     <Shadow
-                    Brush="{AppThemeBinding Light=OrangeRed, Dark=OrangeRed}"
-                    Radius="5"
-                    Opacity="0.4"
-                    Offset="0,4"/>
+                        Brush="{AppThemeBinding Light=OrangeRed, Dark=OrangeRed}"
+                        Radius="5"
+                        Opacity="0.4"
+                        Offset="0,4"/>
                 </Border.Shadow>
                 <VerticalStackLayout>
                     <Label
-                    Text="{loc:Translate LearningStreak}"
-                    FontSize="Title"
-                    HorizontalTextAlignment="Center" />
-                    <Grid HorizontalOptions="Center"
-                      ColumnDefinitions="Auto,Auto,Auto">
-                        <Label
-                        Grid.Column="0"
-                        Text="🔥"
-                        FontSize="Large"
-                        VerticalTextAlignment="Center"
-                        Margin="0,0,6,0"/>
-                        <Label
-                        Grid.Column="1"
-                        FontSize="Large"
-                        Text="{Binding CurrentStreak}"
+                        Text="{loc:Translate LearningStreak}"
+                        FontSize="Title"
                         HorizontalTextAlignment="Center" />
+                    <Grid HorizontalOptions="Center"
+                          ColumnDefinitions="Auto,Auto,Auto">
+                        <Label
+                            Grid.Column="0"
+                            Text="🔥"
+                            FontSize="Large"
+                            VerticalTextAlignment="Center"
+                            Margin="0,0,6,0"/>
+                        <Label
+                            Grid.Column="1"
+                            FontSize="Large"
+                            Text="{Binding CurrentStreak}"
+                            HorizontalTextAlignment="Center" />
                         <BoxView
-                        Grid.Column="2"
-                        WidthRequest="42"
-                        Opacity="0"/>
+                            Grid.Column="2"
+                            WidthRequest="42"
+                            Opacity="0"/>
                     </Grid>
                     <FlexLayout
-                    Direction="Row"
-                    Wrap="Wrap"
-                    JustifyContent="End">
+                        Direction="Row"
+                        Wrap="Wrap"
+                        JustifyContent="End">
                         <Label
-                        Margin="0,0,5,0"
-                        FontSize="Subtitle"
-                        Text="{loc:Translate Best, StringFormat='{}{0}:'}" />
+                            Margin="0,0,5,0"
+                            FontSize="Subtitle"
+                            Text="{loc:Translate Best, StringFormat='{}{0}:'}" />
                         <Label
-                        FontSize="Subtitle"
-                        Text="{Binding BestStreak}" />
+                            FontSize="Subtitle"
+                            Text="{Binding BestStreak}" />
                     </FlexLayout>
                 </VerticalStackLayout>
             </Border>
             <Border
-            Grid.Row="1"
-            Grid.Column="1"
-            StrokeShape="RoundRectangle 12"
-            BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
-            Stroke="{AppThemeBinding Light=Goldenrod, Dark=Gold}"
-            Padding="25,10"
-            MaximumHeightRequest="300"
-            MaximumWidthRequest="300"
-            VerticalOptions="Center"
-            HorizontalOptions="Fill">
+                Grid.Row="1"
+                Grid.Column="1"
+                StrokeShape="RoundRectangle 12"
+                BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
+                Stroke="{AppThemeBinding Light=Goldenrod, Dark=Gold}"
+                Padding="25,10"
+                MaximumHeightRequest="300"
+                MaximumWidthRequest="300"
+                VerticalOptions="Center"
+                HorizontalOptions="Fill">
                 <Border.Shadow>
                     <Shadow
-                    Brush="{AppThemeBinding Light=Goldenrod, Dark=Gold}"
-                    Radius="5"
-                    Opacity="0.4"
-                    Offset="0,4"/>
+                        Brush="{AppThemeBinding Light=Goldenrod, Dark=Gold}"
+                        Radius="5"
+                        Opacity="0.4"
+                        Offset="0,4"/>
                 </Border.Shadow>
 
                 <VerticalStackLayout>
                     <Label
-                    Text="{loc:Translate Achievements}"
-                    FontSize="Title"
-                    HorizontalTextAlignment="Center" />
+                        Text="{loc:Translate Achievements}"
+                        FontSize="Title"
+                        HorizontalTextAlignment="Center" />
                     <Grid HorizontalOptions="Center"
-                      ColumnDefinitions="Auto,Auto,Auto">
+                          ColumnDefinitions="Auto,Auto,Auto">
                         <BoxView
-                        Grid.Column="0"
-                        WidthRequest="42"
-                        Opacity="0"/>
+                            Grid.Column="0"
+                            WidthRequest="42"
+                            Opacity="0"/>
                         <Label
-                        Grid.Column="1"
-                        Text="{Binding UnlockedAchievementsCount}"
-                        HorizontalTextAlignment="Center"
-                        FontSize="Large"/>
+                            Grid.Column="1"
+                            Text="{Binding UnlockedAchievementsCount}"
+                            HorizontalTextAlignment="Center"
+                            FontSize="Large"/>
                         <Label
-                        Grid.Column="2"
-                        Text="🏆"
-                        FontSize="Large"
-                        VerticalTextAlignment="Center"
-                        Margin="0,0,6,0"/>
+                            Grid.Column="2"
+                            Text="🏆"
+                            FontSize="Large"
+                            VerticalTextAlignment="Center"
+                            Margin="0,0,6,0"/>
                     </Grid>
                     <HorizontalStackLayout
-                    Spacing="10"
-                    HorizontalOptions="End">
+                        Spacing="10"
+                        HorizontalOptions="End">
                         <Label
-                        FontSize="Subtitle"
-                        Text=""
-                        HorizontalTextAlignment="End" />
+                            FontSize="Subtitle"
+                            Text=""
+                            HorizontalTextAlignment="End" />
                         <Label
-                        FontSize="Subtitle"
-                        Text=""
-                        HorizontalTextAlignment="End" />
+                            FontSize="Subtitle"
+                            Text=""
+                            HorizontalTextAlignment="End" />
                     </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+            <Border
+                Grid.ColumnSpan="2"
+                Grid.Row="2"
+                StrokeShape="RoundRectangle 12"
+                BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray950}}"
+                Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                Padding="50,20"
+                Margin="0"
+                VerticalOptions="Center"
+                HorizontalOptions="Fill">
+                <Border.Shadow>
+                    <Shadow
+                        Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
+                        Radius="5"
+                        Opacity="0.4"
+                        Offset="0,4"/>
+                </Border.Shadow>
+
+                <VerticalStackLayout
+                    Spacing="0"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center">
+
+                    <Label
+                        FontSize="Title"
+                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                        Text="{loc:Translate AITeacherBoxTitle}"
+                        HorizontalTextAlignment="Center" />
+                    
+                    <Label 
+                        FontSize="Subtitle"
+                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                        Text="{Binding AiFeedback}" />
+                    
+                    <ActivityIndicator IsVisible="{Binding IsAiThinking}" IsRunning="{Binding IsAiThinking}" />
                 </VerticalStackLayout>
             </Border>
         </Grid>
