@@ -5,6 +5,7 @@ using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Services;
+using LocalizationResourceManager.Maui;
 
 namespace Linguibuddy.ViewModels;
 
@@ -14,14 +15,17 @@ public partial class AchievementsViewModel : ObservableObject
     private readonly IAchievementRepository _achievementRepository;
     private ObservableCollection<UserAchievement> _allAchievements;
 
+    [ObservableProperty] private ILocalizationResourceManager _localizationResourceManager;
+
     [ObservableProperty] private ObservableCollection<UserAchievement> achievements = new(); // Lista do bindowania
 
     [ObservableProperty] private bool isLoading = true; // Do pokazywania loadera
 
-    public AchievementsViewModel(IAchievementService achievementService, IAchievementRepository achievementRepository)
+    public AchievementsViewModel(IAchievementService achievementService, IAchievementRepository achievementRepository, ILocalizationResourceManager localizationResourceManager)
     {
         _achievementService = achievementService;
         _achievementRepository = achievementRepository;
+        _localizationResourceManager = localizationResourceManager;
     }
 
     [RelayCommand]

@@ -2,47 +2,27 @@
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Newtonsoft.Json;
-using OpenAI;
 using OpenAI.Chat;
-using System.ClientModel;
 using System.Diagnostics;
 
 namespace Linguibuddy.Services;
 
 public class OpenAiService : IOpenAiService
 {
-    // gpt-4o-mini jest jednym z najtańszych, można będzie przetestować inne
-    private const string Model = "openai/gpt-4.1-mini";
+    private readonly IOpenAiClientWrapper _client;
 
-    // inny URL bo korzystamy z wersji od Githuba
-    private const string Endpoint = "https://models.github.ai/inference";
-
-    // klient OpenAI do czatu (są różne lub ogólny openai, w którym można skorzystać z opcji kilku na raz)
-    // tutaj używamy ChatClient do modelu czatu do testu API (na razie)
-    private readonly ChatClient _client;
-
-    public OpenAiService(string? apiKey)
+    public OpenAiService(IOpenAiClientWrapper client)
     {
-        if (string.IsNullOrEmpty(apiKey))
-            throw new ArgumentException("API key is required", nameof(apiKey));
-
-        _client = new ChatClient(
-            Model,
-            new ApiKeyCredential(apiKey),
-            new OpenAIClientOptions
-            {
-                Endpoint = new Uri(Endpoint)
-            }
-        );
+        _client = client;
     }
 
     public async Task<string> TestConnectionAsync()
     {
         try
         {
-            ChatCompletion completion = await _client.CompleteChatAsync("Jesteś online? Odpowiedz tylko wyrazem 'TAK'");
+            var response = await _client.CompleteChatAsync("Jesteś online? Odpowiedz tylko wyrazem 'TAK'");
 
-            return completion.Content[0].Text ?? "Empty response";
+            return response ?? "Empty response";
         }
         catch (Exception ex)
         {
@@ -70,9 +50,9 @@ public class OpenAiService : IOpenAiService
                     $"Context/Definition: {definition}")
             };
 
-            ChatCompletion completion = await _client.CompleteChatAsync(messages);
+            var response = await _client.CompleteChatAsync(messages);
 
-            return completion.Content[0].Text.Trim().TrimEnd('.');
+            return response.Trim().TrimEnd('.');
         }
         catch (Exception ex)
         {
@@ -99,11 +79,9 @@ public class OpenAiService : IOpenAiService
                     $"Difficulty Level: {difficultyLevel}")
             };
 
-            ChatCompletion completion = await _client.CompleteChatAsync(messages);
+            var responseText = await _client.CompleteChatAsync(messages);
 
-            var responseText = completion.Content[0].Text.Trim();
-
-            responseText = responseText
+            responseText = responseText.Trim()
                 .Replace("```json", "")
                 .Replace("```", "")
                 .Trim();
@@ -194,9 +172,7 @@ public class OpenAiService : IOpenAiService
                 new UserChatMessage($"Oto moje statystyki:\n{statsReport}")
             };
 
-            ChatCompletion completion = await _client.CompleteChatAsync(messages);
-
-            return completion.Content[0].Text.Trim();
+            return await _client.CompleteChatAsync(messages);
         }
         catch (Exception ex)
         {
@@ -328,9 +304,9 @@ public class OpenAiService : IOpenAiService
                 new UserChatMessage($"Oto moje pełne statystyki:\n{comprehensiveReport}")
             };
 
-            ChatCompletion completion = await _client.CompleteChatAsync(messages);
+            var response = await _client.CompleteChatAsync(messages);
 
-            return completion.Content[0].Text.Trim();
+            return response.Trim();
         }
         catch (Exception ex)
         {

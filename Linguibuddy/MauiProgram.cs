@@ -16,8 +16,11 @@ using LocalizationResourceManager.Maui;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using OpenAI;
+using OpenAI.Chat;
 using PexelsDotNetSDK.Api;
 using Plugin.Maui.Audio;
+using System.ClientModel;
 
 namespace Linguibuddy;
 
@@ -100,7 +103,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<IDeepLClientWrapper, DeepLClientWrapper>();
         builder.Services.AddSingleton<IDeepLTranslationService, DeepLTranslationService>();
 
-        builder.Services.AddSingleton<IOpenAiService>(new OpenAiService(githubAiKey));
+        builder.Services.AddSingleton(sp => new ChatClient(
+            "openai/gpt-4.1-mini",
+            new ApiKeyCredential(githubAiKey),
+            new OpenAIClientOptions { Endpoint = new Uri("https://models.github.ai/inference") }));
+
+        builder.Services.AddSingleton<IOpenAiClientWrapper, OpenAiClientWrapper>();
+        builder.Services.AddSingleton<IOpenAiService, OpenAiService>();
+
         builder.Services.AddTransient<MockDataSeeder>();
         builder.Services.AddTransient<ICollectionService, CollectionService>();
         builder.Services.AddTransient<ISpacedRepetitionService, SpacedRepetitionService>();
