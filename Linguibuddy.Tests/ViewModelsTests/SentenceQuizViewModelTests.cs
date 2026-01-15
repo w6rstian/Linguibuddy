@@ -4,6 +4,8 @@ using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,7 @@ using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
+[Collection("QuizTests")]
 public class SentenceQuizViewModelTests
 {
     private readonly IOpenAiService _openAiService;
@@ -60,6 +63,9 @@ public class SentenceQuizViewModelTests
             LastSpokenText = text;
             return Task.CompletedTask;
         }
+
+        protected override AppTheme GetApplicationTheme() => AppTheme.Light;
+        protected override Color? GetColorResource(string key) => Colors.Gray;
     }
 
     [Fact]
@@ -142,8 +148,6 @@ public class SentenceQuizViewModelTests
         // Arrange
         await SetupQuiz();
         
-        // Correct sentence: "I eat an apple"
-        // Available words might be shuffled, find and select in order
         var wordsToSelect = new[] { "I", "eat", "an", "apple" };
         foreach (var text in wordsToSelect)
         {
@@ -168,7 +172,6 @@ public class SentenceQuizViewModelTests
         // Arrange
         await SetupQuiz();
         
-        // Incorrect order
         var tile = _viewModel.AvailableWords.First(w => w.Text == "apple");
         _viewModel.SelectWordCommand.Execute(tile);
 

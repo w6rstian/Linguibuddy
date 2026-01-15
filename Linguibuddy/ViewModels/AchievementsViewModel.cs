@@ -13,7 +13,6 @@ public partial class AchievementsViewModel : ObservableObject
 {
     private readonly IAchievementService _achievementService;
     private readonly IAchievementRepository _achievementRepository;
-    private ObservableCollection<UserAchievement> _allAchievements;
 
     [ObservableProperty] private ILocalizationResourceManager _localizationResourceManager;
 
@@ -34,12 +33,12 @@ public partial class AchievementsViewModel : ObservableObject
         IsLoading = true;
         Achievements.Clear();
         await _achievementService.CheckAchievementsAsync();
-        var _allAchievements = await _achievementRepository.GetUserAchievementsAsNoTrackingAsync();
+        var allUserAchievements = await _achievementRepository.GetUserAchievementsAsNoTrackingAsync();
 
         bool wasLastUnlocked = true;
         AchievementUnlockType lastType = AchievementUnlockType.TotalPoints;
         bool isNewType = false;
-        foreach (var achievement in _allAchievements)
+        foreach (var achievement in allUserAchievements)
         {
             if (achievement.Achievement.UnlockCondition != lastType)
                 isNewType = true;

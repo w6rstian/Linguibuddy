@@ -93,7 +93,7 @@ public partial class FlashcardsViewModel : ObservableObject
         if (value != null) await StartSession();
     }
 
-    private async Task StartSession()
+    protected virtual async Task StartSession()
     {
         if (Collection == null)
         {

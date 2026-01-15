@@ -44,6 +44,8 @@ public class FlashcardsViewModelTests
             LastNavigatedRoute = route;
             return Task.CompletedTask;
         }
+
+        public Task CallStartSession() => base.StartSession();
     }
 
     [Fact]
@@ -58,10 +60,10 @@ public class FlashcardsViewModelTests
         };
         A.CallTo(() => _collectionService.GetItemsForLearning(1)).Returns(items);
         _viewModel.CurrentLearningMode = LearningMode.Standard;
+        _viewModel.Collection = collection;
 
         // Act
-        _viewModel.Collection = collection; 
-        await Task.CompletedTask; // Yield to ensure async OnCollectionChanged finishes if needed, though it is partial void
+        await _viewModel.CallStartSession();
 
         // Assert
         _viewModel.IsFinished.Should().BeFalse();
@@ -77,9 +79,10 @@ public class FlashcardsViewModelTests
         var items = new List<CollectionItem> { new() { Id = 1, Word = "DueWord" } };
         A.CallTo(() => _collectionService.GetItemsDueForLearning(1)).Returns(items);
         _viewModel.CurrentLearningMode = LearningMode.SpacedRepetition;
+        _viewModel.Collection = collection;
 
         // Act
-        _viewModel.Collection = collection;
+        await _viewModel.CallStartSession();
 
         // Assert
         _viewModel.CurrentItem?.Word.Should().Be("DueWord");
@@ -92,9 +95,10 @@ public class FlashcardsViewModelTests
         var collection = new WordCollection { Id = 1 };
         A.CallTo(() => _collectionService.GetItemsDueForLearning(1)).Returns(new List<CollectionItem>());
         _viewModel.CurrentLearningMode = LearningMode.SpacedRepetition;
+        _viewModel.Collection = collection;
 
         // Act
-        _viewModel.Collection = collection;
+        await _viewModel.CallStartSession();
 
         // Assert
         _viewModel.LastAlertMessage.Should().NotBeNullOrEmpty();
@@ -123,7 +127,8 @@ public class FlashcardsViewModelTests
         
         A.CallTo(() => _collectionService.GetItemsForLearning(1)).Returns(new List<CollectionItem> { item, nextItem });
         _viewModel.CurrentLearningMode = LearningMode.Standard;
-        _viewModel.Collection = collection; // Loads 'item' as current
+        _viewModel.Collection = collection;
+        await _viewModel.CallStartSession();
 
         // Act
         await _viewModel.GradeGoodCommand.ExecuteAsync(null);
@@ -145,6 +150,7 @@ public class FlashcardsViewModelTests
         A.CallTo(() => _collectionService.GetItemsForLearning(1)).Returns(new List<CollectionItem> { item });
         _viewModel.CurrentLearningMode = LearningMode.Standard;
         _viewModel.Collection = collection;
+        await _viewModel.CallStartSession();
 
         // Act
         await _viewModel.GradeNullCommand.ExecuteAsync(null); 
@@ -161,8 +167,8 @@ public class FlashcardsViewModelTests
         var collection = new WordCollection { Id = 1 };
         var item = new CollectionItem { Id = 1, Word = "Unknown" };
         A.CallTo(() => _collectionService.GetItemsForLearning(1)).Returns(new List<CollectionItem> { item });
-        _viewModel.CurrentLearningMode = LearningMode.Standard;
         _viewModel.Collection = collection;
+        await _viewModel.CallStartSession();
 
         // Act
         _viewModel.MarkAsUnknownCommand.Execute(null);
