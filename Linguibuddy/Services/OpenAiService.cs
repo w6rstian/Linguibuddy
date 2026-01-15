@@ -125,7 +125,7 @@ public class OpenAiService : IOpenAiService
     /// <summary>
     /// Analizuje postępy użytkownika w danej kolekcji i generuje porady.
     /// </summary>
-    public async Task<string> AnalyzeCollectionProgressAsync(WordCollection collection, DifficultyLevel userDifficulty)
+    public async Task<string> AnalyzeCollectionProgressAsync(WordCollection collection, DifficultyLevel userDifficulty, string language)
     {
         if (collection == null || collection.Items.Count == 0)
             return "Ta kolekcja jest pusta. Dodaj słówka i zacznij naukę, aby otrzymać porady.";
@@ -172,6 +172,8 @@ public class OpenAiService : IOpenAiService
 
         try
         {
+            var targetLanguage = language.ToLower().StartsWith("pl") ? "Polish" : "English";
+
             var messages = new List<ChatMessage>
             {
                 new SystemChatMessage(
@@ -181,6 +183,7 @@ public class OpenAiService : IOpenAiService
                     "1. Zaniedbania: Zwróć uwagę na gry, w które użytkownik dawno nie grał (data 'Nigdy' lub stara) lub ma w nich 0%.\n" +
                     "2. Progres: Jeśli 'Ostatni wynik' jest dużo gorszy od 'Najlepszego', zasugeruj powtórkę.\n" +
                     "3. Poziom trudności: Jeśli użytkownik ma wszędzie wyniki >90%, zasugeruj, że kolekcja jest opanowana i warto podnieść poziom trudności (CEFR) w ustawieniach.\n\n" +
+                    $"WAŻNE: Całą odpowiedź wygeneruj w języku: {targetLanguage} (przetłumacz również nagłówki z sekcji FORMAT ODPOWIEDZI).\n\n" +
                     "FORMAT ODPOWIEDZI (Bądź zwięzły, używaj emoji):\n" +
                     "Ocena ogólna: [Krótkie podsumowanie]\n" +
                     "Sugerowane działania:\n" +
@@ -208,7 +211,7 @@ public class OpenAiService : IOpenAiService
     /// <summary>
     /// Przeprowadza kompleksową analizę profilu użytkownika, uwzględniając postępy w kolekcjach oraz ogólne statystyki (streak, punkty).
     /// </summary>
-    public async Task<string> AnalyzeComprehensiveProfileAsync(AppUser user, int currentStreak, int unlockedAchievements, IEnumerable<WordCollection> collections)
+    public async Task<string> AnalyzeComprehensiveProfileAsync(AppUser user, int currentStreak, int unlockedAchievements, IEnumerable<WordCollection> collections, string language)
     {
         if (user == null) return "Brak danych użytkownika.";
 
@@ -281,6 +284,8 @@ public class OpenAiService : IOpenAiService
 
         try
         {
+            var targetLanguage = language.ToLower().StartsWith("pl") ? "Polish" : "English";
+
             var messages = new List<ChatMessage>
             {
                 /*
@@ -313,6 +318,7 @@ public class OpenAiService : IOpenAiService
                     "3. Jeśli wyniki są bardzo wysokie (>90%), a poziom trudności niski (A1/A2), zasugeruj jego zmianę.\n" +
                     "4. Zwróć uwagę na balans - czy uczeń nie unika np. Mówienia na rzecz prostego Hangmana?\n" +
                     "5. Skup się na najważniejszym aktualnie aspekcie. Bądź pozytywny i motywujący, możesz dać jakąś przyjazną emotkę na koniec, ale nie jest to wymagane.\n\n" +
+                    $"WAŻNE: Całą odpowiedź wygeneruj w języku: {targetLanguage}.\n\n" +
                     "FORMAT ODPOWIEDZI:\n" +
                     "[Jedno zdanie o stylu nauki użytkownika na podstawie danych]\n" +
                     "[Jedno zdanie podsumowujące mocne strony i to nad czym trzeba popracować.]\n" +
