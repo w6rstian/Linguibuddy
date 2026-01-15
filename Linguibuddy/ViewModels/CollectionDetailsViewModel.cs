@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
+using Linguibuddy.Helpers;
 
 namespace Linguibuddy.ViewModels;
 
@@ -53,7 +54,8 @@ public partial class CollectionDetailsViewModel : ObservableObject
         try
         {
             var difficulty = await _appUserService.GetUserDifficultyAsync();
-            var feedback = await _openAiService.AnalyzeCollectionProgressAsync(Collection, difficulty);
+            var language = Preferences.Default.Get(Constants.LanguageKey, "pl");
+            var feedback = await _openAiService.AnalyzeCollectionProgressAsync(Collection, difficulty, language);
             
             AiFeedback = feedback;
 

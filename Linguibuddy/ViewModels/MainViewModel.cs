@@ -4,7 +4,8 @@ using Firebase.Auth;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Views;
-using PexelsDotNetSDK.Models;
+using Linguibuddy.Helpers;
+using LocalizationResourceManager.Maui;
 
 namespace Linguibuddy.ViewModels;
 
@@ -96,7 +97,8 @@ public partial class MainViewModel : ObservableObject
 
         var collections = await _collectionService.GetUserCollectionsAsync();
 
-        var feedback = await _openAiService.AnalyzeComprehensiveProfileAsync(user, CurrentStreak, UnlockedAchievementsCount, collections);
+        var language = Preferences.Default.Get(Constants.LanguageKey, "pl");
+        var feedback = await _openAiService.AnalyzeComprehensiveProfileAsync(user, CurrentStreak, UnlockedAchievementsCount, collections, language);
 
         AiFeedback = feedback;
 
