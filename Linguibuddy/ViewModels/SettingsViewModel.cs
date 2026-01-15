@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
@@ -47,10 +47,6 @@ public partial class SettingsViewModel : ObservableObject
         LoadTheme();
         UpdateThemeName();
         UpdateApiName();
-        //LoadDifficulty();
-
-        //Task.Run(LoadDifficultyAsync);
-        //Task.Run(LoadLessonLengthAsync);
     }
 
     public IReadOnlyList<DifficultyLevel> AvailableDifficulties { get; }
@@ -64,8 +60,7 @@ public partial class SettingsViewModel : ObservableObject
 
     partial void OnSelectedDifficultyChanged(DifficultyLevel value)
     {
-        //Preferences.Default.Set(Constants.DifficultyLevelKey, (int)value);
-        Task.Run(async () =>
+        RunInBackground(async () =>
         {
             try
             {
@@ -80,8 +75,7 @@ public partial class SettingsViewModel : ObservableObject
 
     partial void OnSelectedLessonLengthChanged(int value)
     {
-        //Preferences.Default.Set(Constants.DifficultyLevelKey, (int)value);
-        Task.Run(async () =>
+        RunInBackground(async () =>
         {
             try
             {
@@ -98,36 +92,17 @@ public partial class SettingsViewModel : ObservableObject
     {
         var level = await _appUserService.GetUserDifficultyAsync();
         SelectedDifficulty = level;
-        // Musimy to zrobić na głównym wątku, bo aktualizujemy UI
-        //MainThread.BeginInvokeOnMainThread(() => { SelectedDifficulty = level; });
     }
 
     public async Task LoadLessonLengthAsync()
     {
         var length = await _appUserService.GetUserLessonLengthAsync();
         SelectedLessonLength = length;
-        //MainThread.BeginInvokeOnMainThread(() => { SelectedLessonLength = length; });
     }
-
-    /*
-    private void LoadDifficulty()
-    {
-        int savedLevel = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
-
-        if (Enum.IsDefined(typeof(DifficultyLevel), savedLevel))
-        {
-            SelectedDifficulty = (DifficultyLevel)savedLevel;
-        }
-        else
-        {
-            SelectedDifficulty = DifficultyLevel.A1;
-        }
-    }
-    */
 
     private void LoadLanguage()
     {
-        var savedLanguage = Preferences.Default.Get(Constants.LanguageKey, "pl");
+        var savedLanguage = GetPreference(Constants.LanguageKey, "pl");
         if (savedLanguage == "pl")
             _resourceManager.CurrentCulture = Polish;
         else
@@ -136,11 +111,11 @@ public partial class SettingsViewModel : ObservableObject
 
     private void LoadTheme()
     {
-        var savedTheme = Preferences.Default.Get(Constants.AppThemeKey, (int)AppTheme.Light);
+        var savedTheme = GetPreference(Constants.AppThemeKey, (int)AppTheme.Light);
         if (Enum.IsDefined(typeof(AppTheme), savedTheme))
-            Application.Current.UserAppTheme = (AppTheme)savedTheme;
+            SetAppTheme((AppTheme)savedTheme);
         else
-            Application.Current.UserAppTheme = AppTheme.Light;
+            SetAppTheme(AppTheme.Light);
     }
 
     [RelayCommand]
@@ -151,12 +126,12 @@ public partial class SettingsViewModel : ObservableObject
         if (currentCulture.Name == English.Name)
         {
             _resourceManager.CurrentCulture = Polish;
-            Preferences.Default.Set(Constants.LanguageKey, "pl");
+            SetPreference(Constants.LanguageKey, "pl");
         }
         else
         {
             _resourceManager.CurrentCulture = English;
-            Preferences.Default.Set(Constants.LanguageKey, "en");
+            SetPreference(Constants.LanguageKey, "en");
         }
 
         UpdateThemeName();
@@ -173,15 +148,15 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     public void ChangeTheme()
     {
-        if (Application.Current.RequestedTheme == AppTheme.Light)
+        if (GetAppTheme() == AppTheme.Light)
         {
-            Application.Current.UserAppTheme = AppTheme.Dark;
-            Preferences.Default.Set(Constants.AppThemeKey, (int)AppTheme.Dark);
+            SetAppTheme(AppTheme.Dark);
+            SetPreference(Constants.AppThemeKey, (int)AppTheme.Dark);
         }
         else
         {
-            Application.Current.UserAppTheme = AppTheme.Light;
-            Preferences.Default.Set(Constants.AppThemeKey, (int)AppTheme.Light);
+            SetAppTheme(AppTheme.Light);
+            SetPreference(Constants.AppThemeKey, (int)AppTheme.Light);
         }
 
         UpdateThemeName();
@@ -190,21 +165,21 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     public void ChangeTranslationApi()
     {
-        var currentApiInt = Preferences.Default.Get(Constants.TranslationApiKey, (int)TranslationProvider.OpenAi);
+        var currentApiInt = GetPreference(Constants.TranslationApiKey, (int)TranslationProvider.OpenAi);
         var currentProvider = (TranslationProvider)currentApiInt;
 
         var newProvider = currentProvider == TranslationProvider.DeepL
             ? TranslationProvider.OpenAi
             : TranslationProvider.DeepL;
 
-        Preferences.Default.Set(Constants.TranslationApiKey, (int)newProvider);
+        SetPreference(Constants.TranslationApiKey, (int)newProvider);
 
         UpdateApiName();
     }
 
     private void UpdateApiName()
     {
-        var currentApiInt = Preferences.Default.Get(Constants.TranslationApiKey, (int)TranslationProvider.OpenAi);
+        var currentApiInt = GetPreference(Constants.TranslationApiKey, (int)TranslationProvider.OpenAi);
         var provider = (TranslationProvider)currentApiInt;
 
         TranslationApiName = provider == TranslationProvider.OpenAi
@@ -214,7 +189,7 @@ public partial class SettingsViewModel : ObservableObject
 
     private void UpdateThemeName()
     {
-        ThemeName = Application.Current.RequestedTheme == AppTheme.Light
+        ThemeName = GetAppTheme() == AppTheme.Light
             ? AppResources.ThemeNameLight
             : AppResources.ThemeNameDark;
     }
@@ -223,7 +198,50 @@ public partial class SettingsViewModel : ObservableObject
     private async Task SignOut()
     {
         _authClient.SignOut();
+        NavigateToSignIn();
+    }
+
+    protected virtual void RunInBackground(Func<Task> action)
+    {
+        Task.Run(action);
+    }
+
+    protected virtual string GetPreference(string key, string defaultValue)
+    {
+        return Preferences.Default.Get(key, defaultValue);
+    }
+
+    protected virtual int GetPreference(string key, int defaultValue)
+    {
+        return Preferences.Default.Get(key, defaultValue);
+    }
+
+    protected virtual void SetPreference(string key, string value)
+    {
+        Preferences.Default.Set(key, value);
+    }
+
+    protected virtual void SetPreference(string key, int value)
+    {
+        Preferences.Default.Set(key, value);
+    }
+
+    protected virtual AppTheme GetAppTheme()
+    {
+        return Application.Current.RequestedTheme;
+    }
+
+    protected virtual void SetAppTheme(AppTheme theme)
+    {
+        Application.Current.UserAppTheme = theme;
+    }
+
+    protected virtual void NavigateToSignIn()
+    {
         var signInPage = _services.GetRequiredService<SignInPage>();
-        Application.Current.Windows[0].Page = new NavigationPage(signInPage);
+        if (Application.Current?.Windows.Count > 0)
+        {
+            Application.Current.Windows[0].Page = new NavigationPage(signInPage);
+        }
     }
 }
