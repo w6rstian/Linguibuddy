@@ -2,7 +2,7 @@ using FluentAssertions;
 using Linguibuddy.Models;
 using Linguibuddy.Services;
 
-namespace Linguibuddy.Tests.ServiceTests;
+namespace Linguibuddy.Tests.ServicesTests;
 
 public class SpacedRepetitionServiceTests
 {

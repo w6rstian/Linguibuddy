@@ -8,7 +8,7 @@ using Linguibuddy.Services;
 using Linguibuddy.Tests.FakeHelpers;
 using Microsoft.EntityFrameworkCore;
 
-namespace Linguibuddy.Tests.ServiceTests;
+namespace Linguibuddy.Tests.ServicesTests;
 
 public class DictionaryApiServiceTests
 {

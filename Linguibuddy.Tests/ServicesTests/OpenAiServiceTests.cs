@@ -5,9 +5,8 @@ using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Services;
 using OpenAI.Chat;
-using Xunit;
 
-namespace Linguibuddy.Tests.ServiceTests;
+namespace Linguibuddy.Tests.ServicesTests;
 
 public class OpenAiServiceTests
 {

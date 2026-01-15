@@ -6,7 +6,7 @@ using Linguibuddy.Models;
 using Linguibuddy.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace Linguibuddy.Tests.ServiceTests;
+namespace Linguibuddy.Tests.ServicesTests;
 
 public class CollectionServiceTests : IDisposable
 {
