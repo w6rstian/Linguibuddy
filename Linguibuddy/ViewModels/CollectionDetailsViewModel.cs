@@ -89,7 +89,7 @@ public partial class CollectionDetailsViewModel : ObservableObject
         try
         {
             var difficulty = await _appUserService.GetUserDifficultyAsync();
-            var language = Preferences.Default.Get(Constants.LanguageKey, "pl");
+            var language = GetPreference(Constants.LanguageKey, "pl");
             var feedback = await _openAiService.AnalyzeCollectionProgressAsync(Collection, difficulty, language);
             
             AiFeedback = feedback;
@@ -118,7 +118,7 @@ public partial class CollectionDetailsViewModel : ObservableObject
             { "TargetCollection", Collection }
         };
 
-        await Shell.Current.GoToAsync("///DictionaryPage", parameters);
+        await GoToAsync("///DictionaryPage", parameters);
     }
 
     [RelayCommand]
@@ -126,7 +126,7 @@ public partial class CollectionDetailsViewModel : ObservableObject
     {
         if (Collection == null) return;
 
-        var result = await Shell.Current.DisplayPromptAsync(
+        var result = await ShowPromptAsync(
             AppResources.EditCollection,
             $"{AppResources.Rename} :",
             AppResources.Save, AppResources.Cancel,
@@ -143,7 +143,7 @@ public partial class CollectionDetailsViewModel : ObservableObject
     {
         if (item == null || Collection == null) return;
 
-        var confirm = await Shell.Current.DisplayAlert(
+        var confirm = await ShowAlertAsync(
             AppResources.Delete,
             $"Czy na pewno chcesz usunąć słowo '{item.Word}'?",
             AppResources.Yes, AppResources.No);
@@ -160,5 +160,25 @@ public partial class CollectionDetailsViewModel : ObservableObject
     private void ToggleExpand()
     {
         IsExpanded = !IsExpanded;
+    }
+
+    protected virtual string GetPreference(string key, string defaultValue)
+    {
+        return Preferences.Default.Get(key, defaultValue);
+    }
+
+    protected virtual Task GoToAsync(string route, IDictionary<string, object> parameters)
+    {
+        return Shell.Current.GoToAsync(route, parameters);
+    }
+
+    protected virtual Task<string> ShowPromptAsync(string title, string message, string accept, string cancel, string initialValue)
+    {
+        return Shell.Current.DisplayPromptAsync(title, message, accept, cancel, initialValue: initialValue);
+    }
+
+    protected virtual Task<bool> ShowAlertAsync(string title, string message, string accept, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, accept, cancel);
     }
 }
