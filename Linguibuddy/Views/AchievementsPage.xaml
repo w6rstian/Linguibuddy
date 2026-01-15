@@ -6,6 +6,7 @@
              xmlns:converters="clr-namespace:Linguibuddy.Helpers"
              xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              x:Class="Linguibuddy.Views.AchievementsPage"
+             x:Name="AchievementsPageRoot"
              Title="{loc:Translate Achievements}">
     <ContentPage.Resources>
         <converters:AchievementIconConverter x:Key="AchievementIconConverter" />
@@ -38,15 +39,27 @@
                                        WidthRequest="50" HeightRequest="50"
                                        Grid.RowSpan="2" />
 
-                                <Label Text="{Binding Achievement.Name, Converter={StaticResource ResourceKeyConverter}}"
-                                       FontAttributes="Bold"
+                                <Label FontAttributes="Bold"
                                        FontSize="Medium"
-                                       Grid.Column="1" />
+                                       Grid.Column="1">
+                                    <Label.Text>
+                                        <MultiBinding Converter="{StaticResource ResourceKeyConverter}">
+                                            <Binding Path="Achievement.Name" />
+                                            <Binding Path="BindingContext.LocalizationResourceManager.CurrentCulture" Source="{x:Reference AchievementsPageRoot}" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
 
-                                <Label Text="{Binding Achievement.Description, Converter={StaticResource ResourceKeyConverter}}"
-                                       FontSize="Small"
+                                <Label FontSize="Small"
                                        TextColor="Gray"
-                                       Grid.Column="1" Grid.Row="1" />
+                                       Grid.Column="1" Grid.Row="1">
+                                    <Label.Text>
+                                        <MultiBinding Converter="{StaticResource ResourceKeyConverter}">
+                                            <Binding Path="Achievement.Description" />
+                                            <Binding Path="BindingContext.LocalizationResourceManager.CurrentCulture" Source="{x:Reference AchievementsPageRoot}" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
                             </Grid>
                         </Border>
                     </DataTemplate>
