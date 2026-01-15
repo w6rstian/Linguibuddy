@@ -32,7 +32,7 @@
             </Border.Shadow>
 
             <HorizontalStackLayout>
-                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center"
+                <VerticalStackLayout VerticalOptions="Center"
                                      HorizontalOptions="Start"
                                      MaximumWidthRequest="{OnPlatform Android=300, WinUI=300}">
                     <Label Text="{Binding Collection.Name}"
@@ -51,7 +51,7 @@
                            TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
                 </VerticalStackLayout>
 
-                <HorizontalStackLayout Grid.Column="1" Spacing="0" VerticalOptions="Start"
+                <HorizontalStackLayout Spacing="0" VerticalOptions="Start"
                                        HorizontalOptions="Start">
                     <ImageButton Source="{AppThemeBinding Light=edit_16dp_light.png, Dark=edit_16dp_dark.png}"
                                  HeightRequest="10"
