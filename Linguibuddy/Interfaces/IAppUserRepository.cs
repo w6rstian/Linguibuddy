@@ -5,6 +5,7 @@ namespace Linguibuddy.Interfaces;
 public interface IAppUserRepository
 {
     Task<AppUser?> GetByIdAsync(string userId);
+    Task<List<AppUser>> GetTopUsersAsync(int count);
     Task AddAsync(AppUser user);
     void Update(AppUser user);
     Task SaveChangesAsync();

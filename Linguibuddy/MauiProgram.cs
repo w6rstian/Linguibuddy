@@ -84,6 +84,7 @@ public static class MauiProgram
         builder.Services.AddTransient<SentenceQuizPage, SentenceQuizViewModel>();
         builder.Services.AddTransient<HangmanPage, HangmanViewModel>();
         builder.Services.AddTransient<SpeakingQuizPage, SpeakingQuizViewModel>();
+        builder.Services.AddTransient<LeaderboardPage, LeaderboardViewModel>();
         builder.Services.AddTransientPopup<WordCollectionPopup, WordCollectionPopupViewModel>();
 
         //var deepLKey = Environment.GetEnvironmentVariable("DEEPL_API_KEY");

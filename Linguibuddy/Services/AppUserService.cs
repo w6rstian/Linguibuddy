@@ -44,6 +44,11 @@ public class AppUserService : IAppUserService
         return _appUser.Points;
     }
 
+    public async Task<List<AppUser>> GetLeaderboardAsync(int count = 50)
+    {
+        return await _appUsers.GetTopUsersAsync(count);
+    }
+
     public async Task<DifficultyLevel> GetUserDifficultyAsync()
     {
         await EnsureUserLoadedAsync();

@@ -7,6 +7,7 @@ public interface IAppUserService
 {
     Task AddUserPointsAsync(int points);
     Task<int> GetUserPointsAsync();
+    Task<List<AppUser>> GetLeaderboardAsync(int count = 50);
     Task<DifficultyLevel> GetUserDifficultyAsync();
     Task SetUserDifficultyAsync(DifficultyLevel level);
     Task<int> GetUserLessonLengthAsync();

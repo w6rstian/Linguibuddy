@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
+             x:Class="Linguibuddy.Views.LeaderboardPage"
+             Title="Ranking"
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDark}}">
+
+    <Grid RowDefinitions="Auto, *" Padding="20">
+        <!-- Header -->
+        <Label Text="Top Użytkownicy" 
+               Style="{StaticResource Headline}" 
+               HorizontalOptions="Center" 
+               Margin="0,0,0,20"/>
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator IsRunning="{Binding IsLoading}" 
+                           IsVisible="{Binding IsLoading}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Grid.Row="1" />
+
+        <!-- Leaderboard List -->
+        <CollectionView Grid.Row="1" 
+                        ItemsSource="{Binding LeaderboardItems}"
+                        IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}">
+            <CollectionView.EmptyView>
+                <Label Text="Brak danych do wyświetlenia." 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 10"
+                            StrokeThickness="0"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                            Padding="15"
+                            Margin="0,0,0,10">
+                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15">
+                            
+                            <!-- Rank -->
+                            <Border StrokeShape="RoundRectangle 20"
+                                    HeightRequest="40"
+                                    WidthRequest="40"
+                                    StrokeThickness="0"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center">
+                                <Label Text="{Binding Rank}"
+                                       TextColor="White"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+
+                            <!-- User Name -->
+                            <Label Grid.Column="1" 
+                                   Text="{Binding UserName}" 
+                                   FontSize="18" 
+                                   VerticalOptions="Center"
+                                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+
+                            <!-- Points -->
+                            <HorizontalStackLayout Grid.Column="2" Spacing="5" VerticalOptions="Center">
+                                <Label Text="{Binding Points}" 
+                                       FontSize="18" 
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}"/>
+                                <Label Text="pkt" 
+                                       FontSize="14" 
+                                       VerticalOptions="End" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
