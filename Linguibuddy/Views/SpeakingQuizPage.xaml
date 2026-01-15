@@ -73,7 +73,7 @@
                                      MaximumWidthRequest="600">
 
                     <VerticalStackLayout Spacing="20">
-                        <Label Text="Przeczytaj na głos:"
+                        <Label Text="{loc:Translate SentenceRead}"
                                FontSize="18"
                                TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
                                HorizontalOptions="Center" />

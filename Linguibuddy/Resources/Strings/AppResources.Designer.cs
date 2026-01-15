@@ -1267,6 +1267,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have to try harder..
+        /// </summary>
+        internal static string TryHarder {
+            get {
+                return ResourceManager.GetString("TryHarder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to VICTORY.
         /// </summary>
         internal static string Victory {
@@ -1290,6 +1299,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You did it!.
+        /// </summary>
+        internal static string YouDidIt {
+            get {
+                return ResourceManager.GetString("YouDidIt", resourceCulture);
             }
         }
     }

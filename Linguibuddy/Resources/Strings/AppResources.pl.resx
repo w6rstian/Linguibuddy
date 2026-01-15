@@ -528,4 +528,10 @@
   <data name="NoData" xml:space="preserve">
     <value>Brak danych do wyświetlenia</value>
   </data>
+  <data name="YouDidIt" xml:space="preserve">
+    <value>Udało ci się!</value>
+  </data>
+  <data name="TryHarder" xml:space="preserve">
+    <value>Musisz się bardziej postarać.</value>
+  </data>
 </root>

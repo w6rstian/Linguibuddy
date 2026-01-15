@@ -531,4 +531,10 @@
   <data name="NoData" xml:space="preserve">
     <value>No data to show</value>
   </data>
+  <data name="YouDidIt" xml:space="preserve">
+    <value>You did it!</value>
+  </data>
+  <data name="TryHarder" xml:space="preserve">
+    <value>You have to try harder.</value>
+  </data>
 </root>

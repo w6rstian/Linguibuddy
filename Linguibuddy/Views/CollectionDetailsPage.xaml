@@ -71,7 +71,7 @@
                 Stroke="{AppThemeBinding Light=#B3E5FC, Dark=#0D47A1}"
                 StrokeThickness="1">
             <VerticalStackLayout Spacing="8">
-                <Label Text="🤖 AI Coach Feedback"
+                <Label Text="{loc:Translate AITeacherBoxTitle}"
                        FontAttributes="Bold"
                        FontSize="14"
                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />

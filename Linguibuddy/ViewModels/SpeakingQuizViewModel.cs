@@ -372,12 +372,12 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
             var points = _scoringService.CalculatePoints(GameType.SpeakingQuiz, _currentDifficulty);
             PointsEarned += points;
 
-            FeedbackMessage = $"Świetnie! ({similarity:F0}% zgodności)";
+            FeedbackMessage = AppResources.YouDidIt;
             FeedbackColor = Colors.Green;
         }
         else
         {
-            FeedbackMessage = $"Niestety. Zgodność: {similarity:F0}%";
+            FeedbackMessage = AppResources.TryHarder;
             FeedbackColor = Colors.Red;
         }
     }
