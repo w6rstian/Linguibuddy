@@ -32,10 +32,11 @@ public partial class SearchResultItem : ObservableObject
     public bool ShowTranslateButton => string.IsNullOrEmpty(Translation) && !IsBusy;
 }
 
+[QueryProperty(nameof(TargetCollection), "TargetCollection")]
 public partial class DictionaryViewModel : ObservableObject
 {
     private readonly IAudioManager _audioManager;
-    private readonly ICollectionService _CollectionService;
+    private readonly ICollectionService _collectionService;
     private readonly IDictionaryApiService _dictionaryService;
     private readonly IOpenAiService _openAiService;
     private readonly IDeepLTranslationService _translationService;
@@ -48,7 +49,17 @@ public partial class DictionaryViewModel : ObservableObject
 
     [ObservableProperty] private WordCollection? _selectedCollection;
 
-    public DictionaryViewModel(DataContext dataContext,
+    [ObservableProperty] private WordCollection? _targetCollection;
+
+    partial void OnTargetCollectionChanged(WordCollection? value)
+    {
+        if (value != null)
+        {
+            SelectedCollection = value;
+        }
+    }
+
+    public DictionaryViewModel(
         IDictionaryApiService dictionaryService,
         IDeepLTranslationService translationService,
         IOpenAiService openAiService,
@@ -58,8 +69,7 @@ public partial class DictionaryViewModel : ObservableObject
         _dictionaryService = dictionaryService;
         _translationService = translationService;
         _openAiService = openAiService;
-        _openAiService = openAiService;
-        _CollectionService = collectionService;
+        _collectionService = collectionService;
         _audioManager = audioManager;
     }
 
@@ -72,12 +82,18 @@ public partial class DictionaryViewModel : ObservableObject
     {
         try
         {
-            var collections = await _CollectionService.GetUserCollectionsAsync();
+            var collections = await _collectionService.GetUserCollectionsAsync();
             UserCollections.Clear();
             foreach (var col in collections) UserCollections.Add(col);
 
-            if (UserCollections.Any())
+            if (TargetCollection != null)
+            {
+                SelectedCollection = UserCollections.FirstOrDefault(c => c.Id == TargetCollection.Id);
+            }
+            else if (UserCollections.Any())
+            {
                 SelectedCollection = UserCollections.First();
+            }
         }
         catch (Exception ex)
         {
@@ -237,15 +253,13 @@ public partial class DictionaryViewModel : ObservableObject
 
         if (string.IsNullOrEmpty(item.Translation))
         {
-            var translate = await Shell.Current.DisplayAlert(AppResources.TranslationError,
-                AppResources.TranslateBeforeAdding, AppResources.Yes, AppResources.No);
-            if (translate)
+            //var translate = await Shell.Current.DisplayAlert(AppResources.TranslationError, AppResources.TranslateBeforeAdding, AppResources.Yes, AppResources.No);
+
+            await TranslateItem(item);
+
+            if (string.IsNullOrEmpty(item.Translation) || item.Translation == AppResources.TranslationError)
             {
-                await TranslateItem(item);
-                if (string.IsNullOrEmpty(item.Translation)) return;
-            }
-            else
-            {
+                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.TranslationError, "OK");
                 return;
             }
         }
@@ -266,10 +280,21 @@ public partial class DictionaryViewModel : ObservableObject
 
         try
         {
-            await _CollectionService.AddCollectionItemFromDtoAsync(SelectedCollection.Id, dto);
+            bool isAdded = await _collectionService.AddCollectionItemFromDtoAsync(SelectedCollection.Id, dto);
 
-            var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
-            await Shell.Current.DisplayAlert(AppResources.Success, message, "OK");
+            if (isAdded)
+            {
+                var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
+                await Shell.Current.DisplayAlert(AppResources.Success, message, "OK");
+            }
+
+            else
+            {
+                await Shell.Current.DisplayAlert(
+                    AppResources.Success,
+                    AppResources.ItemExists,
+                    "OK");
+            }
         }
         catch (Exception ex)
         {

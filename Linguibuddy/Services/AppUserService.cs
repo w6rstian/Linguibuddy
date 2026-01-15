@@ -1,4 +1,3 @@
-using Firebase.Auth;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
@@ -42,11 +41,6 @@ public class AppUserService : IAppUserService
     {
         await EnsureUserLoadedAsync();
         return _appUser.Points;
-    }
-
-    public async Task<List<AppUser>> GetLeaderboardAsync(int count = 50)
-    {
-        return await _appUsers.GetTopUsersAsync(count);
     }
 
     public async Task<DifficultyLevel> GetUserDifficultyAsync()
@@ -110,5 +104,10 @@ public class AppUserService : IAppUserService
     {
         await EnsureUserLoadedAsync();
         return _appUser;
+    }
+
+    public async Task<List<AppUser>> GetLeaderboardAsync(int count = 50)
+    {
+        return await _appUsers.GetTopUsersAsync(count);
     }
 }

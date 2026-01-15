@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace Linguibuddy.ViewModels;
 
+//TODO: backend for leaderboard or remove this page
 public partial class LeaderboardViewModel : ObservableObject
 {
     private readonly IAppUserService _appUserService;
@@ -45,7 +46,6 @@ public partial class LeaderboardViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            // Simple error handling
             await Shell.Current.DisplayAlert("Błąd", "Nie udało się pobrać rankingu.", "OK");
         }
         finally
@@ -60,7 +60,5 @@ public class LeaderboardItem
     public int Rank { get; set; }
     public string UserName { get; set; }
     public int Points { get; set; }
-    
-    // Helper property for UI styling (e.g. top 3 highlighting)
     public bool IsTop3 => Rank <= 3;
 }

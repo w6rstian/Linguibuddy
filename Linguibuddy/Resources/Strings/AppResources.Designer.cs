@@ -259,6 +259,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to collection.
+        /// </summary>
+        internal static string AddToCollection {
+            get {
+                return ResourceManager.GetString("AddToCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AI Insight.
         /// </summary>
         internal static string AITeacherBoxTitle {
@@ -417,6 +426,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        internal static string Details {
+            get {
+                return ResourceManager.GetString("Details", resourceCulture);
             }
         }
         
@@ -592,6 +610,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The word is already in the collection..
+        /// </summary>
+        internal static string ItemExists {
+            get {
+                return ResourceManager.GetString("ItemExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         internal static string Language {
@@ -606,6 +633,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string LanguageName {
             get {
                 return ResourceManager.GetString("LanguageName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leaderboard.
+        /// </summary>
+        internal static string Leaderboard {
+            get {
+                return ResourceManager.GetString("Leaderboard", resourceCulture);
             }
         }
         
@@ -669,6 +705,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Minigames {
             get {
                 return ResourceManager.GetString("Minigames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edytuj nazwę.
+        /// </summary>
+        internal static string NameEdit {
+            get {
+                return ResourceManager.GetString("NameEdit", resourceCulture);
             }
         }
         
@@ -750,6 +795,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string NoCollections {
             get {
                 return ResourceManager.GetString("NoCollections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No data to show.
+        /// </summary>
+        internal static string NoData {
+            get {
+                return ResourceManager.GetString("NoData", resourceCulture);
             }
         }
         
@@ -853,6 +907,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to pts..
+        /// </summary>
+        internal static string PointsAbbreviation {
+            get {
+                return ResourceManager.GetString("PointsAbbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Points earned:.
         /// </summary>
         internal static string PointsEarnedCount {
@@ -952,7 +1015,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select or create a collection first..
+        ///   Looks up a localized string similar to Please select or create a collection (in collections tab) first..
         /// </summary>
         internal static string SelectCollectionError {
             get {
@@ -1146,6 +1209,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string TooLittleWords {
             get {
                 return ResourceManager.GetString("TooLittleWords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top Users.
+        /// </summary>
+        internal static string TopUsers {
+            get {
+                return ResourceManager.GetString("TopUsers", resourceCulture);
             }
         }
         

@@ -37,6 +37,7 @@ public class CollectionService : ICollectionService
     public async Task<WordCollection?> GetCollection(int id)
     {
         return await _context.WordCollections
+            .Include(c => c.Items)
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 
@@ -95,7 +96,7 @@ public class CollectionService : ICollectionService
         await _context.SaveChangesAsync();
     }
 
-    public async Task AddCollectionItemFromDtoAsync(int collectionId, FlashcardCreationDto dto)
+    public async Task<bool> AddCollectionItemFromDtoAsync(int collectionId, FlashcardCreationDto dto)
     {
         var exists = await _context.CollectionItems.AnyAsync(i =>
             i.CollectionId == collectionId &&
@@ -105,7 +106,7 @@ public class CollectionService : ICollectionService
         );
 
         if (exists)
-            return;
+            return false;
 
         var newItem = new CollectionItem
         {
@@ -134,7 +135,16 @@ public class CollectionService : ICollectionService
         };
 
         _context.CollectionItems.Add(newItem);
+
+        var collection = await _context.WordCollections.FindAsync(collectionId);
+        if (collection != null)
+        {
+            collection.RequiresAiAnalysis = true;
+            _context.WordCollections.Update(collection);
+        }
+
         await _context.SaveChangesAsync();
+        return true;
     }
 
     public async Task DeleteCollectionItemAsync(CollectionItem item)
