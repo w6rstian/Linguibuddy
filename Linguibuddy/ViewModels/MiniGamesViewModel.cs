@@ -53,7 +53,7 @@ public partial class MiniGamesViewModel : ObservableObject
         return NavigateToGameWithCollectionAsync(nameof(SpeakingQuizPage));
     }
 
-    private async Task<IPopupResult<WordCollection?>> DisplayPopup()
+    protected virtual async Task<WordCollection?> GetSelectedCollectionFromPopupAsync()
     {
         var popup = new WordCollectionPopup(
             new WordCollectionPopupViewModel(_collectionService, _popupService)
@@ -74,21 +74,24 @@ public partial class MiniGamesViewModel : ObservableObject
             Shape = shape
         };
 
-        return await Shell.Current.ShowPopupAsync<WordCollection?>(popup, options);
+        var result = await Shell.Current.ShowPopupAsync<WordCollection?>(popup, options);
+        
+        if (result.WasDismissedByTappingOutsideOfPopup)
+            return null;
+
+        return result.Result;
     }
 
     private async Task NavigateToGameWithCollectionAsync(string route)
     {
-        var result = await DisplayPopup();
+        var selectedCollection = await GetSelectedCollectionFromPopupAsync();
 
-        if (result.WasDismissedByTappingOutsideOfPopup || result.Result is null)
+        if (selectedCollection is null)
             return;
-
-        var selectedCollection = result.Result;
 
         if (!selectedCollection.Items.Any())
         {
-            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.CollectionEmpty, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.CollectionEmpty, "OK");
             return;
         }
 
@@ -97,6 +100,16 @@ public partial class MiniGamesViewModel : ObservableObject
             { "SelectedCollection", selectedCollection }
         };
 
-        await Shell.Current.GoToAsync(route, parameters);
+        await GoToAsync(route, parameters);
+    }
+
+    protected virtual Task ShowAlertAsync(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual Task GoToAsync(string route, IDictionary<string, object> parameters)
+    {
+        return Shell.Current.GoToAsync(route, parameters);
     }
 }
