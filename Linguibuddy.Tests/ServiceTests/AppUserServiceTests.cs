@@ -349,4 +349,22 @@ public class AppUserServiceTests
         // Assert
         A.CallTo(() => _repo.GetByIdAsync(_userId)).MustHaveHappenedOnceExactly();
     }
+
+    [Fact]
+    public async Task GetLeaderboardAsync_ShouldReturnTopUsers()
+    {
+        // Arrange
+        var users = new List<AppUser>
+        {
+            new AppUser { Id = "1", Points = 100 },
+            new AppUser { Id = "2", Points = 90 }
+        };
+        A.CallTo(() => _repo.GetTopUsersAsync(50)).Returns(users);
+
+        // Act
+        var result = await _sut.GetLeaderboardAsync();
+
+        // Assert
+        result.Should().BeEquivalentTo(users);
+    }
 }
