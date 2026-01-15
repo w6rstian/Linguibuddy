@@ -295,8 +295,6 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     private void OnRecognitionTextCompleted(object? sender, SpeechToTextRecognitionResultCompletedEventArgs args)
     {
         var finalResult = args.RecognitionResult.Text;
-        if (string.IsNullOrEmpty(finalResult) && args.RecognitionResult.Exception == null)
-            finalResult = args.RecognitionResult.ToString();
 
         RunOnMainThread(async () =>
         {
