@@ -29,6 +29,8 @@ public partial class CollectionDetailsViewModel : ObservableObject
     [ObservableProperty]
     private bool _isAiThinking;
 
+    [ObservableProperty] bool isExpanded = true;
+
     public CollectionDetailsViewModel(
         ICollectionService collectionService,
         IOpenAiService openAiService,
@@ -152,5 +154,11 @@ public partial class CollectionDetailsViewModel : ObservableObject
             Collection.Items.Remove(item);
             Items.Remove(item);
         }
+    }
+
+    [RelayCommand]
+    private void ToggleExpand()
+    {
+        IsExpanded = !IsExpanded;
     }
 }

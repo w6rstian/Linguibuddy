@@ -110,7 +110,7 @@
                                         HeightRequest="40"
                                         WidthRequest="40"
                                         Aspect="AspectFit"
-                                        Padding="0"
+                                        Padding="{OnPlatform Android=5, WinUI=0}"
                                         VerticalOptions="Center"
                                         BackgroundColor="Transparent"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=PlayAudioCommand}"

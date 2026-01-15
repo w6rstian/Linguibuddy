@@ -97,6 +97,8 @@
 	  <None Remove="Resources\Icons\cards_stack_100dp_light.svg" />
 	  <None Remove="Resources\Icons\dictionary_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\dictionary_100dp_light.svg" />
+	  <None Remove="Resources\Icons\edit_16dp_dark.svg" />
+	  <None Remove="Resources\Icons\edit_16dp_light.svg" />
 	  <None Remove="Resources\Icons\home_100dp_dark.svg" />
 	  <None Remove="Resources\Icons\home_100dp_light.svg" />
 	  <None Remove="Resources\Icons\image_search_150dp_dark.svg" />
@@ -136,6 +138,8 @@
 	<ItemGroup>
 	  <MauiImage Include="Resources\Icons\account_circle_100dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\account_circle_100dp_light.svg" />
+	  <MauiImage Include="Resources\Icons\edit_16dp_dark.svg" />
+	  <MauiImage Include="Resources\Icons\edit_16dp_light.svg" />
 	  <MauiImage Include="Resources\Icons\record_voice_over_150dp_dark.svg" />
 	  <MauiImage Include="Resources\Icons\record_voice_over_150dp_light.svg" />
 	</ItemGroup>

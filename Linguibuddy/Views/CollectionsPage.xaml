@@ -98,7 +98,8 @@
                                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
                             </VerticalStackLayout>
 
-                            <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                            <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center"
+                                                   Padding="0,5">
 
                                 <Button Text="{loc:Translate Details}"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CollectionsViewModel}}, Path=EditCollectionCommand}"
@@ -115,12 +116,14 @@
                                 <Button Text="✕"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CollectionsViewModel}}, Path=DeleteCollectionCommand}"
                                         CommandParameter="{Binding .}"
+                                        BorderColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                        BorderWidth="1"
                                         FontSize="14"
                                         WidthRequest="36"
                                         HeightRequest="36"
                                         Padding="0"
-                                        BackgroundColor="{AppThemeBinding Light=#FFEBEE, Dark=#3E2723}"
-                                        TextColor="Red"
+                                        BackgroundColor="{AppThemeBinding Light=#e6d1fa, Dark={StaticResource Gray950}}"
+                                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                                         CornerRadius="8" />
 
                                 <Button Text="{loc:Translate Learn}"
