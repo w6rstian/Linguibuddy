@@ -93,7 +93,7 @@
                                        TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
 
                                 <!--ciężko dodać napis {ilość} fiszek do tłumaczeń-->
-                                <Label Text="{Binding Items.Count, StringFormat='{0} fiszek'}"
+                                <Label Text="{Binding Items.Count, StringFormat='{0} słów'}"
                                        FontSize="13"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
                             </VerticalStackLayout>

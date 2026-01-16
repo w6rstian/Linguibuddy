@@ -120,32 +120,32 @@ public class OpenAiService : IOpenAiService
                            Liczba słów: {collection.Items.Count}
                            Aktualny poziom trudności aplikacji: {userDifficulty}
 
-                           STATYSTYKI GIER (Wyniki 0-100%):
+                           STATYSTYKI LEKCJI (Wyniki 0-100%):
 
-                           1. Audio Quiz (Słuchanie):
+                           1. Rozpoznaj audio (Słuchanie):
                               - Najlepszy wynik: {FormatScore(collection.AudioBestScore)}
                               - Ostatni wynik: {FormatScore(collection.AudioLastScore)}
-                              - Data ostatniej gry: {FormatDate(collection.AudioLastPlayed)}
+                              - Data ostatniej lekcji: {FormatDate(collection.AudioLastPlayed)}
 
-                           2. Speaking Quiz (Wymowa):
+                           2. Wymowa (Poprawne czytanie zdań):
                               - Najlepszy wynik: {FormatScore(collection.SpeakingBestScore)}
                               - Ostatni wynik: {FormatScore(collection.SpeakingLastScore)}
-                              - Data ostatniej gry: {FormatDate(collection.SpeakingLastPlayed)}
+                              - Data ostatniej lekcji: {FormatDate(collection.SpeakingLastPlayed)}
 
-                           3. Sentence Quiz (Gramatyka/Zdania):
+                           3. Szyk zdania (Gramatyka/Zdania):
                               - Najlepszy wynik: {FormatScore(collection.SentenceBestScore)}
                               - Ostatni wynik: {FormatScore(collection.SentenceLastScore)}
-                              - Data ostatniej gry: {FormatDate(collection.SentenceLastPlayed)}
+                              - Data ostatniej lekcji: {FormatDate(collection.SentenceLastPlayed)}
 
-                           4. Image Quiz (Skojarzenia wzrokowe):
+                           4. Dopasuj do obrazka (Skojarzenia wzrokowe):
                               - Najlepszy wynik: {FormatScore(collection.ImageBestScore)}
                               - Ostatni wynik: {FormatScore(collection.ImageLastScore)}
-                              - Data ostatniej gry: {FormatDate(collection.ImageLastPlayed)}
+                              - Data ostatniej lekcji: {FormatDate(collection.ImageLastPlayed)}
 
-                           5. Hangman (Słownictwo):
+                           5. Wisielec (Słownictwo):
                               - Najlepszy wynik: {FormatScore(collection.HangmanBestScore)}
                               - Ostatni wynik: {FormatScore(collection.HangmanLastScore)}
-                              - Data ostatniej gry: {FormatDate(collection.HangmanLastPlayed)}
+                              - Data ostatniej lekcji: {FormatDate(collection.HangmanLastPlayed)}
                            """;
 
         try
@@ -158,7 +158,7 @@ public class OpenAiService : IOpenAiService
                     "Jesteś osobistym, motywującym trenerem językowym w aplikacji 'Linguibuddy'.\n" +
                     "Twoim zadaniem jest analiza statystyk ucznia i udzielenie konkretnych wskazówek.\n\n" +
                     "ZASADY ANALIZY:\n" +
-                    "1. Zaniedbania: Zwróć uwagę na gry, w które użytkownik dawno nie grał (data 'Nigdy' lub stara) lub ma w nich 0%.\n" +
+                    "1. Zaniedbania: Zwróć uwagę na rodzaj lekcji, których użytkownik dawno się nie uczył (data 'Nigdy' lub stara) lub ma w nich 0%.\n" +
                     "2. Progres: Jeśli 'Ostatni wynik' jest dużo gorszy od 'Najlepszego', zasugeruj powtórkę.\n" +
                     "3. Poziom trudności: Jeśli użytkownik ma wszędzie wyniki >90%, zasugeruj, że kolekcja jest opanowana i warto podnieść poziom trudności (CEFR) w ustawieniach.\n\n" +
                     $"WAŻNE: Całą odpowiedź wygeneruj w języku: {targetLanguage} (przetłumacz również nagłówki z sekcji FORMAT ODPOWIEDZI).\n\n" +
@@ -226,12 +226,12 @@ public class OpenAiService : IOpenAiService
                                          Liczba kolekcji: {wordCollections.Count} (Aktywne: {activeCollectionsCount})
                                          Łączna liczba słów: {totalWords}
                                          
-                                         ŚREDNIE WYNIKI GIER (Skill Breakdown):
-                                         🎧 Słuchanie (Audio): {FormatScore(avgAudio)}
-                                         🗣️ Mówienie (Speaking): {FormatScore(avgSpeaking)}
-                                         📝 Gramatyka (Sentence): {FormatScore(avgSentence)}
-                                         🖼️ Skojarzenia (Image): {FormatScore(avgImage)}
-                                         🔤 Słownictwo (Hangman): {FormatScore(avgHangman)}
+                                         ŚREDNIE WYNIKI LEKCJI (Skill Breakdown):
+                                         🎧 Słuchanie (Rozpoznaj audio): {FormatScore(avgAudio)}
+                                         🗣️ Mówienie (Wymowa): {FormatScore(avgSpeaking)}
+                                         📝 Gramatyka/Tłumaczenie (Szyk zdań): {FormatScore(avgSentence)}
+                                         🖼️ Skojarzenia (Dopasuj do obrazka): {FormatScore(avgImage)}
+                                         🔤 Słownictwo (Wisielec): {FormatScore(avgHangman)}
 
                                          Najlepsza kolekcja: "{(bestCollection?.Name ?? "Brak")}"
                                          Najsłabsza kolekcja: "{(neglectedCollection?.Name ?? "Brak")}"
@@ -287,12 +287,12 @@ public class OpenAiService : IOpenAiService
                 */
                 new SystemChatMessage(
                     "Jesteś głównym trenerem językowym w aplikacji 'Linguibuddy'. Twoim celem jest analiza postępów ucznia.\n" +
-                    "Otrzymasz pełny raport zawierający dane o regularności (streak), punktach oraz wynikach z gier językowych.\n\n" +
+                    "Otrzymasz pełny raport zawierający dane o regularności (streak), punktach oraz wynikach z lekcji językowych.\n\n" +
                     "TWOJE ZADANIE:\n" +
                     "1. Przeanalizuj regularność (streak). Jeśli jest wysoki - pochwal. Jeśli niski lub 0 - zmotywuj do codziennej nauki.\n" +
-                    "2. Spójrz na wyniki gier (Słuchanie, Mówienie, Gramatyka, itp.). Zidentyfikuj mocne i słabe strony. Powiedz konkretnie nad czym pracować.\n" +
+                    "2. Spójrz na wyniki lekcji (Słuchanie, Mówienie, Gramatyka, itp.). Zidentyfikuj mocne i słabe strony. Powiedz konkretnie nad czym pracować.\n" +
                     "3. Jeśli wyniki są bardzo wysokie (>90%), a poziom trudności niski (A1/A2), zasugeruj jego zmianę.\n" +
-                    "4. Zwróć uwagę na balans - czy uczeń nie unika np. Mówienia na rzecz prostego Hangmana?\n" +
+                    "4. Zwróć uwagę na balans - czy uczeń nie unika np. Mówienia na rzecz innego trybu?\n" +
                     "5. Skup się na najważniejszym aktualnie aspekcie. Bądź pozytywny i motywujący, możesz dać jakąś przyjazną emotkę na koniec, ale nie jest to wymagane.\n\n" +
                     $"WAŻNE: Całą odpowiedź wygeneruj w języku: {targetLanguage}.\n\n" +
                     "FORMAT ODPOWIEDZI:\n" +

@@ -6,7 +6,7 @@
              xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              x:DataType="vm:MiniGamesViewModel"
              x:Class="Linguibuddy.Views.MiniGamesPage"
-             Title="Mini gry">
+             Title="{loc:Translate Minigames}">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 

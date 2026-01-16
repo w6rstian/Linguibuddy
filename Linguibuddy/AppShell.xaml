@@ -29,7 +29,7 @@
 
     <FlyoutItem Title="{loc:Translate Minigames}">
         <ShellContent
-            Title="Minigames"
+            Title="{loc:Translate Minigames}"
             ContentTemplate="{DataTemplate views:MiniGamesPage}"
             Route="MiniGamesPage" />
     </FlyoutItem>
