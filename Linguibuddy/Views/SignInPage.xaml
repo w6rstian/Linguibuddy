@@ -9,7 +9,7 @@
              Title="{loc:Translate SignIn}">
     <VerticalStackLayout
         Margin="0,30,0,0">
-        <Label Text="Linguibuddy"
+        <Label Text="{loc:Translate AppName}"
                HorizontalTextAlignment="Center"
                FontSize="Header" />
         <Label Text="{loc:Translate SignInWelcome}"
@@ -19,9 +19,9 @@
         <FlexLayout Direction="Column"
                     AlignItems="Center">
             <VerticalStackLayout Spacing="20">
-                <Entry Text="{Binding Email}" Placeholder="Email address" />
+                <Entry Text="{Binding Email}" Placeholder="{loc:Translate EmailPlaceholder}" />
                 <VerticalStackLayout>
-                    <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Password" />
+                    <Entry IsPassword="True" Text="{Binding Password}" Placeholder="{loc:Translate PasswordPlaceholder}" />
                     <Label Text="{loc:Translate SignInError}"
                            FontSize="12"
                            TextColor="Red"

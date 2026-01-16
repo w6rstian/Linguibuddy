@@ -8,10 +8,10 @@
              x:DataType="vm:SignUpViewModel"
              Title="{loc:Translate SignUp}">
     <VerticalStackLayout>
-        <Label Text="Linguibuddy"
+        <Label Text="{loc:Translate AppName}"
                HorizontalTextAlignment="Center"
                FontSize="Header" />
-        <Label Text="Create a free account"
+        <Label Text="{loc:Translate CreateFreeAccount}"
                HorizontalTextAlignment="Center"
                FontSize="Subtitle"
                Margin="0,0,0,20" />
@@ -19,25 +19,25 @@
                     AlignItems="Center">
             <VerticalStackLayout Spacing="10">
                 <VerticalStackLayout>
-                    <Entry Text="{Binding Username}" Placeholder="Username" />
-                    <Label Text="Username is empty"
+                    <Entry Text="{Binding Username}" Placeholder="{loc:Translate UsernamePlaceholder}" />
+                    <Label Text="{loc:Translate UsernameEmpty}"
                            FontSize="12"
                            TextColor="Red"
                            Opacity="{Binding LabelUsernameErrorOpacity}" />
                 </VerticalStackLayout>
                 <VerticalStackLayout>
-                    <Entry Text="{Binding Email}" Placeholder="Email address" />
-                    <Label Text="Email incorrect"
+                    <Entry Text="{Binding Email}" Placeholder="{loc:Translate EmailPlaceholder}" />
+                    <Label Text="{loc:Translate EmailIncorrect}"
                            FontSize="12"
                            TextColor="Red"
                            Opacity="{Binding LabelEmailErrorOpacity}" />
                 </VerticalStackLayout>
                 <VerticalStackLayout>
-                    <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Password" />
+                    <Entry IsPassword="True" Text="{Binding Password}" Placeholder="{loc:Translate PasswordPlaceholder}" />
                     <Label Text="{loc:Translate PasswordLength}"
                            FontSize="10"
                            TextColor="LightSlateGray" />
-                    <Label Text="Password insufficient"
+                    <Label Text="{loc:Translate PasswordInsufficient}"
                            FontSize="12"
                            TextColor="Red"
                            Opacity="{Binding LabelPasswordErrorOpacity}" />
