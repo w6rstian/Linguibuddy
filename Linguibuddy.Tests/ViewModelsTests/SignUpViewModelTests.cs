@@ -98,12 +98,21 @@ public class SignUpViewModelTests
         _viewModel.NavigateToMainPageCalled.Should().BeFalse();
     }
 
-    [Fact]
-    public async Task SignUp_ShouldValidateInvalidEmail()
+    [Theory]
+    [InlineData("plainaddress")]
+    [InlineData("#@%^%#$@#$@#.com")]
+    [InlineData("@example.com")]
+    [InlineData("Joe Smith <email@example.com>")]
+    [InlineData("email.example.com")]
+    [InlineData("email@example@example.com")]
+    [InlineData("email@example")]
+    [InlineData("")]
+    [InlineData(null)]
+    public async Task SignUp_ShouldValidateInvalidEmail(string invalidEmail)
     {
         // Arrange
         _viewModel.Username = "User";
-        _viewModel.Email = "invalid-email";
+        _viewModel.Email = invalidEmail;
         _viewModel.Password = "password123";
 
         // Act
