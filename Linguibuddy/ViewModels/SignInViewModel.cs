@@ -16,7 +16,7 @@ public partial class SignInViewModel : ObservableObject
     private readonly FirebaseAuthClient _authClient;
     private readonly IServiceProvider _services;
     private readonly SettingsViewModel _settingsViewModel;
-    private readonly DataContext db;
+    private readonly DataContext _db;
 
     [ObservableProperty] private string _email;
 
@@ -30,7 +30,7 @@ public partial class SignInViewModel : ObservableObject
         _authClient = authClient;
         _services = services;
         _settingsViewModel = settingsViewModel;
-        db = dataContext;
+        _db = dataContext;
         LabelErrorOpacity = 0;
     }
 
@@ -40,7 +40,7 @@ public partial class SignInViewModel : ObservableObject
         LabelErrorOpacity = 0;
         try
         {
-            await _authClient.SignInWithEmailAndPasswordAsync(Email, Password);
+            await SignInWithEmailAndPasswordAsync(Email, Password);
         }
         catch (Exception ex)
         {
@@ -51,11 +51,11 @@ public partial class SignInViewModel : ObservableObject
         AppUser appUser = null;
         try
         {
-            appUser = await db.AppUsers.FindAsync(_authClient.User.Uid);
+            appUser = await FindAppUserAsync(GetAuthUserUid());
         }
         catch (SqliteException ex)
         {
-            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.DatabaseError, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.DatabaseError, "OK");
             return;
         }
 
@@ -63,40 +63,84 @@ public partial class SignInViewModel : ObservableObject
         {
             appUser = new AppUser
             {
-                Id = _authClient.User.Uid,
-                UserName = _authClient.User.Info.DisplayName
+                Id = GetAuthUserUid(),
+                UserName = GetAuthUserDisplayName()
             };
-            db.AppUsers.Add(appUser);
+            await AddAppUserAsync(appUser);
 
-            var allAchievements = await db.Achievements.ToListAsync(); // Pobierz wszystkie globalne osiągnięcia
-            var userAchievements = await db.UserAchievements
-                .Where(u => u.AppUserId == appUser.Id)
-                .ToListAsync();
-
-            foreach (var achievement in allAchievements)
-                if (!userAchievements.Exists(ua => ua.AchievementId == achievement.Id))
-                {
-                    var userAchievement = new UserAchievement
-                    {
-                        AppUserId = appUser.Id,
-                        AchievementId = achievement.Id,
-                        IsUnlocked = false
-                    };
-                    db.UserAchievements.Add(userAchievement);
-                }
-
-            await db.SaveChangesAsync();
+            await InitializeUserAchievementsAsync(appUser.Id);
         }
 
-        //await Shell.Current.GoToAsync("//MainPage");
-        Application.Current!.Windows[0].Page = App.GetMainShell();
+        NavigateToMainPage();
     }
 
     [RelayCommand]
     private async Task NavigateSignUp()
     {
-        var signUpPage = _services.GetRequiredService<SignUpPage>();
+        NavigateToSignUpPage();
+    }
 
+    protected virtual async Task SignInWithEmailAndPasswordAsync(string email, string password)
+    {
+        await _authClient.SignInWithEmailAndPasswordAsync(email, password);
+    }
+
+    protected virtual string GetAuthUserUid()
+    {
+        return _authClient.User.Uid;
+    }
+
+    protected virtual string GetAuthUserDisplayName()
+    {
+        return _authClient.User.Info.DisplayName;
+    }
+
+    protected virtual async Task<AppUser?> FindAppUserAsync(string uid)
+    {
+        return await _db.AppUsers.FindAsync(uid);
+    }
+
+    protected virtual async Task AddAppUserAsync(AppUser appUser)
+    {
+        _db.AppUsers.Add(appUser);
+        await _db.SaveChangesAsync();
+    }
+
+    protected virtual async Task InitializeUserAchievementsAsync(string userId)
+    {
+        var allAchievements = await _db.Achievements.ToListAsync();
+        var userAchievements = await _db.UserAchievements
+            .Where(u => u.AppUserId == userId)
+            .ToListAsync();
+
+        foreach (var achievement in allAchievements)
+            if (!userAchievements.Exists(ua => ua.AchievementId == achievement.Id))
+            {
+                var userAchievement = new UserAchievement
+                {
+                    AppUserId = userId,
+                    AchievementId = achievement.Id,
+                    IsUnlocked = false
+                };
+                _db.UserAchievements.Add(userAchievement);
+            }
+
+        await _db.SaveChangesAsync();
+    }
+
+    protected virtual void NavigateToMainPage()
+    {
+        Application.Current!.Windows[0].Page = App.GetMainShell();
+    }
+
+    protected virtual void NavigateToSignUpPage()
+    {
+        var signUpPage = _services.GetRequiredService<SignUpPage>();
         Application.Current!.Windows[0].Page = new NavigationPage(signUpPage);
+    }
+
+    protected virtual Task ShowAlertAsync(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
     }
 }
