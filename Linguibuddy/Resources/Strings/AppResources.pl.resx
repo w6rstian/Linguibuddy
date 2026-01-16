@@ -622,4 +622,7 @@ w czasie</value>
   <data name="ChangeUserNameDescription" xml:space="preserve">
     <value>Wpisz nową nazwę użytkownika</value>
   </data>
+  <data name="QuiteGood" xml:space="preserve">
+    <value>Było naprawdę dobrze</value>
+  </data>
 </root>

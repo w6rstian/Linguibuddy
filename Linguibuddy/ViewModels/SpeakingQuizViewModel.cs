@@ -335,13 +335,10 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         {
             Score++;
 
-            //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
-            //var difficulty = (DifficultyLevel)difficultyInt;
-
             var points = _scoringService.CalculatePoints(GameType.SpeakingQuiz, _currentDifficulty);
             PointsEarned += points;
 
-            FeedbackMessage = AppResources.YouDidIt;
+            FeedbackMessage = similarity >= 99.9 ? AppResources.YouDidIt : AppResources.QuiteGood;
             FeedbackColor = Colors.Green;
         }
         else

@@ -844,7 +844,7 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Minigames.
+        ///   Looks up a localized string similar to Lessons.
         /// </summary>
         internal static string Minigames {
             get {
@@ -1128,6 +1128,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string Profile {
             get {
                 return ResourceManager.GetString("Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It was quite good.
+        /// </summary>
+        internal static string QuiteGood {
+            get {
+                return ResourceManager.GetString("QuiteGood", resourceCulture);
             }
         }
         

@@ -625,4 +625,7 @@ Repetition</value>
   <data name="ChangeUserNameDescription" xml:space="preserve">
     <value>Enter your new user name</value>
   </data>
+  <data name="QuiteGood" xml:space="preserve">
+    <value>It was quite good</value>
+  </data>
 </root>
