@@ -3,6 +3,7 @@ using FluentAssertions;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
+using LocalizationResourceManager.Maui;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,7 +19,9 @@ public class MainViewModelTests
     private readonly IAchievementRepository _achievementRepository;
     private readonly ICollectionService _collectionService;
     private readonly IOpenAiService _openAiService;
+    private readonly ILocalizationResourceManager _resourceManager;
     private readonly TestableMainViewModel _viewModel;
+    private readonly TestableSettingsViewModel _settingsViewModel;
 
     public MainViewModelTests()
     {
@@ -28,6 +31,15 @@ public class MainViewModelTests
         _achievementRepository = A.Fake<IAchievementRepository>();
         _collectionService = A.Fake<ICollectionService>();
         _openAiService = A.Fake<IOpenAiService>();
+        _resourceManager = A.Fake<ILocalizationResourceManager>();
+
+        _settingsViewModel = new TestableSettingsViewModel(
+            _resourceManager,
+            _appUserService,
+            null!,
+            _services,
+            _collectionService
+        );
 
         // Passing null for FirebaseAuthClient because we override all its usages
         _viewModel = new TestableMainViewModel(
@@ -37,7 +49,28 @@ public class MainViewModelTests
             null!, 
             _achievementRepository,
             _collectionService,
-            _openAiService);
+            _openAiService,
+            _settingsViewModel);
+    }
+
+    private class TestableSettingsViewModel : SettingsViewModel
+    {
+        public TestableSettingsViewModel(
+            ILocalizationResourceManager resourceManager,
+            IAppUserService appUserService,
+            Firebase.Auth.FirebaseAuthClient authClient,
+            IServiceProvider services,
+            ICollectionService collectionService)
+            : base(resourceManager, appUserService, authClient, services, collectionService)
+        {
+        }
+
+        protected override string GetPreference(string key, string defaultValue) => defaultValue;
+        protected override int GetPreference(string key, int defaultValue) => defaultValue;
+        protected override void SetPreference(string key, string value) { }
+        protected override void SetPreference(string key, int value) { }
+        protected override AppTheme GetAppTheme() => AppTheme.Light;
+        protected override void SetAppTheme(AppTheme theme) { }
     }
 
     private class TestableMainViewModel : MainViewModel
@@ -55,8 +88,9 @@ public class MainViewModelTests
             Firebase.Auth.FirebaseAuthClient authClient,
             IAchievementRepository achievementRepository,
             ICollectionService collectionService,
-            IOpenAiService openAiService)
-            : base(services, appUserService, learningService, authClient, achievementRepository, collectionService, openAiService)
+            IOpenAiService openAiService,
+            SettingsViewModel settingsViewModel)
+            : base(services, appUserService, learningService, authClient, achievementRepository, collectionService, openAiService, settingsViewModel)
         {
         }
 
