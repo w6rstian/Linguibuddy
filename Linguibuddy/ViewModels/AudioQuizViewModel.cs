@@ -59,6 +59,8 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
             return;
 
         allWords = SelectedCollection.Items
+                .GroupBy(i => i.Word, StringComparer.OrdinalIgnoreCase)
+                .Select(g => g.FirstOrDefault(i => !string.IsNullOrEmpty(i.Audio)) ?? g.First())
                 .OrderBy(_ => random.Next())
                 .Take(await _appUserService.GetUserLessonLengthAsync())
                 .ToList();

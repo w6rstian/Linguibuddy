@@ -105,7 +105,7 @@ public class SpeakingQuizViewModelTests
         await _viewModel.ImportCollectionAsync();
 
         A.CallTo(() => _appUserService.GetUserDifficultyAsync()).Returns(DifficultyLevel.A1);
-        A.CallTo(() => _openAiService.GenerateSentenceAsync("Apple", "A1"))
+        A.CallTo(() => _openAiService.GenerateSentenceAsync("Apple", "A1", A<string>.Ignored))
             .Returns(("I eat an apple", "Jem jabłko"));
 
         // Act
@@ -199,7 +199,7 @@ public class SpeakingQuizViewModelTests
         await _viewModel.ImportCollectionAsync();
 
         A.CallTo(() => _appUserService.GetUserDifficultyAsync()).Returns(DifficultyLevel.A1);
-        A.CallTo(() => _openAiService.GenerateSentenceAsync("Apple", "A1"))
+        A.CallTo(() => _openAiService.GenerateSentenceAsync("Apple", "A1", A<string>.Ignored))
             .Returns((sentence, "Translation"));
 
         await _viewModel.LoadQuestionAsync();

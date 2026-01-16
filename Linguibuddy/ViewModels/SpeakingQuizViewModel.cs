@@ -124,7 +124,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
             //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
             var difficultyString = _currentDifficulty.ToString();
 
-            var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString);
+            var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString, TargetWord.Definition);
 
             if (generatedData != null)
             {

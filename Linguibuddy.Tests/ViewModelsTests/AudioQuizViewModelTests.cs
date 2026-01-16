@@ -213,4 +213,36 @@ public class AudioQuizViewModelTests
         // Assert
         _viewModel.LastNavigatedRoute.Should().Be("..");
     }
+
+    [Fact]
+    public async Task ImportCollectionAsync_ShouldFilterDuplicates_AndPrioritizeAudio()
+    {
+        // Arrange
+        var itemWithAudio = new CollectionItem { Id = 1, Word = "fork", Audio = "http://audio" };
+        var itemWithoutAudio = new CollectionItem { Id = 2, Word = "Fork", Audio = "" };
+        var itemOther = new CollectionItem { Id = 3, Word = "Spoon" };
+
+        var collection = new WordCollection
+        {
+            Items = new List<CollectionItem> { itemWithoutAudio, itemWithAudio, itemOther }
+        };
+        _viewModel.SelectedCollection = collection;
+        A.CallTo(() => _appUserService.GetUserLessonLengthAsync()).Returns(10);
+
+        // Act
+        await _viewModel.ImportCollectionAsync();
+
+        // Check internal 'allWords' using reflection
+        var field = typeof(AudioQuizViewModel).GetField("allWords", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var allWords = (List<CollectionItem>)field.GetValue(_viewModel);
+
+        // Assert
+        allWords.Should().HaveCount(2); // fork + Spoon
+        allWords.Should().Contain(i => i.Word.Equals("fork", StringComparison.OrdinalIgnoreCase));
+        allWords.Should().Contain(i => i.Word == "Spoon");
+        
+        // Verify audio priority
+        var forkItem = allWords.First(i => i.Word.Equals("fork", StringComparison.OrdinalIgnoreCase));
+        forkItem.Audio.Should().Be("http://audio");
+    }
 }

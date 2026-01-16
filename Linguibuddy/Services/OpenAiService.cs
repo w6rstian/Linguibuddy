@@ -61,22 +61,29 @@ public class OpenAiService : IOpenAiService
         }
     }
 
-    public async Task<(string English, string Polish)?> GenerateSentenceAsync(string targetWord, string difficultyLevel)
+    public async Task<(string English, string Polish)?> GenerateSentenceAsync(string targetWord, string difficultyLevel, string definition = "")
     {
         try
         {
+            var userMessage = $"Target word: {targetWord}\n" +
+                              $"Difficulty Level: {difficultyLevel}";
+
+            if (!string.IsNullOrWhiteSpace(definition))
+            {
+                userMessage += $"\nContext/Definition: {definition}";
+            }
+
             var messages = new List<ChatMessage>
             {
                 new SystemChatMessage(
                     "Jesteś nauczycielem języka angielskiego. " +
                     "Twoim zadaniem jest ułożenie prostego zdania w języku angielskim zawierającego podane słowo. " +
                     "Zdanie musi być dostosowane do podanego poziomu trudności (CEFR). " +
+                    "Jeśli podano definicję lub kontekst, upewnij się, że zdanie pasuje do tego znaczenia słowa. " +
                     "Odpowiedź musi być poprawnym obiektem JSON o strukturze: { \"english_sentence\": \"...\", \"polish_translation\": \"...\" }." +
                     "Zwróć TYLKO czysty JSON, bez bloków markdown (```json)."),
 
-                new UserChatMessage(
-                    $"Target word: {targetWord}\n" +
-                    $"Difficulty Level: {difficultyLevel}")
+                new UserChatMessage(userMessage)
             };
 
             var responseText = await _client.CompleteChatAsync(messages);

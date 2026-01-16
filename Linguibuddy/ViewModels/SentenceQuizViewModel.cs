@@ -123,7 +123,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
             var difficultyString = _currentDifficulty.ToString();
 
-            var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString);
+            var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString, TargetWord.Definition);
 
             if (generatedData != null)
                 _currentQuestion = new SentenceQuestion

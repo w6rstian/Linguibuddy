@@ -68,6 +68,8 @@ public partial class HangmanViewModel : BaseQuizViewModel
             return;
 
         allWords = SelectedCollection.Items
+                .GroupBy(i => i.Word, StringComparer.OrdinalIgnoreCase)
+                .Select(g => g.First())
                 .OrderBy(_ => random.Next())
                 .Take(await _appUserService.GetUserLessonLengthAsync())
                 .ToList();
