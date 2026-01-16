@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Models;
@@ -83,18 +83,20 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         IsBusy = true;
         IsAnswered = false;
         FeedbackMessage = string.Empty;
+        
+        var theme = GetApplicationTheme();
         FeedbackColor =
-            Application.Current.RequestedTheme == AppTheme.Light
-                ? Application.Current.Resources["PrimaryDarkText"] as Color
+            theme == AppTheme.Light
+                ? GetColorResource("PrimaryDarkText") ?? Colors.Black
                 : Colors.White;
 
         AvailableWords.Clear();
         SelectedWords.Clear();
         PolishTranslation = AppResources.SentenceGenerating;
 
-        if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+        if (!IsNetworkConnected())
         {
-            await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
             IsBusy = false;
             return;
         }
@@ -119,8 +121,6 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
             TargetWord = validWords[random.Next(validWords.Count)];
 
-            //int difficulty = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
-            //var difficulty = await _appUserService.GetUserDifficultyAsync();
             var difficultyString = _currentDifficulty.ToString();
 
             var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString);
@@ -157,7 +157,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         catch (Exception e)
         {
             Debug.WriteLine($"Error loading sentence quiz: {e.Message}");
-            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
         }
         finally
         {
@@ -165,7 +165,6 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         }
     }
 
-    // Akcja: Kliknięcie w słowo na dole (dodaj do zdania)
     [RelayCommand]
     private void SelectWord(WordTile tile)
     {
@@ -175,7 +174,6 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         SelectedWords.Add(tile);
     }
 
-    // Akcja: Kliknięcie w słowo u góry (usuń ze zdania)
     [RelayCommand]
     private void DeselectWord(WordTile tile)
     {
@@ -192,40 +190,10 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
         try
         {
-            var locales = await TextToSpeech.Default.GetLocalesAsync();
-            string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
-            // preferowany język US i GB na Android i Windows
-            var preferred = locales.FirstOrDefault(l =>
-                                (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
-                                femaleVoices.Any(f => l.Name.Contains(f)))
-                            ?? locales.FirstOrDefault(l =>
-                                (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
-                                femaleVoices.Any(f => l.Name.Contains(f)))
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
-                            // inne głosy
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
-                            ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
-
-            if (preferred == null)
-            {
-                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.InstallEng, "OK");
-                return;
-            }
-
-            await TextToSpeech.Default.SpeakAsync(_currentQuestion.EnglishSentence, new SpeechOptions
-            {
-                Locale = preferred,
-                Pitch = 1.0f,
-                Volume = 1.0f
-            });
+            await SpeakAsync(_currentQuestion.EnglishSentence);
         }
         catch (Exception ex)
         {
-            //await Shell.Current.DisplayAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
             Debug.WriteLine(ex.Message);
         }
     }
@@ -245,9 +213,9 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
             var lower = input.ToLowerInvariant();
 
-            var punctuation = new[] { '.', ',', '?', '!', ';', ':', '-', '"', '\'' };
+            var punctuation = new char[] { '.', ',', '?', '!', ';', ':', '-', '"', '\'' };
             foreach (var p in punctuation) lower = lower.Replace(p.ToString(), "");
-            return string.Join(" ", lower.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+            return string.Join(" ", lower.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
         }
 
         var isCorrect = Normalize(formedSentence) == Normalize(correctSentence);
@@ -257,9 +225,6 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         if (isCorrect)
         {
             Score++;
-
-            //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
-            //var difficulty = (DifficultyLevel)difficultyInt;
 
             var points = _scoringService.CalculatePoints(GameType.SentenceQuiz, _currentDifficulty);
             PointsEarned += points;
@@ -279,7 +244,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
     [RelayCommand]
     public async Task GoBack()
     {
-        await Shell.Current.GoToAsync("..");
+        await GoToAsync("..");
     }
 
     [RelayCommand]
@@ -299,5 +264,63 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
                     PointsEarned
                 );
             }
+    }
+
+    protected virtual bool IsNetworkConnected()
+    {
+        return Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+    }
+
+    protected virtual Task ShowAlertAsync(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual Task GoToAsync(string route)
+    {
+        return Shell.Current.GoToAsync(route);
+    }
+
+    protected virtual async Task SpeakAsync(string text)
+    {
+        var locales = await TextToSpeech.Default.GetLocalesAsync();
+        string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
+        
+        var preferred = locales.FirstOrDefault(l =>
+                            (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
+                            femaleVoices.Any(f => l.Name.Contains(f)))
+                        ?? locales.FirstOrDefault(l =>
+                            (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
+                            femaleVoices.Any(f => l.Name.Contains(f)))
+                        ?? locales.FirstOrDefault(l =>
+                            l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
+                        ?? locales.FirstOrDefault(l =>
+                            l.Language == "en-US" || (l.Language == "en" && l.Country == "US") )
+                        ?? locales.FirstOrDefault(l =>
+                            l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB") )
+                        ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
+
+        if (preferred == null)
+        {
+            await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, "OK");
+            return;
+        }
+
+        await TextToSpeech.Default.SpeakAsync(text, new SpeechOptions
+        {
+            Locale = preferred,
+            Pitch = 1.0f,
+            Volume = 1.0f
+        });
+    }
+
+    protected virtual AppTheme GetApplicationTheme()
+    {
+        return Application.Current.RequestedTheme;
+    }
+
+    protected virtual Color? GetColorResource(string key)
+    {
+        return Application.Current.Resources[key] as Color;
     }
 }

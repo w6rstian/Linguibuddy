@@ -46,12 +46,17 @@ public partial class LeaderboardViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Błąd", "Nie udało się pobrać rankingu.", "OK");
+            await ShowAlertAsync("Błąd", "Nie udało się pobrać rankingu.", "OK");
         }
         finally
         {
             IsLoading = false;
         }
+    }
+
+    protected virtual Task ShowAlertAsync(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
     }
 }
 

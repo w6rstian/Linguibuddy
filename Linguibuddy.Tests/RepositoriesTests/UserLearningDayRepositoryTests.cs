@@ -4,7 +4,7 @@ using Linguibuddy.Models;
 using Linguibuddy.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace Linguibuddy.Tests.RepositoryTests;
+namespace Linguibuddy.Tests.RepositoriesTests;
 
 public class UserLearningDayRepositoryTests : IDisposable
 {

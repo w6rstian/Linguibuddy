@@ -4,7 +4,7 @@ using FluentAssertions;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Services;
 
-namespace Linguibuddy.Tests.ServiceTests;
+namespace Linguibuddy.Tests.ServicesTests;
 
 public class DeepLTranslationServiceTests
 {

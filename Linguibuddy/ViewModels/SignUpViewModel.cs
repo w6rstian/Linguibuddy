@@ -13,7 +13,7 @@ public partial class SignUpViewModel : ObservableObject
 {
     private readonly FirebaseAuthClient _authClient;
     private readonly IServiceProvider _services;
-    private readonly DataContext db;
+    private readonly DataContext _db;
 
     [ObservableProperty] private string _email;
 
@@ -31,7 +31,7 @@ public partial class SignUpViewModel : ObservableObject
     {
         _authClient = authClient;
         _services = services;
-        db = dataContext;
+        _db = dataContext;
         LabelUsernameErrorOpacity = 0;
         LabelEmailErrorOpacity = 0;
         LabelPasswordErrorOpacity = 0;
@@ -57,43 +57,83 @@ public partial class SignUpViewModel : ObservableObject
         if (LabelUsernameErrorOpacity == 1 || LabelEmailErrorOpacity == 1 || LabelPasswordErrorOpacity == 1)
             return;
 
-        await _authClient.CreateUserWithEmailAndPasswordAsync(Email, Password, Username);
+        await CreateUserWithEmailAndPasswordAsync(Email, Password, Username);
 
         // This check is excessive but I'd rather have it than not, for safety =)
-        var appUser = await db.AppUsers.FindAsync(_authClient.User.Uid);
+        var appUser = await FindAppUserAsync(GetAuthUserUid());
         if (appUser == null)
         {
             appUser = new AppUser
             {
-                Id = _authClient.User.Uid,
-                UserName = _authClient.User.Info.DisplayName
+                Id = GetAuthUserUid(),
+                UserName = GetAuthUserDisplayName()
             };
-            db.AppUsers.Add(appUser);
+            await AddAppUserAsync(appUser);
 
-            var allAchievements = await db.Achievements.ToListAsync(); // Pobierz wszystkie globalne osiągnięcia
-
-            foreach (var achievement in allAchievements)
-            {
-                var userAchievement = new UserAchievement
-                {
-                    AppUserId = appUser.Id,
-                    AchievementId = achievement.Id,
-                    IsUnlocked = false
-                };
-                db.UserAchievements.Add(userAchievement);
-            }
-
-            await db.SaveChangesAsync();
+            await InitializeUserAchievementsAsync(appUser.Id);
         }
 
-        Application.Current.Windows[0].Page = App.GetMainShell();
+        NavigateToMainPage();
     }
 
     [RelayCommand]
     private async Task NavigateSignIn()
     {
-        var signInPage = _services.GetRequiredService<SignInPage>();
+        NavigateToSignInPage();
+    }
 
-        Application.Current.Windows[0].Page = new NavigationPage(signInPage);
+    protected virtual async Task CreateUserWithEmailAndPasswordAsync(string email, string password, string username)
+    {
+        await _authClient.CreateUserWithEmailAndPasswordAsync(email, password, username);
+    }
+
+    protected virtual string GetAuthUserUid()
+    {
+        return _authClient.User.Uid;
+    }
+
+    protected virtual string GetAuthUserDisplayName()
+    {
+        return _authClient.User.Info.DisplayName;
+    }
+
+    protected virtual async Task<AppUser?> FindAppUserAsync(string uid)
+    {
+        return await _db.AppUsers.FindAsync(uid);
+    }
+
+    protected virtual async Task AddAppUserAsync(AppUser appUser)
+    {
+        _db.AppUsers.Add(appUser);
+        await _db.SaveChangesAsync();
+    }
+
+    protected virtual async Task InitializeUserAchievementsAsync(string userId)
+    {
+        var allAchievements = await _db.Achievements.ToListAsync();
+
+        foreach (var achievement in allAchievements)
+        {
+            var userAchievement = new UserAchievement
+            {
+                AppUserId = userId,
+                AchievementId = achievement.Id,
+                IsUnlocked = false
+            };
+            _db.UserAchievements.Add(userAchievement);
+        }
+
+        await _db.SaveChangesAsync();
+    }
+
+    protected virtual void NavigateToMainPage()
+    {
+        Application.Current!.Windows[0].Page = App.GetMainShell();
+    }
+
+    protected virtual void NavigateToSignInPage()
+    {
+        var signInPage = _services.GetRequiredService<SignInPage>();
+        Application.Current!.Windows[0].Page = new NavigationPage(signInPage);
     }
 }

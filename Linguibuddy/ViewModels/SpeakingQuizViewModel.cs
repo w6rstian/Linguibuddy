@@ -96,9 +96,9 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         TargetSentence = string.Empty;
         RecognizedText = string.Empty;
 
-        if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+        if (!IsNetworkConnected())
         {
-            await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
             IsBusy = false;
             return;
         }
@@ -142,7 +142,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
         }
         finally
         {
@@ -165,7 +165,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         var isGranted = await _speechToText.RequestPermissions(CancellationToken.None);
         if (!isGranted)
         {
-            await Shell.Current.DisplayAlert(AppResources.NoPermissions, AppResources.MicrophoneNeeded, "OK");
+            await ShowAlertAsync(AppResources.NoPermissions, AppResources.MicrophoneNeeded, "OK");
             return;
         }
 
@@ -242,36 +242,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
 
         try
         {
-            var locales = await TextToSpeech.Default.GetLocalesAsync();
-            string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
-            // preferowany język US i GB na Android i Windows
-            var preferred = locales.FirstOrDefault(l =>
-                                (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
-                                femaleVoices.Any(f => l.Name.Contains(f)))
-                            ?? locales.FirstOrDefault(l =>
-                                (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
-                                femaleVoices.Any(f => l.Name.Contains(f)))
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
-                            // inne głosy
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
-                            ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
-
-            if (preferred == null)
-            {
-                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.InstallEng, "OK");
-                return;
-            }
-
-            await TextToSpeech.Default.SpeakAsync(text, new SpeechOptions
-            {
-                Locale = preferred,
-                Pitch = 1.0f,
-                Volume = 1.0f
-            }, cancelToken: _ttsCts.Token);
+            await SpeakAsync(text, _ttsCts.Token);
         }
         catch (OperationCanceledException)
         {
@@ -324,10 +295,8 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     private void OnRecognitionTextCompleted(object? sender, SpeechToTextRecognitionResultCompletedEventArgs args)
     {
         var finalResult = args.RecognitionResult.Text;
-        if (string.IsNullOrEmpty(finalResult) && args.RecognitionResult.Exception == null)
-            finalResult = args.RecognitionResult.ToString();
 
-        MainThread.BeginInvokeOnMainThread(async () =>
+        RunOnMainThread(async () =>
         {
             RecognizedText = finalResult;
             //IsListening = false;
@@ -338,7 +307,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         });
     }
 
-    private async Task FinishAttempt()
+    protected virtual async Task FinishAttempt()
     {
         _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
         _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
@@ -351,7 +320,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
             RecognizedText = "Nie usłyszałem nic. Spróbuj ponownie.";
     }
 
-    private void CheckPronunciation(string spokenText)
+    protected virtual void CheckPronunciation(string spokenText)
     {
         if (IsAnswered) return;
 
@@ -403,7 +372,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     [RelayCommand]
     public async Task GoBack()
     {
-        await Shell.Current.GoToAsync("..");
+        await GoToAsync("..");
     }
 
     private double CalculateSimilarity(string target, string spoken)
@@ -446,6 +415,63 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         RecognizedText = AppResources.Error;
         _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
         _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
-        await MainThread.InvokeOnMainThreadAsync(async () => await Shell.Current.DisplayAlert(title, message, "OK"));
+        await InvokeOnMainThreadAsync(async () => await ShowAlertAsync(title, message, "OK"));
+    }
+
+    protected virtual bool IsNetworkConnected()
+    {
+        return Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+    }
+
+    protected virtual Task ShowAlertAsync(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual Task GoToAsync(string route)
+    {
+        return Shell.Current.GoToAsync(route);
+    }
+
+    protected virtual async Task SpeakAsync(string text, CancellationToken token)
+    {
+        var locales = await TextToSpeech.Default.GetLocalesAsync();
+        string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
+        var preferred = locales.FirstOrDefault(l =>
+                            (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
+                            femaleVoices.Any(f => l.Name.Contains(f)))
+                        ?? locales.FirstOrDefault(l =>
+                            (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
+                            femaleVoices.Any(f => l.Name.Contains(f)))
+                        ?? locales.FirstOrDefault(l =>
+                            l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
+                        ?? locales.FirstOrDefault(l =>
+                            l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
+                        ?? locales.FirstOrDefault(l =>
+                            l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
+                        ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
+
+        if (preferred == null)
+        {
+            await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, "OK");
+            return;
+        }
+
+        await TextToSpeech.Default.SpeakAsync(text, new SpeechOptions
+        {
+            Locale = preferred,
+            Pitch = 1.0f,
+            Volume = 1.0f
+        }, cancelToken: token);
+    }
+
+    protected virtual void RunOnMainThread(Action action)
+    {
+        MainThread.BeginInvokeOnMainThread(action);
+    }
+
+    protected virtual Task InvokeOnMainThreadAsync(Func<Task> action)
+    {
+        return MainThread.InvokeOnMainThreadAsync(action);
     }
 }

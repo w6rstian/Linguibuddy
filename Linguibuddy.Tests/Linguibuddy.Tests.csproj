@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Maui" Version="12.3.0" />
     <PackageReference Include="coverlet.collector" Version="6.0.2" />
     <PackageReference Include="FakeItEasy" Version="9.0.0" />
     <PackageReference Include="FluentAssertions" Version="8.8.0" />
@@ -27,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="RepositoryTests\" />
+    <Folder Include="ViewModelsTests\" />
   </ItemGroup>
 
 </Project>

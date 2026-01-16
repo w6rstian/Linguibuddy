@@ -48,23 +48,23 @@ public partial class FlashcardsViewModel : ObservableObject
     public bool CanShowButtons => IsAnswerRevealed;
     public bool IsLearning => !IsFinished;
 
-    public string CurrentWordText => _currentItem?.Word ?? "";
-    public string CurrentPhonetic => _currentItem?.Phonetic ?? "";
-    public string CurrentAudio => _currentItem?.Audio ?? "";
-    public string CurrentImageUrl => _currentItem?.ImageUrl ?? "";
+    public string CurrentWordText => CurrentItem?.Word ?? "";
+    public string CurrentPhonetic => CurrentItem?.Phonetic ?? "";
+    public string CurrentAudio => CurrentItem?.Audio ?? "";
+    public string CurrentImageUrl => CurrentItem?.ImageUrl ?? "";
 
     public string CurrentTranslation =>
-        !string.IsNullOrEmpty(_currentItem?.SavedTranslation)
-            ? _currentItem.SavedTranslation
+        !string.IsNullOrEmpty(CurrentItem?.SavedTranslation)
+            ? CurrentItem.SavedTranslation
             : AppResources.NoTranslation;
 
     public string CurrentDefinition
     {
         get
         {
-            if (_currentItem == null) return "";
+            if (CurrentItem == null) return "";
 
-            return _currentItem?.Definition ?? "";
+            return CurrentItem?.Definition ?? "";
         }
     }
 
@@ -72,9 +72,9 @@ public partial class FlashcardsViewModel : ObservableObject
     {
         get
         {
-            if (_currentItem == null) return "";
+            if (CurrentItem == null) return "";
 
-            return _currentItem?.Example ?? "";
+            return CurrentItem?.Example ?? "";
         }
     }
 
@@ -82,9 +82,9 @@ public partial class FlashcardsViewModel : ObservableObject
     {
         get
         {
-            if (_currentItem == null) return "";
+            if (CurrentItem == null) return "";
 
-            return _currentItem?.PartOfSpeech ?? "";
+            return CurrentItem?.PartOfSpeech ?? "";
         }
     }
 
@@ -93,9 +93,14 @@ public partial class FlashcardsViewModel : ObservableObject
         if (value != null) await StartSession();
     }
 
-    private async Task StartSession()
+    protected virtual async Task StartSession()
     {
-        if (Collection == null) await GoBack();
+        if (Collection == null)
+        {
+            await GoBack();
+            return;
+        }
+        
         List<CollectionItem> items;
 
         if (IsSrsMode)
@@ -103,8 +108,9 @@ public partial class FlashcardsViewModel : ObservableObject
             items = await _collectionService.GetItemsDueForLearning(Collection.Id);
             if (items.Count == 0)
             {
-                await Shell.Current.DisplayAlert(AppResources.Error, AppResources.NoFlashcardsToLearn, "OK");
+                await ShowAlertAsync(AppResources.Error, AppResources.NoFlashcardsToLearn, "OK");
                 await GoBack();
+                return;
             }
         }
         else
@@ -220,6 +226,16 @@ public partial class FlashcardsViewModel : ObservableObject
     [RelayCommand]
     public async Task GoBack()
     {
-        await Shell.Current.GoToAsync("..");
+        await GoToAsync("..");
+    }
+
+    protected virtual Task ShowAlertAsync(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual Task GoToAsync(string route)
+    {
+        return Shell.Current.GoToAsync(route);
     }
 }

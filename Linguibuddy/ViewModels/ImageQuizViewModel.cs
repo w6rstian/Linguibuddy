@@ -74,9 +74,9 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
                 : Colors.White;
         Options.Clear();
 
-        if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+        if (!IsNetworkConnected())
         {
-            await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            await ShowAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
             IsBusy = false;
             return;
         }
@@ -126,7 +126,7 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
         catch (Exception ex)
         {
             Debug.WriteLine($"Image Quiz Error: {ex.Message}");
-            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
+            await ShowAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
         }
         finally
         {
@@ -166,7 +166,7 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
     [RelayCommand]
     public async Task GoBack()
     {
-        await Shell.Current.GoToAsync("..");
+        await GoToAsync("..");
     }
 
     [RelayCommand]
@@ -186,5 +186,20 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
                     PointsEarned
                 );
             }
+    }
+
+    protected virtual bool IsNetworkConnected()
+    {
+        return Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+    }
+
+    protected virtual Task ShowAlert(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual Task GoToAsync(string route)
+    {
+        return Shell.Current.GoToAsync(route);
     }
 }

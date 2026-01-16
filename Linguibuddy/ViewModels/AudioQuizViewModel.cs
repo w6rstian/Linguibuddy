@@ -75,9 +75,9 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
                 : Colors.White;
         Options.Clear();
 
-        if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+        if (!IsNetworkConnected())
         {
-            await Shell.Current.DisplayAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            await ShowAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
             IsBusy = false;
             return;
         }
@@ -131,7 +131,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
         catch (Exception ex)
         {
             Debug.WriteLine($"Error loading quiz: {ex.Message}");
-            await Shell.Current.DisplayAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
+            await ShowAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
         }
         finally
         {
@@ -183,7 +183,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
             var audioBytes = await client.GetByteArrayAsync(url);
 
             var fileName = "quiz_temp_audio.mp3";
-            var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+            var filePath = Path.Combine(GetCacheDirectory(), fileName);
 
             await File.WriteAllBytesAsync(filePath, audioBytes);
 
@@ -196,7 +196,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
+            await ShowAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
             Debug.WriteLine($"Audio Error: {ex.Message}");
         }
     }
@@ -204,7 +204,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
     [RelayCommand]
     public async Task GoBack()
     {
-        await Shell.Current.GoToAsync("..");
+        await GoToAsync("..");
     }
 
     [RelayCommand]
@@ -224,17 +224,25 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
                     PointsEarned
                 );
             }
-        // TODO: DisplayResultScreen()
-        // Nie rozumiem do końca jak jest zrobiony ekran końcowy w fiszkach, ale tutaj powinno być podobnie.
-        // Wyżej przy prawidłowej odpowiedzi jest robiony Score++.
-        // Można wyświetlić score/allwords.count, np. "5/10 poprawnych odpowiedzi"
-        // A ten score się przyda może do punktów do grywalizacji albo można dodać jeszcze jakieś kolekcje/pola do CollectionItem,
-        // żeby śledzić jakie słowa użytkownik umie/nie umie (analiza wyników dla AI).
-        // Myślałem, żeby każde słowo w danej kolekcji miało win ratio (czyli potrzebne 2 pola, poprawneOdpCount i wszystkieOdpCount).
-        // Oraz dodatkowo pole "ostatnia odp" czy poprawna czy nie. Może to wystarczy, żeby AI zdecydowało czy dane słowo już jest nauczone.
     }
 
-    private async Task DisplayResultScreen()
+    protected virtual bool IsNetworkConnected()
     {
+        return Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+    }
+
+    protected virtual Task ShowAlert(string title, string message, string cancel)
+    {
+        return Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual string GetCacheDirectory()
+    {
+        return FileSystem.CacheDirectory;
+    }
+
+    protected virtual Task GoToAsync(string route)
+    {
+        return Shell.Current.GoToAsync(route);
     }
 }
