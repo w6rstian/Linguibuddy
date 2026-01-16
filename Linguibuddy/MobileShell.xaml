@@ -30,6 +30,10 @@
             <ShellContent ContentTemplate="{DataTemplate views:AchievementsPage}" Route="AchievementsPage" />
         </Tab>
 
+        <Tab Title="{loc:Translate Leaderboard}" Icon="leaderboard_100dp_light.png">
+            <ShellContent ContentTemplate="{DataTemplate views:LeaderboardPage}" Route="LeaderboardPage" />
+        </Tab>
+
         <Tab Title="{loc:Translate Settings}" Icon="settings_100dp_light.png">
             <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage" />
         </Tab>

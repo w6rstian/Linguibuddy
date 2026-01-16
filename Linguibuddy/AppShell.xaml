@@ -40,9 +40,9 @@
             Route="AchievementsPage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Ranking">
+    <FlyoutItem Title="{loc:Translate Leaderboard}">
         <ShellContent
-            Title="Ranking"
+            Title="{loc:Translate Leaderboard}"
             ContentTemplate="{DataTemplate views:LeaderboardPage}"
             Route="LeaderboardPage" />
     </FlyoutItem>
