@@ -19,6 +19,7 @@ public partial class MainViewModel : ObservableObject
     private readonly IServiceProvider _services;
     private readonly ICollectionService _collectionService;
     private readonly IOpenAiService _openAiService;
+    private readonly SettingsViewModel _settingsViewModel;
 
     private AppUser user;
 
@@ -47,7 +48,8 @@ public partial class MainViewModel : ObservableObject
         FirebaseAuthClient authClient, 
         IAchievementRepository achievementRepository,
         ICollectionService collectionService,
-        IOpenAiService openAiService)
+        IOpenAiService openAiService,
+        SettingsViewModel settingsViewModel)
     {
         _appUserService = appUserService;
         _learningService = learningService;
@@ -56,6 +58,7 @@ public partial class MainViewModel : ObservableObject
         _collectionService = collectionService;
         _openAiService = openAiService;
         _services = services;
+        _settingsViewModel = settingsViewModel;
         _isAiThinking = true;
     }
 
