@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Interfaces;
@@ -12,19 +12,19 @@ public partial class WordCollectionPopupViewModel : ObservableObject
     private readonly ICollectionService _collectionService;
     private readonly IPopupService _popupService;
 
-    [ObservableProperty] private IEnumerable<WordCollection> _collections;
+    [ObservableProperty] private IEnumerable<WordCollection> _collections = [];
 
-    [ObservableProperty] private WordCollection _selectedCollection;
+    [ObservableProperty] private WordCollection? _selectedCollection;
 
     public WordCollectionPopupViewModel(ICollectionService collectionService, IPopupService popupService)
     {
         _collectionService = collectionService;
         _popupService = popupService;
 
-        LoadCollectionsAsync();
+        RunInBackground(async () => await LoadCollectionsAsync());
     }
 
-    private async Task LoadCollectionsAsync()
+    public async Task LoadCollectionsAsync()
     {
         Collections = await _collectionService.GetUserCollectionsAsync();
     }
@@ -32,12 +32,22 @@ public partial class WordCollectionPopupViewModel : ObservableObject
     [RelayCommand]
     private async Task CollectionSelected(WordCollection? selected)
     {
-        await _popupService.ClosePopupAsync<WordCollection?>(Shell.Current, selected);
+        await ClosePopup(selected);
     }
 
     [RelayCommand]
     private async Task Cancel()
     {
-        await _popupService.ClosePopupAsync<WordCollection?>(Shell.Current, null);
+        await ClosePopup(null);
+    }
+
+    protected virtual async Task ClosePopup(WordCollection? result)
+    {
+        await _popupService.ClosePopupAsync<WordCollection?>(Shell.Current, result);
+    }
+
+    protected virtual void RunInBackground(Func<Task> action)
+    {
+        Task.Run(action);
     }
 }
