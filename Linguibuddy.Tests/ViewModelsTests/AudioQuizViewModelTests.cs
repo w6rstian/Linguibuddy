@@ -27,6 +27,7 @@ public class AudioQuizViewModelTests
     // Testable subclass to bypass static MAUI dependencies
     private class TestableAudioQuizViewModel : AudioQuizViewModel
     {
+        public bool NetworkAvailable { get; set; } = true;
         public string LastNavigatedRoute { get; private set; } = string.Empty;
 
         public TestableAudioQuizViewModel(IScoringService scoringService, IAudioManager audioManager, IAppUserService appUserService, ILearningService learningService) 
@@ -36,7 +37,7 @@ public class AudioQuizViewModelTests
 
         protected override bool IsNetworkConnected()
         {
-            return true; // Simulate network available
+            return NetworkAvailable;
         }
 
         protected override Task ShowAlert(string title, string message, string cancel)
@@ -65,6 +66,19 @@ public class AudioQuizViewModelTests
         _learningService = A.Fake<ILearningService>();
 
         _viewModel = new TestableAudioQuizViewModel(_scoringService, _audioManager, _appUserService, _learningService);
+    }
+
+    [Fact]
+    public async Task LoadQuestionAsync_ShouldNavigateBack_WhenNetworkIsNotAvailable()
+    {
+        // Arrange
+        _viewModel.NetworkAvailable = false;
+
+        // Act
+        await _viewModel.LoadQuestionAsync();
+
+        // Assert
+        _viewModel.LastNavigatedRoute.Should().Be("..");
     }
 
     [Fact]

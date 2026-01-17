@@ -81,6 +81,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
         {
             await ShowAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
             IsBusy = false;
+            await GoBack();
             return;
         }
 

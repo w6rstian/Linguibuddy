@@ -98,6 +98,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         {
             await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
             IsBusy = false;
+            await GoBack();
             return;
         }
 

@@ -118,6 +118,7 @@ public class ImageQuizViewModelTests
 
         // Assert
         _viewModel.LastAlertMessage.Should().NotBeNullOrEmpty();
+        _viewModel.LastNavigatedRoute.Should().Be("..");
     }
 
     [Fact]

@@ -100,6 +100,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         {
             await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
             IsBusy = false;
+            await GoBack();
             return;
         }
 

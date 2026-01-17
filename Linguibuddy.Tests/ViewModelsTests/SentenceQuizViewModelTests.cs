@@ -69,6 +69,19 @@ public class SentenceQuizViewModelTests
     }
 
     [Fact]
+    public async Task LoadQuestionAsync_ShouldNavigateBack_WhenNetworkIsNotAvailable()
+    {
+        // Arrange
+        _viewModel.MockNetworkStatus = false;
+
+        // Act
+        await _viewModel.LoadQuestionAsync();
+
+        // Assert
+        _viewModel.LastNavigatedRoute.Should().Be("..");
+    }
+
+    [Fact]
     public async Task ImportCollectionAsync_ShouldCallGetUserLessonLengthAsync_WhenCollectionIsValid()
     {
         // Arrange
