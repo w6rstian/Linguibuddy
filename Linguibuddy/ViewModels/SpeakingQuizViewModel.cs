@@ -299,7 +299,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
 
         RunOnMainThread(async () =>
         {
-            RecognizedText = finalResult;
+            if (finalResult != null) RecognizedText = finalResult;
             //IsListening = false;
             //_speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
             //_speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;

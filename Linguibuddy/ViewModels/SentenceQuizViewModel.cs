@@ -317,11 +317,13 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
     protected virtual AppTheme GetApplicationTheme()
     {
+        Debug.Assert(Application.Current != null, "Application.Current != null");
         return Application.Current.RequestedTheme;
     }
 
     protected virtual Color? GetColorResource(string key)
     {
+        Debug.Assert(Application.Current != null, "Application.Current != null");
         return Application.Current.Resources[key] as Color;
     }
 }

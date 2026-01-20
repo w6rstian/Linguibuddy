@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Extensions;
+﻿using System.Diagnostics;
+using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
@@ -44,6 +45,7 @@ public partial class SignInViewModel : ObservableObject
         }
         catch (Exception ex)
         {
+            Debug.WriteLine($"Sign in failed: {ex.Message}");
             LabelErrorOpacity = 1;
             return;
         }

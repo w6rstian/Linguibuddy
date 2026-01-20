@@ -3,10 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Linguibuddy.ViewModels;
 
-//TODO: backend for leaderboard or remove this page
 public partial class LeaderboardViewModel : ObservableObject
 {
     private readonly IAppUserService _appUserService;
@@ -46,6 +46,7 @@ public partial class LeaderboardViewModel : ObservableObject
         }
         catch (Exception ex)
         {
+            Debug.WriteLine($"Error loading leaderboard: {ex.Message}");
             await ShowAlertAsync("Błąd", "Nie udało się pobrać rankingu.", "OK");
         }
         finally

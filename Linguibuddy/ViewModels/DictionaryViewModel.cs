@@ -229,6 +229,7 @@ public partial class DictionaryViewModel : ObservableObject
         }
         catch (Exception ex)
         {
+            Debug.WriteLine($"TTS failed: {ex.Message}");
             await ShowAlertAsync(AppResources.AudioError, AppResources.PlaybackError, "OK");
         }
     }
