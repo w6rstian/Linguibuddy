@@ -13,18 +13,20 @@ public partial class App : Application
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        var authClient = IPlatformApplication.Current.Services.GetRequiredService<FirebaseAuthClient>();
-        var user = authClient.User;
-        if (
-            user is null ||
-            !IPlatformApplication.Current.Services.GetRequiredService<DataContext>()
-                .AppUsers
-                .Where(au => au.Id == user.Uid)
-                .Any())
+        if (IPlatformApplication.Current != null)
         {
-            var signInPage = IPlatformApplication.Current.Services.GetService<SignInPage>();
+            var authClient = IPlatformApplication.Current.Services.GetRequiredService<FirebaseAuthClient>();
+            var user = authClient.User;
+            if (
+                user is null ||
+                !IPlatformApplication.Current.Services.GetRequiredService<DataContext>()
+                    .AppUsers
+                    .Any(au => au.Id == user.Uid))
+            {
+                var signInPage = IPlatformApplication.Current.Services.GetService<SignInPage>();
 
-            return new Window(new NavigationPage(signInPage));
+                return new Window(new NavigationPage(signInPage));
+            }
         }
 
         return new Window(GetMainShell());
