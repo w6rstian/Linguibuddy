@@ -9,7 +9,6 @@ using LocalizationResourceManager.Maui;
 
 namespace Linguibuddy.ViewModels;
 
-//TODO: AI profile analysis like in CollectionDetailsViewModel
 public partial class MainViewModel : ObservableObject
 {
     private readonly IAchievementRepository _achievementRepository;
