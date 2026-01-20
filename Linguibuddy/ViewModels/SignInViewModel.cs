@@ -50,13 +50,14 @@ public partial class SignInViewModel : ObservableObject
             return;
         }
 
-        AppUser appUser = null;
+        AppUser? appUser = null;
         try
         {
             appUser = await FindAppUserAsync(GetAuthUserUid());
         }
         catch (SqliteException ex)
         {
+            Debug.WriteLine($"Database error: {ex.Message}");
             await ShowAlertAsync(AppResources.Error, AppResources.DatabaseError, "OK");
             return;
         }
