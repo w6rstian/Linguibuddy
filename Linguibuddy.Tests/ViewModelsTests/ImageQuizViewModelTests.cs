@@ -194,7 +194,7 @@ public class ImageQuizViewModelTests
         await _viewModel.ImportCollectionAsync();
 
         // Check internal 'allWords' using reflection
-        var field = typeof(ImageQuizViewModel).GetField("allWords", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var field = typeof(ImageQuizViewModel).GetField("_allWords", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         var allWords = (List<CollectionItem>)field.GetValue(_viewModel);
 
         // Assert

@@ -113,8 +113,6 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
             TargetWord = validWords[_random.Next(validWords.Count)];
 
-            // TODO: CHECK IF TARGET WORD HAS AUDIO AND PHONETIC SPELLING. HANDLE IF NOT
-
             var wrongOptions = _allWords
                 .Where(w => w != TargetWord)
                 .OrderBy(_ => _random.Next())
@@ -174,33 +172,80 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
     [RelayCommand]
     private async Task PlayAudioAsync()
     {
-        if (TargetWord == null || string.IsNullOrWhiteSpace(TargetWord.Audio)) return;
+        if (TargetWord == null) return;
 
         var url = TargetWord.Audio;
+        var wordToSpeak = TargetWord.Word;
+        bool playedSuccessfully = false;
 
-        if (_audioPlayer != null && _audioPlayer.IsPlaying) _audioPlayer.Dispose();
-
-        try
+        if (!string.IsNullOrWhiteSpace(url))
         {
-            using var client = new HttpClient();
-            var audioBytes = await client.GetByteArrayAsync(url);
+            if (_audioPlayer != null && _audioPlayer.IsPlaying) _audioPlayer.Dispose();
 
-            var fileName = "quiz_temp_audio.mp3";
-            var filePath = Path.Combine(GetCacheDirectory(), fileName);
+            try
+            {
+                using var client = new HttpClient();
+                var audioBytes = await client.GetByteArrayAsync(url);
 
-            await File.WriteAllBytesAsync(filePath, audioBytes);
+                var fileName = "quiz_temp_audio.mp3";
+                var filePath = Path.Combine(GetCacheDirectory(), fileName);
 
-            var fileStream = File.OpenRead(filePath);
+                await File.WriteAllBytesAsync(filePath, audioBytes);
 
-            _audioPlayer = _audioManager.CreatePlayer(fileStream);
-            _audioPlayer.Play();
+                var fileStream = File.OpenRead(filePath);
 
-            _audioPlayer.PlaybackEnded += (s, e) => { fileStream.Dispose(); };
+                _audioPlayer = _audioManager.CreatePlayer(fileStream);
+                _audioPlayer.Play();
+
+                _audioPlayer.PlaybackEnded += (s, e) => { fileStream.Dispose(); };
+                playedSuccessfully = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Audio file failed, falling back to TTS. Error: {ex.Message}");
+            }
         }
-        catch (Exception ex)
+
+        if (!playedSuccessfully)
         {
-            await ShowAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
-            Debug.WriteLine($"Audio Error: {ex.Message}");
+            try
+            {
+                var locales = await TextToSpeech.Default.GetLocalesAsync();
+                string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
+                // Prefer US or GB
+                var preferred = locales.FirstOrDefault(l =>
+                                    (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
+                                    femaleVoices.Any(f => l.Name.Contains(f)))
+                                ?? locales.FirstOrDefault(l =>
+                                    (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
+                                    femaleVoices.Any(f => l.Name.Contains(f)))
+                                ?? locales.FirstOrDefault(l =>
+                                    l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
+                                // Other voices
+                                ?? locales.FirstOrDefault(l =>
+                                    l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
+                                ?? locales.FirstOrDefault(l =>
+                                    l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
+                                ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
+
+                if (preferred == null)
+                {
+                    await ShowAlert(AppResources.Error, AppResources.InstallEng, "OK");
+                    return;
+                }
+
+                await TextToSpeech.Default.SpeakAsync(wordToSpeak, new SpeechOptions
+                {
+                    Locale = preferred,
+                    Pitch = 1.0f,
+                    Volume = 1.0f
+                });
+            }
+            catch (Exception ex)
+            {
+                await ShowAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
+                Debug.WriteLine($"TTS Error: {ex.Message}");
+            }
         }
     }
 

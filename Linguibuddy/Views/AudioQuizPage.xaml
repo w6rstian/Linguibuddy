@@ -92,7 +92,16 @@
                        FontSize="24"
                        FontAttributes="Italic"
                        TextColor="{StaticResource Primary}"
-                       HorizontalOptions="Center" />
+                       HorizontalOptions="Center">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding TargetWord.Phonetic}" Value="">
+                            <Setter Property="IsVisible" Value="False" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label" Binding="{Binding TargetWord.Phonetic}" Value="{x:Null}">
+                            <Setter Property="IsVisible" Value="False" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
             </VerticalStackLayout>
 
             <Label Grid.Row="1"

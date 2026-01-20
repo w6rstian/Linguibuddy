@@ -170,14 +170,18 @@ public partial class DictionaryViewModel : ObservableObject
     {
         if (item == null) return;
 
-        if (!string.IsNullOrWhiteSpace(item.AudioUrl))
+        var url = item.AudioUrl;
+        var wordToSpeak = item.Word;
+        bool playedSuccessfully = false;
+
+        if (!string.IsNullOrWhiteSpace(url))
         {
             if (_audioPlayer != null && _audioPlayer.IsPlaying) _audioPlayer.Dispose();
 
             try
             {
                 using var client = new HttpClient();
-                var audioBytes = await client.GetByteArrayAsync(item.AudioUrl);
+                var audioBytes = await client.GetByteArrayAsync(url);
                 var fileName = "temp_pronunciation.mp3";
                 var filePath = Path.Combine(GetCacheDirectory(), fileName);
                 await File.WriteAllBytesAsync(filePath, audioBytes);
@@ -186,7 +190,7 @@ public partial class DictionaryViewModel : ObservableObject
                 _audioPlayer = _audioManager.CreatePlayer(fileStream);
                 _audioPlayer.Play();
                 _audioPlayer.PlaybackEnded += (s, e) => { fileStream.Dispose(); };
-                return;
+                playedSuccessfully = true;
             }
             catch (Exception ex)
             {
@@ -194,43 +198,46 @@ public partial class DictionaryViewModel : ObservableObject
             }
         }
 
-        try
+        if (!playedSuccessfully)
         {
-            var locales = await TextToSpeech.Default.GetLocalesAsync();
-            string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
-            // preferowany język US i GB na Android i Windows
-            var preferred = locales.FirstOrDefault(l =>
-                                (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
-                                femaleVoices.Any(f => l.Name.Contains(f)))
-                            ?? locales.FirstOrDefault(l =>
-                                (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
-                                femaleVoices.Any(f => l.Name.Contains(f)))
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
-                            // inne głosy
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
-                            ?? locales.FirstOrDefault(l =>
-                                l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
-                            ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
-
-            if (preferred == null)
+            try
             {
-                await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, "OK");
-                return;
+                var locales = await TextToSpeech.Default.GetLocalesAsync();
+                string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
+                // preferowany język US i GB na Android i Windows
+                var preferred = locales.FirstOrDefault(l =>
+                                    (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
+                                    femaleVoices.Any(f => l.Name.Contains(f)))
+                                ?? locales.FirstOrDefault(l =>
+                                    (l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB")) &&
+                                    femaleVoices.Any(f => l.Name.Contains(f)))
+                                ?? locales.FirstOrDefault(l =>
+                                    l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
+                                // inne głosy
+                                ?? locales.FirstOrDefault(l =>
+                                    l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
+                                ?? locales.FirstOrDefault(l =>
+                                    l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
+                                ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
+
+                if (preferred == null)
+                {
+                    await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, "OK");
+                    return;
+                }
+
+                await TextToSpeech.Default.SpeakAsync(wordToSpeak, new SpeechOptions
+                {
+                    Locale = preferred,
+                    Pitch = 1.0f,
+                    Volume = 1.0f
+                });
             }
-
-            await TextToSpeech.Default.SpeakAsync(item.Word, new SpeechOptions
+            catch (Exception ex)
             {
-                Locale = preferred,
-                Pitch = 1.0f,
-                Volume = 1.0f
-            });
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"TTS failed: {ex.Message}");
-            await ShowAlertAsync(AppResources.AudioError, AppResources.PlaybackError, "OK");
+                Debug.WriteLine($"TTS failed: {ex.Message}");
+                await ShowAlertAsync(AppResources.AudioError, AppResources.PlaybackError, "OK");
+            }
         }
     }
 
