@@ -18,8 +18,7 @@
         </Tab>
 
         <Tab Title="{loc:Translate Collections}" Icon="cards_stack_100dp_light.png">
-            <ShellContent ContentTemplate="{DataTemplate views:CollectionsPage}"
-                          Route="CollectionsPage" />
+            <ShellContent ContentTemplate="{DataTemplate views:CollectionsPage}" Route="CollectionsPage" />
         </Tab>
 
         <Tab Title="{loc:Translate Minigames}" Icon="joystick_100dp_light.png">

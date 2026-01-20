@@ -26,11 +26,11 @@ public class PexelsImageServiceTests
 
         var mockResponse = new PexelsPhotoResponse
         {
-            photos = new List<PexelsPhoto>
+            Photos = new List<PexelsPhoto>
             {
                 new()
                 {
-                    source = new PexelsSource { medium = expectedUrl }
+                    Source = new PexelsSource { Medium = expectedUrl }
                 }
             }
         };
@@ -52,7 +52,7 @@ public class PexelsImageServiceTests
         var word = "test";
         var mockResponse = new PexelsPhotoResponse
         {
-            photos = new List<PexelsPhoto>()
+            Photos = new List<PexelsPhoto>()
         };
 
         A.CallTo(() => _pexelsClientWrapper.SearchPhotosAsync(word, 1))

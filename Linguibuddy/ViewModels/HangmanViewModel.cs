@@ -18,8 +18,8 @@ public partial class HangmanViewModel : BaseQuizViewModel
     private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
     private readonly ILearningService _learningService;
-    private List<CollectionItem> allWords;
-    private Random random = Random.Shared;
+    private List<CollectionItem> _allWords;
+    private readonly Random _random = Random.Shared;
 
     [ObservableProperty] private string _currentImage;
 
@@ -67,10 +67,10 @@ public partial class HangmanViewModel : BaseQuizViewModel
         if (SelectedCollection is null || !SelectedCollection.Items.Any())
             return;
 
-        allWords = SelectedCollection.Items
+        _allWords = SelectedCollection.Items
                 .GroupBy(i => i.Word, StringComparer.OrdinalIgnoreCase)
                 .Select(g => g.First())
-                .OrderBy(_ => random.Next())
+                .OrderBy(_ => _random.Next())
                 .Take(await _appUserService.GetUserLessonLengthAsync())
                 .ToList();
     }
@@ -113,7 +113,7 @@ public partial class HangmanViewModel : BaseQuizViewModel
                 return;
             }
 
-            var validWords = allWords.Except(HasAppeared).ToList();
+            var validWords = _allWords.Except(HasAppeared).ToList();
 
             if (!validWords.Any())
             {
@@ -122,9 +122,9 @@ public partial class HangmanViewModel : BaseQuizViewModel
                 return;
             }
 
-            if (allWords is not null && allWords.Any())
+            if (_allWords is not null && _allWords.Any())
             {
-                var wordObj = validWords[random.Next(validWords.Count)];
+                var wordObj = validWords[_random.Next(validWords.Count)];
 
                 _secretWord = wordObj.Word.Trim().ToUpper();
                 HasAppeared.Add(wordObj);
@@ -247,7 +247,7 @@ public partial class HangmanViewModel : BaseQuizViewModel
                     SelectedCollection,
                     GameType.Hangman,
                     Score,
-                    allWords.Count,
+                    _allWords.Count,
                     PointsEarned
                 );
             }

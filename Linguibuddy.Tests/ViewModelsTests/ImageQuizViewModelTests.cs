@@ -21,7 +21,7 @@ public class ImageQuizViewModelTests
     private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
     private readonly ILearningService _learningService;
-    private TestableImageQuizViewModel _viewModel;
+    private readonly TestableImageQuizViewModel _viewModel;
 
     public ImageQuizViewModelTests()
     {

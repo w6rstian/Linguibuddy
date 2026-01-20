@@ -18,8 +18,8 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
     private readonly IOpenAiService _openAiService;
     private readonly IScoringService _scoringService;
     private readonly ILearningService _learningService;
-    private List<CollectionItem> allWords;
-    private Random random = Random.Shared;
+    private List<CollectionItem> _allWords;
+    private readonly Random _random = Random.Shared;
 
     private DifficultyLevel _currentDifficulty;
 
@@ -68,8 +68,8 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         if (SelectedCollection is null || !SelectedCollection.Items.Any())
             return;
 
-        allWords = SelectedCollection.Items
-                .OrderBy(_ => random.Next())
+        _allWords = SelectedCollection.Items
+                .OrderBy(_ => _random.Next())
                 .Take(await _appUserService.GetUserLessonLengthAsync())
                 .ToList();
     }
@@ -120,7 +120,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            TargetWord = validWords[random.Next(validWords.Count)];
+            TargetWord = validWords[_random.Next(validWords.Count)];
 
             var difficultyString = _currentDifficulty.ToString();
 
@@ -149,7 +149,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
             var words = cleanSentence.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            words = words.OrderBy(x => random.Next()).ToList();
+            words = words.OrderBy(x => _random.Next()).ToList();
 
             foreach (var w in words) AvailableWords.Add(new WordTile(w));
 
@@ -261,7 +261,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
                     SelectedCollection,
                     GameType.SentenceQuiz,
                     Score,
-                    allWords.Count,
+                    _allWords.Count,
                     PointsEarned
                 );
             }

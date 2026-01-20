@@ -15,7 +15,7 @@ namespace Linguibuddy.Repositories
     {
         private readonly DataContext _db;
         private readonly IAuthService _authService;
-        private string _currentUserId;
+        private readonly string _currentUserId;
 
         public AchievementRepository(DataContext db, IAuthService authService)
         {

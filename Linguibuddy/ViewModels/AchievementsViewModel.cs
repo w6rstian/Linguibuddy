@@ -16,9 +16,9 @@ public partial class AchievementsViewModel : ObservableObject
 
     [ObservableProperty] private ILocalizationResourceManager _localizationResourceManager;
 
-    [ObservableProperty] private ObservableCollection<UserAchievement> achievements = new(); // Lista do bindowania
+    [ObservableProperty] private ObservableCollection<UserAchievement> _achievements = new(); // Lista do bindowania
 
-    [ObservableProperty] private bool isLoading = true; // Do pokazywania loadera
+    [ObservableProperty] private bool _isLoading = true; // Do pokazywania loadera
 
     public AchievementsViewModel(IAchievementService achievementService, IAchievementRepository achievementRepository, ILocalizationResourceManager localizationResourceManager)
     {

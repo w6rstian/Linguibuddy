@@ -21,8 +21,8 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     private readonly IScoringService _scoringService;
     private readonly ISpeechToText _speechToText;
     private readonly ILearningService _learningService;
-    private List<CollectionItem> allWords;
-    private Random random = Random.Shared;
+    private List<CollectionItem> _allWords;
+    private readonly Random _random = Random.Shared;
 
     private CancellationTokenSource? _ttsCts;
 
@@ -73,15 +73,15 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         if (SelectedCollection is null || !SelectedCollection.Items.Any())
             return;
 
-        allWords = SelectedCollection.Items
-                .OrderBy(_ => random.Next())
+        _allWords = SelectedCollection.Items
+                .OrderBy(_ => _random.Next())
                 .Take(await _appUserService.GetUserLessonLengthAsync())
                 .ToList();
     }
 
     public override async Task LoadQuestionAsync()
     {
-        StopTTS();
+        StopTts();
         await ForceStopListening();
 
         _currentDifficulty = await _appUserService.GetUserDifficultyAsync();
@@ -112,7 +112,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            var validWords = allWords.Except(HasAppeared).ToList();
+            var validWords = _allWords.Except(HasAppeared).ToList();
 
             if (validWords.Count == 0)
             {
@@ -120,7 +120,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            TargetWord = validWords[random.Next(validWords.Count)];
+            TargetWord = validWords[_random.Next(validWords.Count)];
 
             //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
             var difficultyString = _currentDifficulty.ToString();
@@ -161,7 +161,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     {
         if (IsListening || IsAnswered) return;
 
-        StopTTS();
+        StopTts();
 
         var isGranted = await _speechToText.RequestPermissions(CancellationToken.None);
         if (!isGranted)
@@ -237,7 +237,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
             await StopListening();
         }
 
-        StopTTS();
+        StopTts();
 
         _ttsCts = new CancellationTokenSource();
 
@@ -263,7 +263,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         }
     }
 
-    public void StopTTS()
+    public void StopTts()
     {
         if (_ttsCts != null && !_ttsCts.IsCancellationRequested)
         {
@@ -361,7 +361,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
                     SelectedCollection,
                     GameType.SpeakingQuiz,
                     Score,
-                    allWords.Count,
+                    _allWords.Count,
                     PointsEarned
                 );
             }    

@@ -18,8 +18,8 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
     private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
     private readonly ILearningService _learningService;
-    private List<CollectionItem> allWords;
-    private Random random = Random.Shared;
+    private List<CollectionItem> _allWords;
+    private readonly Random _random = Random.Shared;
 
     [ObservableProperty] private List<CollectionItem> _hasAppeared;
 
@@ -56,10 +56,10 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
         if (SelectedCollection is null || !SelectedCollection.Items.Any())
             return;
 
-        allWords = SelectedCollection.Items
+        _allWords = SelectedCollection.Items
                 .GroupBy(i => i.Word, StringComparer.OrdinalIgnoreCase)
                 .Select(g => g.FirstOrDefault(i => !string.IsNullOrEmpty(i.ImageUrl)) ?? g.First())
-                .OrderBy(_ => random.Next())
+                .OrderBy(_ => _random.Next())
                 .Take(await _appUserService.GetUserLessonLengthAsync())
                 .ToList();
     }
@@ -93,13 +93,13 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            if (allWords.Count < 4)
+            if (_allWords.Count < 4)
             {
                 FeedbackMessage = AppResources.TooLittleWords;
                 return;
             }
 
-            var validWords = allWords.Except(HasAppeared).ToList();
+            var validWords = _allWords.Except(HasAppeared).ToList();
 
             if (validWords.Count == 0)
             {
@@ -108,18 +108,18 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            TargetWord = validWords[random.Next(validWords.Count)];
+            TargetWord = validWords[_random.Next(validWords.Count)];
 
-            var wrongOptions = allWords
+            var wrongOptions = _allWords
                 .Where(w => w != TargetWord)
-                .OrderBy(_ => random.Next())
+                .OrderBy(_ => _random.Next())
                 .Take(3)
                 .ToList();
 
             var optionsList = new List<CollectionItem> { TargetWord };
             optionsList.AddRange(wrongOptions);
             optionsList = optionsList
-                .OrderBy(_ => random.Next())
+                .OrderBy(_ => _random.Next())
                 .ToList();
 
             foreach (var word in optionsList) Options.Add(new QuizOption(word));
@@ -185,7 +185,7 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
                     SelectedCollection,
                     GameType.ImageQuiz,
                     Score,
-                    allWords.Count,
+                    _allWords.Count,
                     PointsEarned
                 );
             }

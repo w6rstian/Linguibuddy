@@ -22,7 +22,7 @@ public class AudioQuizViewModelTests
     private readonly IAudioManager _audioManager;
     private readonly IAppUserService _appUserService;
     private readonly ILearningService _learningService;
-    private TestableAudioQuizViewModel _viewModel;
+    private readonly TestableAudioQuizViewModel _viewModel;
 
     // Testable subclass to bypass static MAUI dependencies
     private class TestableAudioQuizViewModel : AudioQuizViewModel

@@ -21,7 +21,7 @@ public partial class MainViewModel : ObservableObject
     private readonly IOpenAiService _openAiService;
     private readonly SettingsViewModel _settingsViewModel;
 
-    private AppUser user;
+    private AppUser _user;
 
     [ObservableProperty] private int _bestStreak;
 
@@ -78,7 +78,7 @@ public partial class MainViewModel : ObservableObject
         Points = await _appUserService.GetUserPointsAsync();
         CurrentStreak = await _learningService.GetCurrentStreakAsync();
         BestStreak = await _appUserService.GetUserBestStreakAsync();
-        user = await _appUserService.GetCurrentUserAsync();
+        _user = await _appUserService.GetCurrentUserAsync();
 
         if (CurrentStreak == BestStreak)
             IsCurrentStreakBest = true;
@@ -90,9 +90,9 @@ public partial class MainViewModel : ObservableObject
 
     public async Task GetAiFeedback()
     {
-        if (!user.RequiresAiAnalysis && !string.IsNullOrEmpty(user.LastAiAnalysis))
+        if (!_user.RequiresAiAnalysis && !string.IsNullOrEmpty(_user.LastAiAnalysis))
         {
-            AiFeedback = user.LastAiAnalysis;
+            AiFeedback = _user.LastAiAnalysis;
             IsAiThinking = false;
             return;
         }
@@ -101,14 +101,14 @@ public partial class MainViewModel : ObservableObject
         var collections = await _collectionService.GetUserCollectionsAsync();
 
         var language = GetPreference(Constants.LanguageKey, "pl");
-        var feedback = await _openAiService.AnalyzeComprehensiveProfileAsync(user, CurrentStreak, UnlockedAchievementsCount, collections, language);
+        var feedback = await _openAiService.AnalyzeComprehensiveProfileAsync(_user, CurrentStreak, UnlockedAchievementsCount, collections, language);
 
         AiFeedback = feedback;
 
-        user.LastAiAnalysis = feedback;
-        user.RequiresAiAnalysis = false;
+        _user.LastAiAnalysis = feedback;
+        _user.RequiresAiAnalysis = false;
         IsAiThinking = false;
-        await _appUserService.UpdateAppUserAsync(user);
+        await _appUserService.UpdateAppUserAsync(_user);
     }
 
     protected virtual bool IsUserAuthenticated()

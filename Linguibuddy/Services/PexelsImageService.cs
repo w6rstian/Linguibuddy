@@ -20,9 +20,9 @@ public class PexelsImageService : IPexelsImageService
         {
             var result = await _pexelsClient.SearchPhotosAsync(word, pageSize: 1);
 
-            var photo = result?.photos?.FirstOrDefault();
+            var photo = result?.Photos?.FirstOrDefault();
 
-            if (photo != null) return photo.source.medium;
+            if (photo != null) return photo.Source.Medium;
         }
         catch (Exception ex)
         {

@@ -20,8 +20,8 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
     private readonly IAppUserService _appUserService;
     private readonly ILearningService _learningService;
     private IAudioPlayer? _audioPlayer;
-    private List<CollectionItem> allWords;
-    private Random random = Random.Shared;
+    private List<CollectionItem> _allWords;
+    private readonly Random _random = Random.Shared;
 
     [ObservableProperty] private List<CollectionItem> _hasAppeared;
 
@@ -58,10 +58,10 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
         if (SelectedCollection is null || !SelectedCollection.Items.Any())
             return;
 
-        allWords = SelectedCollection.Items
+        _allWords = SelectedCollection.Items
                 .GroupBy(i => i.Word, StringComparer.OrdinalIgnoreCase)
                 .Select(g => g.FirstOrDefault(i => !string.IsNullOrEmpty(i.Audio)) ?? g.First())
-                .OrderBy(_ => random.Next())
+                .OrderBy(_ => _random.Next())
                 .Take(await _appUserService.GetUserLessonLengthAsync())
                 .ToList();
     }
@@ -96,13 +96,13 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
             // We only choose allWords that have not been asked as the next word. All allWords can appear as an incorrect QuizOption.
 
-            if (allWords.Count < 4)
+            if (_allWords.Count < 4)
             {
                 FeedbackMessage = AppResources.TooLittleWords;
                 return;
             }
 
-            var validWords = allWords.Except(HasAppeared).ToList();
+            var validWords = _allWords.Except(HasAppeared).ToList();
 
             if (validWords.Count == 0)
             {
@@ -111,20 +111,20 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
                 return;
             }
 
-            TargetWord = validWords[random.Next(validWords.Count)];
+            TargetWord = validWords[_random.Next(validWords.Count)];
 
             // TODO: CHECK IF TARGET WORD HAS AUDIO AND PHONETIC SPELLING. HANDLE IF NOT
 
-            var wrongOptions = allWords
+            var wrongOptions = _allWords
                 .Where(w => w != TargetWord)
-                .OrderBy(_ => random.Next())
+                .OrderBy(_ => _random.Next())
                 .Take(3)
                 .ToList();
 
             var optionsList = new List<CollectionItem> { TargetWord };
             optionsList.AddRange(wrongOptions);
             optionsList = optionsList
-                .OrderBy(_ => random.Next())
+                .OrderBy(_ => _random.Next())
                 .ToList();
 
             foreach (var word in optionsList) Options.Add(new QuizOption(word));
@@ -223,7 +223,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
                     SelectedCollection,
                     GameType.AudioQuiz,
                     Score,
-                    allWords.Count,
+                    _allWords.Count,
                     PointsEarned
                 );
             }

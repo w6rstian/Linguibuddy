@@ -29,7 +29,7 @@ public partial class CollectionDetailsViewModel : ObservableObject
     [ObservableProperty]
     private bool _isAiThinking;
 
-    [ObservableProperty] bool isExpanded = true;
+    [ObservableProperty] bool _isExpanded = true;
 
     public CollectionDetailsViewModel(
         ICollectionService collectionService,

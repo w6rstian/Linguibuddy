@@ -28,9 +28,9 @@ public class PexelsClientWrapper : IPexelsClientWrapper
         
         if (result.photos != null)
         {
-            response.photos = result.photos.Select(p => new PexelsPhoto
+            response.Photos = result.photos.Select(p => new PexelsPhoto
             {
-                source = new PexelsSource { medium = p.source.medium }
+                Source = new PexelsSource { Medium = p.source.medium }
             }).ToList();
         }
         
