@@ -42,7 +42,6 @@
                            TextColor="Red"
                            Opacity="{Binding LabelPasswordErrorOpacity}" />
                 </VerticalStackLayout>
-                <!-- TODO: Add confirm password -->
                 <Button Command="{Binding SignUpCommand}" Text="{loc:Translate SignUp}" />
                 <Button Command="{Binding NavigateSignInCommand}" Text="{loc:Translate SignInPls}" />
             </VerticalStackLayout>

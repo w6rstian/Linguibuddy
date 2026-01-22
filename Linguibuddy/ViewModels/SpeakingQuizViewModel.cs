@@ -12,7 +12,6 @@ using Linguibuddy.Interfaces;
 
 namespace Linguibuddy.ViewModels;
 
-// TODO: add translations and better view
 [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
 public partial class SpeakingQuizViewModel : BaseQuizViewModel
 {
@@ -216,7 +215,6 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         }
     }
 
-    // do odtworzenia TTS na razie niepotrzebne
     [RelayCommand]
     public async Task PlayAudio()
     {

@@ -16,10 +16,6 @@ public class PexelsClientWrapper : IPexelsClientWrapper
 
     public async Task<PexelsPhotoResponse?> SearchPhotosAsync(string query, int pageSize = 1)
     {
-        // Here we assume the SDK call works.
-        // We catch exceptions only if we want to handle them here, but the service also has try-catch.
-        // However, to mimic the SDK result being mapped to our result, we need to succeed first.
-        
         var result = await _client.SearchPhotosAsync(query, pageSize: pageSize);
         
         if (result == null) return null;

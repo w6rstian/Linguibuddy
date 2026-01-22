@@ -191,9 +191,6 @@ public class OpenAiService : IOpenAiService
     /// <summary>
     /// Analizuje ogólny profil ucznia.
     /// </summary>
-    /// <summary>
-    /// Przeprowadza kompleksową analizę profilu użytkownika, uwzględniając postępy w kolekcjach oraz ogólne statystyki (streak, punkty).
-    /// </summary>
     public async Task<string> AnalyzeComprehensiveProfileAsync(AppUser user, int currentStreak, int unlockedAchievements, IEnumerable<WordCollection> collections, string language)
     {
         if (user == null) return "Brak danych użytkownika.";
@@ -250,7 +247,6 @@ public class OpenAiService : IOpenAiService
             }
         }
 
-        // --- Raport całościowy ---
         var comprehensiveReport = $"""
                            RAPORT KOMPLEKSOWY UŻYTKOWNIKA:
                            
@@ -271,27 +267,6 @@ public class OpenAiService : IOpenAiService
 
             var messages = new List<ChatMessage>
             {
-                /*
-                new SystemChatMessage(
-                    "Jesteś głównym trenerem językowym w aplikacji 'Linguibuddy'. Twoim celem jest analiza postępów ucznia.\n" +
-                    "Otrzymasz pełny raport zawierający dane o regularności (streak), punktach oraz wynikach z gier językowych.\n\n" +
-                    "TWOJE ZADANIE:\n" +
-                    "1. Przeanalizuj regularność (streak). Jeśli jest wysoki - pochwal. Jeśli niski lub 0 - zmotywuj do codziennej nauki.\n" +
-                    "2. Spójrz na wyniki gier (Słuchanie, Mówienie, Gramatyka, itp.). Zidentyfikuj mocne i słabe strony. Powiedz konkretnie nad czym pracować.\n" +
-                    "3. Jeśli wyniki są bardzo wysokie (>90%), a poziom trudności niski (A1/A2), zasugeruj jego zmianę.\n" +
-                    "4. Zwróć uwagę na balans - czy uczeń nie unika np. Mówienia na rzecz prostego Hangmana?\n\n" +
-                    "FORMAT ODPOWIEDZI (Struktura markdown, używaj emoji):\n" +
-                    "### 📊 Diagnoza Profilu\n" +
-                    "[Krótki opis stylu nauki użytkownika na podstawie danych]\n\n" +
-                    "### ✅ Co idzie świetnie?\n" +
-                    "- [Punkt 1]\n" +
-                    "- [Punkt 2]\n\n" +
-                    "### 🚧 Nad czym popracować?\n" +
-                    "- [Konkretna porada 1]\n" +
-                    "- [Konkretna porada 2]\n\n" +
-                    "### 💡 Plan Treningowy\n" +
-                    "[Jedno zdanie podsumowujące co robić dalej]"),
-                */
                 new SystemChatMessage(
                     "Jesteś głównym trenerem językowym w aplikacji 'Linguibuddy'. Twoim celem jest analiza postępów ucznia.\n" +
                     "Otrzymasz pełny raport zawierający dane o regularności (streak), punktach oraz wynikach z lekcji językowych.\n\n" +
