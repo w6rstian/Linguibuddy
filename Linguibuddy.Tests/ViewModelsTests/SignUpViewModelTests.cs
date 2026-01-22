@@ -1,4 +1,4 @@
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Data;
 using Linguibuddy.Models;
@@ -46,8 +46,8 @@ public class SignUpViewModelTests
         protected override Task CreateUserWithEmailAndPasswordAsync(string email, string password, string username)
         {
             if (MockCreateUserSuccess) return Task.CompletedTask;
-            // Simplified: real VM logic doesn't explicitly catch this, so exception would propagate.
-            // But here we assume successful flow logic check.
+            
+            
             throw new System.Exception("Create failed");
         }
 
@@ -146,7 +146,7 @@ public class SignUpViewModelTests
         _viewModel.Username = "User";
         _viewModel.Email = "test@test.com";
         _viewModel.Password = "password123";
-        _viewModel.MockAppUser = null; // User doesn't exist yet
+        _viewModel.MockAppUser = null; 
 
         // Act
         await _viewModel.SignUpCommand.ExecuteAsync(null);

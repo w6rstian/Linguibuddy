@@ -1,4 +1,4 @@
-using CommunityToolkit.Maui;
+﻿using CommunityToolkit.Maui;
 using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Interfaces;
@@ -44,8 +44,8 @@ public class WordCollectionPopupViewModelTests
 
         protected override void RunInBackground(Func<Task> action)
         {
-            // Do not automatically run in background during test setup to avoid race conditions.
-            // We will call LoadCollectionsAsync manually in tests.
+            
+            
         }
     }
 

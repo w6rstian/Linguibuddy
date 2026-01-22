@@ -1,4 +1,4 @@
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Data;
 using Linguibuddy.Helpers;
@@ -201,7 +201,7 @@ public class DictionaryViewModelTests
 
         // Assert
         item.Translation.Should().Be("witaj");
-        // Must specify the optional argument here as well for the check
+        
         A.CallTo(() => _translationService.TranslateWithContextAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
     }
 }

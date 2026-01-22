@@ -1,4 +1,4 @@
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
@@ -138,23 +138,23 @@ public class FlashcardsViewModelTests
         _viewModel.Collection = collection;
         if (_viewModel.CurrentStartSessionTask != null) await _viewModel.CurrentStartSessionTask;
 
-        // Ensure the item is what we expect
+        
         if (_viewModel.CurrentItem?.Id != 1)
         {
-            // If random order put item 2 first, cycle it
+            
             _viewModel.NextCardCommand.Execute(null);
         }
         
-        // Wait, if NextCard is called in StartSession, it takes one.
-        // Random order might pick "Next" first.
-        // I should force order or check which one is current.
-        // If current is "Next", I should grade "Next" (but I need to set up progress for it).
-        // Better: Mock Returns to return only 1 item initially to be sure, or mock Random? No, Random is local.
         
-        // Let's force specific behavior:
-        // Since I cannot easily control Random inside the VM, I will assume the item I want is there.
-        // I'll make sure both items have progress or handle it.
-        // Or I can just check _viewModel.CurrentItem and set its progress if missing?
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         if (_viewModel.CurrentItem!.FlashcardProgress == null)
         {

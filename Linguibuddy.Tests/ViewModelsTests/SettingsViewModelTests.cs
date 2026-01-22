@@ -1,4 +1,4 @@
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
@@ -32,7 +32,7 @@ public class SettingsViewModelTests
         _viewModel = new TestableSettingsViewModel(
             _resourceManager,
             _appUserService,
-            null!, // FirebaseAuthClient is handled via virtual methods if needed, but here mostly irrelevant for logic except SignOut
+            null!, 
             _services,
             _collectionService);
     }
@@ -87,7 +87,7 @@ public class SettingsViewModelTests
 
         protected override void RunInBackground(Func<Task> action)
         {
-            action().GetAwaiter().GetResult(); // Run synchronously for tests
+            action().GetAwaiter().GetResult(); 
         }
     }
 

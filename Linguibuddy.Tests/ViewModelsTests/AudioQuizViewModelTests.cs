@@ -1,4 +1,4 @@
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
@@ -24,7 +24,7 @@ public class AudioQuizViewModelTests
     private readonly ILearningService _learningService;
     private readonly TestableAudioQuizViewModel _viewModel;
 
-    // Testable subclass to bypass static MAUI dependencies
+    
     private class TestableAudioQuizViewModel : AudioQuizViewModel
     {
         public bool NetworkAvailable { get; set; } = true;
@@ -42,7 +42,7 @@ public class AudioQuizViewModelTests
 
         protected override Task ShowAlert(string title, string message, string cancel)
         {
-            return Task.CompletedTask; // Bypass UI alert
+            return Task.CompletedTask; 
         }
         
         protected override Task GoToAsync(string route)
@@ -59,7 +59,7 @@ public class AudioQuizViewModelTests
 
     public AudioQuizViewModelTests()
     {
-        // Dependencies
+        
         _scoringService = A.Fake<IScoringService>();
         _audioManager = A.Fake<IAudioManager>();
         _appUserService = A.Fake<IAppUserService>();
@@ -133,7 +133,7 @@ public class AudioQuizViewModelTests
     {
         // Arrange
         var items = new List<CollectionItem>();
-        // We need at least 4 items for the quiz to proceed
+        
         for (int i = 1; i <= 5; i++)
         {
             items.Add(new CollectionItem { Id = i, Word = $"Word{i}" });
@@ -144,7 +144,7 @@ public class AudioQuizViewModelTests
 
         A.CallTo(() => _appUserService.GetUserLessonLengthAsync()).Returns(5);
         
-        // Populate the internal 'allWords' list
+        
         await _viewModel.ImportCollectionAsync();
 
         // Act
@@ -246,16 +246,16 @@ public class AudioQuizViewModelTests
         // Act
         await _viewModel.ImportCollectionAsync();
 
-        // Check internal 'allWords' using reflection
+        
         var field = typeof(AudioQuizViewModel).GetField("_allWords", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         var allWords = (List<CollectionItem>)field.GetValue(_viewModel);
 
         // Assert
-        allWords.Should().HaveCount(2); // fork + Spoon
+        allWords.Should().HaveCount(2); 
         allWords.Should().Contain(i => i.Word.Equals("fork", StringComparison.OrdinalIgnoreCase));
         allWords.Should().Contain(i => i.Word == "Spoon");
         
-        // Verify audio priority
+        
         var forkItem = allWords.First(i => i.Word.Equals("fork", StringComparison.OrdinalIgnoreCase));
         forkItem.Audio.Should().Be("http://audio");
     }

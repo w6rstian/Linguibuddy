@@ -1,4 +1,4 @@
-using CommunityToolkit.Maui.Media;
+﻿using CommunityToolkit.Maui.Media;
 using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Helpers;
@@ -69,7 +69,7 @@ public class SpeakingQuizViewModelTests
 
         protected override Task InvokeOnMainThreadAsync(Func<Task> action) => action();
 
-        // Expose protected methods for testing
+        
         public void CallCheckPronunciation(string text) => base.CheckPronunciation(text);
         public Task CallFinishAttempt() => base.FinishAttempt();
     }

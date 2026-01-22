@@ -1,4 +1,4 @@
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Data;
 using Linguibuddy.Interfaces;
@@ -245,7 +245,7 @@ public class CollectionServiceTests : IDisposable
 
         var dto = new FlashcardCreationDto
         {
-            Word = "existingword", // case insensitive check
+            Word = "existingword", 
             PartOfSpeech = "noun",
             Definition = "def"
         };

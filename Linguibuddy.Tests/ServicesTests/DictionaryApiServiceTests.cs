@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Data;
@@ -53,7 +53,7 @@ public class DictionaryApiServiceTests
         // Assert
         result.Should().NotBeNull();
         result!.Word.Should().Be(expectedWord.Word);
-        // Verify
+        
         _httpHandler.Requests.Should().BeEmpty();
     }
 
@@ -81,7 +81,7 @@ public class DictionaryApiServiceTests
         result!.Word.Should().Be(word);
         result.ImageUrl.Should().Be("https://example.com/image.jpg");
 
-        // Verify
+        
         var dbWord = await _context.DictionaryWords.FirstOrDefaultAsync(w => w.Word == word);
         dbWord.Should().NotBeNull();
         dbWord!.ImageUrl.Should().Be("https://example.com/image.jpg");

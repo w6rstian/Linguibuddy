@@ -1,4 +1,4 @@
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
@@ -21,7 +21,7 @@ public class CollectionsViewModelTests
         _viewModel = new TestableCollectionsViewModel(_collectionService);
     }
 
-    // Subclass to override protected virtual methods
+    
     private class TestableCollectionsViewModel : CollectionsViewModel
     {
         public string PromptResult { get; set; } = string.Empty;
@@ -129,7 +129,7 @@ public class CollectionsViewModelTests
     {
         // Arrange
         var collection = new WordCollection { Id = 1, Name = "Delete Me" };
-        _viewModel.AlertResult = true; // User clicks "Yes"
+        _viewModel.AlertResult = true; 
 
         // Act
         await _viewModel.DeleteCollectionCommand.ExecuteAsync(collection);
@@ -144,7 +144,7 @@ public class CollectionsViewModelTests
     {
         // Arrange
         var collection = new WordCollection { Id = 1, Name = "Safe" };
-        _viewModel.AlertResult = false; // User clicks "No"
+        _viewModel.AlertResult = false; 
 
         // Act
         await _viewModel.DeleteCollectionCommand.ExecuteAsync(collection);
@@ -204,6 +204,6 @@ public class CollectionsViewModelTests
 
         // Assert
         _viewModel.LastNavigatedRoute.Should().BeEmpty();
-        _viewModel.LastAlertMessage.Should().NotBeEmpty(); // Check if alert was shown
+        _viewModel.LastAlertMessage.Should().NotBeEmpty(); 
     }
 }

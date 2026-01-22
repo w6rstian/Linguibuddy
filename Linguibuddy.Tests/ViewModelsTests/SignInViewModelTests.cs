@@ -1,4 +1,4 @@
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Data;
 using Linguibuddy.Interfaces;
@@ -26,25 +26,25 @@ public class SignInViewModelTests
         var resourceManager = A.Fake<LocalizationResourceManager.Maui.ILocalizationResourceManager>();
         var appUserService = A.Fake<IAppUserService>();
         var collectionService = A.Fake<ICollectionService>();
-        // FirebaseAuthClient is concrete, pass null and expect issues if used? 
-        // But SettingsViewModel constructor calls other methods that might fail.
-        // It calls LoadLanguage (needs resourceManager), LoadTheme (needs Preferences -> GetPreference), UpdateThemeName (needs App.Current -> GetAppTheme), UpdateApiName (needs Preferences -> GetPreference).
         
-        // Since GetPreference/SetPreference/etc are virtual, we can configure the fake to return values or do nothing?
-        // But we are creating the fake.
-        // If we don't configure "CallsBaseMethods", virtual methods do nothing by default.
-        // GetPreference returns null.
-        // LoadLanguage: savedLanguage is null. if(null == "pl") false. else _resourceManager.CurrentCulture = English. 
-        // So resourceManager must NOT be null.
         
-        // LoadTheme calls GetPreference (returns 0/null). SetAppTheme is virtual, does nothing.
-        // UpdateThemeName calls GetAppTheme (returns default/null). ThemeName is set.
-        // UpdateApiName calls GetPreference. TranslationApiName is set.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         _settingsViewModel = A.Fake<SettingsViewModel>(x => x.WithArgumentsForConstructor(new object[] { 
             resourceManager, 
             appUserService, 
-            null!, // AuthClient (not used in constructor?)
+            null!, 
             _services, 
             collectionService 
         }));
@@ -54,7 +54,7 @@ public class SignInViewModelTests
             .Options;
         _dataContext = new DataContext(options);
 
-        // We pass null for FirebaseAuthClient because we override all its usages
+        
         _viewModel = new TestableSignInViewModel(null!, _services, _dataContext, _settingsViewModel);
     }
 
@@ -163,7 +163,7 @@ public class SignInViewModelTests
         _viewModel.MockSignInSuccess = true;
         _viewModel.Email = "test@test.com";
         _viewModel.Password = "password";
-        _viewModel.MockAppUser = null; // User not found in DB
+        _viewModel.MockAppUser = null; 
 
         // Act
         await _viewModel.SignInCommand.ExecuteAsync(null);

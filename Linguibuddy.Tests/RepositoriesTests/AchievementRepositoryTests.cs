@@ -1,4 +1,4 @@
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Data;
 using Linguibuddy.Interfaces;
@@ -103,6 +103,6 @@ public class AchievementRepositoryTests : IDisposable
         var result = await _sut.GetUnlockedAchievementsCountAsync();
 
         // Assert
-        result.Should().Be(2); // ua1 and ua4
+        result.Should().Be(2); 
     }
 }

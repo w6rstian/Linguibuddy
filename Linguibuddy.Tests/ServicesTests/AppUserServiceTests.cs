@@ -1,4 +1,4 @@
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
@@ -299,9 +299,9 @@ public class AppUserServiceTests
         A.CallTo(() => _repo.Update(user)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _repo.SaveChangesAsync()).MustHaveHappenedOnceExactly();
 
-        // Verify internal state update by calling a getter without repo setup
-        // The service should use the cached user we just updated
-        // Clearing previous repo calls to ensure we don't rely on repo anymore
+        
+        
+        
         A.CallTo(() => _repo.GetByIdAsync(A<string>._)).Returns(Task.FromResult<AppUser?>(null));
 
         var points = await _sut.GetUserPointsAsync();
