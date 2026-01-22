@@ -10,8 +10,7 @@
              Title="{loc:Translate SpeakingQuizName}">
 
     <ContentPage.Resources>
-        <ResourceDictionary>
-        </ResourceDictionary>
+        <ResourceDictionary />
     </ContentPage.Resources>
 
     <Grid>
@@ -128,7 +127,9 @@
                                     </DataTrigger>
                                 </Button.Triggers>
                                 <Button.Shadow>
-                                    <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}" Offset="0,4" Radius="8" Opacity="0.4" />
+                                    <Shadow
+                                        Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
+                                        Offset="0,4" Radius="8" Opacity="0.4" />
                                 </Button.Shadow>
                             </Button>
 
@@ -196,7 +197,9 @@
                         </DataTrigger>
                     </Button.Triggers>
                     <Button.Shadow>
-                        <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}" Offset="0,4" Radius="8" Opacity="0.4" />
+                        <Shadow
+                            Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
+                            Offset="0,4" Radius="8" Opacity="0.4" />
                     </Button.Shadow>
                 </Button>
             </VerticalStackLayout>

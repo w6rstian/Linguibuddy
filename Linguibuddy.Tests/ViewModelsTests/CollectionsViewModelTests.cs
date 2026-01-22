@@ -4,9 +4,6 @@ using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
 using Linguibuddy.Views;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
@@ -19,47 +16,6 @@ public class CollectionsViewModelTests
     {
         _collectionService = A.Fake<ICollectionService>();
         _viewModel = new TestableCollectionsViewModel(_collectionService);
-    }
-
-    
-    private class TestableCollectionsViewModel : CollectionsViewModel
-    {
-        public string PromptResult { get; set; } = string.Empty;
-        public bool AlertResult { get; set; } = true;
-        
-        public string LastNavigatedRoute { get; private set; } = string.Empty;
-        public IDictionary<string, object>? LastNavigatedParameters { get; private set; }
-
-        public string LastAlertTitle { get; private set; } = string.Empty;
-        public string LastAlertMessage { get; private set; } = string.Empty;
-
-        public TestableCollectionsViewModel(ICollectionService collectionService) : base(collectionService) { }
-
-        protected override Task<string> ShowPromptAsync(string title, string message, string accept = "OK", string cancel = "Cancel")
-        {
-            return Task.FromResult(PromptResult);
-        }
-
-        protected override Task<bool> ShowAlertAsync(string title, string message, string accept, string cancel)
-        {
-            LastAlertTitle = title;
-            LastAlertMessage = message;
-            return Task.FromResult(AlertResult);
-        }
-
-        protected override Task ShowAlertAsync(string title, string message, string cancel)
-        {
-            LastAlertTitle = title;
-            LastAlertMessage = message;
-            return Task.CompletedTask;
-        }
-
-        protected override Task GoToAsync(string route, IDictionary<string, object> parameters)
-        {
-            LastNavigatedRoute = route;
-            LastNavigatedParameters = parameters;
-            return Task.CompletedTask;
-        }
     }
 
     [Fact]
@@ -129,7 +85,7 @@ public class CollectionsViewModelTests
     {
         // Arrange
         var collection = new WordCollection { Id = 1, Name = "Delete Me" };
-        _viewModel.AlertResult = true; 
+        _viewModel.AlertResult = true;
 
         // Act
         await _viewModel.DeleteCollectionCommand.ExecuteAsync(collection);
@@ -144,7 +100,7 @@ public class CollectionsViewModelTests
     {
         // Arrange
         var collection = new WordCollection { Id = 1, Name = "Safe" };
-        _viewModel.AlertResult = false; 
+        _viewModel.AlertResult = false;
 
         // Act
         await _viewModel.DeleteCollectionCommand.ExecuteAsync(collection);
@@ -157,10 +113,10 @@ public class CollectionsViewModelTests
     public async Task GoToLearning_ShouldNavigateToFlashcards_WithStandardMode_WhenSRSDisabled()
     {
         // Arrange
-        var collection = new WordCollection 
-        { 
-            Id = 1, 
-            Items = new List<CollectionItem> { new CollectionItem { Word = "Word" } } 
+        var collection = new WordCollection
+        {
+            Id = 1,
+            Items = new List<CollectionItem> { new() { Word = "Word" } }
         };
         _viewModel.IsSpacedRepetitionEnabled = false;
 
@@ -177,10 +133,10 @@ public class CollectionsViewModelTests
     public async Task GoToLearning_ShouldNavigateToFlashcards_WithSRSMode_WhenSRSEnabled()
     {
         // Arrange
-        var collection = new WordCollection 
-        { 
-            Id = 1, 
-            Items = new List<CollectionItem> { new CollectionItem { Word = "Word" } } 
+        var collection = new WordCollection
+        {
+            Id = 1,
+            Items = new List<CollectionItem> { new() { Word = "Word" } }
         };
         _viewModel.IsSpacedRepetitionEnabled = true;
 
@@ -204,6 +160,50 @@ public class CollectionsViewModelTests
 
         // Assert
         _viewModel.LastNavigatedRoute.Should().BeEmpty();
-        _viewModel.LastAlertMessage.Should().NotBeEmpty(); 
+        _viewModel.LastAlertMessage.Should().NotBeEmpty();
+    }
+
+
+    private class TestableCollectionsViewModel : CollectionsViewModel
+    {
+        public TestableCollectionsViewModel(ICollectionService collectionService) : base(collectionService)
+        {
+        }
+
+        public string PromptResult { get; set; } = string.Empty;
+        public bool AlertResult { get; set; } = true;
+
+        public string LastNavigatedRoute { get; private set; } = string.Empty;
+        public IDictionary<string, object>? LastNavigatedParameters { get; private set; }
+
+        public string LastAlertTitle { get; private set; } = string.Empty;
+        public string LastAlertMessage { get; private set; } = string.Empty;
+
+        protected override Task<string> ShowPromptAsync(string title, string message, string accept = "OK",
+            string cancel = "Cancel")
+        {
+            return Task.FromResult(PromptResult);
+        }
+
+        protected override Task<bool> ShowAlertAsync(string title, string message, string accept, string cancel)
+        {
+            LastAlertTitle = title;
+            LastAlertMessage = message;
+            return Task.FromResult(AlertResult);
+        }
+
+        protected override Task ShowAlertAsync(string title, string message, string cancel)
+        {
+            LastAlertTitle = title;
+            LastAlertMessage = message;
+            return Task.CompletedTask;
+        }
+
+        protected override Task GoToAsync(string route, IDictionary<string, object> parameters)
+        {
+            LastNavigatedRoute = route;
+            LastNavigatedParameters = parameters;
+            return Task.CompletedTask;
+        }
     }
 }

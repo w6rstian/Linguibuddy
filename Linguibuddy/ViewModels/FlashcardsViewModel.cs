@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.Services;
 
 namespace Linguibuddy.ViewModels;
 
@@ -100,7 +99,7 @@ public partial class FlashcardsViewModel : ObservableObject
             await GoBack();
             return;
         }
-        
+
         List<CollectionItem> items;
 
         if (IsSrsMode)

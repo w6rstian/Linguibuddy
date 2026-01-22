@@ -4,19 +4,14 @@ using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 public class HangmanViewModelTests
 {
-    private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
     private readonly ILearningService _learningService;
+    private readonly IScoringService _scoringService;
     private readonly TestableHangmanViewModel _viewModel;
 
     public HangmanViewModelTests()
@@ -25,30 +20,6 @@ public class HangmanViewModelTests
         _appUserService = A.Fake<IAppUserService>();
         _learningService = A.Fake<ILearningService>();
         _viewModel = new TestableHangmanViewModel(_scoringService, _appUserService, _learningService);
-    }
-
-    private class TestableHangmanViewModel : HangmanViewModel
-    {
-        public string? LastNavigatedRoute { get; private set; }
-        public bool AlertShown { get; private set; }
-
-        public TestableHangmanViewModel(IScoringService scoringService, IAppUserService appUserService, ILearningService learningService) 
-            : base(scoringService, appUserService, learningService)
-        {
-        }
-
-        protected override AppTheme GetApplicationTheme() => AppTheme.Light;
-        protected override Color? GetColorResource(string key) => Colors.Gray;
-        protected override Task ShowAlertAsync(string title, string message, string cancel)
-        {
-            AlertShown = true;
-            return Task.CompletedTask;
-        }
-        protected override Task GoToAsync(string route)
-        {
-            LastNavigatedRoute = route;
-            return Task.CompletedTask;
-        }
     }
 
     [Fact]
@@ -191,5 +162,39 @@ public class HangmanViewModelTests
 
         // Assert
         _viewModel.LastNavigatedRoute.Should().Be("..");
+    }
+
+    private class TestableHangmanViewModel : HangmanViewModel
+    {
+        public TestableHangmanViewModel(IScoringService scoringService, IAppUserService appUserService,
+            ILearningService learningService)
+            : base(scoringService, appUserService, learningService)
+        {
+        }
+
+        public string? LastNavigatedRoute { get; private set; }
+        public bool AlertShown { get; private set; }
+
+        protected override AppTheme GetApplicationTheme()
+        {
+            return AppTheme.Light;
+        }
+
+        protected override Color? GetColorResource(string key)
+        {
+            return Colors.Gray;
+        }
+
+        protected override Task ShowAlertAsync(string title, string message, string cancel)
+        {
+            AlertShown = true;
+            return Task.CompletedTask;
+        }
+
+        protected override Task GoToAsync(string route)
+        {
+            LastNavigatedRoute = route;
+            return Task.CompletedTask;
+        }
     }
 }

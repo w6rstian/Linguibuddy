@@ -1,25 +1,20 @@
-﻿using FakeItEasy;
+﻿using System.Globalization;
+using FakeItEasy;
+using Firebase.Auth;
 using FluentAssertions;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
-using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
 using LocalizationResourceManager.Maui;
-using Microsoft.Maui.Controls;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 public class SettingsViewModelTests
 {
-    private readonly ILocalizationResourceManager _resourceManager;
     private readonly IAppUserService _appUserService;
-    private readonly IServiceProvider _services;
     private readonly ICollectionService _collectionService;
+    private readonly ILocalizationResourceManager _resourceManager;
+    private readonly IServiceProvider _services;
     private readonly TestableSettingsViewModel _viewModel;
 
     public SettingsViewModelTests()
@@ -32,63 +27,9 @@ public class SettingsViewModelTests
         _viewModel = new TestableSettingsViewModel(
             _resourceManager,
             _appUserService,
-            null!, 
+            null!,
             _services,
             _collectionService);
-    }
-
-    private class TestableSettingsViewModel : SettingsViewModel
-    {
-        public Dictionary<string, object> MockPreferences { get; } = new();
-        public AppTheme MockAppTheme { get; set; } = AppTheme.Light;
-        public bool NavigateToSignInCalled { get; private set; }
-
-        public TestableSettingsViewModel(
-            ILocalizationResourceManager resourceManager,
-            IAppUserService appUserService,
-            Firebase.Auth.FirebaseAuthClient authClient,
-            IServiceProvider services,
-            ICollectionService collectionService)
-            : base(resourceManager, appUserService, authClient, services, collectionService)
-        {
-        }
-
-        protected override string GetPreference(string key, string defaultValue)
-        {
-            return MockPreferences.TryGetValue(key, out var value) ? (string)value : defaultValue;
-        }
-
-        protected override int GetPreference(string key, int defaultValue)
-        {
-            return MockPreferences.TryGetValue(key, out var value) ? (int)value : defaultValue;
-        }
-
-        protected override void SetPreference(string key, string value)
-        {
-            MockPreferences[key] = value;
-        }
-
-        protected override void SetPreference(string key, int value)
-        {
-            MockPreferences[key] = value;
-        }
-
-        protected override AppTheme GetAppTheme() => MockAppTheme;
-
-        protected override void SetAppTheme(AppTheme theme)
-        {
-            MockAppTheme = theme;
-        }
-
-        protected override void NavigateToSignIn()
-        {
-            NavigateToSignInCalled = true;
-        }
-
-        protected override void RunInBackground(Func<Task> action)
-        {
-            action().GetAwaiter().GetResult(); 
-        }
     }
 
     [Fact]
@@ -178,5 +119,62 @@ public class SettingsViewModelTests
         // Assert
         _viewModel.MockPreferences[Constants.TranslationApiKey].Should().Be((int)TranslationProvider.DeepL);
         _viewModel.TranslationApiName.Should().Be("DeepL");
+    }
+
+    private class TestableSettingsViewModel : SettingsViewModel
+    {
+        public TestableSettingsViewModel(
+            ILocalizationResourceManager resourceManager,
+            IAppUserService appUserService,
+            FirebaseAuthClient authClient,
+            IServiceProvider services,
+            ICollectionService collectionService)
+            : base(resourceManager, appUserService, authClient, services, collectionService)
+        {
+        }
+
+        public Dictionary<string, object> MockPreferences { get; } = new();
+        public AppTheme MockAppTheme { get; set; } = AppTheme.Light;
+        public bool NavigateToSignInCalled { get; private set; }
+
+        protected override string GetPreference(string key, string defaultValue)
+        {
+            return MockPreferences.TryGetValue(key, out var value) ? (string)value : defaultValue;
+        }
+
+        protected override int GetPreference(string key, int defaultValue)
+        {
+            return MockPreferences.TryGetValue(key, out var value) ? (int)value : defaultValue;
+        }
+
+        protected override void SetPreference(string key, string value)
+        {
+            MockPreferences[key] = value;
+        }
+
+        protected override void SetPreference(string key, int value)
+        {
+            MockPreferences[key] = value;
+        }
+
+        protected override AppTheme GetAppTheme()
+        {
+            return MockAppTheme;
+        }
+
+        protected override void SetAppTheme(AppTheme theme)
+        {
+            MockAppTheme = theme;
+        }
+
+        protected override void NavigateToSignIn()
+        {
+            NavigateToSignInCalled = true;
+        }
+
+        protected override void RunInBackground(Func<Task> action)
+        {
+            action().GetAwaiter().GetResult();
+        }
     }
 }

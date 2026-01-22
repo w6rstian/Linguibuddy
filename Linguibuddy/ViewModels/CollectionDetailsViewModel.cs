@@ -1,35 +1,29 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.Helpers;
 
 namespace Linguibuddy.ViewModels;
 
 [QueryProperty(nameof(Collection), "Collection")]
 public partial class CollectionDetailsViewModel : ObservableObject
 {
+    private readonly IAppUserService _appUserService;
     private readonly ICollectionService _collectionService;
     private readonly IOpenAiService _openAiService;
-    private readonly IAppUserService _appUserService;
 
-    [ObservableProperty]
-    private WordCollection? _collection;
+    [ObservableProperty] private string _aiFeedback;
 
-    [ObservableProperty]
-    private string _aiFeedback;
+    [ObservableProperty] private WordCollection? _collection;
 
-    public ObservableCollection<CollectionItem> Items { get; } = [];
+    [ObservableProperty] private bool _isAiThinking;
 
-    [ObservableProperty]
-    private bool _isBusy;
+    [ObservableProperty] private bool _isBusy;
 
-    [ObservableProperty]
-    private bool _isAiThinking;
-
-    [ObservableProperty] bool _isExpanded = true;
+    [ObservableProperty] private bool _isExpanded = true;
 
     public CollectionDetailsViewModel(
         ICollectionService collectionService,
@@ -42,6 +36,8 @@ public partial class CollectionDetailsViewModel : ObservableObject
         _isAiThinking = true;
     }
 
+    public ObservableCollection<CollectionItem> Items { get; } = [];
+
     [RelayCommand]
     public async Task LoadDataAsync()
     {
@@ -51,24 +47,18 @@ public partial class CollectionDetailsViewModel : ObservableObject
         try
         {
             var updatedCollection = await _collectionService.GetCollection(Collection.Id);
-            if (updatedCollection != null)
-            {
-                Collection = updatedCollection; 
-            }
+            if (updatedCollection != null) Collection = updatedCollection;
 
             Items.Clear();
             if (Collection?.Items != null)
-            {
                 foreach (var item in Collection.Items)
-                {
                     Items.Add(item);
-                }
-            }
         }
         finally
         {
             IsBusy = false;
         }
+
         await LoadAiFeedback();
     }
 
@@ -85,13 +75,13 @@ public partial class CollectionDetailsViewModel : ObservableObject
 
         IsAiThinking = true;
         AiFeedback = AppResources.AiAnalysisThinkingCollection;
-        
+
         try
         {
             var difficulty = await _appUserService.GetUserDifficultyAsync();
             var language = GetPreference(Constants.LanguageKey, "pl");
             var feedback = await _openAiService.AnalyzeCollectionProgressAsync(Collection, difficulty, language);
-            
+
             AiFeedback = feedback;
 
             Collection.LastAiAnalysis = feedback;
@@ -130,12 +120,10 @@ public partial class CollectionDetailsViewModel : ObservableObject
             AppResources.EditCollection,
             $"{AppResources.Rename} :",
             AppResources.Save, AppResources.Cancel,
-            initialValue: Collection.Name);
+            Collection.Name);
 
         if (!string.IsNullOrWhiteSpace(result) && result != Collection.Name)
-        {
             await _collectionService.RenameCollectionAsync(Collection, result);
-        }
     }
 
     [RelayCommand]
@@ -172,7 +160,8 @@ public partial class CollectionDetailsViewModel : ObservableObject
         return Shell.Current.GoToAsync(route, parameters);
     }
 
-    protected virtual Task<string> ShowPromptAsync(string title, string message, string accept, string cancel, string initialValue)
+    protected virtual Task<string> ShowPromptAsync(string title, string message, string accept, string cancel,
+        string initialValue)
     {
         return Shell.Current.DisplayPromptAsync(title, message, accept, cancel, initialValue: initialValue);
     }

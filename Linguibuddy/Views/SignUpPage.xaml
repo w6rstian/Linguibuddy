@@ -33,7 +33,8 @@
                            Opacity="{Binding LabelEmailErrorOpacity}" />
                 </VerticalStackLayout>
                 <VerticalStackLayout>
-                    <Entry IsPassword="True" Text="{Binding Password}" Placeholder="{loc:Translate PasswordPlaceholder}" />
+                    <Entry IsPassword="True" Text="{Binding Password}"
+                           Placeholder="{loc:Translate PasswordPlaceholder}" />
                     <Label Text="{loc:Translate PasswordLength}"
                            FontSize="10"
                            TextColor="LightSlateGray" />

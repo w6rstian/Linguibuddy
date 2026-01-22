@@ -245,7 +245,7 @@ public class CollectionServiceTests : IDisposable
 
         var dto = new FlashcardCreationDto
         {
-            Word = "existingword", 
+            Word = "existingword",
             PartOfSpeech = "noun",
             Definition = "def"
         };

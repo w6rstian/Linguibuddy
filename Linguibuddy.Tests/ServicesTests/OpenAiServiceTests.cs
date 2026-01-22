@@ -126,7 +126,7 @@ public class OpenAiServiceTests
         var collection = new WordCollection
         {
             Name = "Test Collection",
-            Items = new List<CollectionItem> { new CollectionItem() }
+            Items = new List<CollectionItem> { new() }
         };
         var expectedAnalysis = "Analysis result";
 

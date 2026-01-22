@@ -7,7 +7,6 @@ using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.Services;
 
 namespace Linguibuddy.ViewModels;
 
@@ -15,11 +14,11 @@ namespace Linguibuddy.ViewModels;
 public partial class HangmanViewModel : BaseQuizViewModel
 {
     private const int MaxMistakes = 6;
-    private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
     private readonly ILearningService _learningService;
-    private List<CollectionItem> _allWords;
     private readonly Random _random = Random.Shared;
+    private readonly IScoringService _scoringService;
+    private List<CollectionItem> _allWords;
 
     [ObservableProperty] private string _currentImage;
 
@@ -40,7 +39,8 @@ public partial class HangmanViewModel : BaseQuizViewModel
 
     [ObservableProperty] private WordCollection? _selectedCollection;
 
-    public HangmanViewModel(IScoringService scoringService, IAppUserService appUserService, ILearningService learningService)
+    public HangmanViewModel(IScoringService scoringService, IAppUserService appUserService,
+        ILearningService learningService)
     {
         _scoringService = scoringService;
         _appUserService = appUserService;
@@ -62,17 +62,18 @@ public partial class HangmanViewModel : BaseQuizViewModel
         Keyboard.Clear();
         for (var c = 'A'; c <= 'Z'; c++) Keyboard.Add(new HangmanLetter(c, Colors.Gray));
     }
+
     public async Task ImportCollectionAsync()
     {
         if (SelectedCollection is null || !SelectedCollection.Items.Any())
             return;
 
         _allWords = SelectedCollection.Items
-                .GroupBy(i => i.Word, StringComparer.OrdinalIgnoreCase)
-                .Select(g => g.First())
-                .OrderBy(_ => _random.Next())
-                .Take(await _appUserService.GetUserLessonLengthAsync())
-                .ToList();
+            .GroupBy(i => i.Word, StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.First())
+            .OrderBy(_ => _random.Next())
+            .Take(await _appUserService.GetUserLessonLengthAsync())
+            .ToList();
     }
 
     public override async Task LoadQuestionAsync()
@@ -83,7 +84,7 @@ public partial class HangmanViewModel : BaseQuizViewModel
         Mistakes = 0;
         CurrentImage = "hangman_0.jpg";
         FeedbackMessage = string.Empty;
-        
+
         var theme = GetApplicationTheme();
         FeedbackColor =
             theme == AppTheme.Light
@@ -255,13 +256,13 @@ public partial class HangmanViewModel : BaseQuizViewModel
 
     protected virtual AppTheme GetApplicationTheme()
     {
-        Debug.Assert(Application.Current != null, "Application.Current != null");
+        Debug.Assert(Application.Current != null);
         return Application.Current.RequestedTheme;
     }
 
     protected virtual Color? GetColorResource(string key)
     {
-        Debug.Assert(Application.Current != null, "Application.Current != null");
+        Debug.Assert(Application.Current != null);
         return Application.Current.Resources[key] as Color;
     }
 

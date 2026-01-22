@@ -53,7 +53,7 @@ public class DictionaryApiServiceTests
         // Assert
         result.Should().NotBeNull();
         result!.Word.Should().Be(expectedWord.Word);
-        
+
         _httpHandler.Requests.Should().BeEmpty();
     }
 
@@ -81,7 +81,7 @@ public class DictionaryApiServiceTests
         result!.Word.Should().Be(word);
         result.ImageUrl.Should().Be("https://example.com/image.jpg");
 
-        
+
         var dbWord = await _context.DictionaryWords.FirstOrDefaultAsync(w => w.Word == word);
         dbWord.Should().NotBeNull();
         dbWord!.ImageUrl.Should().Be("https://example.com/image.jpg");

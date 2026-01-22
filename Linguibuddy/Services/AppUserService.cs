@@ -19,15 +19,6 @@ public class AppUserService : IAppUserService
         _currentUserId = authService.CurrentUserId;
     }
 
-    private async Task EnsureUserLoadedAsync()
-    {
-        if (_appUser is null)
-        {
-            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
-                       ?? throw new Exception("User not found");
-        }
-    }
-
     public async Task AddUserPointsAsync(int points)
     {
         await EnsureUserLoadedAsync();
@@ -109,5 +100,12 @@ public class AppUserService : IAppUserService
     public async Task<List<AppUser>> GetLeaderboardAsync(int count = 50)
     {
         return await _appUsers.GetTopUsersAsync(count);
+    }
+
+    private async Task EnsureUserLoadedAsync()
+    {
+        if (_appUser is null)
+            _appUser = await _appUsers.GetByIdAsync(_currentUserId)
+                       ?? throw new Exception("User not found");
     }
 }

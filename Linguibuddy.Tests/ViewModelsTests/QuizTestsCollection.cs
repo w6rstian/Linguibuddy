@@ -1,24 +1,16 @@
 ﻿using FakeItEasy;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 [CollectionDefinition("QuizTests")]
 public class QuizTestsCollection : ICollectionFixture<ApplicationFixture>
 {
-    
-    
-    
 }
 
 public class ApplicationFixture : IDisposable
 {
     public ApplicationFixture()
     {
-        
         var app = A.Fake<Application>();
         var resources = new ResourceDictionary
         {
@@ -26,7 +18,7 @@ public class ApplicationFixture : IDisposable
             { "PrimaryDark", Colors.DarkBlue },
             { "PrimaryDarkText", Colors.Black }
         };
-        
+
         app.Resources = resources;
         Application.Current = app;
     }

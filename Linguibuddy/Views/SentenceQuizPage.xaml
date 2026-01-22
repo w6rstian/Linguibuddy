@@ -115,8 +115,10 @@
                                                 FontSize="16"
                                                 FontAttributes="Bold">
                                             <Button.Shadow>
-                                                <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}" Radius="4" Opacity="0.3"
-                                                        Offset="2,2" />
+                                                <Shadow
+                                                    Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
+                                                    Radius="4" Opacity="0.3"
+                                                    Offset="2,2" />
                                             </Button.Shadow>
                                         </Button>
                                     </DataTemplate>
@@ -180,7 +182,9 @@
                             CornerRadius="25"
                             FontAttributes="Bold">
                         <Button.Shadow>
-                            <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}" Radius="8" Opacity="0.4" Offset="0,4" />
+                            <Shadow
+                                Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
+                                Radius="8" Opacity="0.4" Offset="0,4" />
                         </Button.Shadow>
                     </Button>
 
@@ -193,7 +197,9 @@
                             CornerRadius="25"
                             FontAttributes="Bold">
                         <Button.Shadow>
-                            <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}" Radius="8" Opacity="0.4" Offset="0,4" />
+                            <Shadow
+                                Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
+                                Radius="8" Opacity="0.4" Offset="0,4" />
                         </Button.Shadow>
                     </Button>
                 </Grid>

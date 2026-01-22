@@ -1,25 +1,23 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.Services;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace Linguibuddy.ViewModels;
 
 [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
 public partial class ImageQuizViewModel : BaseQuizViewModel
 {
-    private readonly ICollectionService _collectionService;
-    private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
+    private readonly ICollectionService _collectionService;
     private readonly ILearningService _learningService;
-    private List<CollectionItem> _allWords;
     private readonly Random _random = Random.Shared;
+    private readonly IScoringService _scoringService;
+    private List<CollectionItem> _allWords;
 
     [ObservableProperty] private List<CollectionItem> _hasAppeared;
 
@@ -34,7 +32,8 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
 
     [ObservableProperty] private CollectionItem? _targetWord;
 
-    public ImageQuizViewModel(ICollectionService collectionService, IScoringService scoringService, IAppUserService appUserService, ILearningService learningService)
+    public ImageQuizViewModel(ICollectionService collectionService, IScoringService scoringService,
+        IAppUserService appUserService, ILearningService learningService)
     {
         _collectionService = collectionService;
         _scoringService = scoringService;
@@ -57,11 +56,11 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
             return;
 
         _allWords = SelectedCollection.Items
-                .GroupBy(i => i.Word, StringComparer.OrdinalIgnoreCase)
-                .Select(g => g.FirstOrDefault(i => !string.IsNullOrEmpty(i.ImageUrl)) ?? g.First())
-                .OrderBy(_ => _random.Next())
-                .Take(await _appUserService.GetUserLessonLengthAsync())
-                .ToList();
+            .GroupBy(i => i.Word, StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.FirstOrDefault(i => !string.IsNullOrEmpty(i.ImageUrl)) ?? g.First())
+            .OrderBy(_ => _random.Next())
+            .Take(await _appUserService.GetUserLessonLengthAsync())
+            .ToList();
     }
 
     public override async Task LoadQuestionAsync()

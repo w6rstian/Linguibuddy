@@ -1,13 +1,9 @@
+using System.Globalization;
 using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
@@ -22,27 +18,12 @@ public class LeaderboardViewModelTests
         _viewModel = new TestableLeaderboardViewModel(_appUserService);
     }
 
-    private class TestableLeaderboardViewModel : LeaderboardViewModel
-    {
-        public string? LastAlertMessage { get; private set; }
-
-        public TestableLeaderboardViewModel(IAppUserService appUserService) : base(appUserService)
-        {
-        }
-
-        protected override Task ShowAlertAsync(string title, string message, string cancel)
-        {
-            LastAlertMessage = message;
-            return Task.CompletedTask;
-        }
-    }
-
     [Fact]
     public async Task LoadLeaderboardAsync_ShouldPopulateItems_WhenServiceReturnsUsers()
     {
         // Arrange
-        var originalCulture = System.Globalization.CultureInfo.CurrentUICulture;
-        System.Globalization.CultureInfo.CurrentUICulture = new System.Globalization.CultureInfo("pl-PL");
+        var originalCulture = CultureInfo.CurrentUICulture;
+        CultureInfo.CurrentUICulture = new CultureInfo("pl-PL");
 
         try
         {
@@ -59,7 +40,7 @@ public class LeaderboardViewModelTests
 
             // Assert
             _viewModel.LeaderboardItems.Should().HaveCount(3);
-            
+
             var first = _viewModel.LeaderboardItems[0];
             first.Rank.Should().Be(1);
             first.UserName.Should().Be("Alice");
@@ -72,7 +53,7 @@ public class LeaderboardViewModelTests
         }
         finally
         {
-            System.Globalization.CultureInfo.CurrentUICulture = originalCulture;
+            CultureInfo.CurrentUICulture = originalCulture;
         }
     }
 
@@ -102,5 +83,20 @@ public class LeaderboardViewModelTests
 
         // Assert
         A.CallTo(() => _appUserService.GetLeaderboardAsync(A<int>.Ignored)).MustNotHaveHappened();
+    }
+
+    private class TestableLeaderboardViewModel : LeaderboardViewModel
+    {
+        public TestableLeaderboardViewModel(IAppUserService appUserService) : base(appUserService)
+        {
+        }
+
+        public string? LastAlertMessage { get; private set; }
+
+        protected override Task ShowAlertAsync(string title, string message, string cancel)
+        {
+            LastAlertMessage = message;
+            return Task.CompletedTask;
+        }
     }
 }

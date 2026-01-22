@@ -3,10 +3,6 @@ using FluentAssertions;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
@@ -23,44 +19,13 @@ public class FlashcardsViewModelTests
         _viewModel = new TestableFlashcardsViewModel(_collectionService, _srsService);
     }
 
-    private class TestableFlashcardsViewModel : FlashcardsViewModel
-    {
-        public string? LastAlertMessage { get; private set; }
-        public string? LastNavigatedRoute { get; private set; }
-        public Task? CurrentStartSessionTask { get; private set; }
-
-        public TestableFlashcardsViewModel(ICollectionService collectionService, ISpacedRepetitionService srsService) 
-            : base(collectionService, srsService)
-        {
-        }
-
-        protected override Task ShowAlertAsync(string title, string message, string cancel)
-        {
-            LastAlertMessage = message;
-            return Task.CompletedTask;
-        }
-
-        protected override Task GoToAsync(string route)
-        {
-            LastNavigatedRoute = route;
-            return Task.CompletedTask;
-        }
-
-        protected override async Task StartSession()
-        {
-            var task = base.StartSession();
-            CurrentStartSessionTask = task;
-            await task;
-        }
-    }
-
     [Fact]
     public async Task StartSession_ShouldPopulateQueue_InStandardMode()
     {
         // Arrange
         var collection = new WordCollection { Id = 1 };
-        var items = new List<CollectionItem> 
-        { 
+        var items = new List<CollectionItem>
+        {
             new() { Id = 1, Word = "Word1" },
             new() { Id = 2, Word = "Word2" }
         };
@@ -68,7 +33,7 @@ public class FlashcardsViewModelTests
         _viewModel.CurrentLearningMode = LearningMode.Standard;
 
         // Act
-        _viewModel.Collection = collection; 
+        _viewModel.Collection = collection;
         if (_viewModel.CurrentStartSessionTask != null) await _viewModel.CurrentStartSessionTask;
 
         // Assert
@@ -130,41 +95,25 @@ public class FlashcardsViewModelTests
         var progress = new Flashcard { Id = 1 };
         var item = new CollectionItem { Id = 1, Word = "Word", FlashcardProgress = progress };
         var nextItem = new CollectionItem { Id = 2, Word = "Next" };
-        
+
         A.CallTo(() => _collectionService.GetItemsForLearning(1)).Returns(new List<CollectionItem> { item, nextItem });
         _viewModel.CurrentLearningMode = LearningMode.Standard;
-        
+
         // Act
         _viewModel.Collection = collection;
         if (_viewModel.CurrentStartSessionTask != null) await _viewModel.CurrentStartSessionTask;
 
-        
-        if (_viewModel.CurrentItem?.Id != 1)
-        {
-            
-            _viewModel.NextCardCommand.Execute(null);
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        if (_viewModel.CurrentItem!.FlashcardProgress == null)
-        {
-            _viewModel.CurrentItem.FlashcardProgress = progress;
-        }
+
+        if (_viewModel.CurrentItem?.Id != 1) _viewModel.NextCardCommand.Execute(null);
+
+
+        if (_viewModel.CurrentItem!.FlashcardProgress == null) _viewModel.CurrentItem.FlashcardProgress = progress;
 
         await _viewModel.GradeGoodCommand.ExecuteAsync(null);
 
         // Assert
-        A.CallTo(() => _srsService.ProcessResult(A<Flashcard>.Ignored, SuperMemoGrade.Good)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _srsService.ProcessResult(A<Flashcard>.Ignored, SuperMemoGrade.Good))
+            .MustHaveHappenedOnceExactly();
         A.CallTo(() => _collectionService.UpdateFlashcardProgress(A<Flashcard>.Ignored)).MustHaveHappenedOnceExactly();
     }
 
@@ -175,18 +124,18 @@ public class FlashcardsViewModelTests
         var collection = new WordCollection { Id = 1 };
         var progress = new Flashcard { Id = 1 };
         var item = new CollectionItem { Id = 1, Word = "HardWord", FlashcardProgress = progress };
-        
+
         A.CallTo(() => _collectionService.GetItemsForLearning(1)).Returns(new List<CollectionItem> { item });
         _viewModel.CurrentLearningMode = LearningMode.Standard;
-        
+
         // Act
         _viewModel.Collection = collection;
         if (_viewModel.CurrentStartSessionTask != null) await _viewModel.CurrentStartSessionTask;
 
-        await _viewModel.GradeNullCommand.ExecuteAsync(null); 
+        await _viewModel.GradeNullCommand.ExecuteAsync(null);
 
         // Assert
-        _viewModel.CurrentItem?.Id.Should().Be(1); 
+        _viewModel.CurrentItem?.Id.Should().Be(1);
         _viewModel.IsFinished.Should().BeFalse();
     }
 
@@ -198,7 +147,7 @@ public class FlashcardsViewModelTests
         var item = new CollectionItem { Id = 1, Word = "Unknown" };
         A.CallTo(() => _collectionService.GetItemsForLearning(1)).Returns(new List<CollectionItem> { item });
         _viewModel.CurrentLearningMode = LearningMode.Standard;
-        
+
         // Act
         _viewModel.Collection = collection;
         if (_viewModel.CurrentStartSessionTask != null) await _viewModel.CurrentStartSessionTask;
@@ -218,5 +167,36 @@ public class FlashcardsViewModelTests
 
         // Assert
         _viewModel.LastNavigatedRoute.Should().Be("..");
+    }
+
+    private class TestableFlashcardsViewModel : FlashcardsViewModel
+    {
+        public TestableFlashcardsViewModel(ICollectionService collectionService, ISpacedRepetitionService srsService)
+            : base(collectionService, srsService)
+        {
+        }
+
+        public string? LastAlertMessage { get; private set; }
+        public string? LastNavigatedRoute { get; private set; }
+        public Task? CurrentStartSessionTask { get; private set; }
+
+        protected override Task ShowAlertAsync(string title, string message, string cancel)
+        {
+            LastAlertMessage = message;
+            return Task.CompletedTask;
+        }
+
+        protected override Task GoToAsync(string route)
+        {
+            LastNavigatedRoute = route;
+            return Task.CompletedTask;
+        }
+
+        protected override async Task StartSession()
+        {
+            var task = base.StartSession();
+            CurrentStartSessionTask = task;
+            await task;
+        }
     }
 }

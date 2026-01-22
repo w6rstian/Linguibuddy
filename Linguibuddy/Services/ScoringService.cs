@@ -27,7 +27,7 @@ public class ScoringService : IScoringService
     }
 
     /// <summary>
-    /// Oblicza punkty za pojedynczą poprawną odpowiedź.
+    ///     Oblicza punkty za pojedynczą poprawną odpowiedź.
     /// </summary>
     public int CalculatePoints(GameType gameType, DifficultyLevel difficulty)
     {
@@ -45,7 +45,7 @@ public class ScoringService : IScoringService
     }
 
     /// <summary>
-    /// Zapisuje wynik do kolekcji oraz dodaje punkty do użytkownika.
+    ///     Zapisuje wynik do kolekcji oraz dodaje punkty do użytkownika.
     /// </summary>
     public async Task SaveResultsAsync(WordCollection collection, GameType gameType, int correctAnswers,
         int totalQuestions, int totalPointsEarned)

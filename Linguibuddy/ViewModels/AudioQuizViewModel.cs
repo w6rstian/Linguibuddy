@@ -1,27 +1,25 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.Services;
 using Plugin.Maui.Audio;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace Linguibuddy.ViewModels;
 
 [QueryProperty(nameof(SelectedCollection), "SelectedCollection")]
 public partial class AudioQuizViewModel : BaseQuizViewModel
 {
-    private readonly IAudioManager _audioManager;
-    private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
+    private readonly IAudioManager _audioManager;
     private readonly ILearningService _learningService;
-    private IAudioPlayer? _audioPlayer;
-    private List<CollectionItem> _allWords;
     private readonly Random _random = Random.Shared;
+    private readonly IScoringService _scoringService;
+    private List<CollectionItem> _allWords;
+    private IAudioPlayer? _audioPlayer;
 
     [ObservableProperty] private List<CollectionItem> _hasAppeared;
 
@@ -36,7 +34,8 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
     [ObservableProperty] private CollectionItem? _targetWord;
 
-    public AudioQuizViewModel(IScoringService scoringService, IAudioManager audioManager, IAppUserService appUserService, ILearningService learningService)
+    public AudioQuizViewModel(IScoringService scoringService, IAudioManager audioManager,
+        IAppUserService appUserService, ILearningService learningService)
     {
         _scoringService = scoringService;
         _audioManager = audioManager;
@@ -59,12 +58,13 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
             return;
 
         _allWords = SelectedCollection.Items
-                .GroupBy(i => i.Word, StringComparer.OrdinalIgnoreCase)
-                .Select(g => g.FirstOrDefault(i => !string.IsNullOrEmpty(i.Audio)) ?? g.First())
-                .OrderBy(_ => _random.Next())
-                .Take(await _appUserService.GetUserLessonLengthAsync())
-                .ToList();
+            .GroupBy(i => i.Word, StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.FirstOrDefault(i => !string.IsNullOrEmpty(i.Audio)) ?? g.First())
+            .OrderBy(_ => _random.Next())
+            .Take(await _appUserService.GetUserLessonLengthAsync())
+            .ToList();
     }
+
     public override async Task LoadQuestionAsync()
     {
         if (IsBusy) return;
@@ -176,7 +176,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
         var url = TargetWord.Audio;
         var wordToSpeak = TargetWord.Word;
-        bool playedSuccessfully = false;
+        var playedSuccessfully = false;
 
         if (!string.IsNullOrWhiteSpace(url))
         {
@@ -207,7 +207,6 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
         }
 
         if (!playedSuccessfully)
-        {
             try
             {
                 var locales = await TextToSpeech.Default.GetLocalesAsync();
@@ -246,7 +245,6 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
                 await ShowAlert(AppResources.AudioError, AppResources.PlaybackError, AppResources.OK);
                 Debug.WriteLine($"TTS Error: {ex.Message}");
             }
-        }
     }
 
     [RelayCommand]

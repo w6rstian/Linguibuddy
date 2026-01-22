@@ -12,8 +12,8 @@ namespace Linguibuddy.ViewModels;
 public partial class SignUpViewModel : ObservableObject
 {
     private readonly FirebaseAuthClient _authClient;
-    private readonly IServiceProvider _services;
     private readonly DataContext _db;
+    private readonly IServiceProvider _services;
 
     [ObservableProperty] private string _email;
 

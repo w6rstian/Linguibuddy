@@ -1,25 +1,20 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
-using Linguibuddy.Data;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
 using Plugin.Maui.Audio;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 public class DictionaryViewModelTests
 {
-    private readonly IDictionaryApiService _dictionaryService;
-    private readonly IDeepLTranslationService _translationService;
-    private readonly IOpenAiService _openAiService;
-    private readonly ICollectionService _collectionService;
     private readonly IAudioManager _audioManager;
+    private readonly ICollectionService _collectionService;
+    private readonly IDictionaryApiService _dictionaryService;
+    private readonly IOpenAiService _openAiService;
+    private readonly IDeepLTranslationService _translationService;
     private readonly TestableDictionaryViewModel _viewModel;
 
     public DictionaryViewModelTests()
@@ -36,35 +31,6 @@ public class DictionaryViewModelTests
             _openAiService,
             _collectionService,
             _audioManager);
-    }
-
-    private class TestableDictionaryViewModel : DictionaryViewModel
-    {
-        public bool MockNetworkStatus { get; set; } = true;
-        public string? LastAlertMessage { get; private set; }
-        public int MockTranslationApi { get; set; } = (int)TranslationProvider.DeepL;
-
-        public TestableDictionaryViewModel(
-            IDictionaryApiService dictionaryService,
-            IDeepLTranslationService translationService,
-            IOpenAiService openAiService,
-            ICollectionService collectionService,
-            IAudioManager audioManager)
-            : base(dictionaryService, translationService, openAiService, collectionService, audioManager)
-        {
-        }
-
-        protected override bool IsNetworkConnected() => MockNetworkStatus;
-
-        protected override Task ShowAlertAsync(string title, string message, string cancel)
-        {
-            LastAlertMessage = message;
-            return Task.CompletedTask;
-        }
-
-        protected override string GetCacheDirectory() => System.IO.Path.GetTempPath();
-
-        protected override int GetTranslationApiPreference() => MockTranslationApi;
     }
 
     [Fact]
@@ -102,7 +68,11 @@ public class DictionaryViewModelTests
                     PartOfSpeech = "noun",
                     Definitions = new List<Definition>
                     {
-                        new() { DefinitionText = "a procedure intended to establish the quality, performance, or reliability of something." }
+                        new()
+                        {
+                            DefinitionText =
+                                "a procedure intended to establish the quality, performance, or reliability of something."
+                        }
                     }
                 }
             }
@@ -147,13 +117,16 @@ public class DictionaryViewModelTests
             Translation = "test (pl)"
         };
 
-        A.CallTo(() => _collectionService.AddCollectionItemFromDtoAsync(1, A<FlashcardCreationDto>.Ignored)).Returns(true);
+        A.CallTo(() => _collectionService.AddCollectionItemFromDtoAsync(1, A<FlashcardCreationDto>.Ignored))
+            .Returns(true);
 
         // Act
         await _viewModel.AddItemToFlashcardsCommand.ExecuteAsync(searchItem);
 
         // Assert
-        A.CallTo(() => _collectionService.AddCollectionItemFromDtoAsync(1, A<FlashcardCreationDto>.That.Matches(d => d.Word == "test" && d.Translation == "test (pl)"))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _collectionService.AddCollectionItemFromDtoAsync(1,
+                A<FlashcardCreationDto>.That.Matches(d => d.Word == "test" && d.Translation == "test (pl)")))
+            .MustHaveHappenedOnceExactly();
         _viewModel.LastAlertMessage.Should().Contain("My Collection");
     }
 
@@ -169,7 +142,9 @@ public class DictionaryViewModelTests
 
         // Assert
         _viewModel.LastAlertMessage.Should().NotBeNullOrEmpty();
-        A.CallTo(() => _collectionService.AddCollectionItemFromDtoAsync(A<int>.Ignored, A<FlashcardCreationDto>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() =>
+                _collectionService.AddCollectionItemFromDtoAsync(A<int>.Ignored, A<FlashcardCreationDto>.Ignored))
+            .MustNotHaveHappened();
     }
 
     [Fact]
@@ -178,14 +153,17 @@ public class DictionaryViewModelTests
         // Arrange
         _viewModel.MockTranslationApi = (int)TranslationProvider.DeepL;
         var item = new SearchResultItem { Word = "hello", Definition = "greeting", PartOfSpeech = "noun" };
-        A.CallTo(() => _translationService.TranslateWithContextAsync("hello", "greeting", "noun", "PL")).Returns("cześć");
+        A.CallTo(() => _translationService.TranslateWithContextAsync("hello", "greeting", "noun", "PL"))
+            .Returns("cześć");
 
         // Act
         await _viewModel.TranslateItemCommand.ExecuteAsync(item);
 
         // Assert
         item.Translation.Should().Be("cześć");
-        A.CallTo(() => _openAiService.TranslateWithContextAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() =>
+                _openAiService.TranslateWithContextAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            .MustNotHaveHappened();
     }
 
     [Fact]
@@ -201,7 +179,47 @@ public class DictionaryViewModelTests
 
         // Assert
         item.Translation.Should().Be("witaj");
-        
-        A.CallTo(() => _translationService.TranslateWithContextAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+
+        A.CallTo(() =>
+            _translationService.TranslateWithContextAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored,
+                A<string>.Ignored)).MustNotHaveHappened();
+    }
+
+    private class TestableDictionaryViewModel : DictionaryViewModel
+    {
+        public TestableDictionaryViewModel(
+            IDictionaryApiService dictionaryService,
+            IDeepLTranslationService translationService,
+            IOpenAiService openAiService,
+            ICollectionService collectionService,
+            IAudioManager audioManager)
+            : base(dictionaryService, translationService, openAiService, collectionService, audioManager)
+        {
+        }
+
+        public bool MockNetworkStatus { get; } = true;
+        public string? LastAlertMessage { get; private set; }
+        public int MockTranslationApi { get; set; } = (int)TranslationProvider.DeepL;
+
+        protected override bool IsNetworkConnected()
+        {
+            return MockNetworkStatus;
+        }
+
+        protected override Task ShowAlertAsync(string title, string message, string cancel)
+        {
+            LastAlertMessage = message;
+            return Task.CompletedTask;
+        }
+
+        protected override string GetCacheDirectory()
+        {
+            return Path.GetTempPath();
+        }
+
+        protected override int GetTranslationApiPreference()
+        {
+            return MockTranslationApi;
+        }
     }
 }

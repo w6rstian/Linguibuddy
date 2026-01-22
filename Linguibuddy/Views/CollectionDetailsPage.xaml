@@ -17,7 +17,7 @@
                            IsVisible="{Binding IsBusy}"
                            ZIndex="1"
                            HorizontalOptions="Center"
-                           VerticalOptions="Center"/>
+                           VerticalOptions="Center" />
 
         <Border Grid.Row="0"
                 Margin="20,15"
@@ -62,9 +62,7 @@
                                  HorizontalOptions="Start"
                                  BackgroundColor="Transparent"
                                  Margin="0,-10,0,0"
-                                 Command="{Binding RenameCollectionCommand}">
-
-                    </ImageButton>
+                                 Command="{Binding RenameCollectionCommand}" />
                     <Button Text="{loc:Translate NameEdit}"
                             IsVisible="False"
                             Command="{Binding RenameCollectionCommand}"
@@ -96,12 +94,12 @@
                     <Label Text="{Binding AiFeedback}"
                            FontSize="13"
                            TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray100}}"
-                           IsVisible="{Binding IsAiThinking, Converter={toolkit:InvertedBoolConverter}}"/>
-                    <ActivityIndicator IsVisible="{Binding IsAiThinking}" 
+                           IsVisible="{Binding IsAiThinking, Converter={toolkit:InvertedBoolConverter}}" />
+                    <ActivityIndicator IsVisible="{Binding IsAiThinking}"
                                        IsRunning="{Binding IsAiThinking}"
                                        HeightRequest="20"
                                        WidthRequest="20"
-                                       HorizontalOptions="Center"/>
+                                       HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </VerticalStackLayout>
         </Border>
@@ -120,7 +118,7 @@
                         Margin="20,0,20,20"
                         SelectionMode="None"
                         IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}">
-            
+
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
             </CollectionView.ItemsLayout>
@@ -161,9 +159,10 @@
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-            
+
             <CollectionView.EmptyView>
-                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10" Margin="0, 50, 0, 0">
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10"
+                                     Margin="0, 50, 0, 0">
                     <Label Text="{loc:Translate NoWordsInCollection}"
                            FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"
                            TextColor="{StaticResource Gray500}" />

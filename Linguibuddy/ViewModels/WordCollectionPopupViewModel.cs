@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
-using Linguibuddy.Services;
 
 namespace Linguibuddy.ViewModels;
 

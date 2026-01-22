@@ -4,17 +4,14 @@ using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 public class CollectionDetailsViewModelTests
 {
+    private readonly IAppUserService _appUserService;
     private readonly ICollectionService _collectionService;
     private readonly IOpenAiService _openAiService;
-    private readonly IAppUserService _appUserService;
     private readonly TestableCollectionDetailsViewModel _viewModel;
 
     public CollectionDetailsViewModelTests()
@@ -23,39 +20,6 @@ public class CollectionDetailsViewModelTests
         _openAiService = A.Fake<IOpenAiService>();
         _appUserService = A.Fake<IAppUserService>();
         _viewModel = new TestableCollectionDetailsViewModel(_collectionService, _openAiService, _appUserService);
-    }
-
-    private class TestableCollectionDetailsViewModel : CollectionDetailsViewModel
-    {
-        public string? MockPromptResult { get; set; }
-        public bool MockAlertResult { get; set; } = true;
-        public string MockPreference { get; set; } = "en";
-        public string? LastNavigatedRoute { get; private set; }
-        public IDictionary<string, object>? LastNavigatedParameters { get; private set; }
-
-        public TestableCollectionDetailsViewModel(ICollectionService collectionService, IOpenAiService openAiService, IAppUserService appUserService)
-            : base(collectionService, openAiService, appUserService)
-        {
-        }
-
-        protected override string GetPreference(string key, string defaultValue) => MockPreference;
-
-        protected override Task GoToAsync(string route, IDictionary<string, object> parameters)
-        {
-            LastNavigatedRoute = route;
-            LastNavigatedParameters = parameters;
-            return Task.CompletedTask;
-        }
-
-        protected override Task<string> ShowPromptAsync(string title, string message, string accept, string cancel, string initialValue)
-        {
-            return Task.FromResult(MockPromptResult ?? string.Empty);
-        }
-
-        protected override Task<bool> ShowAlertAsync(string title, string message, string accept, string cancel)
-        {
-            return Task.FromResult(MockAlertResult);
-        }
     }
 
     [Fact]
@@ -95,10 +59,12 @@ public class CollectionDetailsViewModelTests
             Items = new List<CollectionItem>()
         };
         _viewModel.Collection = collection;
-        
+
         A.CallTo(() => _collectionService.GetCollection(A<int>.Ignored)).Returns(collection);
         A.CallTo(() => _appUserService.GetUserDifficultyAsync()).Returns(DifficultyLevel.A1);
-        A.CallTo(() => _openAiService.AnalyzeCollectionProgressAsync(A<WordCollection>.Ignored, A<DifficultyLevel>.Ignored, A<string>.Ignored))
+        A.CallTo(() =>
+                _openAiService.AnalyzeCollectionProgressAsync(A<WordCollection>.Ignored, A<DifficultyLevel>.Ignored,
+                    A<string>.Ignored))
             .Returns(Task.FromResult("AI Feedback"));
 
         // Act
@@ -107,7 +73,8 @@ public class CollectionDetailsViewModelTests
         // Assert
         _viewModel.AiFeedback.Should().Be("AI Feedback");
         collection.RequiresAiAnalysis.Should().BeFalse();
-        A.CallTo(() => _collectionService.UpdateCollectionAsync(A<WordCollection>.Ignored)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _collectionService.UpdateCollectionAsync(A<WordCollection>.Ignored))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -162,5 +129,43 @@ public class CollectionDetailsViewModelTests
         _viewModel.Items.Should().BeEmpty();
         collection.Items.Should().BeEmpty();
         A.CallTo(() => _collectionService.DeleteCollectionItemAsync(item)).MustHaveHappenedOnceExactly();
+    }
+
+    private class TestableCollectionDetailsViewModel : CollectionDetailsViewModel
+    {
+        public TestableCollectionDetailsViewModel(ICollectionService collectionService, IOpenAiService openAiService,
+            IAppUserService appUserService)
+            : base(collectionService, openAiService, appUserService)
+        {
+        }
+
+        public string? MockPromptResult { get; set; }
+        public bool MockAlertResult { get; set; } = true;
+        public string MockPreference { get; } = "en";
+        public string? LastNavigatedRoute { get; private set; }
+        public IDictionary<string, object>? LastNavigatedParameters { get; private set; }
+
+        protected override string GetPreference(string key, string defaultValue)
+        {
+            return MockPreference;
+        }
+
+        protected override Task GoToAsync(string route, IDictionary<string, object> parameters)
+        {
+            LastNavigatedRoute = route;
+            LastNavigatedParameters = parameters;
+            return Task.CompletedTask;
+        }
+
+        protected override Task<string> ShowPromptAsync(string title, string message, string accept, string cancel,
+            string initialValue)
+        {
+            return Task.FromResult(MockPromptResult ?? string.Empty);
+        }
+
+        protected override Task<bool> ShowAlertAsync(string title, string message, string accept, string cancel)
+        {
+            return Task.FromResult(MockAlertResult);
+        }
     }
 }

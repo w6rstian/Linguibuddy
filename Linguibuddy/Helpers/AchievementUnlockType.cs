@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Linguibuddy.Helpers;
 
-namespace Linguibuddy.Helpers
+public enum AchievementUnlockType
 {
-    public enum AchievementUnlockType
-    {
-        TotalPoints,
-        LearningStreak
-    }
+    TotalPoints,
+    LearningStreak
 }

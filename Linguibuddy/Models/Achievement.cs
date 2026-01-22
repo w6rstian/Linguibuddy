@@ -1,5 +1,5 @@
-﻿using Linguibuddy.Helpers;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Linguibuddy.Helpers;
 
 namespace Linguibuddy.Models;
 

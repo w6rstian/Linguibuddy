@@ -21,6 +21,12 @@ public class AppUserRepositoryTests : IDisposable
         _sut = new AppUserRepository(_context);
     }
 
+    public void Dispose()
+    {
+        _context.Database.EnsureDeleted();
+        _context.Dispose();
+    }
+
     [Fact]
     public async Task GetTopUsersAsync_ShouldReturnUsersOrderedByPointsDescending()
     {
@@ -28,7 +34,7 @@ public class AppUserRepositoryTests : IDisposable
         var user1 = new AppUser { Id = "u1", Points = 10, UserName = "Low" };
         var user2 = new AppUser { Id = "u2", Points = 50, UserName = "High" };
         var user3 = new AppUser { Id = "u3", Points = 30, UserName = "Mid" };
-        
+
         _context.AppUsers.AddRange(user1, user2, user3);
         await _context.SaveChangesAsync();
 
@@ -46,10 +52,7 @@ public class AppUserRepositoryTests : IDisposable
     public async Task GetTopUsersAsync_ShouldLimitResultCount()
     {
         // Arrange
-        for (int i = 0; i < 10; i++)
-        {
-            _context.AppUsers.Add(new AppUser { Id = $"u{i}", Points = i });
-        }
+        for (var i = 0; i < 10; i++) _context.AppUsers.Add(new AppUser { Id = $"u{i}", Points = i });
         await _context.SaveChangesAsync();
 
         // Act
@@ -58,12 +61,6 @@ public class AppUserRepositoryTests : IDisposable
         // Assert
         result.Should().HaveCount(5);
         result.First().Points.Should().Be(9);
-    }
-
-    public void Dispose()
-    {
-        _context.Database.EnsureDeleted();
-        _context.Dispose();
     }
 
     [Fact]

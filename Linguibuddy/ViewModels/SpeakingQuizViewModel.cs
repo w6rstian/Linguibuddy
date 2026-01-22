@@ -1,14 +1,12 @@
-﻿using CommunityToolkit.Maui.Media;
+﻿using System.Diagnostics;
+using System.Globalization;
+using CommunityToolkit.Maui.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.Services;
-using System;
-using System.Diagnostics;
-using System.Globalization;
-using Linguibuddy.Interfaces;
 
 namespace Linguibuddy.ViewModels;
 
@@ -16,14 +14,12 @@ namespace Linguibuddy.ViewModels;
 public partial class SpeakingQuizViewModel : BaseQuizViewModel
 {
     private readonly IAppUserService _appUserService;
+    private readonly ILearningService _learningService;
     private readonly IOpenAiService _openAiService;
+    private readonly Random _random = Random.Shared;
     private readonly IScoringService _scoringService;
     private readonly ISpeechToText _speechToText;
-    private readonly ILearningService _learningService;
     private List<CollectionItem> _allWords;
-    private readonly Random _random = Random.Shared;
-
-    private CancellationTokenSource? _ttsCts;
 
     private DifficultyLevel _currentDifficulty;
     [ObservableProperty] private List<CollectionItem> _hasAppeared;
@@ -44,6 +40,8 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     [ObservableProperty] private WordCollection? _selectedCollection;
     [ObservableProperty] private string _targetSentence;
     [ObservableProperty] private CollectionItem? _targetWord;
+
+    private CancellationTokenSource? _ttsCts;
 
     public SpeakingQuizViewModel(ISpeechToText speechToText,
         IOpenAiService openAiService,
@@ -73,9 +71,9 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
             return;
 
         _allWords = SelectedCollection.Items
-                .OrderBy(_ => _random.Next())
-                .Take(await _appUserService.GetUserLessonLengthAsync())
-                .ToList();
+            .OrderBy(_ => _random.Next())
+            .Take(await _appUserService.GetUserLessonLengthAsync())
+            .ToList();
     }
 
     public override async Task LoadQuestionAsync()
@@ -124,7 +122,8 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
             //int difficultyInt = Preferences.Default.Get(Constants.DifficultyLevelKey, (int)DifficultyLevel.A1);
             var difficultyString = _currentDifficulty.ToString();
 
-            var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString, TargetWord.Definition);
+            var generatedData =
+                await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString, TargetWord.Definition);
 
             if (generatedData != null)
             {
@@ -218,10 +217,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
     [RelayCommand]
     public async Task PlayAudio()
     {
-        if (!string.IsNullOrEmpty(TargetSentence))
-        {
-            await ReadTargetSentence(TargetSentence);
-        }
+        if (!string.IsNullOrEmpty(TargetSentence)) await ReadTargetSentence(TargetSentence);
     }
 
     [RelayCommand]
@@ -230,10 +226,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         if (string.IsNullOrWhiteSpace(text)) return;
 
         // zatrzymanie mikrofonu
-        if (IsListening)
-        {
-            await StopListening();
-        }
+        if (IsListening) await StopListening();
 
         StopTts();
 
@@ -263,10 +256,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
 
     public void StopTts()
     {
-        if (_ttsCts != null && !_ttsCts.IsCancellationRequested)
-        {
-            _ttsCts.Cancel();
-        }
+        if (_ttsCts != null && !_ttsCts.IsCancellationRequested) _ttsCts.Cancel();
     }
 
     private async Task ForceStopListening()
@@ -362,7 +352,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
                     _allWords.Count,
                     PointsEarned
                 );
-            }    
+            }
     }
 
     [RelayCommand]
@@ -458,7 +448,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
             Locale = preferred,
             Pitch = 1.0f,
             Volume = 1.0f
-        }, cancelToken: token);
+        }, token);
     }
 
     protected virtual void RunOnMainThread(Action action)

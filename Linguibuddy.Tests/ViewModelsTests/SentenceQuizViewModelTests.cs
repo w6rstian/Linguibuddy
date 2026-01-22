@@ -4,23 +4,16 @@ using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 [Collection("QuizTests")]
 public class SentenceQuizViewModelTests
 {
-    private readonly IOpenAiService _openAiService;
-    private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
     private readonly ILearningService _learningService;
+    private readonly IOpenAiService _openAiService;
+    private readonly IScoringService _scoringService;
     private readonly TestableSentenceQuizViewModel _viewModel;
 
     public SentenceQuizViewModelTests()
@@ -29,43 +22,8 @@ public class SentenceQuizViewModelTests
         _scoringService = A.Fake<IScoringService>();
         _appUserService = A.Fake<IAppUserService>();
         _learningService = A.Fake<ILearningService>();
-        _viewModel = new TestableSentenceQuizViewModel(_openAiService, _scoringService, _appUserService, _learningService);
-    }
-
-    private class TestableSentenceQuizViewModel : SentenceQuizViewModel
-    {
-        public bool MockNetworkStatus { get; set; } = true;
-        public string? LastAlertMessage { get; private set; }
-        public string? LastNavigatedRoute { get; private set; }
-        public string? LastSpokenText { get; private set; }
-
-        public TestableSentenceQuizViewModel(IOpenAiService openAiService, IScoringService scoringService, IAppUserService appUserService, ILearningService learningService) 
-            : base(openAiService, scoringService, appUserService, learningService)
-        {
-        }
-
-        protected override bool IsNetworkConnected() => MockNetworkStatus;
-
-        protected override Task ShowAlertAsync(string title, string message, string cancel)
-        {
-            LastAlertMessage = message;
-            return Task.CompletedTask;
-        }
-
-        protected override Task GoToAsync(string route)
-        {
-            LastNavigatedRoute = route;
-            return Task.CompletedTask;
-        }
-
-        protected override Task SpeakAsync(string text)
-        {
-            LastSpokenText = text;
-            return Task.CompletedTask;
-        }
-
-        protected override AppTheme GetApplicationTheme() => AppTheme.Light;
-        protected override Color? GetColorResource(string key) => Colors.Gray;
+        _viewModel =
+            new TestableSentenceQuizViewModel(_openAiService, _scoringService, _appUserService, _learningService);
     }
 
     [Fact]
@@ -160,7 +118,7 @@ public class SentenceQuizViewModelTests
     {
         // Arrange
         await SetupQuiz();
-        
+
         var wordsToSelect = new[] { "I", "eat", "an", "apple" };
         foreach (var text in wordsToSelect)
         {
@@ -184,7 +142,7 @@ public class SentenceQuizViewModelTests
     {
         // Arrange
         await SetupQuiz();
-        
+
         var tile = _viewModel.AvailableWords.First(w => w.Text == "apple");
         _viewModel.SelectWordCommand.Execute(tile);
 
@@ -221,5 +179,52 @@ public class SentenceQuizViewModelTests
             .Returns(("I eat an apple", "Jem jabłko"));
 
         await _viewModel.LoadQuestionAsync();
+    }
+
+    private class TestableSentenceQuizViewModel : SentenceQuizViewModel
+    {
+        public TestableSentenceQuizViewModel(IOpenAiService openAiService, IScoringService scoringService,
+            IAppUserService appUserService, ILearningService learningService)
+            : base(openAiService, scoringService, appUserService, learningService)
+        {
+        }
+
+        public bool MockNetworkStatus { get; set; } = true;
+        public string? LastAlertMessage { get; private set; }
+        public string? LastNavigatedRoute { get; private set; }
+        public string? LastSpokenText { get; private set; }
+
+        protected override bool IsNetworkConnected()
+        {
+            return MockNetworkStatus;
+        }
+
+        protected override Task ShowAlertAsync(string title, string message, string cancel)
+        {
+            LastAlertMessage = message;
+            return Task.CompletedTask;
+        }
+
+        protected override Task GoToAsync(string route)
+        {
+            LastNavigatedRoute = route;
+            return Task.CompletedTask;
+        }
+
+        protected override Task SpeakAsync(string text)
+        {
+            LastSpokenText = text;
+            return Task.CompletedTask;
+        }
+
+        protected override AppTheme GetApplicationTheme()
+        {
+            return AppTheme.Light;
+        }
+
+        protected override Color? GetColorResource(string key)
+        {
+            return Colors.Gray;
+        }
     }
 }

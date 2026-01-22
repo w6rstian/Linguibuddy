@@ -1,13 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
+using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.Services;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using Linguibuddy.Interfaces;
 
 namespace Linguibuddy.ViewModels;
 
@@ -15,11 +13,11 @@ namespace Linguibuddy.ViewModels;
 public partial class SentenceQuizViewModel : BaseQuizViewModel
 {
     private readonly IAppUserService _appUserService;
-    private readonly IOpenAiService _openAiService;
-    private readonly IScoringService _scoringService;
     private readonly ILearningService _learningService;
-    private List<CollectionItem> _allWords;
+    private readonly IOpenAiService _openAiService;
     private readonly Random _random = Random.Shared;
+    private readonly IScoringService _scoringService;
+    private List<CollectionItem> _allWords;
 
     private DifficultyLevel _currentDifficulty;
 
@@ -69,9 +67,9 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
             return;
 
         _allWords = SelectedCollection.Items
-                .OrderBy(_ => _random.Next())
-                .Take(await _appUserService.GetUserLessonLengthAsync())
-                .ToList();
+            .OrderBy(_ => _random.Next())
+            .Take(await _appUserService.GetUserLessonLengthAsync())
+            .ToList();
     }
 
     public override async Task LoadQuestionAsync()
@@ -83,7 +81,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         IsBusy = true;
         IsAnswered = false;
         FeedbackMessage = string.Empty;
-        
+
         var theme = GetApplicationTheme();
         FeedbackColor =
             theme == AppTheme.Light
@@ -124,7 +122,8 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
             var difficultyString = _currentDifficulty.ToString();
 
-            var generatedData = await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString, TargetWord.Definition);
+            var generatedData =
+                await _openAiService.GenerateSentenceAsync(TargetWord.Word, difficultyString, TargetWord.Definition);
 
             if (generatedData != null)
                 _currentQuestion = new SentenceQuestion
@@ -214,9 +213,9 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
             var lower = input.ToLowerInvariant();
 
-            var punctuation = new char[] { '.', ',', '?', '!', ';', ':', '-', '"', '\'' };
+            var punctuation = new[] { '.', ',', '?', '!', ';', ':', '-', '"', '\'' };
             foreach (var p in punctuation) lower = lower.Replace(p.ToString(), "");
-            return string.Join(" ", lower.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+            return string.Join(" ", lower.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
         }
 
         var isCorrect = Normalize(formedSentence) == Normalize(correctSentence);
@@ -286,7 +285,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
     {
         var locales = await TextToSpeech.Default.GetLocalesAsync();
         string[] femaleVoices = { "Zira", "Paulina", "Jenny", "Aria" };
-        
+
         var preferred = locales.FirstOrDefault(l =>
                             (l.Language == "en-US" || (l.Language == "en" && l.Country == "US")) &&
                             femaleVoices.Any(f => l.Name.Contains(f)))
@@ -296,9 +295,9 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
                         ?? locales.FirstOrDefault(l =>
                             l.Language.StartsWith("en") && femaleVoices.Any(f => l.Name.Contains(f)))
                         ?? locales.FirstOrDefault(l =>
-                            l.Language == "en-US" || (l.Language == "en" && l.Country == "US") )
+                            l.Language == "en-US" || (l.Language == "en" && l.Country == "US"))
                         ?? locales.FirstOrDefault(l =>
-                            l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB") )
+                            l.Language == "en-GB" || (l.Language == "en" && l.Country == "GB"))
                         ?? locales.FirstOrDefault(l => l.Language.StartsWith("en"));
 
         if (preferred == null)
@@ -317,13 +316,13 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
     protected virtual AppTheme GetApplicationTheme()
     {
-        Debug.Assert(Application.Current != null, "Application.Current != null");
+        Debug.Assert(Application.Current != null);
         return Application.Current.RequestedTheme;
     }
 
     protected virtual Color? GetColorResource(string key)
     {
-        Debug.Assert(Application.Current != null, "Application.Current != null");
+        Debug.Assert(Application.Current != null);
         return Application.Current.Resources[key] as Color;
     }
 }

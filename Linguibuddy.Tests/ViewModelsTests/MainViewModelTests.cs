@@ -1,27 +1,24 @@
 using FakeItEasy;
+using Firebase.Auth;
 using FluentAssertions;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
 using LocalizationResourceManager.Maui;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 public class MainViewModelTests
 {
-    private readonly IServiceProvider _services;
-    private readonly IAppUserService _appUserService;
-    private readonly ILearningService _learningService;
     private readonly IAchievementRepository _achievementRepository;
+    private readonly IAppUserService _appUserService;
     private readonly ICollectionService _collectionService;
+    private readonly ILearningService _learningService;
     private readonly IOpenAiService _openAiService;
     private readonly ILocalizationResourceManager _resourceManager;
-    private readonly TestableMainViewModel _viewModel;
+    private readonly IServiceProvider _services;
     private readonly TestableSettingsViewModel _settingsViewModel;
+    private readonly TestableMainViewModel _viewModel;
 
     public MainViewModelTests()
     {
@@ -46,63 +43,11 @@ public class MainViewModelTests
             _services,
             _appUserService,
             _learningService,
-            null!, 
+            null!,
             _achievementRepository,
             _collectionService,
             _openAiService,
             _settingsViewModel);
-    }
-
-    private class TestableSettingsViewModel : SettingsViewModel
-    {
-        public TestableSettingsViewModel(
-            ILocalizationResourceManager resourceManager,
-            IAppUserService appUserService,
-            Firebase.Auth.FirebaseAuthClient authClient,
-            IServiceProvider services,
-            ICollectionService collectionService)
-            : base(resourceManager, appUserService, authClient, services, collectionService)
-        {
-        }
-
-        protected override string GetPreference(string key, string defaultValue) => defaultValue;
-        protected override int GetPreference(string key, int defaultValue) => defaultValue;
-        protected override void SetPreference(string key, string value) { }
-        protected override void SetPreference(string key, int value) { }
-        protected override AppTheme GetAppTheme() => AppTheme.Light;
-        protected override void SetAppTheme(AppTheme theme) { }
-    }
-
-    private class TestableMainViewModel : MainViewModel
-    {
-        public bool MockIsAuthenticated { get; set; } = true;
-        public string MockDisplayName { get; set; } = "Test User";
-        public string MockEmail { get; set; } = "test@example.com";
-        public string MockLanguage { get; set; } = "en";
-        public bool NavigateToSignInCalled { get; private set; }
-
-        public TestableMainViewModel(
-            IServiceProvider services,
-            IAppUserService appUserService,
-            ILearningService learningService,
-            Firebase.Auth.FirebaseAuthClient authClient,
-            IAchievementRepository achievementRepository,
-            ICollectionService collectionService,
-            IOpenAiService openAiService,
-            SettingsViewModel settingsViewModel)
-            : base(services, appUserService, learningService, authClient, achievementRepository, collectionService, openAiService, settingsViewModel)
-        {
-        }
-
-        protected override bool IsUserAuthenticated() => MockIsAuthenticated;
-        protected override string GetUserDisplayName() => MockDisplayName;
-        protected override string GetUserEmail() => MockEmail;
-        protected override string GetPreference(string key, string defaultValue) => MockLanguage;
-        
-        protected override void NavigateToSignIn()
-        {
-            NavigateToSignInCalled = true;
-        }
     }
 
     [Fact]
@@ -115,7 +60,9 @@ public class MainViewModelTests
         A.CallTo(() => _appUserService.GetUserBestStreakAsync()).Returns(10);
         A.CallTo(() => _appUserService.GetCurrentUserAsync()).Returns(user);
         A.CallTo(() => _achievementRepository.GetUnlockedAchievementsCountAsync()).Returns(3);
-        A.CallTo(() => _openAiService.AnalyzeComprehensiveProfileAsync(A<AppUser>.Ignored, 5, 3, A<IEnumerable<WordCollection>>.Ignored, "en")).Returns("Good job!");
+        A.CallTo(() =>
+            _openAiService.AnalyzeComprehensiveProfileAsync(A<AppUser>.Ignored, 5, 3,
+                A<IEnumerable<WordCollection>>.Ignored, "en")).Returns("Good job!");
 
         // Act
         await _viewModel.LoadProfileInfoAsync();
@@ -167,15 +114,104 @@ public class MainViewModelTests
         // Arrange
         var user = new AppUser { Id = "1", RequiresAiAnalysis = false, LastAiAnalysis = "Cached Feedback" };
         A.CallTo(() => _appUserService.GetCurrentUserAsync()).Returns(user);
-        
+
         // Load initial profile to set the user field
-        await _viewModel.LoadProfileInfoAsync(); 
+        await _viewModel.LoadProfileInfoAsync();
 
         // Act
         await _viewModel.GetAiFeedback();
 
         // Assert
         _viewModel.AiFeedback.Should().Be("Cached Feedback");
-        A.CallTo(() => _openAiService.AnalyzeComprehensiveProfileAsync(A<AppUser>.Ignored, A<int>.Ignored, A<int>.Ignored, A<IEnumerable<WordCollection>>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() => _openAiService.AnalyzeComprehensiveProfileAsync(A<AppUser>.Ignored, A<int>.Ignored,
+            A<int>.Ignored, A<IEnumerable<WordCollection>>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+    }
+
+    private class TestableSettingsViewModel : SettingsViewModel
+    {
+        public TestableSettingsViewModel(
+            ILocalizationResourceManager resourceManager,
+            IAppUserService appUserService,
+            FirebaseAuthClient authClient,
+            IServiceProvider services,
+            ICollectionService collectionService)
+            : base(resourceManager, appUserService, authClient, services, collectionService)
+        {
+        }
+
+        protected override string GetPreference(string key, string defaultValue)
+        {
+            return defaultValue;
+        }
+
+        protected override int GetPreference(string key, int defaultValue)
+        {
+            return defaultValue;
+        }
+
+        protected override void SetPreference(string key, string value)
+        {
+        }
+
+        protected override void SetPreference(string key, int value)
+        {
+        }
+
+        protected override AppTheme GetAppTheme()
+        {
+            return AppTheme.Light;
+        }
+
+        protected override void SetAppTheme(AppTheme theme)
+        {
+        }
+    }
+
+    private class TestableMainViewModel : MainViewModel
+    {
+        public TestableMainViewModel(
+            IServiceProvider services,
+            IAppUserService appUserService,
+            ILearningService learningService,
+            FirebaseAuthClient authClient,
+            IAchievementRepository achievementRepository,
+            ICollectionService collectionService,
+            IOpenAiService openAiService,
+            SettingsViewModel settingsViewModel)
+            : base(services, appUserService, learningService, authClient, achievementRepository, collectionService,
+                openAiService, settingsViewModel)
+        {
+        }
+
+        public bool MockIsAuthenticated { get; set; } = true;
+        public string MockDisplayName { get; } = "Test User";
+        public string MockEmail { get; } = "test@example.com";
+        public string MockLanguage { get; } = "en";
+        public bool NavigateToSignInCalled { get; private set; }
+
+        protected override bool IsUserAuthenticated()
+        {
+            return MockIsAuthenticated;
+        }
+
+        protected override string GetUserDisplayName()
+        {
+            return MockDisplayName;
+        }
+
+        protected override string GetUserEmail()
+        {
+            return MockEmail;
+        }
+
+        protected override string GetPreference(string key, string defaultValue)
+        {
+            return MockLanguage;
+        }
+
+        protected override void NavigateToSignIn()
+        {
+            NavigateToSignInCalled = true;
+        }
     }
 }

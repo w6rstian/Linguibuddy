@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:Linguibuddy.ViewModels"
              xmlns:loc="clr-namespace:LocalizationResourceManager.Maui;assembly=LocalizationResourceManager.Maui"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Linguibuddy.Views.LeaderboardPage"
@@ -13,18 +13,18 @@
                HorizontalOptions="Center" 
                Margin="0,20,0,20"/>-->
 
-        <ActivityIndicator IsRunning="{Binding IsLoading}" 
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
                            IsVisible="{Binding IsLoading}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
                            Grid.Row="1" />
 
-        <CollectionView Grid.Row="1" 
+        <CollectionView Grid.Row="1"
                         ItemsSource="{Binding LeaderboardItems}"
                         IsVisible="{Binding IsLoading, Converter={toolkit:InvertedBoolConverter}}">
             <CollectionView.EmptyView>
-                <Label Text="{loc:Translate NoData}" 
-                       HorizontalOptions="Center" 
+                <Label Text="{loc:Translate NoData}"
+                       HorizontalOptions="Center"
                        VerticalOptions="Center" />
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
@@ -37,7 +37,7 @@
                                 Padding="15"
                                 Margin="0,5">
                             <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15">
-                            
+
                                 <!-- Rank -->
                                 <Border StrokeShape="RoundRectangle 20"
                                         HeightRequest="40"
@@ -51,26 +51,26 @@
                                            FontSize="18"
                                            FontAttributes="Bold"
                                            HorizontalOptions="Center"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center" />
                                 </Border>
 
                                 <!-- User Name -->
-                                <Label Grid.Column="1" 
-                                       Text="{Binding UserName}" 
-                                       FontSize="18" 
+                                <Label Grid.Column="1"
+                                       Text="{Binding UserName}"
+                                       FontSize="18"
                                        VerticalOptions="Center"
-                                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
 
                                 <!-- Points -->
                                 <HorizontalStackLayout Grid.Column="2" Spacing="5" VerticalOptions="Center">
-                                    <Label Text="{Binding Points}" 
-                                           FontSize="18" 
+                                    <Label Text="{Binding Points}"
+                                           FontSize="18"
                                            FontAttributes="Bold"
-                                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-                                    <Label Text="{loc:Translate PointsAbbreviation}" 
-                                           FontSize="14" 
-                                           VerticalOptions="Center" 
-                                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                                    <Label Text="{loc:Translate PointsAbbreviation}"
+                                           FontSize="14"
+                                           VerticalOptions="Center"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
                                 </HorizontalStackLayout>
                             </Grid>
                         </Border>

@@ -1,6 +1,5 @@
-﻿using Linguibuddy.Models;
-using Linguibuddy.Helpers;
-using Linguibuddy.Resources.Strings;
+﻿using Linguibuddy.Helpers;
+using Linguibuddy.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 

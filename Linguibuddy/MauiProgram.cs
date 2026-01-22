@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ClientModel;
+using System.Reflection;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Media;
 using DeepL;
@@ -20,7 +21,6 @@ using OpenAI;
 using OpenAI.Chat;
 using PexelsDotNetSDK.Api;
 using Plugin.Maui.Audio;
-using System.ClientModel;
 
 namespace Linguibuddy;
 

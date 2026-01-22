@@ -1,12 +1,10 @@
 ﻿using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.Services;
 using Linguibuddy.Views;
 using Microsoft.Maui.Controls.Shapes;
 
@@ -75,7 +73,7 @@ public partial class MiniGamesViewModel : ObservableObject
         };
 
         var result = await Shell.Current.ShowPopupAsync<WordCollection?>(popup, options);
-        
+
         if (result.WasDismissedByTappingOutsideOfPopup)
             return null;
 

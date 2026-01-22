@@ -1,9 +1,9 @@
-﻿using Linguibuddy.Helpers;
+﻿using System.Diagnostics;
+using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Newtonsoft.Json;
 using OpenAI.Chat;
-using System.Diagnostics;
 
 namespace Linguibuddy.Services;
 
@@ -61,17 +61,15 @@ public class OpenAiService : IOpenAiService
         }
     }
 
-    public async Task<(string English, string Polish)?> GenerateSentenceAsync(string targetWord, string difficultyLevel, string definition = "")
+    public async Task<(string English, string Polish)?> GenerateSentenceAsync(string targetWord, string difficultyLevel,
+        string definition = "")
     {
         try
         {
             var userMessage = $"Target word: {targetWord}\n" +
                               $"Difficulty Level: {difficultyLevel}";
 
-            if (!string.IsNullOrWhiteSpace(definition))
-            {
-                userMessage += $"\nContext/Definition: {definition}";
-            }
+            if (!string.IsNullOrWhiteSpace(definition)) userMessage += $"\nContext/Definition: {definition}";
 
             var messages = new List<ChatMessage>
             {
@@ -108,18 +106,25 @@ public class OpenAiService : IOpenAiService
     }
 
     /// <summary>
-    /// Analizuje postępy użytkownika w danej kolekcji i generuje porady.
+    ///     Analizuje postępy użytkownika w danej kolekcji i generuje porady.
     /// </summary>
-    public async Task<string> AnalyzeCollectionProgressAsync(WordCollection collection, DifficultyLevel userDifficulty, string language)
+    public async Task<string> AnalyzeCollectionProgressAsync(WordCollection collection, DifficultyLevel userDifficulty,
+        string language)
     {
         if (collection == null || collection.Items.Count == 0)
             return "Ta kolekcja jest pusta. Dodaj słówka i zacznij naukę, aby otrzymać porady.";
 
-        string FormatDate(DateTime? date) => date.HasValue && date.Value > DateTime.MinValue
-            ? date.Value.ToString("yyyy-MM-dd")
-            : "Nigdy";
+        string FormatDate(DateTime? date)
+        {
+            return date.HasValue && date.Value > DateTime.MinValue
+                ? date.Value.ToString("yyyy-MM-dd")
+                : "Nigdy";
+        }
 
-        string FormatScore(double score) => $"{score:P0}"; // Formatuje 0.5 jako "50%"
+        string FormatScore(double score)
+        {
+            return $"{score:P0}";
+        } // Formatuje 0.5 jako "50%"
 
         var statsReport = $"""
                            RAPORT POSTĘPÓW:
@@ -189,14 +194,15 @@ public class OpenAiService : IOpenAiService
     }
 
     /// <summary>
-    /// Analizuje ogólny profil ucznia.
+    ///     Analizuje ogólny profil ucznia.
     /// </summary>
-    public async Task<string> AnalyzeComprehensiveProfileAsync(AppUser user, int currentStreak, int unlockedAchievements, IEnumerable<WordCollection> collections, string language)
+    public async Task<string> AnalyzeComprehensiveProfileAsync(AppUser user, int currentStreak,
+        int unlockedAchievements, IEnumerable<WordCollection> collections, string language)
     {
         if (user == null) return "Brak danych użytkownika.";
 
         var wordCollections = collections.ToList();
-        
+
         string collectionStatsReport;
         if (wordCollections.Count == 0)
         {
@@ -204,22 +210,26 @@ public class OpenAiService : IOpenAiService
         }
         else
         {
-            int totalWords = wordCollections.Sum(c => c.Items.Count);
-            int activeCollectionsCount = wordCollections.Count(c => c.Items.Count > 0);
+            var totalWords = wordCollections.Sum(c => c.Items.Count);
+            var activeCollectionsCount = wordCollections.Count(c => c.Items.Count > 0);
             var activeCollections = wordCollections.Where(c => c.Items.Count > 0).ToList();
-            
+
             if (activeCollections.Count > 0)
             {
-                string FormatScore(double score) => $"{score:P0}";
-                
-                double avgAudio = activeCollections.Average(c => c.AudioBestScore);
-                double avgSpeaking = activeCollections.Average(c => c.SpeakingBestScore);
-                double avgSentence = activeCollections.Average(c => c.SentenceBestScore);
-                double avgImage = activeCollections.Average(c => c.ImageBestScore);
-                double avgHangman = activeCollections.Average(c => c.HangmanBestScore);
+                string FormatScore(double score)
+                {
+                    return $"{score:P0}";
+                }
+
+                var avgAudio = activeCollections.Average(c => c.AudioBestScore);
+                var avgSpeaking = activeCollections.Average(c => c.SpeakingBestScore);
+                var avgSentence = activeCollections.Average(c => c.SentenceBestScore);
+                var avgImage = activeCollections.Average(c => c.ImageBestScore);
+                var avgHangman = activeCollections.Average(c => c.HangmanBestScore);
 
                 var bestCollection = activeCollections
-                    .OrderByDescending(c => (c.AudioBestScore + c.SpeakingBestScore + c.SentenceBestScore + c.ImageBestScore) / 4)
+                    .OrderByDescending(c =>
+                        (c.AudioBestScore + c.SpeakingBestScore + c.SentenceBestScore + c.ImageBestScore) / 4)
                     .FirstOrDefault();
 
                 var neglectedCollection = activeCollections
@@ -229,7 +239,7 @@ public class OpenAiService : IOpenAiService
                 collectionStatsReport = $"""
                                          Liczba kolekcji: {wordCollections.Count} (Aktywne: {activeCollectionsCount})
                                          Łączna liczba słów: {totalWords}
-                                         
+
                                          ŚREDNIE WYNIKI LEKCJI (Skill Breakdown):
                                          🎧 Słuchanie (Rozpoznaj audio): {FormatScore(avgAudio)}
                                          🗣️ Mówienie (Wymowa): {FormatScore(avgSpeaking)}
@@ -237,8 +247,8 @@ public class OpenAiService : IOpenAiService
                                          🖼️ Skojarzenia (Dopasuj do obrazka): {FormatScore(avgImage)}
                                          🔤 Słownictwo (Wisielec): {FormatScore(avgHangman)}
 
-                                         Najlepsza kolekcja: "{(bestCollection?.Name ?? "Brak")}"
-                                         Najsłabsza kolekcja: "{(neglectedCollection?.Name ?? "Brak")}"
+                                         Najlepsza kolekcja: "{bestCollection?.Name ?? "Brak"}"
+                                         Najsłabsza kolekcja: "{neglectedCollection?.Name ?? "Brak"}"
                                          """;
             }
             else
@@ -248,18 +258,18 @@ public class OpenAiService : IOpenAiService
         }
 
         var comprehensiveReport = $"""
-                           RAPORT KOMPLEKSOWY UŻYTKOWNIKA:
-                           
-                           DANE PROFILOWE:
-                           - Punkty: {user.Points}
-                           - Aktualny streak (dni z rzędu): {currentStreak}
-                           - Najdłuższy streak: {user.BestLearningStreak}
-                           - Poziom trudności (ustawienia): {user.DifficultyLevel}
-                           - Zdobyte osiągnięcia: {unlockedAchievements}
-                           
-                           STATYSTYKI KOLEKCJI I UMIEJĘTNOŚCI:
-                           {collectionStatsReport}
-                           """;
+                                   RAPORT KOMPLEKSOWY UŻYTKOWNIKA:
+
+                                   DANE PROFILOWE:
+                                   - Punkty: {user.Points}
+                                   - Aktualny streak (dni z rzędu): {currentStreak}
+                                   - Najdłuższy streak: {user.BestLearningStreak}
+                                   - Poziom trudności (ustawienia): {user.DifficultyLevel}
+                                   - Zdobyte osiągnięcia: {unlockedAchievements}
+
+                                   STATYSTYKI KOLEKCJI I UMIEJĘTNOŚCI:
+                                   {collectionStatsReport}
+                                   """;
 
         try
         {
@@ -281,7 +291,7 @@ public class OpenAiService : IOpenAiService
                     "[Jedno zdanie o stylu nauki użytkownika na podstawie danych]\n" +
                     "[Jedno zdanie podsumowujące mocne strony i to nad czym trzeba popracować.]\n" +
                     "[Jedno zdanie podsumowujące co robić dalej]"
-                    ),
+                ),
 
                 new UserChatMessage($"Oto moje pełne statystyki:\n{comprehensiveReport}")
             };
@@ -296,7 +306,6 @@ public class OpenAiService : IOpenAiService
             return "Nie udało się wygenerować kompleksowego raportu. Spróbuj ponownie później.";
         }
     }
-
 
 
     private class SentenceResponse

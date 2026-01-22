@@ -13,9 +13,6 @@ public partial class LeaderboardPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        if (BindingContext is LeaderboardViewModel vm)
-        {
-            await vm.LoadLeaderboardCommand.ExecuteAsync(null);
-        }
+        if (BindingContext is LeaderboardViewModel vm) await vm.LoadLeaderboardCommand.ExecuteAsync(null);
     }
 }

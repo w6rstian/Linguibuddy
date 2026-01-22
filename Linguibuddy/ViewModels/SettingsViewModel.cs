@@ -1,12 +1,11 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
-using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.Services;
 using Linguibuddy.Views;
 using LocalizationResourceManager.Maui;
 
@@ -17,10 +16,10 @@ public partial class SettingsViewModel : ObservableObject
     private static readonly CultureInfo English = CultureInfo.GetCultureInfo("en");
     private static readonly CultureInfo Polish = CultureInfo.GetCultureInfo("pl");
     private readonly IAppUserService _appUserService;
-    private readonly ILocalizationResourceManager _resourceManager;
     private readonly FirebaseAuthClient _authClient;
-    private readonly IServiceProvider _services;
     private readonly ICollectionService _collectionService;
+    private readonly ILocalizationResourceManager _resourceManager;
+    private readonly IServiceProvider _services;
 
     [ObservableProperty] private DifficultyLevel _selectedDifficulty;
 
@@ -31,9 +30,9 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty] private string _translationApiName;
 
     public SettingsViewModel(
-        ILocalizationResourceManager resourceManager, 
-        IAppUserService appUserService, 
-        FirebaseAuthClient authClient, 
+        ILocalizationResourceManager resourceManager,
+        IAppUserService appUserService,
+        FirebaseAuthClient authClient,
         IServiceProvider services,
         ICollectionService collectionService)
     {
@@ -68,7 +67,7 @@ public partial class SettingsViewModel : ObservableObject
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Błąd zapisu poziomu trudności: {ex.Message}");
+                Debug.WriteLine($"Błąd zapisu poziomu trudności: {ex.Message}");
             }
         });
     }
@@ -83,7 +82,7 @@ public partial class SettingsViewModel : ObservableObject
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Błąd zapisu długości lekcji: {ex.Message}");
+                Debug.WriteLine($"Błąd zapisu długości lekcji: {ex.Message}");
             }
         });
     }
@@ -264,8 +263,6 @@ public partial class SettingsViewModel : ObservableObject
     {
         var signInPage = _services.GetRequiredService<SignInPage>();
         if (Application.Current?.Windows.Count > 0)
-        {
             Application.Current.Windows[0].Page = new NavigationPage(signInPage);
-        }
     }
 }

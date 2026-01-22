@@ -1,5 +1,4 @@
-﻿using Firebase.Auth;
-using Linguibuddy.Interfaces;
+﻿using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 
 namespace Linguibuddy.Services;

@@ -103,6 +103,6 @@ public class AchievementRepositoryTests : IDisposable
         var result = await _sut.GetUnlockedAchievementsCountAsync();
 
         // Assert
-        result.Should().Be(2); 
+        result.Should().Be(2);
     }
 }

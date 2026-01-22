@@ -4,23 +4,23 @@ using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
-using Linguibuddy.Services;
 using LocalizationResourceManager.Maui;
 
 namespace Linguibuddy.ViewModels;
 
 public partial class AchievementsViewModel : ObservableObject
 {
-    private readonly IAchievementService _achievementService;
     private readonly IAchievementRepository _achievementRepository;
-
-    [ObservableProperty] private ILocalizationResourceManager _localizationResourceManager;
+    private readonly IAchievementService _achievementService;
 
     [ObservableProperty] private ObservableCollection<UserAchievement> _achievements = new(); // Lista do bindowania
 
     [ObservableProperty] private bool _isLoading = true; // Do pokazywania loadera
 
-    public AchievementsViewModel(IAchievementService achievementService, IAchievementRepository achievementRepository, ILocalizationResourceManager localizationResourceManager)
+    [ObservableProperty] private ILocalizationResourceManager _localizationResourceManager;
+
+    public AchievementsViewModel(IAchievementService achievementService, IAchievementRepository achievementRepository,
+        ILocalizationResourceManager localizationResourceManager)
     {
         _achievementService = achievementService;
         _achievementRepository = achievementRepository;
@@ -35,9 +35,9 @@ public partial class AchievementsViewModel : ObservableObject
         await _achievementService.CheckAchievementsAsync();
         var allUserAchievements = await _achievementRepository.GetUserAchievementsAsNoTrackingAsync();
 
-        bool wasLastUnlocked = true;
-        AchievementUnlockType lastType = AchievementUnlockType.TotalPoints;
-        bool isNewType = false;
+        var wasLastUnlocked = true;
+        var lastType = AchievementUnlockType.TotalPoints;
+        var isNewType = false;
         foreach (var achievement in allUserAchievements)
         {
             if (achievement.Achievement.UnlockCondition != lastType)
@@ -60,10 +60,6 @@ public partial class AchievementsViewModel : ObservableObject
             else if (isNewType)
             {
                 Achievements.Add(achievement);
-            }
-            else
-            {
-                continue;
             }
         }
 

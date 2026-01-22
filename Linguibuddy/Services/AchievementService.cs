@@ -1,27 +1,24 @@
-﻿using Firebase.Auth;
-using Linguibuddy.Data;
-using Linguibuddy.Interfaces;
-using Linguibuddy.Models;
+﻿using Linguibuddy.Data;
 using Linguibuddy.Helpers;
-using Microsoft.EntityFrameworkCore;
+using Linguibuddy.Interfaces;
 
 namespace Linguibuddy.Services;
 
 public class AchievementService : IAchievementService
 {
-    private readonly IAuthService _authService;
-    private readonly IAppUserService _appUserService;
     private readonly IAchievementRepository _achievementRepository;
+    private readonly IAppUserService _appUserService;
+    private readonly IAuthService _authService;
 
     private readonly string _currentUserId;
     private readonly DataContext _db;
 
     public AchievementService(
-        DataContext db, 
-        IAuthService authService, 
-        IAppUserService appUserService, 
+        DataContext db,
+        IAuthService authService,
+        IAppUserService appUserService,
         IAchievementRepository achievementRepository
-        )
+    )
     {
         _db = db;
         _authService = authService;
@@ -34,10 +31,7 @@ public class AchievementService : IAchievementService
     {
         var userAchievements = await _achievementRepository.GetUserAchievementsAsync();
 
-        if (userAchievements == null || !userAchievements.Any())
-        {
-            return;
-        }
+        if (userAchievements == null || !userAchievements.Any()) return;
 
         var userPoints = await _appUserService.GetUserPointsAsync();
         var userStreak = await _appUserService.GetUserBestStreakAsync();
@@ -55,6 +49,7 @@ public class AchievementService : IAchievementService
                         userAchievement.IsUnlocked = true;
                         userAchievement.UnlockDate = DateTime.Today;
                     }
+
                     break;
 
                 case AchievementUnlockType.LearningStreak:
@@ -62,10 +57,8 @@ public class AchievementService : IAchievementService
                     {
                         userAchievement.IsUnlocked = true;
                         userAchievement.UnlockDate = DateTime.Today;
-                    }    
-                    break;
+                    }
 
-                default:
                     break;
             }
         }

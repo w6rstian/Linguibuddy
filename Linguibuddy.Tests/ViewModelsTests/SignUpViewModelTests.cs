@@ -1,85 +1,29 @@
 ﻿using FakeItEasy;
+using Firebase.Auth;
 using FluentAssertions;
 using Linguibuddy.Data;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 public class SignUpViewModelTests
 {
-    private readonly IServiceProvider _services;
     private readonly DataContext _dataContext;
+    private readonly IServiceProvider _services;
     private readonly TestableSignUpViewModel _viewModel;
 
     public SignUpViewModelTests()
     {
         _services = A.Fake<IServiceProvider>();
-        
+
         var options = new DbContextOptionsBuilder<DataContext>()
-            .UseInMemoryDatabase(databaseName: "TestSignUpDb")
+            .UseInMemoryDatabase("TestSignUpDb")
             .Options;
         _dataContext = new DataContext(options);
 
         _viewModel = new TestableSignUpViewModel(null!, _services, _dataContext);
-    }
-
-    private class TestableSignUpViewModel : SignUpViewModel
-    {
-        public bool MockCreateUserSuccess { get; set; } = true;
-        public string MockAuthUid { get; set; } = "uid123";
-        public string MockAuthDisplayName { get; set; } = "TestUser";
-        public AppUser? MockAppUser { get; set; }
-        public bool AddAppUserCalled { get; private set; }
-        public bool InitializeAchievementsCalled { get; private set; }
-        public bool NavigateToMainPageCalled { get; private set; }
-        public bool NavigateToSignInPageCalled { get; private set; }
-
-        public TestableSignUpViewModel(Firebase.Auth.FirebaseAuthClient authClient, IServiceProvider services, DataContext dataContext) 
-            : base(authClient, services, dataContext)
-        {
-        }
-
-        protected override Task CreateUserWithEmailAndPasswordAsync(string email, string password, string username)
-        {
-            if (MockCreateUserSuccess) return Task.CompletedTask;
-            
-            
-            throw new System.Exception("Create failed");
-        }
-
-        protected override string GetAuthUserUid() => MockAuthUid;
-        protected override string GetAuthUserDisplayName() => MockAuthDisplayName;
-
-        protected override Task<AppUser?> FindAppUserAsync(string uid)
-        {
-            return Task.FromResult(MockAppUser);
-        }
-
-        protected override Task AddAppUserAsync(AppUser appUser)
-        {
-            AddAppUserCalled = true;
-            return Task.CompletedTask;
-        }
-
-        protected override Task InitializeUserAchievementsAsync(string userId)
-        {
-            InitializeAchievementsCalled = true;
-            return Task.CompletedTask;
-        }
-
-        protected override void NavigateToMainPage()
-        {
-            NavigateToMainPageCalled = true;
-        }
-
-        protected override void NavigateToSignInPage()
-        {
-            NavigateToSignInPageCalled = true;
-        }
     }
 
     [Fact]
@@ -146,7 +90,7 @@ public class SignUpViewModelTests
         _viewModel.Username = "User";
         _viewModel.Email = "test@test.com";
         _viewModel.Password = "password123";
-        _viewModel.MockAppUser = null; 
+        _viewModel.MockAppUser = null;
 
         // Act
         await _viewModel.SignUpCommand.ExecuteAsync(null);
@@ -168,5 +112,68 @@ public class SignUpViewModelTests
 
         // Assert
         _viewModel.NavigateToSignInPageCalled.Should().BeTrue();
+    }
+
+    private class TestableSignUpViewModel : SignUpViewModel
+    {
+        public TestableSignUpViewModel(FirebaseAuthClient authClient, IServiceProvider services,
+            DataContext dataContext)
+            : base(authClient, services, dataContext)
+        {
+        }
+
+        public bool MockCreateUserSuccess { get; } = true;
+        public string MockAuthUid { get; } = "uid123";
+        public string MockAuthDisplayName { get; } = "TestUser";
+        public AppUser? MockAppUser { get; set; }
+        public bool AddAppUserCalled { get; private set; }
+        public bool InitializeAchievementsCalled { get; private set; }
+        public bool NavigateToMainPageCalled { get; private set; }
+        public bool NavigateToSignInPageCalled { get; private set; }
+
+        protected override Task CreateUserWithEmailAndPasswordAsync(string email, string password, string username)
+        {
+            if (MockCreateUserSuccess) return Task.CompletedTask;
+
+
+            throw new Exception("Create failed");
+        }
+
+        protected override string GetAuthUserUid()
+        {
+            return MockAuthUid;
+        }
+
+        protected override string GetAuthUserDisplayName()
+        {
+            return MockAuthDisplayName;
+        }
+
+        protected override Task<AppUser?> FindAppUserAsync(string uid)
+        {
+            return Task.FromResult(MockAppUser);
+        }
+
+        protected override Task AddAppUserAsync(AppUser appUser)
+        {
+            AddAppUserCalled = true;
+            return Task.CompletedTask;
+        }
+
+        protected override Task InitializeUserAchievementsAsync(string userId)
+        {
+            InitializeAchievementsCalled = true;
+            return Task.CompletedTask;
+        }
+
+        protected override void NavigateToMainPage()
+        {
+            NavigateToMainPageCalled = true;
+        }
+
+        protected override void NavigateToSignInPage()
+        {
+            NavigateToSignInPageCalled = true;
+        }
     }
 }

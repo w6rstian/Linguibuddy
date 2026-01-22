@@ -21,7 +21,8 @@
             <VerticalStackLayout Spacing="20">
                 <Entry Text="{Binding Email}" Placeholder="{loc:Translate EmailPlaceholder}" />
                 <VerticalStackLayout>
-                    <Entry IsPassword="True" Text="{Binding Password}" Placeholder="{loc:Translate PasswordPlaceholder}" />
+                    <Entry IsPassword="True" Text="{Binding Password}"
+                           Placeholder="{loc:Translate PasswordPlaceholder}" />
                     <Label Text="{loc:Translate SignInError}"
                            FontSize="12"
                            TextColor="Red"

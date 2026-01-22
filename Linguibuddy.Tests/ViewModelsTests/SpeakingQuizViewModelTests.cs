@@ -1,26 +1,21 @@
-﻿using CommunityToolkit.Maui.Media;
+﻿using System.Globalization;
+using CommunityToolkit.Maui.Media;
 using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 public class SpeakingQuizViewModelTests
 {
-    private readonly ISpeechToText _speechToText;
-    private readonly IOpenAiService _openAiService;
-    private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
     private readonly ILearningService _learningService;
+    private readonly IOpenAiService _openAiService;
+    private readonly IScoringService _scoringService;
+    private readonly ISpeechToText _speechToText;
     private readonly TestableSpeakingQuizViewModel _viewModel;
 
     public SpeakingQuizViewModelTests()
@@ -30,48 +25,8 @@ public class SpeakingQuizViewModelTests
         _scoringService = A.Fake<IScoringService>();
         _appUserService = A.Fake<IAppUserService>();
         _learningService = A.Fake<ILearningService>();
-        _viewModel = new TestableSpeakingQuizViewModel(_speechToText, _openAiService, _scoringService, _appUserService, _learningService);
-    }
-
-    private class TestableSpeakingQuizViewModel : SpeakingQuizViewModel
-    {
-        public bool MockNetworkStatus { get; set; } = true;
-        public string? LastAlertMessage { get; private set; }
-        public string? LastNavigatedRoute { get; private set; }
-        public string? LastSpokenText { get; private set; }
-
-        public TestableSpeakingQuizViewModel(ISpeechToText speechToText, IOpenAiService openAiService, IScoringService scoringService, IAppUserService appUserService, ILearningService learningService) 
-            : base(speechToText, openAiService, scoringService, appUserService, learningService)
-        {
-        }
-
-        protected override bool IsNetworkConnected() => MockNetworkStatus;
-
-        protected override Task ShowAlertAsync(string title, string message, string cancel)
-        {
-            LastAlertMessage = message;
-            return Task.CompletedTask;
-        }
-
-        protected override Task GoToAsync(string route)
-        {
-            LastNavigatedRoute = route;
-            return Task.CompletedTask;
-        }
-
-        protected override Task SpeakAsync(string text, CancellationToken token)
-        {
-            LastSpokenText = text;
-            return Task.CompletedTask;
-        }
-
-        protected override void RunOnMainThread(Action action) => action();
-
-        protected override Task InvokeOnMainThreadAsync(Func<Task> action) => action();
-
-        
-        public void CallCheckPronunciation(string text) => base.CheckPronunciation(text);
-        public Task CallFinishAttempt() => base.FinishAttempt();
+        _viewModel = new TestableSpeakingQuizViewModel(_speechToText, _openAiService, _scoringService, _appUserService,
+            _learningService);
     }
 
     [Fact]
@@ -141,7 +96,8 @@ public class SpeakingQuizViewModelTests
 
         // Assert
         _viewModel.IsListening.Should().BeTrue();
-        A.CallTo(() => _speechToText.StartListenAsync(A<SpeechToTextOptions>.Ignored, A<CancellationToken>.Ignored)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _speechToText.StartListenAsync(A<SpeechToTextOptions>.Ignored, A<CancellationToken>.Ignored))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -180,8 +136,8 @@ public class SpeakingQuizViewModelTests
     public async Task FinishAttempt_ShouldHandleEmptyRecognition()
     {
         // Arrange
-        var originalCulture = System.Globalization.CultureInfo.CurrentUICulture;
-        System.Globalization.CultureInfo.CurrentUICulture = new System.Globalization.CultureInfo("pl-PL");
+        var originalCulture = CultureInfo.CurrentUICulture;
+        CultureInfo.CurrentUICulture = new CultureInfo("pl-PL");
 
         try
         {
@@ -197,7 +153,7 @@ public class SpeakingQuizViewModelTests
         }
         finally
         {
-            System.Globalization.CultureInfo.CurrentUICulture = originalCulture;
+            CultureInfo.CurrentUICulture = originalCulture;
         }
     }
 
@@ -226,5 +182,63 @@ public class SpeakingQuizViewModelTests
             .Returns((sentence, "Translation"));
 
         await _viewModel.LoadQuestionAsync();
+    }
+
+    private class TestableSpeakingQuizViewModel : SpeakingQuizViewModel
+    {
+        public TestableSpeakingQuizViewModel(ISpeechToText speechToText, IOpenAiService openAiService,
+            IScoringService scoringService, IAppUserService appUserService, ILearningService learningService)
+            : base(speechToText, openAiService, scoringService, appUserService, learningService)
+        {
+        }
+
+        public bool MockNetworkStatus { get; set; } = true;
+        public string? LastAlertMessage { get; private set; }
+        public string? LastNavigatedRoute { get; private set; }
+        public string? LastSpokenText { get; private set; }
+
+        protected override bool IsNetworkConnected()
+        {
+            return MockNetworkStatus;
+        }
+
+        protected override Task ShowAlertAsync(string title, string message, string cancel)
+        {
+            LastAlertMessage = message;
+            return Task.CompletedTask;
+        }
+
+        protected override Task GoToAsync(string route)
+        {
+            LastNavigatedRoute = route;
+            return Task.CompletedTask;
+        }
+
+        protected override Task SpeakAsync(string text, CancellationToken token)
+        {
+            LastSpokenText = text;
+            return Task.CompletedTask;
+        }
+
+        protected override void RunOnMainThread(Action action)
+        {
+            action();
+        }
+
+        protected override Task InvokeOnMainThreadAsync(Func<Task> action)
+        {
+            return action();
+        }
+
+
+        public void CallCheckPronunciation(string text)
+        {
+            base.CheckPronunciation(text);
+        }
+
+        public Task CallFinishAttempt()
+        {
+            return base.FinishAttempt();
+        }
     }
 }

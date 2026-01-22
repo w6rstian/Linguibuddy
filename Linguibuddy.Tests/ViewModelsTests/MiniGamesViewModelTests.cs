@@ -1,14 +1,10 @@
 using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Core;
 using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
 using Linguibuddy.Views;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
@@ -25,45 +21,14 @@ public class MiniGamesViewModelTests
         _viewModel = new TestableMiniGamesViewModel(_collectionService, _popupService);
     }
 
-    private class TestableMiniGamesViewModel : MiniGamesViewModel
-    {
-        public WordCollection? MockSelectedCollection { get; set; }
-        public string LastNavigatedRoute { get; private set; } = string.Empty;
-        public IDictionary<string, object>? LastNavigatedParameters { get; private set; }
-        public bool AlertShown { get; private set; }
-
-        public TestableMiniGamesViewModel(ICollectionService collectionService, IPopupService popupService) 
-            : base(collectionService, popupService)
-        {
-        }
-
-        protected override Task<WordCollection?> GetSelectedCollectionFromPopupAsync()
-        {
-            return Task.FromResult(MockSelectedCollection);
-        }
-
-        protected override Task ShowAlertAsync(string title, string message, string cancel)
-        {
-            AlertShown = true;
-            return Task.CompletedTask;
-        }
-
-        protected override Task GoToAsync(string route, IDictionary<string, object> parameters)
-        {
-            LastNavigatedRoute = route;
-            LastNavigatedParameters = parameters;
-            return Task.CompletedTask;
-        }
-    }
-
     [Fact]
     public async Task NavigateToAudioQuiz_ShouldNavigate_WhenCollectionIsSelectedAndNotEmpty()
     {
         // Arrange
-        var collection = new WordCollection 
-        { 
-            Id = 1, 
-            Items = new List<CollectionItem> { new CollectionItem { Word = "Test" } } 
+        var collection = new WordCollection
+        {
+            Id = 1,
+            Items = new List<CollectionItem> { new() { Word = "Test" } }
         };
         _viewModel.MockSelectedCollection = collection;
 
@@ -80,10 +45,10 @@ public class MiniGamesViewModelTests
     public async Task NavigateToImageQuiz_ShouldNavigate_WhenCollectionIsSelectedAndNotEmpty()
     {
         // Arrange
-        var collection = new WordCollection 
-        { 
-            Id = 1, 
-            Items = new List<CollectionItem> { new CollectionItem { Word = "Test" } } 
+        var collection = new WordCollection
+        {
+            Id = 1,
+            Items = new List<CollectionItem> { new() { Word = "Test" } }
         };
         _viewModel.MockSelectedCollection = collection;
 
@@ -98,10 +63,10 @@ public class MiniGamesViewModelTests
     public async Task NavigateToHangman_ShouldNavigate_WhenCollectionIsSelectedAndNotEmpty()
     {
         // Arrange
-        var collection = new WordCollection 
-        { 
-            Id = 1, 
-            Items = new List<CollectionItem> { new CollectionItem { Word = "Test" } } 
+        var collection = new WordCollection
+        {
+            Id = 1,
+            Items = new List<CollectionItem> { new() { Word = "Test" } }
         };
         _viewModel.MockSelectedCollection = collection;
 
@@ -138,5 +103,36 @@ public class MiniGamesViewModelTests
         // Assert
         _viewModel.LastNavigatedRoute.Should().BeEmpty();
         _viewModel.AlertShown.Should().BeTrue();
+    }
+
+    private class TestableMiniGamesViewModel : MiniGamesViewModel
+    {
+        public TestableMiniGamesViewModel(ICollectionService collectionService, IPopupService popupService)
+            : base(collectionService, popupService)
+        {
+        }
+
+        public WordCollection? MockSelectedCollection { get; set; }
+        public string LastNavigatedRoute { get; private set; } = string.Empty;
+        public IDictionary<string, object>? LastNavigatedParameters { get; private set; }
+        public bool AlertShown { get; private set; }
+
+        protected override Task<WordCollection?> GetSelectedCollectionFromPopupAsync()
+        {
+            return Task.FromResult(MockSelectedCollection);
+        }
+
+        protected override Task ShowAlertAsync(string title, string message, string cancel)
+        {
+            AlertShown = true;
+            return Task.CompletedTask;
+        }
+
+        protected override Task GoToAsync(string route, IDictionary<string, object> parameters)
+        {
+            LastNavigatedRoute = route;
+            LastNavigatedParameters = parameters;
+            return Task.CompletedTask;
+        }
     }
 }

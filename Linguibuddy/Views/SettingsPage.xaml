@@ -77,35 +77,35 @@
             </Grid>
 
             <VerticalStackLayout>
-                <Label 
+                <Label
                     Text="{loc:Translate PreferredDifficulty}"
                     TextColor="{AppThemeBinding Light=Black, Dark=White}"
                     HorizontalTextAlignment="Center" />
-                <Picker 
-                        MaximumWidthRequest="250"
-                        ItemsSource="{Binding AvailableDifficulties}"
-                        SelectedItem="{Binding SelectedDifficulty}"/>
+                <Picker
+                    MaximumWidthRequest="250"
+                    ItemsSource="{Binding AvailableDifficulties}"
+                    SelectedItem="{Binding SelectedDifficulty}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout>
-                <Label 
+                <Label
                     Text="{loc:Translate PreferredMaxLessonLength}"
                     TextColor="{AppThemeBinding Light=Black, Dark=White}"
                     HorizontalTextAlignment="Center" />
-                <Picker 
-                        MaximumWidthRequest="250"
-                        ItemsSource="{Binding AvailableLessonLengths}"
-                        SelectedItem="{Binding SelectedLessonLength}" />
+                <Picker
+                    MaximumWidthRequest="250"
+                    ItemsSource="{Binding AvailableLessonLengths}"
+                    SelectedItem="{Binding SelectedLessonLength}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Spacing="20">
-                <Button 
+                <Button
                     Text="{loc:Translate ChangeUserName}"
                     Command="{Binding ChangeDisplayNameCommand}"
                     MaximumWidthRequest="250"
                     CornerRadius="20" />
-            
-                <Button 
+
+                <Button
                     Text="{loc:Translate SignOut}"
                     Command="{Binding SignOutCommand}"
                     MaximumWidthRequest="250"

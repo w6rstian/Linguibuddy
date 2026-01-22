@@ -299,9 +299,7 @@ public class AppUserServiceTests
         A.CallTo(() => _repo.Update(user)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _repo.SaveChangesAsync()).MustHaveHappenedOnceExactly();
 
-        
-        
-        
+
         A.CallTo(() => _repo.GetByIdAsync(A<string>._)).Returns(Task.FromResult<AppUser?>(null));
 
         var points = await _sut.GetUserPointsAsync();
@@ -356,8 +354,8 @@ public class AppUserServiceTests
         // Arrange
         var users = new List<AppUser>
         {
-            new AppUser { Id = "1", Points = 100 },
-            new AppUser { Id = "2", Points = 90 }
+            new() { Id = "1", Points = 100 },
+            new() { Id = "2", Points = 90 }
         };
         A.CallTo(() => _repo.GetTopUsersAsync(50)).Returns(users);
 

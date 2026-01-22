@@ -28,7 +28,7 @@
                         Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
                         Radius="5"
                         Opacity="0.4"
-                        Offset="0,4"/>
+                        Offset="0,4" />
                 </Border.Shadow>
 
                 <VerticalStackLayout
@@ -83,7 +83,7 @@
                         Brush="{AppThemeBinding Light=OrangeRed, Dark=OrangeRed}"
                         Radius="5"
                         Opacity="0.4"
-                        Offset="0,4"/>
+                        Offset="0,4" />
                 </Border.Shadow>
                 <VerticalStackLayout>
                     <Label
@@ -97,7 +97,7 @@
                             Text="🔥"
                             FontSize="Large"
                             VerticalTextAlignment="Center"
-                            Margin="0,0,6,0"/>
+                            Margin="0,0,6,0" />
                         <Label
                             Grid.Column="1"
                             FontSize="Large"
@@ -106,7 +106,7 @@
                         <BoxView
                             Grid.Column="2"
                             WidthRequest="42"
-                            Opacity="0"/>
+                            Opacity="0" />
                     </Grid>
                     <FlexLayout
                         Direction="Row"
@@ -138,32 +138,31 @@
                         Brush="{AppThemeBinding Light=Goldenrod, Dark=Gold}"
                         Radius="5"
                         Opacity="0.4"
-                        Offset="0,4"/>
+                        Offset="0,4" />
                 </Border.Shadow>
 
                 <VerticalStackLayout>
                     <Label
                         Text="{loc:Translate Achievements}"
                         FontSize="18"
-                        HorizontalTextAlignment="Center"
-                        />
+                        HorizontalTextAlignment="Center" />
                     <Grid HorizontalOptions="Center"
                           ColumnDefinitions="Auto,Auto,Auto">
                         <BoxView
                             Grid.Column="0"
                             WidthRequest="38"
-                            Opacity="0"/>
+                            Opacity="0" />
                         <Label
                             Grid.Column="1"
                             Text="{Binding UnlockedAchievementsCount}"
                             HorizontalTextAlignment="Center"
-                            FontSize="Large"/>
+                            FontSize="Large" />
                         <Label
                             Grid.Column="2"
                             Text="🏆"
                             FontSize="Large"
                             VerticalTextAlignment="Center"
-                            Margin="0,0,6,0"/>
+                            Margin="0,0,6,0" />
                     </Grid>
                     <HorizontalStackLayout
                         Spacing="10"
@@ -194,7 +193,7 @@
                         Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}"
                         Radius="5"
                         Opacity="0.4"
-                        Offset="0,4"/>
+                        Offset="0,4" />
                 </Border.Shadow>
 
                 <VerticalStackLayout
@@ -207,12 +206,12 @@
                         TextColor="{AppThemeBinding Light=Black, Dark=White}"
                         Text="{loc:Translate AITeacherBoxTitle}"
                         HorizontalTextAlignment="Center" />
-                    
-                    <Label 
+
+                    <Label
                         FontSize="Subtitle"
                         TextColor="{AppThemeBinding Light=Black, Dark=White}"
                         Text="{Binding AiFeedback}" />
-                    
+
                     <ActivityIndicator IsVisible="{Binding IsAiThinking}" IsRunning="{Binding IsAiThinking}" />
                 </VerticalStackLayout>
             </Border>

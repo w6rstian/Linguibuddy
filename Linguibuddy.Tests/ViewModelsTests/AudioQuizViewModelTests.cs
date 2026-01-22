@@ -1,65 +1,25 @@
-﻿using FakeItEasy;
+﻿using System.Reflection;
+using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 using Plugin.Maui.Audio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 [Collection("QuizTests")]
 public class AudioQuizViewModelTests
 {
-    private readonly IScoringService _scoringService;
-    private readonly IAudioManager _audioManager;
     private readonly IAppUserService _appUserService;
+    private readonly IAudioManager _audioManager;
     private readonly ILearningService _learningService;
+    private readonly IScoringService _scoringService;
     private readonly TestableAudioQuizViewModel _viewModel;
-
-    
-    private class TestableAudioQuizViewModel : AudioQuizViewModel
-    {
-        public bool NetworkAvailable { get; set; } = true;
-        public string LastNavigatedRoute { get; private set; } = string.Empty;
-
-        public TestableAudioQuizViewModel(IScoringService scoringService, IAudioManager audioManager, IAppUserService appUserService, ILearningService learningService) 
-            : base(scoringService, audioManager, appUserService, learningService)
-        {
-        }
-
-        protected override bool IsNetworkConnected()
-        {
-            return NetworkAvailable;
-        }
-
-        protected override Task ShowAlert(string title, string message, string cancel)
-        {
-            return Task.CompletedTask; 
-        }
-        
-        protected override Task GoToAsync(string route)
-        {
-            LastNavigatedRoute = route;
-            return Task.CompletedTask;
-        }
-
-        protected override string GetCacheDirectory()
-        {
-             return System.IO.Path.GetTempPath();
-        }
-    }
 
     public AudioQuizViewModelTests()
     {
-        
         _scoringService = A.Fake<IScoringService>();
         _audioManager = A.Fake<IAudioManager>();
         _appUserService = A.Fake<IAppUserService>();
@@ -101,8 +61,8 @@ public class AudioQuizViewModelTests
         {
             Items = new List<CollectionItem>
             {
-                new CollectionItem { Id = 1, Word = "Test1" },
-                new CollectionItem { Id = 2, Word = "Test2" }
+                new() { Id = 1, Word = "Test1" },
+                new() { Id = 2, Word = "Test2" }
             }
         };
         _viewModel.SelectedCollection = collection;
@@ -133,18 +93,15 @@ public class AudioQuizViewModelTests
     {
         // Arrange
         var items = new List<CollectionItem>();
-        
-        for (int i = 1; i <= 5; i++)
-        {
-            items.Add(new CollectionItem { Id = i, Word = $"Word{i}" });
-        }
+
+        for (var i = 1; i <= 5; i++) items.Add(new CollectionItem { Id = i, Word = $"Word{i}" });
 
         var collection = new WordCollection { Items = items };
         _viewModel.SelectedCollection = collection;
 
         A.CallTo(() => _appUserService.GetUserLessonLengthAsync()).Returns(5);
-        
-        
+
+
         await _viewModel.ImportCollectionAsync();
 
         // Act
@@ -163,7 +120,7 @@ public class AudioQuizViewModelTests
         // Arrange
         var targetWord = new CollectionItem { Id = 1, Word = "Target" };
         var option = new QuizOption(targetWord);
-        
+
         _viewModel.TargetWord = targetWord;
         _viewModel.Options.Add(option);
 
@@ -184,10 +141,10 @@ public class AudioQuizViewModelTests
         // Arrange
         var targetWord = new CollectionItem { Id = 1, Word = "Target" };
         var wrongWord = new CollectionItem { Id = 2, Word = "Wrong" };
-        
+
         var correctOption = new QuizOption(targetWord);
         var wrongOption = new QuizOption(wrongWord);
-        
+
         _viewModel.TargetWord = targetWord;
         _viewModel.Options.Add(correctOption);
         _viewModel.Options.Add(wrongOption);
@@ -200,14 +157,14 @@ public class AudioQuizViewModelTests
         wrongOption.BackgroundColor.Should().Be(Colors.Salmon);
         correctOption.BackgroundColor.Should().Be(Colors.LightGreen);
     }
-    
+
     [Fact]
     public async Task SelectAnswerCommand_ShouldDoNothing_WhenAlreadyAnswered()
     {
         // Arrange
         var targetWord = new CollectionItem { Id = 1, Word = "Target" };
         var option = new QuizOption(targetWord);
-        
+
         _viewModel.TargetWord = targetWord;
         _viewModel.IsAnswered = true;
 
@@ -246,17 +203,51 @@ public class AudioQuizViewModelTests
         // Act
         await _viewModel.ImportCollectionAsync();
 
-        
-        var field = typeof(AudioQuizViewModel).GetField("_allWords", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+        var field = typeof(AudioQuizViewModel).GetField("_allWords", BindingFlags.NonPublic | BindingFlags.Instance);
         var allWords = (List<CollectionItem>)field.GetValue(_viewModel);
 
         // Assert
-        allWords.Should().HaveCount(2); 
+        allWords.Should().HaveCount(2);
         allWords.Should().Contain(i => i.Word.Equals("fork", StringComparison.OrdinalIgnoreCase));
         allWords.Should().Contain(i => i.Word == "Spoon");
-        
-        
+
+
         var forkItem = allWords.First(i => i.Word.Equals("fork", StringComparison.OrdinalIgnoreCase));
         forkItem.Audio.Should().Be("http://audio");
+    }
+
+
+    private class TestableAudioQuizViewModel : AudioQuizViewModel
+    {
+        public TestableAudioQuizViewModel(IScoringService scoringService, IAudioManager audioManager,
+            IAppUserService appUserService, ILearningService learningService)
+            : base(scoringService, audioManager, appUserService, learningService)
+        {
+        }
+
+        public bool NetworkAvailable { get; set; } = true;
+        public string LastNavigatedRoute { get; private set; } = string.Empty;
+
+        protected override bool IsNetworkConnected()
+        {
+            return NetworkAvailable;
+        }
+
+        protected override Task ShowAlert(string title, string message, string cancel)
+        {
+            return Task.CompletedTask;
+        }
+
+        protected override Task GoToAsync(string route)
+        {
+            LastNavigatedRoute = route;
+            return Task.CompletedTask;
+        }
+
+        protected override string GetCacheDirectory()
+        {
+            return Path.GetTempPath();
+        }
     }
 }

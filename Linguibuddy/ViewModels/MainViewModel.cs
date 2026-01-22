@@ -1,12 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
+using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
-using Linguibuddy.Views;
-using Linguibuddy.Helpers;
 using Linguibuddy.Resources.Strings;
-using LocalizationResourceManager.Maui;
+using Linguibuddy.Views;
 
 namespace Linguibuddy.ViewModels;
 
@@ -15,13 +13,13 @@ public partial class MainViewModel : ObservableObject
     private readonly IAchievementRepository _achievementRepository;
     private readonly IAppUserService _appUserService;
     private readonly FirebaseAuthClient _authClient;
-    private readonly ILearningService _learningService;
-    private readonly IServiceProvider _services;
     private readonly ICollectionService _collectionService;
+    private readonly ILearningService _learningService;
     private readonly IOpenAiService _openAiService;
+    private readonly IServiceProvider _services;
     private readonly SettingsViewModel _settingsViewModel;
 
-    private AppUser _user;
+    [ObservableProperty] private string _aiFeedback;
 
     [ObservableProperty] private int _bestStreak;
 
@@ -31,21 +29,21 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty] private string _email;
 
+    [ObservableProperty] private bool _isAiThinking;
+
     [ObservableProperty] private bool _isCurrentStreakBest;
 
     [ObservableProperty] private int _points;
 
     [ObservableProperty] private int _unlockedAchievementsCount;
 
-    [ObservableProperty] private string _aiFeedback;
-
-    [ObservableProperty] private bool _isAiThinking;
+    private AppUser _user;
 
     public MainViewModel(
         IServiceProvider services,
         IAppUserService appUserService,
         ILearningService learningService,
-        FirebaseAuthClient authClient, 
+        FirebaseAuthClient authClient,
         IAchievementRepository achievementRepository,
         ICollectionService collectionService,
         IOpenAiService openAiService,
@@ -96,6 +94,7 @@ public partial class MainViewModel : ObservableObject
             IsAiThinking = false;
             return;
         }
+
         AiFeedback = AppResources.AiAnalysisThinking;
 
         try
@@ -103,7 +102,8 @@ public partial class MainViewModel : ObservableObject
             var collections = await _collectionService.GetUserCollectionsAsync();
 
             var language = GetPreference(Constants.LanguageKey, "pl");
-            var feedback = await _openAiService.AnalyzeComprehensiveProfileAsync(_user, CurrentStreak, UnlockedAchievementsCount, collections, language);
+            var feedback = await _openAiService.AnalyzeComprehensiveProfileAsync(_user, CurrentStreak,
+                UnlockedAchievementsCount, collections, language);
 
             AiFeedback = feedback;
 
@@ -140,9 +140,7 @@ public partial class MainViewModel : ObservableObject
     {
         var signInPage = _services.GetRequiredService<SignInPage>();
         if (Application.Current?.Windows.Count > 0)
-        {
             Application.Current.Windows[0].Page = new NavigationPage(signInPage);
-        }
     }
 
     protected virtual string GetPreference(string key, string defaultValue)

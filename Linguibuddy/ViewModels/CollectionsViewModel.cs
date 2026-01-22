@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.Services;
 using Linguibuddy.Views;
 
 namespace Linguibuddy.ViewModels;
@@ -109,7 +108,8 @@ public partial class CollectionsViewModel : ObservableObject
         await GoToAsync(nameof(FlashcardsPage), navigationParameter);
     }
 
-    protected virtual Task<string> ShowPromptAsync(string title, string message, string accept = "OK", string cancel = "Cancel")
+    protected virtual Task<string> ShowPromptAsync(string title, string message, string accept = "OK",
+        string cancel = "Cancel")
     {
         return Shell.Current.DisplayPromptAsync(title, message, accept, cancel);
     }

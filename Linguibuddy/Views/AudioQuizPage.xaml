@@ -155,7 +155,7 @@
                                IsRunning="{Binding IsBusy}"
                                IsVisible="{Binding IsBusy}"
                                HorizontalOptions="Center"
-                               VerticalOptions="Center"/>
+                               VerticalOptions="Center" />
         </Grid>
     </Grid>
 </ContentPage>

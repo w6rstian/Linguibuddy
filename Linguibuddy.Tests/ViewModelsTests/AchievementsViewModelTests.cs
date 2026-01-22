@@ -5,16 +5,13 @@ using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
 using LocalizationResourceManager.Maui;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 public class AchievementsViewModelTests
 {
-    private readonly IAchievementService _achievementService;
     private readonly IAchievementRepository _achievementRepository;
+    private readonly IAchievementService _achievementService;
     private readonly ILocalizationResourceManager _localizationResourceManager;
     private readonly AchievementsViewModel _viewModel;
 
@@ -23,7 +20,8 @@ public class AchievementsViewModelTests
         _achievementService = A.Fake<IAchievementService>();
         _achievementRepository = A.Fake<IAchievementRepository>();
         _localizationResourceManager = A.Fake<ILocalizationResourceManager>();
-        _viewModel = new AchievementsViewModel(_achievementService, _achievementRepository, _localizationResourceManager);
+        _viewModel =
+            new AchievementsViewModel(_achievementService, _achievementRepository, _localizationResourceManager);
     }
 
     [Fact]
@@ -49,24 +47,28 @@ public class AchievementsViewModelTests
         var achievements = new List<UserAchievement>
         {
             // Unlocked
-            new() { 
-                IsUnlocked = true, 
-                Achievement = new Achievement { UnlockCondition = AchievementUnlockType.TotalPoints, Name = "A1" } 
+            new()
+            {
+                IsUnlocked = true,
+                Achievement = new Achievement { UnlockCondition = AchievementUnlockType.TotalPoints, Name = "A1" }
             },
             // Locked but last was unlocked (should be visible)
-            new() { 
-                IsUnlocked = false, 
-                Achievement = new Achievement { UnlockCondition = AchievementUnlockType.TotalPoints, Name = "A2" } 
+            new()
+            {
+                IsUnlocked = false,
+                Achievement = new Achievement { UnlockCondition = AchievementUnlockType.TotalPoints, Name = "A2" }
             },
             // Locked and previous was locked (should be skipped)
-            new() { 
-                IsUnlocked = false, 
-                Achievement = new Achievement { UnlockCondition = AchievementUnlockType.TotalPoints, Name = "A3" } 
+            new()
+            {
+                IsUnlocked = false,
+                Achievement = new Achievement { UnlockCondition = AchievementUnlockType.TotalPoints, Name = "A3" }
             },
             // Locked but NEW type (should be visible)
-            new() { 
-                IsUnlocked = false, 
-                Achievement = new Achievement { UnlockCondition = AchievementUnlockType.LearningStreak, Name = "B1" } 
+            new()
+            {
+                IsUnlocked = false,
+                Achievement = new Achievement { UnlockCondition = AchievementUnlockType.LearningStreak, Name = "B1" }
             }
         };
 

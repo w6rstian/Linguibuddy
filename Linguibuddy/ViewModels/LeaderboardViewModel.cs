@@ -1,9 +1,8 @@
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Interfaces;
-using Linguibuddy.Models;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using Linguibuddy.Resources.Strings;
 
 namespace Linguibuddy.ViewModels;
@@ -12,11 +11,9 @@ public partial class LeaderboardViewModel : ObservableObject
 {
     private readonly IAppUserService _appUserService;
 
-    [ObservableProperty]
-    private ObservableCollection<LeaderboardItem> _leaderboardItems = new();
+    [ObservableProperty] private bool _isLoading;
 
-    [ObservableProperty]
-    private bool _isLoading;
+    [ObservableProperty] private ObservableCollection<LeaderboardItem> _leaderboardItems = new();
 
     public LeaderboardViewModel(IAppUserService appUserService)
     {
@@ -40,10 +37,7 @@ public partial class LeaderboardViewModel : ObservableObject
             }).ToList();
 
             LeaderboardItems.Clear();
-            foreach (var item in items)
-            {
-                LeaderboardItems.Add(item);
-            }
+            foreach (var item in items) LeaderboardItems.Add(item);
         }
         catch (Exception ex)
         {

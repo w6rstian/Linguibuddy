@@ -1,5 +1,4 @@
-﻿using Firebase.Auth;
-using Linguibuddy.Data;
+﻿using Linguibuddy.Data;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,14 +14,6 @@ public class CollectionService : ICollectionService
     {
         _context = context;
         _authService = authService;
-    }
-
-    private string GetUserId()
-    {
-        var uid = _authService.CurrentUserId;
-        if (string.IsNullOrEmpty(uid))
-            throw new UnauthorizedAccessException("Użytkownik nie jest zalogowany.");
-        return uid;
     }
 
     public async Task<List<WordCollection>> GetUserCollectionsAsync()
@@ -151,6 +142,14 @@ public class CollectionService : ICollectionService
     {
         _context.CollectionItems.Remove(item);
         await _context.SaveChangesAsync();
+    }
+
+    private string GetUserId()
+    {
+        var uid = _authService.CurrentUserId;
+        if (string.IsNullOrEmpty(uid))
+            throw new UnauthorizedAccessException("Użytkownik nie jest zalogowany.");
+        return uid;
     }
 
     //public async Task<List<string>> GetWordsWithImagesFromCollectionAsync(int collectionId)

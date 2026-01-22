@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Linguibuddy.Interfaces;
-using PexelsDotNetSDK.Api;
+
 // Namespace z paczki NuGet
 
 namespace Linguibuddy.Services;
@@ -18,7 +18,7 @@ public class PexelsImageService : IPexelsImageService
     {
         try
         {
-            var result = await _pexelsClient.SearchPhotosAsync(word, pageSize: 1);
+            var result = await _pexelsClient.SearchPhotosAsync(word, 1);
 
             var photo = result?.Photos?.FirstOrDefault();
 

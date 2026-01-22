@@ -2,12 +2,10 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Linguibuddy.Data;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Resources.Strings;
-using Linguibuddy.Services;
 using Plugin.Maui.Audio;
 
 namespace Linguibuddy.ViewModels;
@@ -51,14 +49,6 @@ public partial class DictionaryViewModel : ObservableObject
 
     [ObservableProperty] private WordCollection? _targetCollection;
 
-    partial void OnTargetCollectionChanged(WordCollection? value)
-    {
-        if (value != null)
-        {
-            SelectedCollection = value;
-        }
-    }
-
     public DictionaryViewModel(
         IDictionaryApiService dictionaryService,
         IDeepLTranslationService translationService,
@@ -77,6 +67,11 @@ public partial class DictionaryViewModel : ObservableObject
 
     public ObservableCollection<WordCollection> UserCollections { get; } = [];
 
+    partial void OnTargetCollectionChanged(WordCollection? value)
+    {
+        if (value != null) SelectedCollection = value;
+    }
+
     [RelayCommand]
     public async Task LoadCollections()
     {
@@ -87,13 +82,8 @@ public partial class DictionaryViewModel : ObservableObject
             foreach (var col in collections) UserCollections.Add(col);
 
             if (TargetCollection != null)
-            {
                 SelectedCollection = UserCollections.FirstOrDefault(c => c.Id == TargetCollection.Id);
-            }
-            else if (UserCollections.Any())
-            {
-                SelectedCollection = UserCollections.First();
-            }
+            else if (UserCollections.Any()) SelectedCollection = UserCollections.First();
         }
         catch (Exception ex)
         {
@@ -136,26 +126,17 @@ public partial class DictionaryViewModel : ObservableObject
             else
             {
                 if (!IsNetworkConnected())
-                {
                     await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, AppResources.OK);
-                }
                 else
-                {
                     await ShowAlertAsync(AppResources.Dictionary, AppResources.NoResultsFoundText, AppResources.OK);
-                }
             }
-                
         }
         catch (Exception ex)
         {
             if (!IsNetworkConnected())
-            {
                 await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, AppResources.OK);
-            }
             else
-            {
                 await ShowAlertAsync(AppResources.Error, AppResources.FailedWordRetrieval, AppResources.OK);
-            }
 
             Debug.WriteLine($"Error: {ex.Message}");
         }
@@ -172,7 +153,7 @@ public partial class DictionaryViewModel : ObservableObject
 
         var url = item.AudioUrl;
         var wordToSpeak = item.Word;
-        bool playedSuccessfully = false;
+        var playedSuccessfully = false;
 
         if (!string.IsNullOrWhiteSpace(url))
         {
@@ -199,7 +180,6 @@ public partial class DictionaryViewModel : ObservableObject
         }
 
         if (!playedSuccessfully)
-        {
             try
             {
                 var locales = await TextToSpeech.Default.GetLocalesAsync();
@@ -238,7 +218,6 @@ public partial class DictionaryViewModel : ObservableObject
                 Debug.WriteLine($"TTS failed: {ex.Message}");
                 await ShowAlertAsync(AppResources.AudioError, AppResources.PlaybackError, AppResources.OK);
             }
-        }
     }
 
     [RelayCommand]
@@ -288,7 +267,7 @@ public partial class DictionaryViewModel : ObservableObject
 
         try
         {
-            bool isAdded = await _collectionService.AddCollectionItemFromDtoAsync(SelectedCollection.Id, dto);
+            var isAdded = await _collectionService.AddCollectionItemFromDtoAsync(SelectedCollection.Id, dto);
 
             if (isAdded)
             {

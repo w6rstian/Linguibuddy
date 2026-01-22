@@ -1,26 +1,20 @@
+using System.Reflection;
 using FakeItEasy;
 using FluentAssertions;
 using Linguibuddy.Helpers;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.ViewModels;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Linguibuddy.Tests.ViewModelsTests;
 
 [Collection("QuizTests")]
 public class ImageQuizViewModelTests
 {
-    private readonly ICollectionService _collectionService;
-    private readonly IScoringService _scoringService;
     private readonly IAppUserService _appUserService;
+    private readonly ICollectionService _collectionService;
     private readonly ILearningService _learningService;
+    private readonly IScoringService _scoringService;
     private readonly TestableImageQuizViewModel _viewModel;
 
     public ImageQuizViewModelTests()
@@ -31,33 +25,8 @@ public class ImageQuizViewModelTests
         _appUserService = A.Fake<IAppUserService>();
         _learningService = A.Fake<ILearningService>();
 
-        _viewModel = new TestableImageQuizViewModel(_collectionService, _scoringService, _appUserService, _learningService);
-    }
-
-    private class TestableImageQuizViewModel : ImageQuizViewModel
-    {
-        public bool MockNetworkStatus { get; set; } = true;
-        public string? LastAlertMessage { get; private set; }
-        public string? LastNavigatedRoute { get; private set; }
-
-        public TestableImageQuizViewModel(ICollectionService collectionService, IScoringService scoringService, IAppUserService appUserService, ILearningService learningService) 
-            : base(collectionService, scoringService, appUserService, learningService)
-        {
-        }
-
-        protected override bool IsNetworkConnected() => MockNetworkStatus;
-
-        protected override Task ShowAlert(string title, string message, string cancel)
-        {
-            LastAlertMessage = message;
-            return Task.CompletedTask;
-        }
-
-        protected override Task GoToAsync(string route)
-        {
-            LastNavigatedRoute = route;
-            return Task.CompletedTask;
-        }
+        _viewModel =
+            new TestableImageQuizViewModel(_collectionService, _scoringService, _appUserService, _learningService);
     }
 
     [Fact]
@@ -68,8 +37,8 @@ public class ImageQuizViewModelTests
         {
             Items = new List<CollectionItem>
             {
-                new CollectionItem { Id = 1, Word = "Test1" },
-                new CollectionItem { Id = 2, Word = "Test2" }
+                new() { Id = 1, Word = "Test1" },
+                new() { Id = 2, Word = "Test2" }
             }
         };
         _viewModel.SelectedCollection = collection;
@@ -87,10 +56,7 @@ public class ImageQuizViewModelTests
     {
         // Arrange
         var items = new List<CollectionItem>();
-        for (int i = 1; i <= 5; i++)
-        {
-            items.Add(new CollectionItem { Id = i, Word = $"Word{i}" });
-        }
+        for (var i = 1; i <= 5; i++) items.Add(new CollectionItem { Id = i, Word = $"Word{i}" });
 
         var collection = new WordCollection { Items = items };
         _viewModel.SelectedCollection = collection;
@@ -127,7 +93,7 @@ public class ImageQuizViewModelTests
         // Arrange
         var targetWord = new CollectionItem { Id = 1, Word = "Target" };
         var option = new QuizOption(targetWord);
-        
+
         _viewModel.TargetWord = targetWord;
         _viewModel.Options.Add(option);
 
@@ -148,10 +114,10 @@ public class ImageQuizViewModelTests
         // Arrange
         var targetWord = new CollectionItem { Id = 1, Word = "Target" };
         var wrongWord = new CollectionItem { Id = 2, Word = "Wrong" };
-        
+
         var correctOption = new QuizOption(targetWord);
         var wrongOption = new QuizOption(wrongWord);
-        
+
         _viewModel.TargetWord = targetWord;
         _viewModel.Options.Add(correctOption);
         _viewModel.Options.Add(wrongOption);
@@ -194,16 +160,46 @@ public class ImageQuizViewModelTests
         await _viewModel.ImportCollectionAsync();
 
         // Check internal 'allWords' using reflection
-        var field = typeof(ImageQuizViewModel).GetField("_allWords", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var field = typeof(ImageQuizViewModel).GetField("_allWords", BindingFlags.NonPublic | BindingFlags.Instance);
         var allWords = (List<CollectionItem>)field.GetValue(_viewModel);
 
         // Assert
         allWords.Should().HaveCount(2); // fork + Spoon
         allWords.Should().Contain(i => i.Word.Equals("fork", StringComparison.OrdinalIgnoreCase));
         allWords.Should().Contain(i => i.Word == "Spoon");
-        
+
         // Verify image priority
         var forkItem = allWords.First(i => i.Word.Equals("fork", StringComparison.OrdinalIgnoreCase));
         forkItem.ImageUrl.Should().Be("http://image.jpg");
+    }
+
+    private class TestableImageQuizViewModel : ImageQuizViewModel
+    {
+        public TestableImageQuizViewModel(ICollectionService collectionService, IScoringService scoringService,
+            IAppUserService appUserService, ILearningService learningService)
+            : base(collectionService, scoringService, appUserService, learningService)
+        {
+        }
+
+        public bool MockNetworkStatus { get; set; } = true;
+        public string? LastAlertMessage { get; private set; }
+        public string? LastNavigatedRoute { get; private set; }
+
+        protected override bool IsNetworkConnected()
+        {
+            return MockNetworkStatus;
+        }
+
+        protected override Task ShowAlert(string title, string message, string cancel)
+        {
+            LastAlertMessage = message;
+            return Task.CompletedTask;
+        }
+
+        protected override Task GoToAsync(string route)
+        {
+            LastNavigatedRoute = route;
+            return Task.CompletedTask;
+        }
     }
 }

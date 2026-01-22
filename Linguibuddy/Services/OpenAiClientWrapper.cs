@@ -1,8 +1,9 @@
+using Linguibuddy.Interfaces;
 using OpenAI.Chat;
 
 namespace Linguibuddy.Services;
 
-public class OpenAiClientWrapper : Linguibuddy.Interfaces.IOpenAiClientWrapper
+public class OpenAiClientWrapper : IOpenAiClientWrapper
 {
     private readonly ChatClient _client;
 

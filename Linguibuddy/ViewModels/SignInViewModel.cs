@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
@@ -15,9 +14,9 @@ namespace Linguibuddy.ViewModels;
 public partial class SignInViewModel : ObservableObject
 {
     private readonly FirebaseAuthClient _authClient;
+    private readonly DataContext _db;
     private readonly IServiceProvider _services;
     private readonly SettingsViewModel _settingsViewModel;
-    private readonly DataContext _db;
 
     [ObservableProperty] private string _email;
 
