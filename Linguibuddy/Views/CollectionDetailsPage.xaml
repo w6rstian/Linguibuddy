@@ -164,7 +164,7 @@
             
             <CollectionView.EmptyView>
                  <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10" Margin="0, 50, 0, 0">
-                    <Label Text="Brak słówek w kolekcji"
+                    <Label Text="{loc:Translate NoWordsInCollection}"
                            FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"
                            TextColor="{StaticResource Gray500}" />
                 </VerticalStackLayout>

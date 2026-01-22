@@ -167,7 +167,7 @@
                                          Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DictionaryViewModel}}, Path=AddItemToFlashcardsCommand}"
                                          CommandParameter="{Binding .}">
                                 <ImageButton.Shadow>
-                                    <Shadow Brush="{StaticResource PrimaryBrush}" Radius="5" Opacity="0.3" Offset="0,4" />
+                                    <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}" Radius="5" Opacity="0.3" Offset="0,4" />
                                 </ImageButton.Shadow>
                             </ImageButton>
 

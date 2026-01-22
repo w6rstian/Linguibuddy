@@ -35,20 +35,22 @@ Stroke="{StaticResource PrimaryBrush}"-->
 
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Border
-                                    Padding="10"
-                                    Margin="4"
-                                    Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 8">
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Popup}}, Path=BindingContext.CollectionSelectedCommand}"
-                                            CommandParameter="{Binding .}" />
-                                    </Border.GestureRecognizers>
+                                <Grid>
+                                    <Border
+                                        Padding="10"
+                                        Margin="4"
+                                        Stroke="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                        StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 8">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Popup}}, Path=BindingContext.CollectionSelectedCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        </Border.GestureRecognizers>
 
-                                    <Label Text="{Binding Name}" />
-                                </Border>
+                                        <Label Text="{Binding Name}" />
+                                    </Border>
+                                </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>

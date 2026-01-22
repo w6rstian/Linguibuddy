@@ -106,8 +106,8 @@
                                         <Button Text="{Binding Text}"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SentenceQuizViewModel}}, Path=DeselectWordCommand}"
                                                 CommandParameter="{Binding .}"
-                                                BackgroundColor="{StaticResource Primary}"
-                                                TextColor="{StaticResource White}"
+                                                BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
                                                 CornerRadius="10"
                                                 HeightRequest="44"
                                                 Padding="15,0"
@@ -115,7 +115,7 @@
                                                 FontSize="16"
                                                 FontAttributes="Bold">
                                             <Button.Shadow>
-                                                <Shadow Brush="{StaticResource PrimaryBrush}" Radius="4" Opacity="0.3"
+                                                <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}" Radius="4" Opacity="0.3"
                                                         Offset="2,2" />
                                             </Button.Shadow>
                                         </Button>
@@ -136,8 +136,8 @@
             </ScrollView>
 
             <VerticalStackLayout Grid.Row="1"
-                                 Spacing="80"
-                                 Padding="20,10,20,30"
+                                 Spacing="20"
+                                 Padding="0,0,5,25"
                                  MaximumWidthRequest="600"
                                  HorizontalOptions="Center"
                                  VerticalOptions="End">
@@ -174,26 +174,26 @@
                     <Button Text="{loc:Translate Check}"
                             Command="{Binding CheckAnswerCommand}"
                             IsVisible="{Binding IsNotAnswered}"
-                            BackgroundColor="{StaticResource Primary}"
-                            TextColor="{StaticResource White}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
                             HeightRequest="50"
                             CornerRadius="25"
                             FontAttributes="Bold">
                         <Button.Shadow>
-                            <Shadow Brush="{StaticResource PrimaryBrush}" Radius="8" Opacity="0.4" Offset="0,4" />
+                            <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}" Radius="8" Opacity="0.4" Offset="0,4" />
                         </Button.Shadow>
                     </Button>
 
                     <Button Text="{loc:Translate Next}"
                             Command="{Binding NextQuestionCommand}"
                             IsVisible="{Binding IsAnswered}"
-                            BackgroundColor="{StaticResource Primary}"
-                            TextColor="{StaticResource White}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
                             HeightRequest="50"
                             CornerRadius="25"
                             FontAttributes="Bold">
                         <Button.Shadow>
-                            <Shadow Brush="{StaticResource PrimaryBrush}" Radius="8" Opacity="0.4" Offset="0,4" />
+                            <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}" Radius="8" Opacity="0.4" Offset="0,4" />
                         </Button.Shadow>
                     </Button>
                 </Grid>

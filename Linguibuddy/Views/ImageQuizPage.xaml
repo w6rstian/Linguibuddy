@@ -104,7 +104,7 @@
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ImageQuizViewModel}}, Path=SelectAnswerCommand}"
                                 CommandParameter="{Binding .}"
                                 BackgroundColor="{Binding BackgroundColor}"
-                                TextColor="White"
+                                TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
                                 HeightRequest="70"
                                 IsEnabled="{Binding IsEnabled}"
                                 FontSize="16"

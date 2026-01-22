@@ -51,8 +51,8 @@
                            HorizontalTextAlignment="End" />
 
                     <Switch IsToggled="{Binding IsSpacedRepetitionEnabled}"
-                            OnColor="{StaticResource Primary}"
-                            ThumbColor="{AppThemeBinding Light=White, Dark={StaticResource Gray200}}"
+                            OnColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            ThumbColor="{AppThemeBinding Light=White, Dark=White}"
                             Scale="1"
                             Margin="0,0,0,0"
 

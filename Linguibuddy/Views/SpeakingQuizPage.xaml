@@ -105,8 +105,8 @@
 
                             <Button Text="{loc:Translate Listen}"
                                     Command="{Binding StartListeningCommand}"
-                                    BackgroundColor="{StaticResource Primary}"
-                                    TextColor="White"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
                                     HeightRequest="50"
                                     WidthRequest="140"
                                     CornerRadius="25"
@@ -128,7 +128,7 @@
                                     </DataTrigger>
                                 </Button.Triggers>
                                 <Button.Shadow>
-                                    <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="8" Opacity="0.4" />
+                                    <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}" Offset="0,4" Radius="8" Opacity="0.4" />
                                 </Button.Shadow>
                             </Button>
 
@@ -145,7 +145,7 @@
                                     FontAttributes="Bold">
                                 <Button.Triggers>
                                     <DataTrigger TargetType="Button" Binding="{Binding IsListening}" Value="False">
-                                        <Setter Property="Opacity" Value="0.5" />
+                                        <Setter Property="Opacity" Value="0.6" />
                                     </DataTrigger>
                                 </Button.Triggers>
                             </Button>
@@ -154,7 +154,7 @@
 
                         <Label Text="{Binding RecognizedText}"
                                FontSize="22"
-                               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
+                               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                                HorizontalTextAlignment="Center"
                                FontAttributes="Italic"
                                LineBreakMode="WordWrap" />
@@ -185,8 +185,8 @@
                 <Button Text="{loc:Translate Next}"
                         Command="{Binding NextQuestionCommand}"
                         IsEnabled="{Binding IsAnswered}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                        TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"
                         HeightRequest="50"
                         CornerRadius="25"
                         FontAttributes="Bold">
@@ -196,7 +196,7 @@
                         </DataTrigger>
                     </Button.Triggers>
                     <Button.Shadow>
-                        <Shadow Brush="{StaticResource Primary}" Offset="0,4" Radius="8" Opacity="0.4" />
+                        <Shadow Brush="{AppThemeBinding Light={StaticResource PrimaryBrush}, Dark={StaticResource PrimaryDarkBrush}}" Offset="0,4" Radius="8" Opacity="0.4" />
                     </Button.Shadow>
                 </Button>
             </VerticalStackLayout>
