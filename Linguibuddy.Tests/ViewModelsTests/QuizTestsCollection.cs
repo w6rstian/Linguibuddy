@@ -23,6 +23,7 @@ public class ApplicationFixture : IDisposable
         var resources = new ResourceDictionary
         {
             { "Primary", Colors.Blue },
+            { "PrimaryDark", Colors.DarkBlue },
             { "PrimaryDarkText", Colors.Black }
         };
         
