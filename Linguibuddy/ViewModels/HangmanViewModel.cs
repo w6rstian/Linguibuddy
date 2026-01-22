@@ -161,12 +161,12 @@ public partial class HangmanViewModel : BaseQuizViewModel
             }
             else if (guessedLetters != null && guessedLetters.Contains(c))
             {
-                // Jeśli odgadnięta -> pokaż
+                // Jeśli odgadnięta - pokaż
                 sb.Append($"{c} ");
             }
             else
             {
-                // Jeśli nie -> pokaż podkreślenie
+                // Jeśli nie - pokaż podkreślenie
                 sb.Append("_ ");
                 isWon = false;
             }

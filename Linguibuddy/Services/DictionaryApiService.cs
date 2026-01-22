@@ -114,6 +114,7 @@ public class DictionaryApiService : IDictionaryApiService
         return null;
     }
 
+    // not used currently
     public async Task<List<DictionaryWord>> GetRandomWordsForGameAsync(int count = 4)
     {
         var validIds = await _context.DictionaryWords
@@ -141,6 +142,7 @@ public class DictionaryApiService : IDictionaryApiService
         return randomWords;
     }
 
+    // not used currently
     public async Task<List<DictionaryWord>> GetRandomWordsWithImagesAsync(int count = 4)
     {
         var validIds = await _context.DictionaryWords
