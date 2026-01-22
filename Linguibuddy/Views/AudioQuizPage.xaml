@@ -91,8 +91,8 @@
                 <Label Text="{Binding TargetWord.Phonetic, StringFormat='/{0}/'}"
                        FontSize="24"
                        FontAttributes="Italic"
-                       TextColor="{StaticResource Primary}"
-                       HorizontalOptions="Center">
+                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                       HorizontalOptions="Center" />
                     <Label.Triggers>
                         <DataTrigger TargetType="Label" Binding="{Binding TargetWord.Phonetic}" Value="">
                             <Setter Property="IsVisible" Value="False" />
@@ -148,7 +148,7 @@
                     Text="{loc:Translate Next}"
                     Command="{Binding NextQuestionCommand}"
                     IsVisible="{Binding IsAnswered}"
-                    BackgroundColor="{StaticResource Primary}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                     Margin="0,0,0,20" />
 
             <ActivityIndicator Grid.RowSpan="4"
