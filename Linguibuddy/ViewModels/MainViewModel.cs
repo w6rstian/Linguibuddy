@@ -5,6 +5,7 @@ using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using Linguibuddy.Views;
 using Linguibuddy.Helpers;
+using Linguibuddy.Resources.Strings;
 using LocalizationResourceManager.Maui;
 
 namespace Linguibuddy.ViewModels;
@@ -95,19 +96,29 @@ public partial class MainViewModel : ObservableObject
             IsAiThinking = false;
             return;
         }
-        AiFeedback = "Trener analizuje Twój profil i kolekcje...";
+        AiFeedback = AppResources.AiAnalysisThinking;
 
-        var collections = await _collectionService.GetUserCollectionsAsync();
+        try
+        {
+            var collections = await _collectionService.GetUserCollectionsAsync();
 
-        var language = GetPreference(Constants.LanguageKey, "pl");
-        var feedback = await _openAiService.AnalyzeComprehensiveProfileAsync(_user, CurrentStreak, UnlockedAchievementsCount, collections, language);
+            var language = GetPreference(Constants.LanguageKey, "pl");
+            var feedback = await _openAiService.AnalyzeComprehensiveProfileAsync(_user, CurrentStreak, UnlockedAchievementsCount, collections, language);
 
-        AiFeedback = feedback;
+            AiFeedback = feedback;
 
-        _user.LastAiAnalysis = feedback;
-        _user.RequiresAiAnalysis = false;
-        IsAiThinking = false;
-        await _appUserService.UpdateAppUserAsync(_user);
+            _user.LastAiAnalysis = feedback;
+            _user.RequiresAiAnalysis = false;
+            await _appUserService.UpdateAppUserAsync(_user);
+        }
+        catch (Exception)
+        {
+            AiFeedback = AppResources.AiAnalysisError;
+        }
+        finally
+        {
+            IsAiThinking = false;
+        }
     }
 
     protected virtual bool IsUserAuthenticated()

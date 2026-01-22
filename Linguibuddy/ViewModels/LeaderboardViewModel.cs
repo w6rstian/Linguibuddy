@@ -4,6 +4,7 @@ using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Linguibuddy.Resources.Strings;
 
 namespace Linguibuddy.ViewModels;
 
@@ -34,7 +35,7 @@ public partial class LeaderboardViewModel : ObservableObject
             var items = topUsers.Select((u, index) => new LeaderboardItem
             {
                 Rank = index + 1,
-                UserName = string.IsNullOrEmpty(u.UserName) ? Linguibuddy.Resources.Strings.AppResources.Anonymous : u.UserName,
+                UserName = string.IsNullOrEmpty(u.UserName) ? AppResources.Anonymous : u.UserName,
                 Points = u.Points
             }).ToList();
 
@@ -47,7 +48,7 @@ public partial class LeaderboardViewModel : ObservableObject
         catch (Exception ex)
         {
             Debug.WriteLine($"Error loading leaderboard: {ex.Message}");
-            await ShowAlertAsync(Linguibuddy.Resources.Strings.AppResources.Error, Linguibuddy.Resources.Strings.AppResources.LeaderboardErrorMessage, Linguibuddy.Resources.Strings.AppResources.OK);
+            await ShowAlertAsync(AppResources.Error, AppResources.LeaderboardErrorMessage, AppResources.OK);
         }
         finally
         {

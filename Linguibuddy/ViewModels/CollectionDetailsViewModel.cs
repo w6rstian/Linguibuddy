@@ -84,7 +84,7 @@ public partial class CollectionDetailsViewModel : ObservableObject
         }
 
         IsAiThinking = true;
-        AiFeedback = "Trener analizuje Twoją kolekcję...";
+        AiFeedback = AppResources.AiAnalysisThinkingCollection;
         
         try
         {
@@ -100,7 +100,7 @@ public partial class CollectionDetailsViewModel : ObservableObject
         }
         catch (Exception)
         {
-            AiFeedback = "Nie udało się pobrać analizy AI.";
+            AiFeedback = AppResources.AiAnalysisError;
         }
         finally
         {
