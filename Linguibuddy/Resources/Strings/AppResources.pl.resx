@@ -631,4 +631,7 @@ w czasie</value>
   <data name="HeardNothing" xml:space="preserve">
     <value>Nie usłyszałem nic. Spróbuj ponownie.</value>
   </data>
+  <data name="Words" xml:space="preserve">
+    <value>słów</value>
+  </data>
 </root>

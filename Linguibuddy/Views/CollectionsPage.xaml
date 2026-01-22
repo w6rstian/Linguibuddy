@@ -52,7 +52,7 @@
 
                     <Switch IsToggled="{Binding IsSpacedRepetitionEnabled}"
                             OnColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                            ThumbColor="{AppThemeBinding Light=White, Dark=White}"
+                            ThumbColor="{AppThemeBinding Light={StaticResource Gray200}, Dark=White}"
                             Scale="1"
                             Margin="0,0,0,0"
 
@@ -92,10 +92,16 @@
                                        Margin="0,0,10,0"
                                        TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
 
-                                <!--ciężko dodać napis {ilość} fiszek do tłumaczeń-->
-                                <Label Text="{Binding Items.Count, StringFormat='{0} słów'}"
-                                       FontSize="13"
-                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
+                                <Label FontSize="13"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding Items.Count}" />
+                                            <Span Text=" " />
+                                            <Span Text="{loc:Translate Words}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
                             </VerticalStackLayout>
 
                             <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center"
@@ -144,10 +150,10 @@
 
             <CollectionView.EmptyView>
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
-                    <Label Text="Brak kolekcji"
+                    <Label Text="{loc:Translate NoCollections}"
                            FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"
                            TextColor="{StaticResource Gray500}" />
-                    <Label Text="Stwórz pierwszą kolekcję przyciskiem powyżej."
+                    <Label Text="{loc:Translate CreateFirstCollection}"
                            FontSize="14" HorizontalOptions="Center"
                            TextColor="{StaticResource Gray400}" />
                 </VerticalStackLayout>

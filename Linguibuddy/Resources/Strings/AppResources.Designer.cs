@@ -1583,6 +1583,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to words.
+        /// </summary>
+        internal static string Words {
+            get {
+                return ResourceManager.GetString("Words", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         internal static string Yes {
