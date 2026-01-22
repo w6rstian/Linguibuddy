@@ -304,6 +304,15 @@ namespace Linguibuddy.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anonymous.
+        /// </summary>
+        internal static string Anonymous {
+            get {
+                return ResourceManager.GetString("Anonymous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Linguibuddy.
         /// </summary>
         internal static string AppName {
@@ -660,6 +669,15 @@ namespace Linguibuddy.Resources.Strings {
         internal static string HangmanDesc {
             get {
                 return ResourceManager.GetString("HangmanDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I didn&apos;t hear anything. Please try again..
+        /// </summary>
+        internal static string HeardNothing {
+            get {
+                return ResourceManager.GetString("HeardNothing", resourceCulture);
             }
         }
         
@@ -1579,15 +1597,6 @@ namespace Linguibuddy.Resources.Strings {
         internal static string YouDidIt {
             get {
                 return ResourceManager.GetString("YouDidIt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Anonymous.
-        /// </summary>
-        internal static string Anonymous {
-            get {
-                return ResourceManager.GetString("Anonymous", resourceCulture);
             }
         }
     }

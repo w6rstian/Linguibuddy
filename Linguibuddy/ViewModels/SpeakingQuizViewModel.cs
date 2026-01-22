@@ -318,7 +318,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         if (!string.IsNullOrWhiteSpace(RecognizedText) && RecognizedText != AppResources.Listening)
             CheckPronunciation(RecognizedText);
         else
-            RecognizedText = "Nie usłyszałem nic. Spróbuj ponownie.";
+            RecognizedText = AppResources.HeardNothing;
     }
 
     protected virtual void CheckPronunciation(string spokenText)

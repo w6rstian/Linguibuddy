@@ -625,4 +625,10 @@ w czasie</value>
   <data name="QuiteGood" xml:space="preserve">
     <value>Było naprawdę dobrze</value>
   </data>
+  <data name="Anonymous" xml:space="preserve">
+    <value>Anonim</value>
+  </data>
+  <data name="HeardNothing" xml:space="preserve">
+    <value>Nie usłyszałem nic. Spróbuj ponownie.</value>
+  </data>
 </root>
