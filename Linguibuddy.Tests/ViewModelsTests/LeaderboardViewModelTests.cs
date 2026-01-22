@@ -41,29 +41,39 @@ public class LeaderboardViewModelTests
     public async Task LoadLeaderboardAsync_ShouldPopulateItems_WhenServiceReturnsUsers()
     {
         // Arrange
-        var users = new List<AppUser>
+        var originalCulture = System.Globalization.CultureInfo.CurrentUICulture;
+        System.Globalization.CultureInfo.CurrentUICulture = new System.Globalization.CultureInfo("pl-PL");
+
+        try
         {
-            new() { Id = "1", UserName = "Alice", Points = 100 },
-            new() { Id = "2", UserName = "Bob", Points = 80 },
-            new() { Id = "3", Points = 50 } // No username
-        };
-        A.CallTo(() => _appUserService.GetLeaderboardAsync(50)).Returns(users);
+            var users = new List<AppUser>
+            {
+                new() { Id = "1", UserName = "Alice", Points = 100 },
+                new() { Id = "2", UserName = "Bob", Points = 80 },
+                new() { Id = "3", Points = 50 } // No username
+            };
+            A.CallTo(() => _appUserService.GetLeaderboardAsync(50)).Returns(users);
 
-        // Act
-        await _viewModel.LoadLeaderboardCommand.ExecuteAsync(null);
+            // Act
+            await _viewModel.LoadLeaderboardCommand.ExecuteAsync(null);
 
-        // Assert
-        _viewModel.LeaderboardItems.Should().HaveCount(3);
-        
-        var first = _viewModel.LeaderboardItems[0];
-        first.Rank.Should().Be(1);
-        first.UserName.Should().Be("Alice");
-        first.Points.Should().Be(100);
-        first.IsTop3.Should().BeTrue();
+            // Assert
+            _viewModel.LeaderboardItems.Should().HaveCount(3);
+            
+            var first = _viewModel.LeaderboardItems[0];
+            first.Rank.Should().Be(1);
+            first.UserName.Should().Be("Alice");
+            first.Points.Should().Be(100);
+            first.IsTop3.Should().BeTrue();
 
-        var third = _viewModel.LeaderboardItems[2];
-        third.Rank.Should().Be(3);
-        third.UserName.Should().Be("Anonim"); // Default name check
+            var third = _viewModel.LeaderboardItems[2];
+            third.Rank.Should().Be(3);
+            third.UserName.Should().Be("Anonim"); // Default name check
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentUICulture = originalCulture;
+        }
     }
 
     [Fact]

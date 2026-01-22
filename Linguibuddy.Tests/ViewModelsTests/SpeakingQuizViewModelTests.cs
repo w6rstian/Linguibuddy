@@ -180,15 +180,25 @@ public class SpeakingQuizViewModelTests
     public async Task FinishAttempt_ShouldHandleEmptyRecognition()
     {
         // Arrange
-        await SetupQuiz("I eat an apple");
-        _viewModel.RecognizedText = "";
+        var originalCulture = System.Globalization.CultureInfo.CurrentUICulture;
+        System.Globalization.CultureInfo.CurrentUICulture = new System.Globalization.CultureInfo("pl-PL");
 
-        // Act
-        await _viewModel.CallFinishAttempt();
+        try
+        {
+            await SetupQuiz("I eat an apple");
+            _viewModel.RecognizedText = "";
 
-        // Assert
-        _viewModel.IsAnswered.Should().BeFalse();
-        _viewModel.RecognizedText.Should().Contain("Nie usłyszałem");
+            // Act
+            await _viewModel.CallFinishAttempt();
+
+            // Assert
+            _viewModel.IsAnswered.Should().Be(false);
+            _viewModel.RecognizedText.Should().Contain("Nie usłyszałem");
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentUICulture = originalCulture;
+        }
     }
 
     [Fact]
