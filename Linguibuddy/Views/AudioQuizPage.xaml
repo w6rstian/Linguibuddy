@@ -92,7 +92,7 @@
                        FontSize="24"
                        FontAttributes="Italic"
                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                       HorizontalOptions="Center" />
+                       HorizontalOptions="Center">
                     <Label.Triggers>
                         <DataTrigger TargetType="Label" Binding="{Binding TargetWord.Phonetic}" Value="">
                             <Setter Property="IsVisible" Value="False" />

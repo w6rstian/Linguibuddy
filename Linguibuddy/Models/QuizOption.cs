@@ -11,7 +11,9 @@ public partial class QuizOption : ObservableObject
     public QuizOption(CollectionItem word)
     {
         Word = word;
-        BackgroundColor = Application.Current.Resources["Primary"] as Color ?? Colors.LightGray;
+        BackgroundColor = Application.Current.RequestedTheme == AppTheme.Light
+            ? Application.Current.Resources["Primary"] as Color ?? Colors.LightGray
+            : Application.Current.Resources["PrimaryDark"] as Color ?? Colors.LightGray;
         IsEnabled = true;
     }
 
