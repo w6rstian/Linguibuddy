@@ -58,7 +58,7 @@ public partial class SignInViewModel : ObservableObject
         catch (SqliteException ex)
         {
             Debug.WriteLine($"Database error: {ex.Message}");
-            await ShowAlertAsync(AppResources.Error, AppResources.DatabaseError, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.DatabaseError, AppResources.OK);
             return;
         }
 

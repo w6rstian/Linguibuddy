@@ -78,7 +78,7 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
 
         if (!IsNetworkConnected())
         {
-            await ShowAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            await ShowAlert(AppResources.NetworkError, AppResources.NetworkRequired, AppResources.OK);
             IsBusy = false;
             await GoBack();
             return;
@@ -129,7 +129,7 @@ public partial class ImageQuizViewModel : BaseQuizViewModel
         catch (Exception ex)
         {
             Debug.WriteLine($"Image Quiz Error: {ex.Message}");
-            await ShowAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
+            await ShowAlert(AppResources.Error, AppResources.FailedLoadQuestion, AppResources.OK);
         }
         finally
         {

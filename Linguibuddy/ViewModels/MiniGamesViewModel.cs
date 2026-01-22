@@ -91,7 +91,7 @@ public partial class MiniGamesViewModel : ObservableObject
 
         if (!selectedCollection.Items.Any())
         {
-            await ShowAlertAsync(AppResources.Error, AppResources.CollectionEmpty, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.CollectionEmpty, AppResources.OK);
             return;
         }
 

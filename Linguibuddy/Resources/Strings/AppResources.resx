@@ -628,4 +628,7 @@ Repetition</value>
   <data name="QuiteGood" xml:space="preserve">
     <value>It was quite good</value>
   </data>
+  <data name="Anonymous" xml:space="preserve">
+    <value>Anonymous</value>
+  </data>
 </root>

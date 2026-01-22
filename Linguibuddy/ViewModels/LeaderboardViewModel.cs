@@ -34,7 +34,7 @@ public partial class LeaderboardViewModel : ObservableObject
             var items = topUsers.Select((u, index) => new LeaderboardItem
             {
                 Rank = index + 1,
-                UserName = string.IsNullOrEmpty(u.UserName) ? "Anonim" : u.UserName,
+                UserName = string.IsNullOrEmpty(u.UserName) ? Linguibuddy.Resources.Strings.AppResources.Anonymous : u.UserName,
                 Points = u.Points
             }).ToList();
 
@@ -47,7 +47,7 @@ public partial class LeaderboardViewModel : ObservableObject
         catch (Exception ex)
         {
             Debug.WriteLine($"Error loading leaderboard: {ex.Message}");
-            await ShowAlertAsync("Błąd", "Nie udało się pobrać rankingu.", "OK");
+            await ShowAlertAsync(Linguibuddy.Resources.Strings.AppResources.Error, Linguibuddy.Resources.Strings.AppResources.LeaderboardErrorMessage, Linguibuddy.Resources.Strings.AppResources.OK);
         }
         finally
         {

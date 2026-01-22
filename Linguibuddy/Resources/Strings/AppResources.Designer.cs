@@ -1581,5 +1581,14 @@ namespace Linguibuddy.Resources.Strings {
                 return ResourceManager.GetString("YouDidIt", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anonymous.
+        /// </summary>
+        internal static string Anonymous {
+            get {
+                return ResourceManager.GetString("Anonymous", resourceCulture);
+            }
+        }
     }
 }

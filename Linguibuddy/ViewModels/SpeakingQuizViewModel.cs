@@ -98,7 +98,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
 
         if (!IsNetworkConnected())
         {
-            await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, AppResources.OK);
             IsBusy = false;
             await GoBack();
             return;
@@ -143,7 +143,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            await ShowAlertAsync(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.FailedLoadQuestion, AppResources.OK);
         }
         finally
         {
@@ -166,7 +166,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         var isGranted = await _speechToText.RequestPermissions(CancellationToken.None);
         if (!isGranted)
         {
-            await ShowAlertAsync(AppResources.NoPermissions, AppResources.MicrophoneNeeded, "OK");
+            await ShowAlertAsync(AppResources.NoPermissions, AppResources.MicrophoneNeeded, AppResources.OK);
             return;
         }
 
@@ -413,7 +413,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
         RecognizedText = AppResources.Error;
         _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
         _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
-        await InvokeOnMainThreadAsync(async () => await ShowAlertAsync(title, message, "OK"));
+        await InvokeOnMainThreadAsync(async () => await ShowAlertAsync(title, message, AppResources.OK));
     }
 
     protected virtual bool IsNetworkConnected()
@@ -451,7 +451,7 @@ public partial class SpeakingQuizViewModel : BaseQuizViewModel
 
         if (preferred == null)
         {
-            await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, AppResources.OK);
             return;
         }
 

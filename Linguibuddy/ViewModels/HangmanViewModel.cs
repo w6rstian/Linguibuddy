@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -140,7 +140,7 @@ public partial class HangmanViewModel : BaseQuizViewModel
         catch (Exception ex)
         {
             Debug.WriteLine($"Hangman error: {ex.Message}");
-            await ShowAlertAsync(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.FailedWordRetrieval, AppResources.OK);
         }
         finally
         {

@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
@@ -213,7 +213,7 @@ public partial class SettingsViewModel : ObservableObject
             await Shell.Current.DisplayAlert(
                 AppResources.Success,
                 $"{AppResources.ChangeUserNameSuccess}!",
-                "OK");
+                AppResources.OK);
         }
     }
 

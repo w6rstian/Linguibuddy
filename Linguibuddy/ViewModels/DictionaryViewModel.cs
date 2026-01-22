@@ -137,11 +137,11 @@ public partial class DictionaryViewModel : ObservableObject
             {
                 if (!IsNetworkConnected())
                 {
-                    await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+                    await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, AppResources.OK);
                 }
                 else
                 {
-                    await ShowAlertAsync(AppResources.Dictionary, AppResources.NoResultsFoundText, "OK");
+                    await ShowAlertAsync(AppResources.Dictionary, AppResources.NoResultsFoundText, AppResources.OK);
                 }
             }
                 
@@ -150,11 +150,11 @@ public partial class DictionaryViewModel : ObservableObject
         {
             if (!IsNetworkConnected())
             {
-                await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+                await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, AppResources.OK);
             }
             else
             {
-                await ShowAlertAsync(AppResources.Error, AppResources.FailedWordRetrieval, "OK");
+                await ShowAlertAsync(AppResources.Error, AppResources.FailedWordRetrieval, AppResources.OK);
             }
 
             Debug.WriteLine($"Error: {ex.Message}");
@@ -222,7 +222,7 @@ public partial class DictionaryViewModel : ObservableObject
 
                 if (preferred == null)
                 {
-                    await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, "OK");
+                    await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, AppResources.OK);
                     return;
                 }
 
@@ -236,7 +236,7 @@ public partial class DictionaryViewModel : ObservableObject
             catch (Exception ex)
             {
                 Debug.WriteLine($"TTS failed: {ex.Message}");
-                await ShowAlertAsync(AppResources.AudioError, AppResources.PlaybackError, "OK");
+                await ShowAlertAsync(AppResources.AudioError, AppResources.PlaybackError, AppResources.OK);
             }
         }
     }
@@ -249,13 +249,13 @@ public partial class DictionaryViewModel : ObservableObject
             await ShowAlertAsync(
                 AppResources.Error,
                 AppResources.SelectCollectionError,
-                "OK");
+                AppResources.OK);
             return;
         }
 
         if (item.SourceWordObject == null)
         {
-            await ShowAlertAsync(AppResources.Error, AppResources.NoSourceData, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.NoSourceData, AppResources.OK);
             return;
         }
 
@@ -267,7 +267,7 @@ public partial class DictionaryViewModel : ObservableObject
 
             if (string.IsNullOrEmpty(item.Translation) || item.Translation == AppResources.TranslationError)
             {
-                await ShowAlertAsync(AppResources.Error, AppResources.TranslationError, "OK");
+                await ShowAlertAsync(AppResources.Error, AppResources.TranslationError, AppResources.OK);
                 return;
             }
         }
@@ -293,7 +293,7 @@ public partial class DictionaryViewModel : ObservableObject
             if (isAdded)
             {
                 var message = string.Format(AppResources.AddedToCollectionMessage, SelectedCollection.Name);
-                await ShowAlertAsync(AppResources.Success, message, "OK");
+                await ShowAlertAsync(AppResources.Success, message, AppResources.OK);
             }
 
             else
@@ -301,12 +301,12 @@ public partial class DictionaryViewModel : ObservableObject
                 await ShowAlertAsync(
                     AppResources.Success,
                     AppResources.ItemExists,
-                    "OK");
+                    AppResources.OK);
             }
         }
         catch (Exception ex)
         {
-            await ShowAlertAsync(AppResources.Error, ex.Message, "OK");
+            await ShowAlertAsync(AppResources.Error, ex.Message, AppResources.OK);
         }
     }
 

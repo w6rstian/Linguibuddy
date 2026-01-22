@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Helpers;
 using Linguibuddy.Models;
@@ -96,7 +96,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
         if (!IsNetworkConnected())
         {
-            await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            await ShowAlertAsync(AppResources.NetworkError, AppResources.NetworkRequired, AppResources.OK);
             IsBusy = false;
             await GoBack();
             return;
@@ -158,7 +158,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
         catch (Exception e)
         {
             Debug.WriteLine($"Error loading sentence quiz: {e.Message}");
-            await ShowAlertAsync(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.FailedLoadQuestion, AppResources.OK);
         }
         finally
         {
@@ -303,7 +303,7 @@ public partial class SentenceQuizViewModel : BaseQuizViewModel
 
         if (preferred == null)
         {
-            await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, "OK");
+            await ShowAlertAsync(AppResources.Error, AppResources.InstallEng, AppResources.OK);
             return;
         }
 

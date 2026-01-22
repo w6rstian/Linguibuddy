@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -92,7 +92,7 @@ public partial class CollectionsViewModel : ObservableObject
             await ShowAlertAsync(
                 AppResources.Error,
                 AppResources.CollectionEmpty,
-                "OK");
+                AppResources.OK);
             return;
         }
 

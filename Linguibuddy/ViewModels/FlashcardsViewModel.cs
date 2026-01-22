@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Linguibuddy.Interfaces;
 using Linguibuddy.Models;
@@ -108,7 +108,7 @@ public partial class FlashcardsViewModel : ObservableObject
             items = await _collectionService.GetItemsDueForLearning(Collection.Id);
             if (items.Count == 0)
             {
-                await ShowAlertAsync(AppResources.Error, AppResources.NoFlashcardsToLearn, "OK");
+                await ShowAlertAsync(AppResources.Error, AppResources.NoFlashcardsToLearn, AppResources.OK);
                 await GoBack();
                 return;
             }

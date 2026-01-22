@@ -79,7 +79,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
         if (!IsNetworkConnected())
         {
-            await ShowAlert(AppResources.NetworkError, AppResources.NetworkRequired, "OK");
+            await ShowAlert(AppResources.NetworkError, AppResources.NetworkRequired, AppResources.OK);
             IsBusy = false;
             await GoBack();
             return;
@@ -132,7 +132,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
         catch (Exception ex)
         {
             Debug.WriteLine($"Error loading quiz: {ex.Message}");
-            await ShowAlert(AppResources.Error, AppResources.FailedLoadQuestion, "OK");
+            await ShowAlert(AppResources.Error, AppResources.FailedLoadQuestion, AppResources.OK);
         }
         finally
         {
@@ -230,7 +230,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
 
                 if (preferred == null)
                 {
-                    await ShowAlert(AppResources.Error, AppResources.InstallEng, "OK");
+                    await ShowAlert(AppResources.Error, AppResources.InstallEng, AppResources.OK);
                     return;
                 }
 
@@ -243,7 +243,7 @@ public partial class AudioQuizViewModel : BaseQuizViewModel
             }
             catch (Exception ex)
             {
-                await ShowAlert(AppResources.AudioError, AppResources.PlaybackError, "OK");
+                await ShowAlert(AppResources.AudioError, AppResources.PlaybackError, AppResources.OK);
                 Debug.WriteLine($"TTS Error: {ex.Message}");
             }
         }
